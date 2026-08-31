@@ -6,7 +6,19 @@
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "elapsed_seconds": 0.2953,
+  "stub_end_given_hit_rate": 1.0,
+  "n_given_hit": 223,
+  "p_at_3_95ci": [
+    0.8779527559055118,
+    0.8385826771653543,
+    0.9173228346456693
+  ],
+  "p_at_5_95ci": [
+    0.905511811023622,
+    0.8700787401574803,
+    0.9409448818897638
+  ],
+  "elapsed_seconds": 0.1823,
   "metrics": {
     "baseline": "grep",
     "domain": "papers",

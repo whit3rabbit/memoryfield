@@ -6,7 +6,19 @@
   "n_no_answer": 17,
   "no_answer_correct": 1,
   "no_answer_rate": 0.058823529411764705,
-  "elapsed_seconds": 0.1942,
+  "stub_end_given_hit_rate": 1.0,
+  "n_given_hit": 135,
+  "p_at_3_95ci": [
+    0.7758620689655172,
+    0.7126436781609196,
+    0.8390804597701149
+  ],
+  "p_at_5_95ci": [
+    0.8390804597701149,
+    0.7873563218390804,
+    0.8908045977011494
+  ],
+  "elapsed_seconds": 0.1106,
   "metrics": {
     "baseline": "grep",
     "domain": "codebase",

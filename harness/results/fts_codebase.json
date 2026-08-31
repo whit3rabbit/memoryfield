@@ -6,7 +6,19 @@
   "n_no_answer": 17,
   "no_answer_correct": 2,
   "no_answer_rate": 0.11764705882352941,
-  "elapsed_seconds": 0.1217,
+  "stub_end_given_hit_rate": 1.0,
+  "n_given_hit": 164,
+  "p_at_3_95ci": [
+    0.9425287356321839,
+    0.9080459770114943,
+    0.9770114942528736
+  ],
+  "p_at_5_95ci": [
+    0.9655172413793104,
+    0.9367816091954023,
+    0.9885057471264368
+  ],
+  "elapsed_seconds": 0.0875,
   "metrics": {
     "baseline": "fts",
     "domain": "codebase",

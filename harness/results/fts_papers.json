@@ -6,7 +6,19 @@
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "elapsed_seconds": 0.182,
+  "stub_end_given_hit_rate": 1.0,
+  "n_given_hit": 244,
+  "p_at_3_95ci": [
+    0.9606299212598425,
+    0.937007874015748,
+    0.984251968503937
+  ],
+  "p_at_5_95ci": [
+    0.9803149606299213,
+    0.9645669291338582,
+    0.9960629921259843
+  ],
+  "elapsed_seconds": 0.1331,
   "metrics": {
     "baseline": "fts",
     "domain": "papers",

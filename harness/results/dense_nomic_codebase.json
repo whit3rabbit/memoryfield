@@ -6,20 +6,32 @@
   "n_no_answer": 17,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "elapsed_seconds": 239.276,
+  "stub_end_given_hit_rate": 1.0,
+  "n_given_hit": 168,
+  "p_at_3_95ci": [
+    0.9655172413793104,
+    0.9367816091954023,
+    0.9885057471264368
+  ],
+  "p_at_5_95ci": [
+    0.9770114942528736,
+    0.9540229885057471,
+    0.9942528735632183
+  ],
+  "elapsed_seconds": 402.1664,
   "metrics": {
     "baseline": "dense_nomic",
     "domain": "codebase",
     "n_queries": 191,
-    "p_at_3": 0.8448275862068966,
-    "p_at_5": 0.8793103448275862,
-    "r_at_5": 0.8735632183908046,
-    "mrr": 0.7867816091954022,
-    "stub_end_rate": 0.5968586387434555,
-    "tokens_stub_median": 247,
-    "tokens_stub_p95": 261.0,
-    "tokens_l1_median": 362,
-    "tokens_full_median": 371,
+    "p_at_3": 0.9655172413793104,
+    "p_at_5": 0.9770114942528736,
+    "r_at_5": 0.9741379310344828,
+    "mrr": 0.9457854406130268,
+    "stub_end_rate": 0.7486910994764397,
+    "tokens_stub_median": 244,
+    "tokens_stub_p95": 262.5,
+    "tokens_l1_median": 361,
+    "tokens_full_median": 370,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_nomic_codebase.json"
   },
   "per_query": [
@@ -36,13 +48,13 @@
       "topk": [
         "code-auth-rotate-jwt-key",
         "code-auth-public-keys",
+        "code-auth-leaked-token",
         "code-obs-oncall-rotation",
-        "code-auth-no-sessions",
-        "code-api-webhook-sig"
+        "code-auth-no-sessions"
       ],
-      "stub_tokens": 231,
-      "l1_tokens": 345,
-      "full_tokens": 486,
+      "stub_tokens": 223,
+      "l1_tokens": 337,
+      "full_tokens": 478,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -55,18 +67,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 4,
+      "rank": 1,
       "topk": [
+        "code-auth-leaked-token",
         "code-auth-rotate-jwt-key",
         "code-auth-public-keys",
-        "code-api-webhook-sig",
-        "code-auth-leaked-token",
-        "code-auth-no-sessions"
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-s2s-tokens"
       ],
-      "stub_tokens": 221,
-      "l1_tokens": 335,
-      "full_tokens": 476,
-      "ended_at_stub": false,
+      "stub_tokens": 226,
+      "l1_tokens": 363,
+      "full_tokens": 399,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -84,11 +96,11 @@
         "code-auth-no-sessions",
         "code-auth-public-keys",
         "code-obs-oncall-rotation",
-        "code-auth-user-vs-service-jwt"
+        "code-deploy-canary-window"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 353,
-      "full_tokens": 494,
+      "stub_tokens": 226,
+      "l1_tokens": 340,
+      "full_tokens": 481,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -104,14 +116,14 @@
       "rank": 1,
       "topk": [
         "code-auth-ed25519-vs-rsa",
-        "code-api-401-vs-403",
-        "code-deploy-immutable-tags",
         "code-migrations-audit-log",
-        "code-testing-coverage-gate"
+        "code-api-401-vs-403",
+        "code-obs-slo-billing",
+        "code-dm-uuidv7"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 367,
-      "full_tokens": 413,
+      "stub_tokens": 231,
+      "l1_tokens": 359,
+      "full_tokens": 405,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -129,12 +141,12 @@
         "code-auth-no-sessions",
         "code-auth-user-vs-service-jwt",
         "code-auth-rotate-jwt-key",
-        "code-auth-public-keys",
-        "code-deploy-feature-flags"
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-public-keys"
       ],
-      "stub_tokens": 229,
-      "l1_tokens": 374,
-      "full_tokens": 377,
+      "stub_tokens": 224,
+      "l1_tokens": 369,
+      "full_tokens": 372,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -147,17 +159,17 @@
       "stub_sufficient": false,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": null,
+      "rank": 3,
       "topk": [
-        "code-auth-ed25519-vs-rsa",
         "code-auth-s2s-tokens",
-        "code-api-rate-limit",
         "code-auth-leaked-token",
-        "code-dm-money-bigint"
+        "code-auth-no-sessions",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 231,
-      "l1_tokens": 359,
-      "full_tokens": 405,
+      "stub_tokens": 218,
+      "l1_tokens": 387,
+      "full_tokens": 432,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -170,18 +182,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-auth-leaked-token",
         "code-auth-s2s-tokens",
-        "code-auth-no-sessions",
-        "code-auth-rotate-jwt-key",
-        "code-api-webhook-sig"
+        "code-auth-oauth-state",
+        "code-auth-aud-meaning",
+        "code-api-webhook-sig",
+        "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 231,
-      "l1_tokens": 368,
-      "full_tokens": 404,
-      "ended_at_stub": false,
+      "stub_tokens": 246,
+      "l1_tokens": 415,
+      "full_tokens": 460,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -197,13 +209,13 @@
       "topk": [
         "code-auth-s2s-tokens",
         "code-auth-aud-meaning",
+        "code-auth-leaked-token",
         "code-auth-rotate-jwt-key",
-        "code-auth-public-keys",
-        "code-billing-stripe-webhook"
+        "code-auth-kid-meaning"
       ],
-      "stub_tokens": 245,
-      "l1_tokens": 414,
-      "full_tokens": 459,
+      "stub_tokens": 236,
+      "l1_tokens": 405,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -219,14 +231,14 @@
       "rank": 1,
       "topk": [
         "code-auth-s2s-tokens",
+        "code-obs-slo-billing",
+        "code-obs-user-facing-err",
         "code-deploy-rollback-cmd",
-        "code-dm-no-fk",
-        "code-auth-user-vs-service-jwt",
-        "code-deploy-stuck-rollout"
+        "code-obs-dashboard-naming"
       ],
-      "stub_tokens": 268,
-      "l1_tokens": 437,
-      "full_tokens": 482,
+      "stub_tokens": 254,
+      "l1_tokens": 423,
+      "full_tokens": 468,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -243,13 +255,13 @@
       "topk": [
         "code-auth-user-vs-service-jwt",
         "code-auth-no-sessions",
+        "code-auth-s2s-tokens",
         "code-auth-rotate-jwt-key",
-        "code-obs-user-facing-err",
-        "code-auth-leaked-token"
+        "code-auth-ed25519-vs-rsa"
       ],
-      "stub_tokens": 236,
-      "l1_tokens": 415,
-      "full_tokens": 459,
+      "stub_tokens": 234,
+      "l1_tokens": 413,
+      "full_tokens": 457,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -262,18 +274,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-auth-s2s-tokens",
         "code-auth-user-vs-service-jwt",
+        "code-auth-s2s-tokens",
         "code-auth-aud-meaning",
-        "code-auth-ed25519-vs-rsa",
-        "code-obs-user-facing-err"
+        "code-obs-dashboard-naming",
+        "code-auth-kid-meaning"
       ],
-      "stub_tokens": 255,
-      "l1_tokens": 424,
-      "full_tokens": 469,
-      "ended_at_stub": false,
+      "stub_tokens": 264,
+      "l1_tokens": 443,
+      "full_tokens": 487,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -285,17 +297,17 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": null,
+      "rank": 5,
       "topk": [
         "code-auth-user-vs-service-jwt",
         "code-auth-no-sessions",
         "code-auth-rotate-jwt-key",
-        "code-auth-leaked-token",
-        "code-auth-public-keys"
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-aud-meaning"
       ],
-      "stub_tokens": 229,
-      "l1_tokens": 408,
-      "full_tokens": 452,
+      "stub_tokens": 226,
+      "l1_tokens": 405,
+      "full_tokens": 449,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -311,14 +323,14 @@
       "rank": 1,
       "topk": [
         "code-auth-kid-meaning",
-        "code-obs-trace-id-prop",
         "code-auth-user-vs-service-jwt",
+        "code-obs-trace-id-prop",
         "code-auth-no-sessions",
-        "code-billing-idempotency"
+        "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 244,
-      "l1_tokens": 361,
-      "full_tokens": 402,
+      "stub_tokens": 237,
+      "l1_tokens": 354,
+      "full_tokens": 395,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -336,12 +348,12 @@
         "code-auth-public-keys",
         "code-auth-rotate-jwt-key",
         "code-auth-no-sessions",
-        "code-auth-user-vs-service-jwt",
-        "code-dm-uuidv7"
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-user-vs-service-jwt"
       ],
-      "stub_tokens": 233,
-      "l1_tokens": 360,
-      "full_tokens": 415,
+      "stub_tokens": 224,
+      "l1_tokens": 351,
+      "full_tokens": 406,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -359,12 +371,12 @@
         "code-auth-public-keys",
         "code-auth-rotate-jwt-key",
         "code-obs-oncall-rotation",
-        "code-api-idempotency",
-        "code-auth-kid-meaning"
+        "code-auth-kid-meaning",
+        "code-dm-no-fk"
       ],
-      "stub_tokens": 234,
-      "l1_tokens": 361,
-      "full_tokens": 416,
+      "stub_tokens": 243,
+      "l1_tokens": 370,
+      "full_tokens": 425,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -377,17 +389,17 @@
       "stub_sufficient": false,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-auth-no-sessions",
         "code-auth-oauth-state",
-        "code-api-401-vs-403",
-        "code-auth-rotate-jwt-key",
+        "code-auth-no-sessions",
+        "code-obs-log-levels",
+        "code-auth-s2s-tokens",
         "code-api-webhook-sig"
       ],
-      "stub_tokens": 235,
-      "l1_tokens": 380,
-      "full_tokens": 383,
+      "stub_tokens": 241,
+      "l1_tokens": 374,
+      "full_tokens": 413,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -400,18 +412,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 1,
       "topk": [
-        "code-billing-trial",
-        "code-billing-tax-inclusive",
         "code-billing-line-math",
+        "code-billing-trial",
         "code-billing-refunds",
-        "code-billing-proration-edge"
+        "code-billing-proration-edge",
+        "code-billing-idempotency"
       ],
-      "stub_tokens": 243,
-      "l1_tokens": 348,
-      "full_tokens": 350,
-      "ended_at_stub": false,
+      "stub_tokens": 247,
+      "l1_tokens": 393,
+      "full_tokens": 395,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -427,14 +439,14 @@
       "rank": 1,
       "topk": [
         "code-billing-line-math",
+        "code-billing-proration-edge",
         "code-billing-trial",
         "code-migrations-test-destructive",
-        "code-testing-integration-org",
         "code-testing-coverage-gate"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 396,
-      "full_tokens": 398,
+      "stub_tokens": 256,
+      "l1_tokens": 402,
+      "full_tokens": 404,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -451,13 +463,13 @@
       "topk": [
         "code-billing-proration-edge",
         "code-billing-line-math",
-        "code-obs-slo-billing",
         "code-deploy-freeze-calendar",
-        "code-testing-coverage-gate"
+        "code-obs-slo-billing",
+        "code-deploy-pdb"
       ],
-      "stub_tokens": 244,
-      "l1_tokens": 392,
-      "full_tokens": 422,
+      "stub_tokens": 249,
+      "l1_tokens": 397,
+      "full_tokens": 427,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -470,18 +482,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-dm-money-bigint",
         "code-billing-no-fx-storage",
-        "code-migrations-audit-log",
-        "code-api-webhook-sig",
-        "code-migrations-lock-timeout"
+        "code-dm-money-bigint",
+        "code-billing-payout-recon",
+        "code-migrations-zero-downtime",
+        "code-migrations-audit-log"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 352,
-      "full_tokens": 392,
-      "ended_at_stub": false,
+      "stub_tokens": 244,
+      "l1_tokens": 371,
+      "full_tokens": 408,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -496,14 +508,14 @@
       "rank": 1,
       "topk": [
         "code-billing-no-fx-storage",
+        "code-billing-payout-recon",
+        "code-billing-proration-edge",
         "code-deploy-canary-window",
-        "code-api-rate-limit",
-        "code-billing-line-math",
-        "code-migrations-rename-column"
+        "code-api-rate-limit"
       ],
-      "stub_tokens": 240,
-      "l1_tokens": 367,
-      "full_tokens": 404,
+      "stub_tokens": 239,
+      "l1_tokens": 366,
+      "full_tokens": 403,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -519,14 +531,14 @@
       "rank": 1,
       "topk": [
         "code-billing-refunds",
-        "code-billing-idempotency",
         "code-billing-no-fx-storage",
+        "code-billing-idempotency",
         "code-obs-dashboard-naming",
-        "code-api-bulk"
+        "code-billing-trial"
       ],
-      "stub_tokens": 248,
-      "l1_tokens": 361,
-      "full_tokens": 364,
+      "stub_tokens": 242,
+      "l1_tokens": 355,
+      "full_tokens": 358,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -543,13 +555,13 @@
       "topk": [
         "code-billing-refunds",
         "code-billing-trial",
-        "code-api-expand",
-        "code-api-graceful-shutdown",
-        "code-billing-dunning"
+        "code-billing-line-math",
+        "code-billing-proration-edge",
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 228,
-      "l1_tokens": 341,
-      "full_tokens": 344,
+      "stub_tokens": 239,
+      "l1_tokens": 352,
+      "full_tokens": 355,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -565,14 +577,14 @@
       "rank": 1,
       "topk": [
         "code-billing-tax-inclusive",
+        "code-billing-payout-recon",
         "code-billing-idempotency",
-        "code-billing-dunning",
-        "code-auth-ed25519-vs-rsa",
-        "code-api-expand"
+        "code-obs-slo-billing",
+        "code-billing-no-fx-storage"
       ],
-      "stub_tokens": 225,
-      "l1_tokens": 330,
-      "full_tokens": 333,
+      "stub_tokens": 232,
+      "l1_tokens": 337,
+      "full_tokens": 340,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -585,18 +597,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-billing-proration-edge",
         "code-billing-trial",
+        "code-billing-proration-edge",
         "code-billing-line-math",
-        "code-obs-dashboard-naming",
-        "code-billing-no-fx-storage"
+        "code-obs-slo-billing",
+        "code-billing-dunning"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 405,
-      "full_tokens": 435,
-      "ended_at_stub": false,
+      "stub_tokens": 240,
+      "l1_tokens": 345,
+      "full_tokens": 347,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -612,13 +624,13 @@
       "topk": [
         "code-billing-idempotency",
         "code-api-idempotency",
-        "code-dm-uuidv7",
-        "code-billing-trial",
-        "code-obs-request-id"
+        "code-auth-rotate-jwt-key",
+        "code-obs-request-id",
+        "code-dm-uuidv7"
       ],
-      "stub_tokens": 234,
-      "l1_tokens": 358,
-      "full_tokens": 361,
+      "stub_tokens": 235,
+      "l1_tokens": 359,
+      "full_tokens": 362,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -635,13 +647,13 @@
       "topk": [
         "code-billing-stripe-webhook",
         "code-api-webhook-sig",
-        "code-billing-payout-recon",
         "code-auth-ed25519-vs-rsa",
-        "code-deploy-stuck-rollout"
+        "code-auth-leaked-token",
+        "code-auth-oauth-state"
       ],
-      "stub_tokens": 231,
-      "l1_tokens": 320,
-      "full_tokens": 361,
+      "stub_tokens": 225,
+      "l1_tokens": 314,
+      "full_tokens": 355,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -654,18 +666,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-deploy-rollback-cmd",
+        "code-billing-payout-recon",
         "code-billing-dunning",
-        "code-billing-no-fx-storage",
         "code-billing-idempotency",
+        "code-deploy-rollback-cmd",
         "code-migrations-rollback"
       ],
-      "stub_tokens": 249,
-      "l1_tokens": 353,
-      "full_tokens": 356,
-      "ended_at_stub": false,
+      "stub_tokens": 243,
+      "l1_tokens": 372,
+      "full_tokens": 374,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -682,12 +694,12 @@
         "code-billing-dunning",
         "code-obs-oncall-rotation",
         "code-testing-load",
-        "code-auth-rotate-jwt-key",
-        "code-deploy-pre-checklist"
+        "code-billing-proration-edge",
+        "code-deploy-freeze-calendar"
       ],
-      "stub_tokens": 231,
-      "l1_tokens": 350,
-      "full_tokens": 353,
+      "stub_tokens": 247,
+      "l1_tokens": 366,
+      "full_tokens": 369,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -705,12 +717,12 @@
         "code-migrations-add-not-null",
         "code-migrations-zero-downtime",
         "code-migrations-never-drop-same-release",
-        "code-migrations-online-offline",
-        "code-api-pagination"
+        "code-migrations-rename-column",
+        "code-dm-soft-delete"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 390,
-      "full_tokens": 419,
+      "stub_tokens": 251,
+      "l1_tokens": 380,
+      "full_tokens": 409,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -726,14 +738,14 @@
       "rank": 1,
       "topk": [
         "code-migrations-rename-column",
-        "code-migrations-add-not-null",
         "code-migrations-zero-downtime",
+        "code-migrations-add-not-null",
         "code-migrations-never-drop-same-release",
-        "code-dm-timestamptz"
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 407,
-      "full_tokens": 410,
+      "stub_tokens": 262,
+      "l1_tokens": 416,
+      "full_tokens": 419,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -747,18 +759,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
+        "code-migrations-zero-downtime",
+        "code-migrations-online-offline",
         "code-migrations-audit-log",
-        "code-migrations-up-vs-expand",
-        "code-migrations-rollback",
-        "code-api-graceful-shutdown",
-        "code-deploy-rollback-cmd"
+        "code-deploy-rollback-cmd",
+        "code-migrations-up-vs-expand"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 360,
-      "full_tokens": 362,
-      "ended_at_stub": false,
+      "stub_tokens": 255,
+      "l1_tokens": 376,
+      "full_tokens": 378,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -770,18 +782,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-migrations-up-vs-expand",
         "code-migrations-online-offline",
+        "code-migrations-zero-downtime",
+        "code-migrations-up-vs-expand",
         "code-migrations-audit-log",
-        "code-auth-no-sessions",
-        "code-migrations-rollback"
+        "code-deploy-immutable-tags"
       ],
-      "stub_tokens": 258,
-      "l1_tokens": 377,
-      "full_tokens": 379,
-      "ended_at_stub": false,
+      "stub_tokens": 257,
+      "l1_tokens": 412,
+      "full_tokens": 414,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -793,18 +805,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 1,
       "topk": [
-        "code-migrations-zero-downtime",
-        "code-migrations-rename-column",
         "code-migrations-never-drop-same-release",
+        "code-migrations-rename-column",
+        "code-migrations-zero-downtime",
         "code-migrations-add-not-null",
-        "code-obs-dashboard-naming"
+        "code-dm-soft-delete"
       ],
-      "stub_tokens": 260,
-      "l1_tokens": 381,
-      "full_tokens": 383,
-      "ended_at_stub": false,
+      "stub_tokens": 251,
+      "l1_tokens": 388,
+      "full_tokens": 391,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -819,14 +831,14 @@
       "rank": 1,
       "topk": [
         "code-migrations-lock-timeout",
+        "code-migrations-online-offline",
         "code-auth-rotate-jwt-key",
-        "code-migrations-rollback",
-        "code-migrations-audit-log",
-        "code-migrations-online-offline"
+        "code-deploy-rollback-cmd",
+        "code-migrations-test-destructive"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 383,
-      "full_tokens": 386,
+      "stub_tokens": 256,
+      "l1_tokens": 378,
+      "full_tokens": 381,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -839,17 +851,17 @@
       "stub_sufficient": false,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 1,
       "topk": [
-        "code-deploy-pre-checklist",
-        "code-migrations-audit-log",
         "code-migrations-test-destructive",
+        "code-migrations-audit-log",
+        "code-deploy-pre-checklist",
         "code-migrations-rollback",
-        "code-migrations-lock-timeout"
+        "code-testing-db-transactions"
       ],
-      "stub_tokens": 260,
-      "l1_tokens": 363,
-      "full_tokens": 366,
+      "stub_tokens": 258,
+      "l1_tokens": 398,
+      "full_tokens": 400,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -866,13 +878,13 @@
       "topk": [
         "code-migrations-audit-log",
         "code-migrations-up-vs-expand",
-        "code-migrations-rollback",
         "code-migrations-test-destructive",
-        "code-deploy-pre-checklist"
+        "code-migrations-zero-downtime",
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 364,
-      "full_tokens": 366,
+      "stub_tokens": 265,
+      "l1_tokens": 368,
+      "full_tokens": 370,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -889,13 +901,13 @@
       "topk": [
         "code-migrations-rollback",
         "code-deploy-rollback-cmd",
-        "code-deploy-pre-checklist",
         "code-migrations-lock-timeout",
+        "code-migrations-test-destructive",
         "code-migrations-audit-log"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 379,
-      "full_tokens": 381,
+      "stub_tokens": 263,
+      "l1_tokens": 392,
+      "full_tokens": 394,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -908,18 +920,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
+        "code-deploy-canary-window",
         "code-testing-fixture-vs-factory",
-        "code-obs-request-id",
         "code-obs-alert-severity",
-        "code-migrations-lock-timeout",
-        "code-migrations-test-destructive"
+        "code-obs-dashboard-naming",
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 258,
-      "l1_tokens": 366,
-      "full_tokens": 369,
-      "ended_at_stub": false,
+      "stub_tokens": 241,
+      "l1_tokens": 336,
+      "full_tokens": 339,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -931,18 +943,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 3,
       "topk": [
+        "code-deploy-feature-flags",
+        "code-obs-slo-billing",
         "code-deploy-canary-window",
-        "code-deploy-stuck-rollout",
         "code-deploy-rollback-cmd",
-        "code-obs-error-budget",
-        "code-api-rate-limit"
+        "code-deploy-stuck-rollout"
       ],
-      "stub_tokens": 237,
-      "l1_tokens": 332,
-      "full_tokens": 335,
-      "ended_at_stub": true,
+      "stub_tokens": 226,
+      "l1_tokens": 314,
+      "full_tokens": 317,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -958,8 +970,8 @@
       "topk": [
         "code-deploy-rollback-cmd",
         "code-migrations-rollback",
-        "code-deploy-canary-window",
         "code-deploy-stuck-rollout",
+        "code-deploy-canary-window",
         "code-migrations-never-drop-same-release"
       ],
       "stub_tokens": 256,
@@ -980,14 +992,14 @@
       "rank": 1,
       "topk": [
         "code-deploy-immutable-tags",
-        "code-billing-stripe-webhook",
-        "code-deploy-stuck-rollout",
+        "code-migrations-zero-downtime",
         "code-migrations-audit-log",
-        "code-api-pagination"
+        "code-billing-stripe-webhook",
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 248,
-      "l1_tokens": 378,
-      "full_tokens": 381,
+      "stub_tokens": 251,
+      "l1_tokens": 381,
+      "full_tokens": 384,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1000,18 +1012,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-obs-error-budget",
         "code-deploy-freeze-calendar",
-        "code-deploy-vs-release",
-        "code-deploy-log-format",
-        "code-migrations-zero-downtime"
+        "code-deploy-pre-checklist",
+        "code-deploy-canary-window",
+        "code-deploy-rollback-cmd",
+        "code-deploy-log-format"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 371,
-      "full_tokens": 373,
-      "ended_at_stub": false,
+      "stub_tokens": 233,
+      "l1_tokens": 338,
+      "full_tokens": 340,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -1023,18 +1035,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-deploy-stuck-rollout",
+        "code-deploy-feature-flags",
         "code-deploy-rollback-cmd",
-        "code-deploy-vs-release",
+        "code-deploy-stuck-rollout",
         "code-deploy-pre-checklist",
-        "code-migrations-rename-column"
+        "code-deploy-vs-release"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 362,
-      "full_tokens": 364,
-      "ended_at_stub": false,
+      "stub_tokens": 230,
+      "l1_tokens": 318,
+      "full_tokens": 321,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -1046,18 +1058,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 4,
+      "rank": 1,
       "topk": [
-        "code-deploy-log-format",
-        "code-migrations-zero-downtime",
-        "code-deploy-stuck-rollout",
         "code-deploy-pre-checklist",
-        "code-obs-error-budget"
+        "code-deploy-log-format",
+        "code-deploy-feature-flags",
+        "code-deploy-stuck-rollout",
+        "code-deploy-freeze-calendar"
       ],
-      "stub_tokens": 249,
-      "l1_tokens": 351,
-      "full_tokens": 353,
-      "ended_at_stub": false,
+      "stub_tokens": 235,
+      "l1_tokens": 338,
+      "full_tokens": 341,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -1072,9 +1084,9 @@
       "rank": 1,
       "topk": [
         "code-deploy-pdb",
-        "code-obs-slo-billing",
         "code-deploy-canary-window",
         "code-obs-error-budget",
+        "code-obs-slo-billing",
         "code-deploy-stuck-rollout"
       ],
       "stub_tokens": 244,
@@ -1095,14 +1107,14 @@
       "rank": 1,
       "topk": [
         "code-deploy-vs-release",
-        "code-migrations-never-drop-same-release",
-        "code-deploy-log-format",
-        "code-obs-error-budget",
-        "code-migrations-rename-column"
+        "code-deploy-rollback-cmd",
+        "code-deploy-canary-window",
+        "code-deploy-pre-checklist",
+        "code-deploy-log-format"
       ],
-      "stub_tokens": 264,
-      "l1_tokens": 382,
-      "full_tokens": 385,
+      "stub_tokens": 237,
+      "l1_tokens": 355,
+      "full_tokens": 358,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1119,13 +1131,13 @@
       "topk": [
         "code-deploy-stuck-rollout",
         "code-deploy-rollback-cmd",
-        "code-deploy-canary-window",
-        "code-migrations-rollback",
-        "code-obs-log-levels"
+        "code-deploy-feature-flags",
+        "code-obs-log-levels",
+        "code-deploy-canary-window"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 370,
-      "full_tokens": 372,
+      "stub_tokens": 232,
+      "l1_tokens": 355,
+      "full_tokens": 357,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1138,18 +1150,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
+        "code-obs-slo-billing",
         "code-billing-proration-edge",
         "code-deploy-feature-flags",
-        "code-obs-dashboard-naming",
-        "code-billing-dunning",
-        "code-api-expand"
+        "code-billing-trial",
+        "code-billing-line-math"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 395,
-      "full_tokens": 425,
-      "ended_at_stub": false,
+      "stub_tokens": 236,
+      "l1_tokens": 345,
+      "full_tokens": 347,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -1164,14 +1176,14 @@
       "rank": 1,
       "topk": [
         "code-obs-trace-sampling",
+        "code-obs-trace-id-prop",
         "code-migrations-test-destructive",
         "code-billing-trial",
-        "code-deploy-pre-checklist",
-        "code-obs-trace-id-prop"
+        "code-deploy-feature-flags"
       ],
-      "stub_tokens": 245,
-      "l1_tokens": 358,
-      "full_tokens": 360,
+      "stub_tokens": 244,
+      "l1_tokens": 357,
+      "full_tokens": 359,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1188,13 +1200,13 @@
       "topk": [
         "code-obs-trace-sampling",
         "code-migrations-test-destructive",
-        "code-api-bulk",
-        "code-obs-error-budget",
-        "code-obs-request-id"
+        "code-testing-db-transactions",
+        "code-testing-property-based",
+        "code-api-bulk"
       ],
-      "stub_tokens": 258,
-      "l1_tokens": 371,
-      "full_tokens": 373,
+      "stub_tokens": 265,
+      "l1_tokens": 378,
+      "full_tokens": 380,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1210,14 +1222,14 @@
       "rank": 1,
       "topk": [
         "code-obs-alert-severity",
+        "code-obs-log-levels",
+        "code-obs-user-facing-err",
         "code-billing-dunning",
-        "code-deploy-pdb",
-        "code-dm-no-fk",
-        "code-obs-log-levels"
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 351,
-      "full_tokens": 354,
+      "stub_tokens": 237,
+      "l1_tokens": 338,
+      "full_tokens": 341,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1230,18 +1242,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "code-obs-alert-severity",
         "code-deploy-freeze-calendar",
-        "code-dm-timestamptz",
+        "code-obs-alert-severity",
         "code-obs-oncall-rotation",
-        "code-migrations-rename-column"
+        "code-billing-proration-edge",
+        "code-api-graceful-shutdown"
       ],
-      "stub_tokens": 242,
-      "l1_tokens": 343,
-      "full_tokens": 346,
-      "ended_at_stub": true,
+      "stub_tokens": 250,
+      "l1_tokens": 355,
+      "full_tokens": 357,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1256,14 +1268,14 @@
       "rank": 1,
       "topk": [
         "code-obs-trace-id-prop",
-        "code-obs-request-id",
-        "code-billing-stripe-webhook",
-        "code-billing-idempotency",
-        "code-obs-trace-sampling"
+        "code-deploy-canary-window",
+        "code-obs-alert-severity",
+        "code-api-versioning",
+        "code-obs-request-id"
       ],
-      "stub_tokens": 252,
-      "l1_tokens": 354,
-      "full_tokens": 388,
+      "stub_tokens": 230,
+      "l1_tokens": 332,
+      "full_tokens": 366,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1279,14 +1291,14 @@
       "rank": 1,
       "topk": [
         "code-obs-dashboard-naming",
-        "code-obs-alert-severity",
         "code-deploy-log-format",
+        "code-migrations-rename-column",
         "code-deploy-pre-checklist",
-        "code-api-pagination"
+        "code-deploy-feature-flags"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 335,
-      "full_tokens": 364,
+      "stub_tokens": 246,
+      "l1_tokens": 331,
+      "full_tokens": 360,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1299,18 +1311,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-billing-dunning",
-        "code-billing-trial",
+        "code-obs-log-levels",
+        "code-obs-alert-severity",
+        "code-obs-slo-billing",
         "code-testing-fixture-vs-factory",
-        "code-migrations-never-drop-same-release",
-        "code-api-rate-limit"
+        "code-migrations-never-drop-same-release"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 358,
-      "full_tokens": 361,
-      "ended_at_stub": false,
+      "stub_tokens": 246,
+      "l1_tokens": 341,
+      "full_tokens": 343,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -1327,12 +1339,12 @@
         "code-obs-oncall-rotation",
         "code-auth-rotate-jwt-key",
         "code-deploy-rollback-cmd",
-        "code-deploy-stuck-rollout",
-        "code-obs-alert-severity"
+        "code-obs-alert-severity",
+        "code-deploy-canary-window"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 345,
-      "full_tokens": 347,
+      "stub_tokens": 233,
+      "l1_tokens": 339,
+      "full_tokens": 341,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1349,13 +1361,13 @@
       "topk": [
         "code-obs-error-budget",
         "code-obs-slo-billing",
-        "code-billing-dunning",
         "code-api-problem-details",
-        "code-obs-dashboard-naming"
+        "code-billing-dunning",
+        "code-obs-user-facing-err"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 377,
-      "full_tokens": 379,
+      "stub_tokens": 252,
+      "l1_tokens": 376,
+      "full_tokens": 378,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1368,17 +1380,17 @@
       "stub_sufficient": false,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 4,
+      "rank": 1,
       "topk": [
-        "code-obs-error-budget",
-        "code-api-problem-details",
-        "code-api-bulk",
         "code-obs-user-facing-err",
-        "code-billing-dunning"
+        "code-api-problem-details",
+        "code-obs-error-budget",
+        "code-obs-slo-billing",
+        "code-api-pagination"
       ],
-      "stub_tokens": 258,
-      "l1_tokens": 382,
-      "full_tokens": 384,
+      "stub_tokens": 256,
+      "l1_tokens": 361,
+      "full_tokens": 363,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1394,14 +1406,14 @@
       "rank": 1,
       "topk": [
         "code-obs-request-id",
+        "code-obs-trace-id-prop",
         "code-deploy-log-format",
-        "code-auth-s2s-tokens",
-        "code-api-versioning",
-        "code-testing-mock-http"
+        "code-api-idempotency",
+        "code-api-versioning"
       ],
-      "stub_tokens": 244,
-      "l1_tokens": 341,
-      "full_tokens": 343,
+      "stub_tokens": 240,
+      "l1_tokens": 337,
+      "full_tokens": 339,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1418,13 +1430,13 @@
       "topk": [
         "code-testing-integration-org",
         "code-migrations-test-destructive",
-        "code-deploy-pre-checklist",
-        "code-testing-ci-parallel",
-        "code-testing-load"
+        "code-testing-db-transactions",
+        "code-testing-load",
+        "code-testing-ci-parallel"
       ],
-      "stub_tokens": 243,
-      "l1_tokens": 346,
-      "full_tokens": 348,
+      "stub_tokens": 252,
+      "l1_tokens": 355,
+      "full_tokens": 357,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1440,14 +1452,14 @@
       "rank": 1,
       "topk": [
         "code-testing-fixture-vs-factory",
-        "code-dm-uuidv7",
-        "code-auth-oauth-state",
         "code-migrations-online-offline",
-        "code-obs-dashboard-naming"
+        "code-testing-db-transactions",
+        "code-obs-log-levels",
+        "code-testing-ci-parallel"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 365,
-      "full_tokens": 368,
+      "stub_tokens": 254,
+      "l1_tokens": 362,
+      "full_tokens": 365,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1463,14 +1475,14 @@
       "rank": 1,
       "topk": [
         "code-testing-mock-http",
+        "code-api-graceful-shutdown",
         "code-billing-dunning",
-        "code-obs-request-id",
         "code-api-expand",
-        "code-obs-trace-id-prop"
+        "code-api-webhook-sig"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 326,
-      "full_tokens": 356,
+      "stub_tokens": 237,
+      "l1_tokens": 324,
+      "full_tokens": 354,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1486,14 +1498,14 @@
       "rank": 1,
       "topk": [
         "code-testing-coverage-gate",
-        "code-billing-trial",
-        "code-billing-dunning",
-        "code-deploy-pre-checklist",
-        "code-deploy-immutable-tags"
+        "code-deploy-feature-flags",
+        "code-deploy-canary-window",
+        "code-billing-proration-edge",
+        "code-billing-dunning"
       ],
-      "stub_tokens": 227,
-      "l1_tokens": 289,
-      "full_tokens": 328,
+      "stub_tokens": 239,
+      "l1_tokens": 301,
+      "full_tokens": 340,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1509,14 +1521,14 @@
       "rank": 1,
       "topk": [
         "code-testing-flaky",
+        "code-deploy-feature-flags",
         "code-testing-ci-parallel",
-        "code-deploy-pre-checklist",
-        "code-deploy-pdb",
-        "code-testing-coverage-gate"
+        "code-testing-coverage-gate",
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 242,
-      "l1_tokens": 341,
-      "full_tokens": 368,
+      "stub_tokens": 230,
+      "l1_tokens": 329,
+      "full_tokens": 356,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1532,14 +1544,14 @@
       "rank": 1,
       "topk": [
         "code-testing-property-based",
-        "code-testing-mock-http",
-        "code-testing-snapshots",
+        "code-testing-db-transactions",
         "code-obs-trace-sampling",
-        "code-testing-integration-org"
+        "code-testing-fixture-vs-factory",
+        "code-testing-load"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 377,
-      "full_tokens": 380,
+      "stub_tokens": 260,
+      "l1_tokens": 380,
+      "full_tokens": 383,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1556,13 +1568,13 @@
       "topk": [
         "code-testing-snapshots",
         "code-migrations-test-destructive",
-        "code-deploy-pre-checklist",
-        "code-testing-flaky",
-        "code-deploy-stuck-rollout"
+        "code-testing-db-transactions",
+        "code-testing-load",
+        "code-deploy-pre-checklist"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 345,
-      "full_tokens": 369,
+      "stub_tokens": 248,
+      "l1_tokens": 340,
+      "full_tokens": 364,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1581,11 +1593,11 @@
         "code-testing-integration-org",
         "code-testing-db-transactions",
         "code-testing-mock-http",
-        "code-billing-stripe-webhook"
+        "code-migrations-test-destructive"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 332,
-      "full_tokens": 335,
+      "stub_tokens": 253,
+      "l1_tokens": 339,
+      "full_tokens": 342,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1602,13 +1614,13 @@
       "topk": [
         "code-testing-db-transactions",
         "code-testing-integration-org",
-        "code-deploy-pre-checklist",
-        "code-api-webhook-sig",
-        "code-billing-trial"
+        "code-migrations-test-destructive",
+        "code-billing-trial",
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 364,
-      "full_tokens": 366,
+      "stub_tokens": 244,
+      "l1_tokens": 369,
+      "full_tokens": 371,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1624,14 +1636,14 @@
       "rank": 1,
       "topk": [
         "code-testing-ci-parallel",
+        "code-billing-payout-recon",
         "code-migrations-online-offline",
-        "code-api-expand",
-        "code-obs-request-id",
-        "code-billing-stripe-webhook"
+        "code-api-rate-limit",
+        "code-billing-idempotency"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 334,
-      "full_tokens": 336,
+      "stub_tokens": 238,
+      "l1_tokens": 326,
+      "full_tokens": 328,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1647,14 +1659,14 @@
       "rank": 1,
       "topk": [
         "code-api-pagination",
-        "code-api-expand",
-        "code-dm-uuidv7",
-        "code-migrations-test-destructive",
-        "code-obs-oncall-rotation"
+        "code-migrations-online-offline",
+        "code-migrations-zero-downtime",
+        "code-billing-proration-edge",
+        "code-obs-alert-severity"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 362,
-      "full_tokens": 365,
+      "stub_tokens": 259,
+      "l1_tokens": 371,
+      "full_tokens": 374,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1670,10 +1682,10 @@
       "rank": 1,
       "topk": [
         "code-api-pagination",
+        "code-dm-no-fk",
         "code-migrations-online-offline",
         "code-deploy-rollback-cmd",
-        "code-deploy-stuck-rollout",
-        "code-migrations-rollback"
+        "code-obs-oncall-rotation"
       ],
       "stub_tokens": 261,
       "l1_tokens": 373,
@@ -1693,14 +1705,14 @@
       "rank": 1,
       "topk": [
         "code-api-rate-limit",
-        "code-migrations-online-offline",
         "code-api-idempotency",
         "code-billing-idempotency",
+        "code-api-bulk",
         "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 316,
-      "full_tokens": 342,
+      "stub_tokens": 230,
+      "l1_tokens": 307,
+      "full_tokens": 333,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1713,18 +1725,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
+        "code-billing-dunning",
         "code-api-rate-limit",
-        "code-obs-user-facing-err",
         "code-api-graceful-shutdown",
-        "code-api-401-vs-403",
-        "code-api-bulk"
+        "code-deploy-canary-window",
+        "code-api-idempotency"
       ],
-      "stub_tokens": 249,
-      "l1_tokens": 326,
-      "full_tokens": 352,
-      "ended_at_stub": true,
+      "stub_tokens": 229,
+      "l1_tokens": 348,
+      "full_tokens": 351,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1739,14 +1751,14 @@
       "rank": 1,
       "topk": [
         "code-api-bulk",
-        "code-obs-trace-sampling",
-        "code-billing-stripe-webhook",
+        "code-obs-slo-billing",
+        "code-billing-proration-edge",
         "code-obs-dashboard-naming",
-        "code-testing-integration-org"
+        "code-obs-trace-sampling"
       ],
-      "stub_tokens": 256,
-      "l1_tokens": 349,
-      "full_tokens": 379,
+      "stub_tokens": 255,
+      "l1_tokens": 348,
+      "full_tokens": 378,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1762,14 +1774,14 @@
       "rank": 1,
       "topk": [
         "code-api-versioning",
-        "code-testing-mock-http",
+        "code-deploy-feature-flags",
         "code-deploy-canary-window",
-        "code-deploy-vs-release",
-        "code-migrations-test-destructive"
+        "code-api-graceful-shutdown",
+        "code-api-rate-limit"
       ],
-      "stub_tokens": 232,
-      "l1_tokens": 303,
-      "full_tokens": 333,
+      "stub_tokens": 215,
+      "l1_tokens": 286,
+      "full_tokens": 316,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1786,9 +1798,9 @@
       "topk": [
         "code-api-401-vs-403",
         "code-auth-ed25519-vs-rsa",
-        "code-auth-user-vs-service-jwt",
         "code-auth-oauth-state",
-        "code-deploy-pre-checklist"
+        "code-obs-dashboard-naming",
+        "code-dm-uuidv7"
       ],
       "stub_tokens": 241,
       "l1_tokens": 352,
@@ -1805,17 +1817,17 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 2,
       "topk": [
-        "code-obs-error-budget",
         "code-obs-user-facing-err",
         "code-api-problem-details",
+        "code-obs-error-budget",
         "code-api-bulk",
-        "code-testing-mock-http"
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 258,
-      "l1_tokens": 382,
-      "full_tokens": 384,
+      "stub_tokens": 254,
+      "l1_tokens": 359,
+      "full_tokens": 361,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1832,13 +1844,13 @@
       "topk": [
         "code-api-expand",
         "code-migrations-up-vs-expand",
-        "code-testing-fixture-vs-factory",
+        "code-migrations-rename-column",
         "code-api-pagination",
-        "code-api-bulk"
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 251,
-      "l1_tokens": 364,
-      "full_tokens": 366,
+      "stub_tokens": 259,
+      "l1_tokens": 372,
+      "full_tokens": 374,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1857,11 +1869,11 @@
         "code-billing-idempotency",
         "code-auth-rotate-jwt-key",
         "code-auth-public-keys",
-        "code-dm-uuidv7"
+        "code-api-rate-limit"
       ],
-      "stub_tokens": 233,
-      "l1_tokens": 323,
-      "full_tokens": 356,
+      "stub_tokens": 229,
+      "l1_tokens": 319,
+      "full_tokens": 352,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1879,12 +1891,12 @@
         "code-api-webhook-sig",
         "code-billing-stripe-webhook",
         "code-auth-ed25519-vs-rsa",
-        "code-auth-kid-meaning",
-        "code-auth-rotate-jwt-key"
+        "code-auth-rotate-jwt-key",
+        "code-auth-oauth-state"
       ],
-      "stub_tokens": 224,
-      "l1_tokens": 337,
-      "full_tokens": 340,
+      "stub_tokens": 226,
+      "l1_tokens": 339,
+      "full_tokens": 342,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1897,18 +1909,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 5,
+      "rank": 1,
       "topk": [
+        "code-api-graceful-shutdown",
         "code-migrations-lock-timeout",
-        "code-deploy-rollback-cmd",
-        "code-obs-oncall-rotation",
         "code-obs-alert-severity",
-        "code-api-graceful-shutdown"
+        "code-deploy-feature-flags",
+        "code-obs-oncall-rotation"
       ],
-      "stub_tokens": 248,
-      "l1_tokens": 370,
-      "full_tokens": 373,
-      "ended_at_stub": false,
+      "stub_tokens": 244,
+      "l1_tokens": 328,
+      "full_tokens": 360,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -1924,13 +1936,13 @@
       "topk": [
         "code-dm-uuidv7",
         "code-obs-request-id",
-        "code-obs-user-facing-err",
-        "code-auth-ed25519-vs-rsa",
+        "code-api-versioning",
+        "code-auth-user-vs-service-jwt",
         "code-billing-idempotency"
       ],
-      "stub_tokens": 236,
-      "l1_tokens": 361,
-      "full_tokens": 364,
+      "stub_tokens": 240,
+      "l1_tokens": 365,
+      "full_tokens": 368,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1946,14 +1958,14 @@
       "rank": 1,
       "topk": [
         "code-dm-uuidv7",
+        "code-billing-idempotency",
         "code-obs-request-id",
-        "code-dm-timestamptz",
-        "code-auth-user-vs-service-jwt",
-        "code-deploy-feature-flags"
+        "code-deploy-feature-flags",
+        "code-auth-user-vs-service-jwt"
       ],
-      "stub_tokens": 243,
-      "l1_tokens": 368,
-      "full_tokens": 371,
+      "stub_tokens": 245,
+      "l1_tokens": 370,
+      "full_tokens": 373,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1970,13 +1982,13 @@
       "topk": [
         "code-dm-soft-delete",
         "code-migrations-never-drop-same-release",
-        "code-migrations-audit-log",
-        "code-dm-no-fk",
-        "code-migrations-zero-downtime"
+        "code-migrations-zero-downtime",
+        "code-migrations-rename-column",
+        "code-migrations-audit-log"
       ],
-      "stub_tokens": 256,
-      "l1_tokens": 367,
-      "full_tokens": 370,
+      "stub_tokens": 251,
+      "l1_tokens": 362,
+      "full_tokens": 365,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1994,12 +2006,12 @@
         "code-dm-timestamptz",
         "code-testing-db-transactions",
         "code-billing-no-fx-storage",
-        "code-obs-oncall-rotation",
-        "code-migrations-lock-timeout"
+        "code-dm-soft-delete",
+        "code-auth-user-vs-service-jwt"
       ],
-      "stub_tokens": 256,
-      "l1_tokens": 356,
-      "full_tokens": 358,
+      "stub_tokens": 254,
+      "l1_tokens": 354,
+      "full_tokens": 356,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2015,14 +2027,14 @@
       "rank": 1,
       "topk": [
         "code-dm-money-bigint",
-        "code-api-bulk",
-        "code-api-webhook-sig",
         "code-billing-no-fx-storage",
-        "code-dm-timestamptz"
+        "code-billing-idempotency",
+        "code-obs-slo-billing",
+        "code-obs-error-budget"
       ],
-      "stub_tokens": 249,
-      "l1_tokens": 344,
-      "full_tokens": 384,
+      "stub_tokens": 248,
+      "l1_tokens": 343,
+      "full_tokens": 383,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2038,14 +2050,14 @@
       "rank": 1,
       "topk": [
         "code-api-bulk",
-        "code-testing-mock-http",
-        "code-billing-stripe-webhook",
         "code-obs-request-id",
-        "code-api-expand"
+        "code-testing-mock-http",
+        "code-api-idempotency",
+        "code-migrations-zero-downtime"
       ],
-      "stub_tokens": 238,
-      "l1_tokens": 331,
-      "full_tokens": 361,
+      "stub_tokens": 237,
+      "l1_tokens": 330,
+      "full_tokens": 360,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2058,18 +2070,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 5,
+      "rank": 1,
       "topk": [
+        "code-api-problem-details",
+        "code-obs-user-facing-err",
         "code-obs-error-budget",
-        "code-billing-dunning",
-        "code-dm-no-fk",
-        "code-obs-request-id",
-        "code-api-problem-details"
+        "code-obs-slo-billing",
+        "code-auth-ed25519-vs-rsa"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 385,
-      "full_tokens": 387,
-      "ended_at_stub": false,
+      "stub_tokens": 243,
+      "l1_tokens": 380,
+      "full_tokens": 382,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -2085,13 +2097,13 @@
       "topk": [
         "code-api-expand",
         "code-migrations-up-vs-expand",
-        "code-api-pagination",
         "code-migrations-rename-column",
-        "code-migrations-online-offline"
+        "code-migrations-online-offline",
+        "code-dm-no-fk"
       ],
-      "stub_tokens": 259,
-      "l1_tokens": 372,
-      "full_tokens": 374,
+      "stub_tokens": 265,
+      "l1_tokens": 378,
+      "full_tokens": 380,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2108,13 +2120,13 @@
       "topk": [
         "code-api-idempotency",
         "code-billing-idempotency",
+        "code-obs-request-id",
         "code-auth-rotate-jwt-key",
-        "code-auth-public-keys",
-        "code-obs-request-id"
+        "code-api-bulk"
       ],
-      "stub_tokens": 236,
-      "l1_tokens": 326,
-      "full_tokens": 359,
+      "stub_tokens": 237,
+      "l1_tokens": 327,
+      "full_tokens": 360,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2131,13 +2143,13 @@
       "topk": [
         "code-api-pagination",
         "code-api-bulk",
+        "code-migrations-never-drop-same-release",
         "code-api-expand",
-        "code-deploy-feature-flags",
-        "code-migrations-test-destructive"
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 242,
-      "l1_tokens": 354,
-      "full_tokens": 357,
+      "stub_tokens": 258,
+      "l1_tokens": 370,
+      "full_tokens": 373,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2153,10 +2165,10 @@
       "rank": 1,
       "topk": [
         "code-api-pagination",
-        "code-migrations-test-destructive",
-        "code-api-expand",
-        "code-migrations-rollback",
-        "code-migrations-never-drop-same-release"
+        "code-migrations-online-offline",
+        "code-dm-no-fk",
+        "code-migrations-zero-downtime",
+        "code-migrations-test-destructive"
       ],
       "stub_tokens": 266,
       "l1_tokens": 378,
@@ -2176,14 +2188,14 @@
       "rank": 1,
       "topk": [
         "code-api-rate-limit",
-        "code-migrations-online-offline",
+        "code-api-idempotency",
         "code-billing-idempotency",
         "code-deploy-canary-window",
-        "code-auth-rotate-jwt-key"
+        "code-deploy-feature-flags"
       ],
-      "stub_tokens": 237,
-      "l1_tokens": 314,
-      "full_tokens": 340,
+      "stub_tokens": 226,
+      "l1_tokens": 303,
+      "full_tokens": 329,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2199,14 +2211,14 @@
       "rank": null,
       "topk": [
         "code-billing-dunning",
-        "code-migrations-test-destructive",
-        "code-deploy-feature-flags",
-        "code-obs-user-facing-err",
-        "code-obs-dashboard-naming"
+        "code-billing-proration-edge",
+        "code-deploy-canary-window",
+        "code-obs-slo-billing",
+        "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 372,
-      "full_tokens": 375,
+      "stub_tokens": 234,
+      "l1_tokens": 353,
+      "full_tokens": 356,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2222,14 +2234,14 @@
       "rank": 1,
       "topk": [
         "code-api-graceful-shutdown",
+        "code-deploy-canary-window",
+        "code-billing-idempotency",
         "code-deploy-stuck-rollout",
-        "code-migrations-rename-column",
-        "code-api-expand",
-        "code-migrations-lock-timeout"
+        "code-migrations-never-drop-same-release"
       ],
-      "stub_tokens": 251,
-      "l1_tokens": 335,
-      "full_tokens": 367,
+      "stub_tokens": 252,
+      "l1_tokens": 336,
+      "full_tokens": 368,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2245,14 +2257,14 @@
       "rank": 1,
       "topk": [
         "code-api-401-vs-403",
-        "code-auth-user-vs-service-jwt",
-        "code-obs-oncall-rotation",
+        "code-api-problem-details",
+        "code-api-rate-limit",
         "code-auth-ed25519-vs-rsa",
-        "code-billing-idempotency"
+        "code-api-idempotency"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 364,
-      "full_tokens": 367,
+      "stub_tokens": 239,
+      "l1_tokens": 350,
+      "full_tokens": 353,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2265,18 +2277,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-migrations-rollback",
-        "code-auth-rotate-jwt-key",
-        "code-migrations-add-not-null",
-        "code-migrations-test-destructive",
-        "code-deploy-stuck-rollout"
+        "code-api-versioning",
+        "code-deploy-rollback-cmd",
+        "code-api-graceful-shutdown",
+        "code-auth-leaked-token",
+        "code-migrations-zero-downtime"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 386,
-      "full_tokens": 388,
-      "ended_at_stub": false,
+      "stub_tokens": 221,
+      "l1_tokens": 292,
+      "full_tokens": 322,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -2288,18 +2300,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-billing-stripe-webhook",
         "code-api-webhook-sig",
-        "code-billing-idempotency",
-        "code-obs-request-id",
-        "code-api-idempotency"
+        "code-billing-stripe-webhook",
+        "code-auth-oauth-state",
+        "code-api-idempotency",
+        "code-auth-s2s-tokens"
       ],
-      "stub_tokens": 245,
-      "l1_tokens": 334,
-      "full_tokens": 375,
-      "ended_at_stub": false,
+      "stub_tokens": 250,
+      "l1_tokens": 363,
+      "full_tokens": 366,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -2314,14 +2326,14 @@
       "rank": 1,
       "topk": [
         "code-auth-ed25519-vs-rsa",
-        "code-api-rate-limit",
         "code-auth-s2s-tokens",
-        "code-api-webhook-sig",
-        "code-api-401-vs-403"
+        "code-auth-leaked-token",
+        "code-obs-slo-billing",
+        "code-auth-no-sessions"
       ],
-      "stub_tokens": 242,
-      "l1_tokens": 370,
-      "full_tokens": 416,
+      "stub_tokens": 217,
+      "l1_tokens": 345,
+      "full_tokens": 391,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2338,13 +2350,13 @@
       "topk": [
         "code-auth-no-sessions",
         "code-auth-s2s-tokens",
+        "code-auth-user-vs-service-jwt",
         "code-auth-ed25519-vs-rsa",
-        "code-api-webhook-sig",
-        "code-auth-user-vs-service-jwt"
+        "code-auth-oauth-state"
       ],
-      "stub_tokens": 241,
-      "l1_tokens": 386,
-      "full_tokens": 389,
+      "stub_tokens": 238,
+      "l1_tokens": 383,
+      "full_tokens": 386,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2359,15 +2371,15 @@
       "query_type": "topical",
       "rank": null,
       "topk": [
-        "code-auth-s2s-tokens",
-        "code-auth-ed25519-vs-rsa",
-        "code-api-rate-limit",
         "code-auth-leaked-token",
-        "code-migrations-rename-column"
+        "code-auth-s2s-tokens",
+        "code-dm-no-fk",
+        "code-auth-rotate-jwt-key",
+        "code-auth-ed25519-vs-rsa"
       ],
-      "stub_tokens": 229,
-      "l1_tokens": 398,
-      "full_tokens": 443,
+      "stub_tokens": 235,
+      "l1_tokens": 372,
+      "full_tokens": 408,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2384,13 +2396,13 @@
       "topk": [
         "code-auth-user-vs-service-jwt",
         "code-auth-no-sessions",
-        "code-auth-rotate-jwt-key",
-        "code-auth-leaked-token",
-        "code-obs-user-facing-err"
+        "code-auth-s2s-tokens",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 236,
-      "l1_tokens": 415,
-      "full_tokens": 459,
+      "stub_tokens": 234,
+      "l1_tokens": 413,
+      "full_tokens": 457,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2403,17 +2415,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": null,
+      "rank": 2,
       "topk": [
         "code-auth-s2s-tokens",
-        "code-auth-leaked-token",
+        "code-auth-user-vs-service-jwt",
+        "code-obs-dashboard-naming",
         "code-auth-aud-meaning",
-        "code-auth-ed25519-vs-rsa",
-        "code-deploy-immutable-tags"
+        "code-auth-leaked-token"
       ],
-      "stub_tokens": 233,
-      "l1_tokens": 402,
-      "full_tokens": 447,
+      "stub_tokens": 261,
+      "l1_tokens": 430,
+      "full_tokens": 475,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2426,13 +2438,13 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 2,
       "topk": [
         "code-auth-user-vs-service-jwt",
-        "code-auth-no-sessions",
         "code-auth-aud-meaning",
         "code-auth-s2s-tokens",
-        "code-auth-rotate-jwt-key"
+        "code-auth-rotate-jwt-key",
+        "code-auth-no-sessions"
       ],
       "stub_tokens": 246,
       "l1_tokens": 425,
@@ -2452,14 +2464,14 @@
       "rank": 1,
       "topk": [
         "code-auth-kid-meaning",
-        "code-obs-trace-id-prop",
         "code-auth-user-vs-service-jwt",
-        "code-auth-no-sessions",
-        "code-billing-idempotency"
+        "code-obs-trace-id-prop",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-no-sessions"
       ],
-      "stub_tokens": 244,
-      "l1_tokens": 361,
-      "full_tokens": 402,
+      "stub_tokens": 231,
+      "l1_tokens": 348,
+      "full_tokens": 389,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2472,18 +2484,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 1,
       "topk": [
-        "code-auth-no-sessions",
-        "code-auth-rotate-jwt-key",
         "code-auth-public-keys",
-        "code-auth-user-vs-service-jwt",
-        "code-api-webhook-sig"
+        "code-auth-rotate-jwt-key",
+        "code-auth-no-sessions",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-leaked-token"
       ],
-      "stub_tokens": 237,
-      "l1_tokens": 382,
-      "full_tokens": 385,
-      "ended_at_stub": false,
+      "stub_tokens": 208,
+      "l1_tokens": 335,
+      "full_tokens": 390,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -2498,10 +2510,10 @@
       "rank": 1,
       "topk": [
         "code-auth-public-keys",
-        "code-obs-oncall-rotation",
         "code-auth-rotate-jwt-key",
+        "code-obs-oncall-rotation",
         "code-auth-leaked-token",
-        "code-obs-alert-severity"
+        "code-migrations-zero-downtime"
       ],
       "stub_tokens": 231,
       "l1_tokens": 358,
@@ -2521,14 +2533,14 @@
       "rank": 1,
       "topk": [
         "code-auth-oauth-state",
-        "code-api-401-vs-403",
-        "code-api-idempotency",
-        "code-auth-s2s-tokens",
-        "code-billing-idempotency"
+        "code-obs-log-levels",
+        "code-obs-user-facing-err",
+        "code-obs-request-id",
+        "code-obs-trace-id-prop"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 390,
-      "full_tokens": 429,
+      "stub_tokens": 250,
+      "l1_tokens": 383,
+      "full_tokens": 422,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2545,13 +2557,13 @@
       "topk": [
         "code-auth-rotate-jwt-key",
         "code-auth-public-keys",
-        "code-api-webhook-sig",
+        "code-auth-leaked-token",
         "code-auth-no-sessions",
-        "code-auth-user-vs-service-jwt"
+        "code-auth-ed25519-vs-rsa"
       ],
-      "stub_tokens": 237,
-      "l1_tokens": 351,
-      "full_tokens": 492,
+      "stub_tokens": 208,
+      "l1_tokens": 322,
+      "full_tokens": 463,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2592,12 +2604,12 @@
         "code-auth-rotate-jwt-key",
         "code-auth-public-keys",
         "code-auth-no-sessions",
-        "code-api-webhook-sig",
-        "code-auth-user-vs-service-jwt"
+        "code-auth-leaked-token",
+        "code-auth-ed25519-vs-rsa"
       ],
-      "stub_tokens": 237,
-      "l1_tokens": 351,
-      "full_tokens": 492,
+      "stub_tokens": 208,
+      "l1_tokens": 322,
+      "full_tokens": 463,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2614,13 +2626,13 @@
       "topk": [
         "code-auth-s2s-tokens",
         "code-auth-no-sessions",
-        "code-dm-no-fk",
+        "code-auth-oauth-state",
         "code-api-webhook-sig",
         "code-obs-dashboard-naming"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 426,
-      "full_tokens": 471,
+      "stub_tokens": 248,
+      "l1_tokens": 417,
+      "full_tokens": 462,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2638,8 +2650,8 @@
         "code-auth-s2s-tokens",
         "code-auth-aud-meaning",
         "code-auth-leaked-token",
-        "code-auth-rotate-jwt-key",
-        "code-auth-user-vs-service-jwt"
+        "code-auth-user-vs-service-jwt",
+        "code-auth-rotate-jwt-key"
       ],
       "stub_tokens": 249,
       "l1_tokens": 418,
@@ -2660,13 +2672,13 @@
       "topk": [
         "code-auth-s2s-tokens",
         "code-deploy-rollback-cmd",
-        "code-deploy-feature-flags",
-        "code-deploy-stuck-rollout",
-        "code-auth-user-vs-service-jwt"
+        "code-obs-dashboard-naming",
+        "code-billing-idempotency",
+        "code-deploy-stuck-rollout"
       ],
-      "stub_tokens": 254,
-      "l1_tokens": 423,
-      "full_tokens": 468,
+      "stub_tokens": 259,
+      "l1_tokens": 428,
+      "full_tokens": 473,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2682,14 +2694,14 @@
       "rank": 1,
       "topk": [
         "code-billing-dunning",
+        "code-billing-payout-recon",
+        "code-obs-slo-billing",
         "code-deploy-rollback-cmd",
-        "code-billing-idempotency",
-        "code-auth-leaked-token",
-        "code-obs-user-facing-err"
+        "code-billing-idempotency"
       ],
-      "stub_tokens": 238,
-      "l1_tokens": 357,
-      "full_tokens": 360,
+      "stub_tokens": 228,
+      "l1_tokens": 347,
+      "full_tokens": 350,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2705,14 +2717,14 @@
       "rank": 1,
       "topk": [
         "code-billing-no-fx-storage",
-        "code-dm-no-fk",
+        "code-billing-payout-recon",
         "code-api-rate-limit",
-        "code-dm-timestamptz",
-        "code-obs-trace-sampling"
+        "code-obs-trace-sampling",
+        "code-billing-idempotency"
       ],
-      "stub_tokens": 248,
-      "l1_tokens": 375,
-      "full_tokens": 412,
+      "stub_tokens": 238,
+      "l1_tokens": 365,
+      "full_tokens": 402,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2728,14 +2740,14 @@
       "rank": 1,
       "topk": [
         "code-billing-no-fx-storage",
-        "code-billing-dunning",
-        "code-billing-line-math",
         "code-billing-proration-edge",
-        "code-testing-db-transactions"
+        "code-billing-trial",
+        "code-billing-payout-recon",
+        "code-billing-line-math"
       ],
-      "stub_tokens": 258,
-      "l1_tokens": 385,
-      "full_tokens": 422,
+      "stub_tokens": 246,
+      "l1_tokens": 373,
+      "full_tokens": 410,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2752,13 +2764,13 @@
       "topk": [
         "code-billing-idempotency",
         "code-api-idempotency",
-        "code-dm-uuidv7",
         "code-auth-rotate-jwt-key",
-        "code-billing-trial"
+        "code-dm-no-fk",
+        "code-obs-dashboard-naming"
       ],
-      "stub_tokens": 228,
-      "l1_tokens": 352,
-      "full_tokens": 355,
+      "stub_tokens": 251,
+      "l1_tokens": 375,
+      "full_tokens": 378,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2771,18 +2783,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 1,
       "topk": [
-        "code-billing-trial",
-        "code-billing-tax-inclusive",
         "code-billing-line-math",
+        "code-billing-trial",
+        "code-billing-refunds",
         "code-billing-proration-edge",
-        "code-billing-refunds"
+        "code-billing-idempotency"
       ],
-      "stub_tokens": 243,
-      "l1_tokens": 348,
-      "full_tokens": 350,
-      "ended_at_stub": false,
+      "stub_tokens": 247,
+      "l1_tokens": 393,
+      "full_tokens": 395,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -2798,14 +2810,14 @@
       "rank": 1,
       "topk": [
         "code-billing-line-math",
+        "code-billing-proration-edge",
         "code-billing-trial",
         "code-billing-no-fx-storage",
-        "code-testing-coverage-gate",
-        "code-migrations-never-drop-same-release"
+        "code-dm-money-bigint"
       ],
-      "stub_tokens": 249,
-      "l1_tokens": 395,
-      "full_tokens": 397,
+      "stub_tokens": 255,
+      "l1_tokens": 401,
+      "full_tokens": 403,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2821,14 +2833,14 @@
       "rank": 1,
       "topk": [
         "code-billing-proration-edge",
-        "code-migrations-test-destructive",
-        "code-obs-request-id",
-        "code-migrations-rename-column",
-        "code-deploy-rollback-cmd"
+        "code-obs-slo-billing",
+        "code-deploy-canary-window",
+        "code-billing-trial",
+        "code-api-bulk"
       ],
-      "stub_tokens": 260,
-      "l1_tokens": 408,
-      "full_tokens": 438,
+      "stub_tokens": 235,
+      "l1_tokens": 383,
+      "full_tokens": 413,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2844,14 +2856,14 @@
       "rank": 1,
       "topk": [
         "code-billing-payout-recon",
-        "code-auth-s2s-tokens",
         "code-billing-dunning",
-        "code-billing-no-fx-storage",
-        "code-deploy-rollback-cmd"
+        "code-billing-refunds",
+        "code-migrations-audit-log",
+        "code-obs-user-facing-err"
       ],
-      "stub_tokens": 243,
-      "l1_tokens": 372,
-      "full_tokens": 374,
+      "stub_tokens": 239,
+      "l1_tokens": 368,
+      "full_tokens": 370,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2867,14 +2879,14 @@
       "rank": 1,
       "topk": [
         "code-billing-refunds",
+        "code-dm-money-bigint",
+        "code-obs-dashboard-naming",
         "code-billing-idempotency",
-        "code-billing-no-fx-storage",
-        "code-api-idempotency",
-        "code-obs-dashboard-naming"
+        "code-billing-no-fx-storage"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 360,
-      "full_tokens": 363,
+      "stub_tokens": 253,
+      "l1_tokens": 366,
+      "full_tokens": 369,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2887,18 +2899,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-billing-trial",
         "code-billing-refunds",
-        "code-api-expand",
-        "code-billing-dunning",
-        "code-billing-proration-edge"
+        "code-billing-trial",
+        "code-billing-line-math",
+        "code-billing-no-fx-storage",
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 237,
-      "l1_tokens": 342,
-      "full_tokens": 344,
-      "ended_at_stub": false,
+      "stub_tokens": 231,
+      "l1_tokens": 344,
+      "full_tokens": 347,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -2914,13 +2926,13 @@
       "topk": [
         "code-billing-stripe-webhook",
         "code-api-webhook-sig",
-        "code-billing-payout-recon",
         "code-auth-leaked-token",
-        "code-obs-request-id"
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 234,
-      "l1_tokens": 323,
-      "full_tokens": 364,
+      "stub_tokens": 221,
+      "l1_tokens": 310,
+      "full_tokens": 351,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2936,14 +2948,14 @@
       "rank": 1,
       "topk": [
         "code-billing-tax-inclusive",
+        "code-obs-dashboard-naming",
         "code-billing-idempotency",
-        "code-deploy-immutable-tags",
-        "code-api-pagination",
-        "code-api-expand"
+        "code-obs-user-facing-err",
+        "code-auth-aud-meaning"
       ],
-      "stub_tokens": 240,
-      "l1_tokens": 345,
-      "full_tokens": 348,
+      "stub_tokens": 254,
+      "l1_tokens": 359,
+      "full_tokens": 362,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2960,13 +2972,13 @@
       "topk": [
         "code-billing-trial",
         "code-billing-no-fx-storage",
-        "code-billing-tax-inclusive",
+        "code-billing-line-math",
         "code-billing-proration-edge",
-        "code-billing-line-math"
+        "code-billing-idempotency"
       ],
-      "stub_tokens": 248,
-      "l1_tokens": 353,
-      "full_tokens": 355,
+      "stub_tokens": 252,
+      "l1_tokens": 357,
+      "full_tokens": 359,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2979,18 +2991,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-deploy-log-format",
-        "code-testing-load",
-        "code-obs-error-budget",
+        "code-deploy-canary-window",
         "code-deploy-pre-checklist",
-        "code-migrations-test-destructive"
+        "code-deploy-log-format",
+        "code-deploy-rollback-cmd",
+        "code-deploy-feature-flags"
       ],
-      "stub_tokens": 254,
-      "l1_tokens": 356,
-      "full_tokens": 358,
-      "ended_at_stub": false,
+      "stub_tokens": 231,
+      "l1_tokens": 326,
+      "full_tokens": 329,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3002,17 +3014,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 5,
       "topk": [
+        "code-deploy-feature-flags",
         "code-deploy-rollback-cmd",
-        "code-deploy-canary-window",
         "code-deploy-stuck-rollout",
-        "code-migrations-rollback",
-        "code-obs-error-budget"
+        "code-obs-slo-billing",
+        "code-deploy-canary-window"
       ],
-      "stub_tokens": 252,
-      "l1_tokens": 356,
-      "full_tokens": 359,
+      "stub_tokens": 226,
+      "l1_tokens": 314,
+      "full_tokens": 317,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3025,18 +3037,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-migrations-rename-column",
+        "code-deploy-pre-checklist",
+        "code-deploy-feature-flags",
         "code-deploy-stuck-rollout",
-        "code-migrations-never-drop-same-release",
-        "code-deploy-canary-window",
-        "code-obs-alert-severity"
+        "code-deploy-rollback-cmd",
+        "code-migrations-never-drop-same-release"
       ],
-      "stub_tokens": 251,
-      "l1_tokens": 405,
-      "full_tokens": 408,
-      "ended_at_stub": false,
+      "stub_tokens": 239,
+      "l1_tokens": 342,
+      "full_tokens": 345,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3051,14 +3063,14 @@
       "rank": 1,
       "topk": [
         "code-deploy-stuck-rollout",
-        "code-deploy-pre-checklist",
         "code-deploy-rollback-cmd",
-        "code-deploy-canary-window",
+        "code-deploy-feature-flags",
+        "code-deploy-pre-checklist",
         "code-migrations-test-destructive"
       ],
-      "stub_tokens": 241,
-      "l1_tokens": 364,
-      "full_tokens": 366,
+      "stub_tokens": 238,
+      "l1_tokens": 361,
+      "full_tokens": 363,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3071,18 +3083,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-deploy-stuck-rollout",
+        "code-deploy-feature-flags",
         "code-deploy-rollback-cmd",
+        "code-deploy-stuck-rollout",
         "code-deploy-pre-checklist",
-        "code-migrations-rename-column",
         "code-migrations-rollback"
       ],
-      "stub_tokens": 248,
-      "l1_tokens": 371,
-      "full_tokens": 373,
-      "ended_at_stub": false,
+      "stub_tokens": 239,
+      "l1_tokens": 327,
+      "full_tokens": 330,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3097,14 +3109,14 @@
       "rank": 1,
       "topk": [
         "code-deploy-freeze-calendar",
+        "code-deploy-pre-checklist",
+        "code-deploy-canary-window",
         "code-deploy-log-format",
-        "code-obs-error-budget",
-        "code-deploy-vs-release",
-        "code-migrations-lock-timeout"
+        "code-deploy-rollback-cmd"
       ],
-      "stub_tokens": 254,
-      "l1_tokens": 359,
-      "full_tokens": 361,
+      "stub_tokens": 233,
+      "l1_tokens": 338,
+      "full_tokens": 340,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3120,14 +3132,14 @@
       "rank": 1,
       "topk": [
         "code-deploy-immutable-tags",
-        "code-deploy-stuck-rollout",
-        "code-auth-ed25519-vs-rsa",
-        "code-billing-stripe-webhook",
+        "code-migrations-online-offline",
+        "code-migrations-zero-downtime",
+        "code-migrations-never-drop-same-release",
         "code-dm-no-fk"
       ],
-      "stub_tokens": 241,
-      "l1_tokens": 371,
-      "full_tokens": 374,
+      "stub_tokens": 265,
+      "l1_tokens": 395,
+      "full_tokens": 398,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3163,18 +3175,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-migrations-never-drop-same-release",
+        "code-deploy-rollback-cmd",
         "code-auth-leaked-token",
-        "code-deploy-canary-window",
-        "code-migrations-rename-column",
-        "code-migrations-rollback"
+        "code-migrations-rollback",
+        "code-migrations-never-drop-same-release",
+        "code-migrations-test-destructive"
       ],
-      "stub_tokens": 252,
-      "l1_tokens": 389,
-      "full_tokens": 392,
-      "ended_at_stub": false,
+      "stub_tokens": 258,
+      "l1_tokens": 362,
+      "full_tokens": 365,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3190,13 +3202,13 @@
       "topk": [
         "code-deploy-vs-release",
         "code-migrations-never-drop-same-release",
+        "code-deploy-rollback-cmd",
         "code-deploy-canary-window",
-        "code-migrations-rename-column",
-        "code-deploy-rollback-cmd"
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 365,
-      "full_tokens": 368,
+      "stub_tokens": 253,
+      "l1_tokens": 371,
+      "full_tokens": 374,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3213,13 +3225,13 @@
       "topk": [
         "code-dm-money-bigint",
         "code-billing-no-fx-storage",
-        "code-api-bulk",
-        "code-dm-timestamptz",
-        "code-migrations-rollback"
+        "code-billing-idempotency",
+        "code-testing-db-transactions",
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 256,
-      "l1_tokens": 351,
-      "full_tokens": 391,
+      "stub_tokens": 247,
+      "l1_tokens": 342,
+      "full_tokens": 382,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3235,14 +3247,14 @@
       "rank": 1,
       "topk": [
         "code-dm-soft-delete",
-        "code-api-pagination",
         "code-migrations-audit-log",
-        "code-api-webhook-sig",
-        "code-migrations-rollback"
+        "code-migrations-never-drop-same-release",
+        "code-migrations-add-not-null",
+        "code-migrations-rename-column"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 364,
-      "full_tokens": 367,
+      "stub_tokens": 254,
+      "l1_tokens": 365,
+      "full_tokens": 368,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3258,14 +3270,14 @@
       "rank": 1,
       "topk": [
         "code-dm-timestamptz",
-        "code-migrations-rename-column",
-        "code-obs-dashboard-naming",
-        "code-obs-oncall-rotation",
-        "code-obs-alert-severity"
+        "code-dm-soft-delete",
+        "code-migrations-zero-downtime",
+        "code-billing-no-fx-storage",
+        "code-migrations-never-drop-same-release"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 353,
-      "full_tokens": 355,
+      "stub_tokens": 248,
+      "l1_tokens": 348,
+      "full_tokens": 350,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3282,13 +3294,13 @@
       "topk": [
         "code-dm-uuidv7",
         "code-obs-request-id",
-        "code-api-401-vs-403",
-        "code-auth-ed25519-vs-rsa",
-        "code-auth-user-vs-service-jwt"
+        "code-auth-user-vs-service-jwt",
+        "code-billing-idempotency",
+        "code-auth-kid-meaning"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 371,
-      "full_tokens": 374,
+      "stub_tokens": 248,
+      "l1_tokens": 373,
+      "full_tokens": 376,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3305,13 +3317,13 @@
       "topk": [
         "code-dm-uuidv7",
         "code-migrations-online-offline",
+        "code-billing-idempotency",
         "code-obs-request-id",
-        "code-auth-ed25519-vs-rsa",
-        "code-api-bulk"
+        "code-api-pagination"
       ],
-      "stub_tokens": 237,
-      "l1_tokens": 362,
-      "full_tokens": 365,
+      "stub_tokens": 252,
+      "l1_tokens": 377,
+      "full_tokens": 380,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3328,13 +3340,13 @@
       "topk": [
         "code-migrations-audit-log",
         "code-migrations-up-vs-expand",
-        "code-migrations-rollback",
+        "code-migrations-online-offline",
         "code-migrations-test-destructive",
-        "code-deploy-pre-checklist"
+        "code-migrations-zero-downtime"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 364,
-      "full_tokens": 366,
+      "stub_tokens": 265,
+      "l1_tokens": 368,
+      "full_tokens": 370,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3347,18 +3359,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": null,
+      "rank": 1,
       "topk": [
+        "code-migrations-online-offline",
+        "code-migrations-zero-downtime",
         "code-migrations-up-vs-expand",
         "code-migrations-audit-log",
-        "code-api-graceful-shutdown",
-        "code-migrations-rollback",
-        "code-migrations-test-destructive"
+        "code-api-graceful-shutdown"
       ],
-      "stub_tokens": 267,
-      "l1_tokens": 386,
-      "full_tokens": 388,
-      "ended_at_stub": false,
+      "stub_tokens": 258,
+      "l1_tokens": 413,
+      "full_tokens": 415,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3373,14 +3385,14 @@
       "rank": 1,
       "topk": [
         "code-migrations-rollback",
-        "code-deploy-pre-checklist",
         "code-deploy-rollback-cmd",
         "code-migrations-audit-log",
-        "code-migrations-lock-timeout"
+        "code-deploy-pre-checklist",
+        "code-migrations-test-destructive"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 379,
-      "full_tokens": 381,
+      "stub_tokens": 252,
+      "l1_tokens": 381,
+      "full_tokens": 383,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3397,13 +3409,13 @@
       "topk": [
         "code-migrations-add-not-null",
         "code-migrations-zero-downtime",
-        "code-api-pagination",
         "code-migrations-never-drop-same-release",
-        "code-migrations-online-offline"
+        "code-migrations-online-offline",
+        "code-migrations-rename-column"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 390,
-      "full_tokens": 419,
+      "stub_tokens": 262,
+      "l1_tokens": 391,
+      "full_tokens": 420,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3419,14 +3431,14 @@
       "rank": 1,
       "topk": [
         "code-migrations-rename-column",
-        "code-migrations-add-not-null",
         "code-migrations-zero-downtime",
         "code-migrations-never-drop-same-release",
-        "code-dm-timestamptz"
+        "code-migrations-add-not-null",
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 407,
-      "full_tokens": 410,
+      "stub_tokens": 262,
+      "l1_tokens": 416,
+      "full_tokens": 419,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3442,15 +3454,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-dm-no-fk",
-        "code-deploy-pdb",
-        "code-auth-leaked-token",
+        "code-api-graceful-shutdown",
         "code-obs-alert-severity",
-        "code-api-graceful-shutdown"
+        "code-obs-log-levels",
+        "code-deploy-pdb",
+        "code-dm-no-fk"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 375,
-      "full_tokens": 377,
+      "stub_tokens": 253,
+      "l1_tokens": 337,
+      "full_tokens": 369,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3463,17 +3475,17 @@
       "stub_sufficient": false,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 1,
       "topk": [
-        "code-migrations-audit-log",
-        "code-migrations-up-vs-expand",
         "code-migrations-test-destructive",
-        "code-api-webhook-sig",
+        "code-migrations-zero-downtime",
+        "code-migrations-audit-log",
+        "code-migrations-online-offline",
         "code-deploy-pre-checklist"
       ],
-      "stub_tokens": 254,
-      "l1_tokens": 357,
-      "full_tokens": 359,
+      "stub_tokens": 253,
+      "l1_tokens": 393,
+      "full_tokens": 395,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3489,14 +3501,14 @@
       "rank": 1,
       "topk": [
         "code-migrations-lock-timeout",
-        "code-migrations-audit-log",
-        "code-migrations-rollback",
+        "code-migrations-online-offline",
         "code-auth-rotate-jwt-key",
-        "code-deploy-feature-flags"
+        "code-dm-no-fk",
+        "code-migrations-audit-log"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 368,
-      "full_tokens": 371,
+      "stub_tokens": 260,
+      "l1_tokens": 382,
+      "full_tokens": 385,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3509,18 +3521,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "code-migrations-rename-column",
         "code-migrations-never-drop-same-release",
+        "code-migrations-rename-column",
         "code-migrations-zero-downtime",
-        "code-deploy-vs-release",
-        "code-dm-no-fk"
+        "code-deploy-feature-flags",
+        "code-deploy-vs-release"
       ],
-      "stub_tokens": 259,
-      "l1_tokens": 413,
-      "full_tokens": 416,
-      "ended_at_stub": false,
+      "stub_tokens": 245,
+      "l1_tokens": 382,
+      "full_tokens": 385,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3536,9 +3548,9 @@
       "topk": [
         "code-obs-error-budget",
         "code-obs-slo-billing",
-        "code-billing-dunning",
-        "code-obs-dashboard-naming",
-        "code-obs-trace-sampling"
+        "code-deploy-pdb",
+        "code-obs-user-facing-err",
+        "code-billing-dunning"
       ],
       "stub_tokens": 248,
       "l1_tokens": 372,
@@ -3558,14 +3570,14 @@
       "rank": 1,
       "topk": [
         "code-obs-dashboard-naming",
-        "code-deploy-pre-checklist",
-        "code-testing-fixture-vs-factory",
-        "code-deploy-pdb",
-        "code-obs-alert-severity"
+        "code-obs-user-facing-err",
+        "code-obs-alert-severity",
+        "code-obs-log-levels",
+        "code-obs-error-budget"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 335,
-      "full_tokens": 364,
+      "stub_tokens": 257,
+      "l1_tokens": 342,
+      "full_tokens": 371,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3578,17 +3590,17 @@
       "stub_sufficient": false,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
+        "code-obs-user-facing-err",
         "code-api-problem-details",
         "code-obs-error-budget",
-        "code-api-401-vs-403",
-        "code-auth-kid-meaning",
-        "code-api-pagination"
+        "code-obs-alert-severity",
+        "code-obs-log-levels"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 398,
-      "full_tokens": 400,
+      "stub_tokens": 259,
+      "l1_tokens": 364,
+      "full_tokens": 366,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3601,18 +3613,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
-        "code-migrations-never-drop-same-release",
+        "code-obs-log-levels",
+        "code-deploy-feature-flags",
+        "code-obs-slo-billing",
         "code-obs-alert-severity",
-        "code-testing-fixture-vs-factory",
-        "code-billing-dunning",
-        "code-migrations-rename-column"
+        "code-migrations-never-drop-same-release"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 390,
-      "full_tokens": 393,
-      "ended_at_stub": false,
+      "stub_tokens": 236,
+      "l1_tokens": 331,
+      "full_tokens": 333,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3629,12 +3641,12 @@
         "code-obs-oncall-rotation",
         "code-deploy-rollback-cmd",
         "code-auth-rotate-jwt-key",
-        "code-deploy-stuck-rollout",
+        "code-api-graceful-shutdown",
         "code-obs-alert-severity"
       ],
-      "stub_tokens": 239,
-      "l1_tokens": 345,
-      "full_tokens": 347,
+      "stub_tokens": 237,
+      "l1_tokens": 343,
+      "full_tokens": 345,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3651,13 +3663,13 @@
       "topk": [
         "code-obs-alert-severity",
         "code-billing-dunning",
-        "code-dm-no-fk",
-        "code-deploy-log-format",
-        "code-billing-stripe-webhook"
+        "code-obs-oncall-rotation",
+        "code-obs-log-levels",
+        "code-deploy-canary-window"
       ],
-      "stub_tokens": 253,
-      "l1_tokens": 354,
-      "full_tokens": 357,
+      "stub_tokens": 238,
+      "l1_tokens": 339,
+      "full_tokens": 342,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3670,17 +3682,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 3,
+      "rank": null,
       "topk": [
+        "code-billing-proration-edge",
+        "code-obs-dashboard-naming",
+        "code-deploy-feature-flags",
         "code-billing-line-math",
-        "code-testing-coverage-gate",
-        "code-obs-alert-severity",
-        "code-billing-trial",
-        "code-billing-proration-edge"
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 393,
-      "full_tokens": 395,
+      "stub_tokens": 249,
+      "l1_tokens": 397,
+      "full_tokens": 427,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3697,13 +3709,13 @@
       "topk": [
         "code-obs-request-id",
         "code-auth-s2s-tokens",
-        "code-api-bulk",
-        "code-api-graceful-shutdown",
-        "code-auth-user-vs-service-jwt"
+        "code-billing-idempotency",
+        "code-auth-aud-meaning",
+        "code-api-graceful-shutdown"
       ],
-      "stub_tokens": 261,
-      "l1_tokens": 358,
-      "full_tokens": 360,
+      "stub_tokens": 254,
+      "l1_tokens": 351,
+      "full_tokens": 353,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3719,10 +3731,10 @@
       "rank": 1,
       "topk": [
         "code-obs-trace-sampling",
-        "code-migrations-test-destructive",
         "code-obs-trace-id-prop",
-        "code-obs-request-id",
-        "code-billing-trial"
+        "code-migrations-test-destructive",
+        "code-billing-trial",
+        "code-obs-request-id"
       ],
       "stub_tokens": 251,
       "l1_tokens": 364,
@@ -3742,14 +3754,14 @@
       "rank": 1,
       "topk": [
         "code-obs-trace-sampling",
-        "code-obs-request-id",
-        "code-migrations-test-destructive",
+        "code-obs-trace-id-prop",
         "code-testing-db-transactions",
-        "code-billing-trial"
+        "code-obs-request-id",
+        "code-migrations-test-destructive"
       ],
-      "stub_tokens": 251,
-      "l1_tokens": 364,
-      "full_tokens": 366,
+      "stub_tokens": 261,
+      "l1_tokens": 374,
+      "full_tokens": 376,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3762,18 +3774,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": null,
+      "rank": 1,
       "topk": [
+        "code-obs-slo-billing",
         "code-deploy-feature-flags",
         "code-billing-proration-edge",
-        "code-obs-dashboard-naming",
-        "code-billing-trial",
-        "code-billing-stripe-webhook"
+        "code-obs-user-facing-err",
+        "code-billing-trial"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 334,
-      "full_tokens": 337,
-      "ended_at_stub": false,
+      "stub_tokens": 238,
+      "l1_tokens": 347,
+      "full_tokens": 349,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3785,18 +3797,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 4,
+      "rank": 1,
       "topk": [
-        "code-obs-request-id",
-        "code-deploy-log-format",
-        "code-auth-leaked-token",
         "code-obs-trace-id-prop",
-        "code-auth-s2s-tokens"
+        "code-obs-request-id",
+        "code-auth-s2s-tokens",
+        "code-migrations-never-drop-same-release",
+        "code-obs-dashboard-naming"
       ],
-      "stub_tokens": 255,
-      "l1_tokens": 352,
-      "full_tokens": 354,
-      "ended_at_stub": false,
+      "stub_tokens": 270,
+      "l1_tokens": 372,
+      "full_tokens": 406,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -3812,13 +3824,13 @@
       "topk": [
         "code-testing-ci-parallel",
         "code-deploy-immutable-tags",
-        "code-api-webhook-sig",
-        "code-dm-no-fk",
-        "code-migrations-test-destructive"
+        "code-auth-leaked-token",
+        "code-billing-payout-recon",
+        "code-dm-no-fk"
       ],
-      "stub_tokens": 255,
-      "l1_tokens": 343,
-      "full_tokens": 345,
+      "stub_tokens": 235,
+      "l1_tokens": 323,
+      "full_tokens": 325,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3835,13 +3847,13 @@
       "topk": [
         "code-testing-coverage-gate",
         "code-testing-ci-parallel",
-        "code-testing-flaky",
         "code-deploy-feature-flags",
-        "code-auth-ed25519-vs-rsa"
+        "code-obs-slo-billing",
+        "code-billing-proration-edge"
       ],
-      "stub_tokens": 225,
-      "l1_tokens": 287,
-      "full_tokens": 326,
+      "stub_tokens": 235,
+      "l1_tokens": 297,
+      "full_tokens": 336,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3858,13 +3870,13 @@
       "topk": [
         "code-testing-db-transactions",
         "code-migrations-rollback",
-        "code-deploy-pre-checklist",
+        "code-migrations-test-destructive",
         "code-deploy-rollback-cmd",
-        "code-testing-integration-org"
+        "code-deploy-pre-checklist"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 375,
-      "full_tokens": 377,
+      "stub_tokens": 254,
+      "l1_tokens": 379,
+      "full_tokens": 381,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3880,14 +3892,14 @@
       "rank": 1,
       "topk": [
         "code-testing-fixture-vs-factory",
-        "code-dm-no-fk",
-        "code-auth-oauth-state",
-        "code-dm-uuidv7",
+        "code-migrations-online-offline",
+        "code-testing-property-based",
+        "code-obs-log-levels",
         "code-testing-ci-parallel"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 354,
-      "full_tokens": 357,
+      "stub_tokens": 259,
+      "l1_tokens": 367,
+      "full_tokens": 370,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3904,13 +3916,13 @@
       "topk": [
         "code-testing-flaky",
         "code-testing-ci-parallel",
-        "code-deploy-pre-checklist",
         "code-testing-coverage-gate",
-        "code-migrations-never-drop-same-release"
+        "code-deploy-feature-flags",
+        "code-migrations-test-destructive"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 345,
-      "full_tokens": 372,
+      "stub_tokens": 244,
+      "l1_tokens": 343,
+      "full_tokens": 370,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3927,13 +3939,13 @@
       "topk": [
         "code-testing-integration-org",
         "code-migrations-test-destructive",
+        "code-deploy-feature-flags",
         "code-testing-ci-parallel",
-        "code-deploy-pre-checklist",
-        "code-billing-trial"
+        "code-testing-db-transactions"
       ],
-      "stub_tokens": 238,
-      "l1_tokens": 341,
-      "full_tokens": 343,
+      "stub_tokens": 247,
+      "l1_tokens": 350,
+      "full_tokens": 352,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3950,13 +3962,13 @@
       "topk": [
         "code-testing-load",
         "code-testing-integration-org",
-        "code-migrations-test-destructive",
-        "code-deploy-pre-checklist",
-        "code-billing-stripe-webhook"
+        "code-testing-ci-parallel",
+        "code-testing-mock-http",
+        "code-testing-db-transactions"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 333,
-      "full_tokens": 336,
+      "stub_tokens": 242,
+      "l1_tokens": 328,
+      "full_tokens": 331,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3972,14 +3984,14 @@
       "rank": 1,
       "topk": [
         "code-testing-mock-http",
-        "code-billing-stripe-webhook",
-        "code-obs-request-id",
-        "code-testing-snapshots",
-        "code-api-webhook-sig"
+        "code-testing-load",
+        "code-api-webhook-sig",
+        "code-api-graceful-shutdown",
+        "code-auth-oauth-state"
       ],
-      "stub_tokens": 244,
-      "l1_tokens": 331,
-      "full_tokens": 361,
+      "stub_tokens": 239,
+      "l1_tokens": 326,
+      "full_tokens": 356,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3995,14 +4007,14 @@
       "rank": 1,
       "topk": [
         "code-testing-property-based",
+        "code-obs-trace-sampling",
         "code-testing-flaky",
         "code-testing-ci-parallel",
-        "code-billing-trial",
-        "code-testing-mock-http"
+        "code-testing-load"
       ],
-      "stub_tokens": 243,
-      "l1_tokens": 363,
-      "full_tokens": 366,
+      "stub_tokens": 254,
+      "l1_tokens": 374,
+      "full_tokens": 377,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4019,13 +4031,13 @@
       "topk": [
         "code-testing-snapshots",
         "code-migrations-test-destructive",
+        "code-testing-db-transactions",
         "code-deploy-pre-checklist",
-        "code-deploy-stuck-rollout",
-        "code-testing-integration-org"
+        "code-testing-load"
       ],
-      "stub_tokens": 252,
-      "l1_tokens": 344,
-      "full_tokens": 368,
+      "stub_tokens": 248,
+      "l1_tokens": 340,
+      "full_tokens": 364,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4038,15 +4050,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-auth-no-sessions",
         "code-auth-rotate-jwt-key",
+        "code-auth-leaked-token",
         "code-auth-user-vs-service-jwt",
-        "code-auth-public-keys",
-        "code-auth-leaked-token"
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-no-sessions"
       ],
-      "stub_tokens": 229,
-      "l1_tokens": 374,
-      "full_tokens": 377,
+      "stub_tokens": 219,
+      "l1_tokens": 333,
+      "full_tokens": 474,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4059,15 +4071,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-obs-oncall-rotation",
         "code-auth-rotate-jwt-key",
+        "code-obs-oncall-rotation",
         "code-auth-public-keys",
-        "code-testing-integration-org",
-        "code-migrations-test-destructive"
+        "code-testing-db-transactions",
+        "code-migrations-online-offline"
       ],
-      "stub_tokens": 250,
-      "l1_tokens": 356,
-      "full_tokens": 358,
+      "stub_tokens": 251,
+      "l1_tokens": 365,
+      "full_tokens": 506,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4080,15 +4092,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-api-rate-limit",
-        "code-testing-load",
-        "code-migrations-test-destructive",
-        "code-migrations-lock-timeout",
+        "code-obs-alert-severity",
+        "code-deploy-canary-window",
+        "code-obs-log-levels",
+        "code-deploy-feature-flags",
         "code-migrations-online-offline"
       ],
-      "stub_tokens": 256,
-      "l1_tokens": 333,
-      "full_tokens": 359,
+      "stub_tokens": 239,
+      "l1_tokens": 340,
+      "full_tokens": 343,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4101,15 +4113,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
+        "code-api-graceful-shutdown",
         "code-obs-request-id",
-        "code-testing-mock-http",
-        "code-billing-stripe-webhook",
-        "code-auth-s2s-tokens",
-        "code-deploy-vs-release"
+        "code-api-versioning",
+        "code-obs-dashboard-naming",
+        "code-api-expand"
       ],
-      "stub_tokens": 249,
-      "l1_tokens": 346,
-      "full_tokens": 348,
+      "stub_tokens": 236,
+      "l1_tokens": 320,
+      "full_tokens": 352,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4122,15 +4134,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-migrations-lock-timeout",
+        "code-auth-no-sessions",
+        "code-billing-idempotency",
         "code-auth-leaked-token",
-        "code-migrations-rollback",
-        "code-auth-oauth-state",
-        "code-dm-no-fk"
+        "code-migrations-lock-timeout",
+        "code-auth-oauth-state"
       ],
-      "stub_tokens": 256,
-      "l1_tokens": 378,
-      "full_tokens": 381,
+      "stub_tokens": 232,
+      "l1_tokens": 377,
+      "full_tokens": 380,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4143,15 +4155,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
+        "code-obs-slo-billing",
         "code-deploy-feature-flags",
-        "code-obs-dashboard-naming",
-        "code-obs-alert-severity",
-        "code-testing-fixture-vs-factory",
-        "code-testing-coverage-gate"
+        "code-obs-user-facing-err",
+        "code-deploy-canary-window",
+        "code-billing-proration-edge"
       ],
-      "stub_tokens": 244,
-      "l1_tokens": 332,
-      "full_tokens": 335,
+      "stub_tokens": 241,
+      "l1_tokens": 350,
+      "full_tokens": 352,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4164,15 +4176,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-obs-dashboard-naming",
+        "code-billing-refunds",
+        "code-billing-payout-recon",
         "code-billing-no-fx-storage",
-        "code-api-expand",
-        "code-testing-mock-http",
-        "code-api-bulk"
+        "code-billing-trial",
+        "code-billing-dunning"
       ],
-      "stub_tokens": 245,
-      "l1_tokens": 330,
-      "full_tokens": 359,
+      "stub_tokens": 227,
+      "l1_tokens": 340,
+      "full_tokens": 343,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4185,15 +4197,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
+        "code-deploy-feature-flags",
         "code-deploy-immutable-tags",
-        "code-deploy-vs-release",
-        "code-testing-fixture-vs-factory",
-        "code-migrations-up-vs-expand",
-        "code-dm-no-fk"
+        "code-auth-s2s-tokens",
+        "code-migrations-audit-log",
+        "code-migrations-zero-downtime"
       ],
-      "stub_tokens": 259,
-      "l1_tokens": 389,
-      "full_tokens": 392,
+      "stub_tokens": 244,
+      "l1_tokens": 332,
+      "full_tokens": 335,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4207,14 +4219,14 @@
       "rank": null,
       "topk": [
         "code-migrations-add-not-null",
-        "code-deploy-immutable-tags",
-        "code-api-webhook-sig",
-        "code-billing-stripe-webhook",
-        "code-migrations-never-drop-same-release"
+        "code-testing-load",
+        "code-deploy-stuck-rollout",
+        "code-obs-alert-severity",
+        "code-api-webhook-sig"
       ],
-      "stub_tokens": 254,
-      "l1_tokens": 383,
-      "full_tokens": 412,
+      "stub_tokens": 245,
+      "l1_tokens": 374,
+      "full_tokens": 403,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4229,13 +4241,13 @@
       "topk": [
         "code-deploy-stuck-rollout",
         "code-deploy-rollback-cmd",
-        "code-dm-no-fk",
-        "code-obs-request-id",
-        "code-deploy-canary-window"
+        "code-deploy-canary-window",
+        "code-deploy-pdb",
+        "code-deploy-log-format"
       ],
-      "stub_tokens": 247,
-      "l1_tokens": 370,
-      "full_tokens": 372,
+      "stub_tokens": 250,
+      "l1_tokens": 373,
+      "full_tokens": 375,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4248,15 +4260,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
+        "code-auth-leaked-token",
         "code-api-webhook-sig",
+        "code-billing-proration-edge",
         "code-migrations-never-drop-same-release",
-        "code-billing-dunning",
-        "code-obs-alert-severity",
-        "code-deploy-immutable-tags"
+        "code-api-problem-details"
       ],
-      "stub_tokens": 248,
-      "l1_tokens": 361,
-      "full_tokens": 364,
+      "stub_tokens": 264,
+      "l1_tokens": 401,
+      "full_tokens": 437,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4269,15 +4281,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-dm-no-fk",
-        "code-api-idempotency",
         "code-auth-oauth-state",
-        "code-api-webhook-sig",
-        "code-billing-dunning"
+        "code-obs-log-levels",
+        "code-billing-idempotency",
+        "code-api-idempotency",
+        "code-auth-leaked-token"
       ],
-      "stub_tokens": 246,
-      "l1_tokens": 374,
-      "full_tokens": 376,
+      "stub_tokens": 234,
+      "l1_tokens": 367,
+      "full_tokens": 406,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4290,15 +4302,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
+        "code-billing-payout-recon",
+        "code-deploy-canary-window",
         "code-testing-mock-http",
-        "code-testing-integration-org",
-        "code-obs-request-id",
         "code-migrations-test-destructive",
-        "code-api-rate-limit"
+        "code-api-versioning"
       ],
-      "stub_tokens": 245,
-      "l1_tokens": 332,
-      "full_tokens": 362,
+      "stub_tokens": 228,
+      "l1_tokens": 357,
+      "full_tokens": 359,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4311,15 +4323,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-testing-snapshots",
-        "code-auth-ed25519-vs-rsa",
-        "code-api-expand",
+        "code-deploy-canary-window",
+        "code-billing-proration-edge",
         "code-api-pagination",
-        "code-api-webhook-sig"
+        "code-auth-ed25519-vs-rsa",
+        "code-obs-slo-billing"
       ],
-      "stub_tokens": 233,
-      "l1_tokens": 325,
-      "full_tokens": 349,
+      "stub_tokens": 232,
+      "l1_tokens": 327,
+      "full_tokens": 330,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4332,15 +4344,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-obs-alert-severity",
         "code-obs-oncall-rotation",
+        "code-billing-proration-edge",
+        "code-migrations-online-offline",
         "code-deploy-freeze-calendar",
-        "code-api-pagination",
-        "code-deploy-feature-flags"
+        "code-obs-alert-severity"
       ],
-      "stub_tokens": 235,
-      "l1_tokens": 336,
-      "full_tokens": 339,
+      "stub_tokens": 258,
+      "l1_tokens": 364,
+      "full_tokens": 366,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4353,15 +4365,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-api-rate-limit",
         "code-testing-load",
-        "code-billing-idempotency",
-        "code-migrations-lock-timeout",
-        "code-api-webhook-sig"
+        "code-deploy-canary-window",
+        "code-deploy-rollback-cmd",
+        "code-api-rate-limit",
+        "code-auth-rotate-jwt-key"
       ],
-      "stub_tokens": 243,
-      "l1_tokens": 320,
-      "full_tokens": 346,
+      "stub_tokens": 223,
+      "l1_tokens": 309,
+      "full_tokens": 312,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -4374,15 +4386,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "code-api-webhook-sig",
+        "code-dm-uuidv7",
         "code-migrations-lock-timeout",
         "code-dm-timestamptz",
-        "code-dm-uuidv7",
-        "code-migrations-rollback"
+        "code-testing-integration-org",
+        "code-testing-load"
       ],
-      "stub_tokens": 255,
-      "l1_tokens": 368,
-      "full_tokens": 371,
+      "stub_tokens": 247,
+      "l1_tokens": 372,
+      "full_tokens": 375,
       "ended_at_stub": false,
       "is_no_answer": true
     }

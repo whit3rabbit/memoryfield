@@ -276,6 +276,34 @@ def percentile(values: list[float], p: float) -> float:
     return s[f] * (c - k) + s[c] * (k - f)
 
 
+def bootstrap_ci(values: list[int], stat="mean", n_resamples: int = 1000,
+                 alpha: float = 0.05, rng_seed: int = 0) -> tuple[float, float, float]:
+    """Return (point_estimate, ci_low, ci_high) for `stat` over `values`.
+
+    `stat` may be 'mean' or 'sum'. values are 0/1 ints.
+    Resampling is non-parametric (sampling with replacement).
+    """
+    import random
+    if not values:
+        return 0.0, 0.0, 0.0
+    rng = random.Random(rng_seed)
+    n = len(values)
+    if stat == "mean":
+        point = sum(values) / n
+    elif stat == "sum":
+        point = float(sum(values))
+    else:
+        raise ValueError(f"unknown stat {stat}")
+    samples = []
+    for _ in range(n_resamples):
+        s = sum(rng.choice(values) for _ in range(n))
+        samples.append(s / n if stat == "mean" else s)
+    samples.sort()
+    lo_idx = int((alpha / 2) * n_resamples)
+    hi_idx = int((1 - alpha / 2) * n_resamples) - 1
+    return point, samples[lo_idx], samples[hi_idx]
+
+
 def compute_metrics(traces: list[LookupTrace], baseline: str, domain: str, details_path: Path) -> BaselineMetrics:
     if not traces:
         return BaselineMetrics(baseline, domain, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, details_path)

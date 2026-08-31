@@ -37,6 +37,7 @@ from harness.mf_harness import (
     BaselineMetrics,
     LookupTrace,
     Query,
+    bootstrap_ci,
     compute_metrics,
     load_corpus,
     load_queries,
@@ -104,18 +105,24 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
     full_tokens = []
     no_answer_correct = 0
     no_answer_n = 0
+    stub_ends_given_hit = 0
+    n_given_hit = 0
     per_query = []
 
     for q, t in zip(queries, traces):
         is_no_answer = (len(q.answer_uuids) == 0)
 
         if is_no_answer:
-            # No-answer query: success means NO page was retrieved at all
-            # (empty top-k). Anything in top-k is a false positive — there
-            # is no answer for this query by definition.
-            if not t.topk_uuids:
-                no_answer_correct += 1
+            # No-answer query: the "empty top-k" metric is misleading --
+            # top-k always returns k. The real question is "did abstention
+            # fire?" and that requires a feature M1 hasn't built yet.
+            # Record both empty-top-k (currently always 0) and the count,
+            # so M1 can replace the metric with one that uses confidence.
+            no_answer_correct += 1 if not t.topk_uuids else 0
             no_answer_n += 1
+            # Track per-query top scores once LookupTrace carries them (M0.6+).
+            # For M0.5 we just record the metric we have, which is the wrong
+            # one, and call it out in the report.
         else:
             if t.rank is not None:
                 mrr_sum += 1.0 / t.rank
@@ -136,6 +143,10 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         stub_tokens.append(t.stub_tokens)
         l1_tokens.append(t.l1_tokens)
         full_tokens.append(t.full_tokens)
+        # Conditional on hit: agent only reaches stub if retrieval succeeded.
+        if not is_no_answer and t.rank is not None and t.rank <= 3:
+            stub_ends_given_hit += 1
+            n_given_hit += 1
         per_query.append({
             "qid": q.qid,
             "text": q.text,
@@ -169,6 +180,12 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         details_path=RESULTS_DIR / f"{baseline_name}_{domain_name}.json",
     )
 
+    # Bootstrap 95% CIs for P@3 and R@5 over real-answer queries only.
+    real_hits = [1 if (t["rank"] is not None and t["rank"] <= 3) else 0 for t in per_query if not t["is_no_answer"]]
+    p_at_3_ci = bootstrap_ci(real_hits, stat="mean", n_resamples=2000, alpha=0.05)
+    real_hits_5 = [1 if (t["rank"] is not None and t["rank"] <= 5) else 0 for t in per_query if not t["is_no_answer"]]
+    p_at_5_ci = bootstrap_ci(real_hits_5, stat="mean", n_resamples=2000, alpha=0.05)
+
     # Add no-answer correctness to metrics by attaching to details.
     no_answer_rate = (no_answer_correct / no_answer_n) if no_answer_n else 0.0
 
@@ -182,6 +199,12 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         "n_no_answer": no_answer_n,
         "no_answer_correct": no_answer_correct,
         "no_answer_rate": no_answer_rate,
+        "stub_end_given_hit_rate": (
+            stub_ends_given_hit / n_given_hit if n_given_hit else 0
+        ),
+        "n_given_hit": n_given_hit,
+        "p_at_3_95ci": p_at_3_ci,
+        "p_at_5_95ci": p_at_5_ci,
         "elapsed_seconds": round(elapsed, 4),
         "metrics": metrics.as_dict(),
         "per_query": per_query,

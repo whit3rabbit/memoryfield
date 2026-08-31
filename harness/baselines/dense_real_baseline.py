@@ -56,14 +56,17 @@ class DenseIndex:
         self._page_text_for_query: list[str] = []
 
     def add_corpus(self, corpus: dict[str, Page]) -> None:
-        # Embed title + summary + L1 body section, prefixed with search_document.
-        # This is what the plan means by "L0+L1 only" for the dense vector.
+        # Embed title + summary + first body section (L0+L1 per plan).
+        # Symmetric text on both sides; prefix is model-specific.
         texts = []
         ids = []
         for uuid, page in corpus.items():
-            piece = page.summary or page.title
+            l1 = page.body_l1 if page.body_sections else ""
+            piece = f"{page.title}. {page.summary} {l1}".strip()
+            if not piece:
+                piece = page.title
             prefix = "search_document: " if self.kind == "nomic" else ""
-            texts.append(prefix + (piece or page.title))
+            texts.append(prefix + piece)
             ids.append(uuid)
         if not texts:
             return
@@ -76,7 +79,16 @@ class DenseIndex:
     def query(self, q: str, k: int = 5) -> list[tuple[str, float]]:
         """Return top-k (uuid, score) pairs."""
         import numpy as np
-        prefix = "search_query: " if self.kind == "nomic" else ""
+        # Prefix conventions:
+        #   nomic: "search_query: " (asymmetric; the doc side has "search_document: ")
+        #   bge-en-v1.5: "Represent this sentence for searching relevant passages: "
+        #     (per BGE-en-v1.5 README; fastembed does not add this automatically.)
+        if self.kind == "nomic":
+            prefix = "search_query: "
+        elif self.kind == "bge":
+            prefix = "Represent this sentence for searching relevant passages: "
+        else:
+            prefix = ""
         qv = list(self.model.embed([prefix + q]))
         qv = _normalize(qv)[0]
         import numpy as np

@@ -33,23 +33,20 @@ except ImportError:
     )
     raise
 
-from harness.mf_harness import (
-    BaselineMetrics,
-    LookupTrace,
-    Query,
-    bootstrap_ci,
-    compute_metrics,
-    load_corpus,
-    load_queries,
-    percentile,
-)
-
 from harness.baselines import (
     dense_baseline,
     dense_real_baseline,
     fts_baseline,
     grep_baseline,
     hybrid_baseline,
+)
+from harness.mf_harness import (
+    BaselineMetrics,
+    LookupTrace,
+    bootstrap_ci,
+    load_corpus,
+    load_queries,
+    percentile,
 )
 
 ROOT = Path(__file__).parent

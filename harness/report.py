@@ -75,7 +75,7 @@ def load_debiased() -> dict[str, dict]:
     return out
 
 
-def render_table(summary: list[dict], columns: "list[str] | None" = None) -> str:
+def render_table(summary: list[dict], columns: list[str] | None = None) -> str:
     columns = columns or [
         "baseline", "domain", "n_queries", "p_at_3", "p_at_5",
         "r_at_5", "mrr", "stub_end_rate",
@@ -159,7 +159,7 @@ def per_axis_breakdown(summary: list[dict], tags: dict, paraphrase_meta: dict) -
             "lexical": [],
             "no_answer": [],
         }
-        for domain, data in by_domain.items():
+        for data in by_domain.values():
             for q in data["per_query"]:
                 qtype = tags.get(q["qid"])
                 buckets["all"].append(q)
@@ -232,8 +232,8 @@ def stub_end_debias(summary: list[dict], debiased: dict) -> str:
     else:
         avg_stub = 0
 
-    out.append(f"| Source | Sufficient | Insufficient | Uncertain |")
-    out.append(f"|---|---|---|---|")
+    out.append("| Source | Sufficient | Insufficient | Uncertain |")
+    out.append("|---|---|---|---|")
     out.append(f"| Original author labels (avg across baselines) | {avg_stub:.3f} | n/a | n/a |")
     out.append(f"| De-biased labels (judgment on stub alone) | {pct_suf:.3f} | {pct_unsuf:.3f} | {pct_unc:.3f} |")
     out.append("")
@@ -242,13 +242,6 @@ def stub_end_debias(summary: list[dict], debiased: dict) -> str:
         "as judged by the author who wrote both the page and the query. The "
         "de-biased labels are a fresh judgment with the body hidden."
     )
-
-    # Disagreements
-    disagreements = []
-    for qid, v in debiased.items():
-        # We don't have access to the original label here, just note how
-        # many judgments disagree with a hypothetical author-leans-toward-no.
-        pass
     return "\n".join(out)
 
 

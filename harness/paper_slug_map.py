@@ -9,10 +9,8 @@ titles without breaking queries.
 """
 from __future__ import annotations
 
-from typing import Optional
-
 # title -> slug id (None = claim exists but no query references it)
-TITLE_TO_SLUG: "dict[str, Optional[str]]" = {
+TITLE_TO_SLUG: dict[str, str | None] = {
     # Transformer
     "Transformer: scaled dot-product attention definition": "tx-scaled-dot-product",
     "Transformer: multi-head attention lets the model attend to different representation subspaces": "tx-multi-head",

@@ -113,3 +113,18 @@
 | lexical_topical | papers | 39 | 0 | 0.897 | 0.949 | 0.949 | 0.812 | 0.000 |
 | paraphrased_topical | papers | 39 | 0 | 0.872 | 0.949 | 0.949 | 0.783 | 0.000 |
 
+### `hybrid`
+
+| Axis | Domain | N | N(no-ans) | P@3 | P@5 | R@5 | MRR | no-ans zero-rate |
+|---|---|---|---|---|---|---|---|---|
+| all | codebase | 191 | 17 | 0.977 | 0.994 | 0.991 | 0.930 | 0.000 |
+| lexical | codebase | 87 | 0 | 0.989 | 1.000 | 0.994 | 0.953 | 0.000 |
+| paraphrased | codebase | 87 | 0 | 0.966 | 0.989 | 0.989 | 0.907 | 0.000 |
+| no_answer | codebase | 17 | 17 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| entity | codebase | 165 | 17 | 0.986 | 0.993 | 0.990 | 0.942 | 0.000 |
+| topical | codebase | 26 | 0 | 0.923 | 1.000 | 1.000 | 0.863 | 0.000 |
+| lexical_entity | codebase | 74 | 0 | 1.000 | 1.000 | 0.993 | 0.964 | 0.000 |
+| paraphrased_entity | codebase | 74 | 0 | 0.973 | 0.986 | 0.986 | 0.919 | 0.000 |
+| lexical_topical | codebase | 13 | 0 | 0.923 | 1.000 | 1.000 | 0.891 | 0.000 |
+| paraphrased_topical | codebase | 13 | 0 | 0.923 | 1.000 | 1.000 | 0.836 | 0.000 |
+

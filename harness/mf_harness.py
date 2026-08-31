@@ -13,13 +13,12 @@ from __future__ import annotations
 
 import json
 import math
+import random
 import re
-import sqlite3
-import statistics
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
 
 # ---------------------------------------------------------------------------
 # Token accounting
@@ -283,7 +282,6 @@ def bootstrap_ci(values: list[int], stat="mean", n_resamples: int = 1000,
     `stat` may be 'mean' or 'sum'. values are 0/1 ints.
     Resampling is non-parametric (sampling with replacement).
     """
-    import random
     if not values:
         return 0.0, 0.0, 0.0
     rng = random.Random(rng_seed)
@@ -302,54 +300,6 @@ def bootstrap_ci(values: list[int], stat="mean", n_resamples: int = 1000,
     lo_idx = int((alpha / 2) * n_resamples)
     hi_idx = int((1 - alpha / 2) * n_resamples) - 1
     return point, samples[lo_idx], samples[hi_idx]
-
-
-def compute_metrics(traces: list[LookupTrace], baseline: str, domain: str, details_path: Path) -> BaselineMetrics:
-    if not traces:
-        return BaselineMetrics(baseline, domain, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, details_path)
-
-    p_at_3 = sum(1 for t in traces if t.rank is not None and t.rank <= 3) / len(traces)
-    p_at_5 = sum(1 for t in traces if t.rank is not None and t.rank <= 5) / len(traces)
-    r_at_5_sum = 0.0
-    r_at_5_n = 0
-    mrr_sum = 0.0
-    stub_ends = 0
-    stub_tokens = []
-    l1_tokens = []
-    full_tokens = []
-
-    for t in traces:
-        if t.rank is not None:
-            mrr_sum += 1.0 / t.rank
-        # R@5: fraction of labeled relevant pages in top 5. Need the Query,
-        # but traces carry only qid; we approximate using topk_uuids and
-        # assume answer_uuids match (1 per query in M0's generated set).
-        # For multi-answer queries we'll switch to a join in the runner.
-        r_at_5_n += 1  # placeholder, real calc happens in runner
-        if t.ended_at_stub:
-            stub_ends += 1
-        stub_tokens.append(t.stub_tokens)
-        l1_tokens.append(t.l1_tokens)
-        full_tokens.append(t.full_tokens)
-
-    # Recompute R@5 properly from the joined data:
-    # (we'll patch this in the runner, which has access to the queries)
-
-    return BaselineMetrics(
-        baseline=baseline,
-        domain=domain,
-        n_queries=len(traces),
-        p_at_3=p_at_3,
-        p_at_5=p_at_5,
-        r_at_5=0.0,  # filled in by runner
-        mrr=mrr_sum / len(traces),
-        stub_end_rate=stub_ends / len(traces),
-        tokens_stub_median=statistics.median(stub_tokens),
-        tokens_stub_p95=percentile(stub_tokens, 95),
-        tokens_l1_median=statistics.median(l1_tokens),
-        tokens_full_median=statistics.median(full_tokens),
-        details_path=details_path,
-    )
 
 
 # ---------------------------------------------------------------------------

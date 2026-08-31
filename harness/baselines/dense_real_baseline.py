@@ -32,7 +32,7 @@ from ..mf_harness import (
 )
 
 
-def _normalize(matrix) -> "list[list[float]]":
+def _normalize(matrix) -> list[list[float]]:
     """L2-normalize each row. Returns a list (compatible with cosine calc)."""
     import numpy as np
     arr = np.asarray(matrix, dtype="float32")
@@ -91,7 +91,6 @@ class DenseIndex:
             prefix = ""
         qv = list(self.model.embed([prefix + q]))
         qv = _normalize(qv)[0]
-        import numpy as np
         page_mat = np.asarray(self._page_vecs, dtype="float32")
         scores = page_mat @ np.asarray(qv, dtype="float32")
         order = np.argsort(-scores)[:k]
@@ -107,7 +106,6 @@ def run_with_model(model_name: str, kind: str, corpus: dict[str, Page], query: Q
     idx = DenseIndex(model_name, kind)
     idx.add_corpus(corpus)
     topk = [u for u, _ in idx.query(query.text, k=5)]
-    scores = {u: s for u, s in idx.query(query.text, k=5)}
     rank = None
     for i, uuid in enumerate(topk, start=1):
         if uuid in query.answer_uuids:

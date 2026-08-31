@@ -3,7 +3,7 @@
 Reciprocal Rank Fusion: each retriever contributes a score of
 `1 / (k + rank)` for each result; we sum across retrievers and re-sort.
 `k=60` is the standard constant from the original Cormack et al. paper and
-the value qmd and most modern stacks default to.
+the value most modern stacks default to.
 
 This is the proposed design from PLAN.md §2 ("Retrieve"). If it doesn't
 beat either baseline alone, the architecture needs rethinking.
@@ -55,7 +55,6 @@ def _rank(corpus: dict[str, Page], query: Query) -> list[str]:
     # Dense (real, nomic) for the asymmetric fusion. We use the same
     # dense_real_baseline code path so the embedder and prefix handling
     # are identical to dense_nomic.
-    from . import dense_real_baseline
     dc = dense_real_baseline.DenseIndex(
         "nomic-ai/nomic-embed-text-v1.5", "nomic"
     )

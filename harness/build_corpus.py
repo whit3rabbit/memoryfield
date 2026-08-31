@@ -2167,7 +2167,7 @@ def main() -> int:
     from paper_slug_map import TITLE_TO_SLUG as PAPER_TITLE_TO_SLUG
     papers_pages = 0
     paper_uuid_for: dict[str, str] = {}
-    for paper, claims in PAPER_CLAIMS.items():
+    for claims in PAPER_CLAIMS.values():
         for c in claims:
             slug = PAPER_TITLE_TO_SLUG.get(c["title"])
             if slug is None:

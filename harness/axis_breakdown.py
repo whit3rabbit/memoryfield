@@ -10,7 +10,6 @@ Outputs a markdown table per baseline per axis.
 from __future__ import annotations
 
 import json
-import statistics
 from collections import defaultdict
 from pathlib import Path
 

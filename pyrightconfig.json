@@ -1,5 +1,4 @@
 {
   "include": ["harness"],
-  "stubFiles": [],
   "reportMissingImports": "none"
 }

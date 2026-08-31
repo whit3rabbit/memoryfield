@@ -76,6 +76,10 @@ local/
 tmp/
 scratch/
 
+# Repo-packing tool output (repomix), not project content
+repomix-output.xml
+.repomixignore
+
 # Generated indexes and caches — never commit
 mf.sqlite3
 mf.sqlite3-journal

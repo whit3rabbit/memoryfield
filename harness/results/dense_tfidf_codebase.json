@@ -1,0 +1,4322 @@
+{
+  "baseline": "dense_tfidf",
+  "domain": "codebase",
+  "n_pages": 75,
+  "n_queries": 191,
+  "n_no_answer": 17,
+  "no_answer_correct": 1,
+  "no_answer_rate": 0.058823529411764705,
+  "elapsed_seconds": 0.4103,
+  "metrics": {
+    "baseline": "dense_tfidf",
+    "domain": "codebase",
+    "n_queries": 191,
+    "p_at_3": 0.8850574712643678,
+    "p_at_5": 0.9137931034482759,
+    "r_at_5": 0.9080459770114943,
+    "mrr": 0.7805555555555556,
+    "stub_end_rate": 0.5549738219895288,
+    "tokens_stub_median": 241,
+    "tokens_stub_p95": 263.0,
+    "tokens_l1_median": 356,
+    "tokens_full_median": 364,
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_tfidf_codebase.json"
+  },
+  "per_query": [
+    {
+      "qid": "auth-rotate-001",
+      "text": "how do I rotate the JWT signing key",
+      "answer_uuids": [
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-rotate-jwt-key",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-kid-meaning",
+        "code-auth-public-keys",
+        "code-billing-idempotency"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 357,
+      "full_tokens": 498,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-rotate-002",
+      "text": "leaked JWT token what do I do",
+      "answer_uuids": [
+        "code-auth-leaked-token"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-auth-leaked-token",
+        "code-obs-trace-id-prop",
+        "code-auth-aud-meaning",
+        "code-api-versioning"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 417,
+      "full_tokens": 461,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-rotate-003",
+      "text": "rotating JWT without breaking active sessions",
+      "answer_uuids": [
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-auth-no-sessions",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-rotate-jwt-key",
+        "code-auth-public-keys",
+        "code-auth-leaked-token"
+      ],
+      "stub_tokens": 229,
+      "l1_tokens": 374,
+      "full_tokens": 377,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-design-001",
+      "text": "why ed25519 instead of RSA",
+      "answer_uuids": [
+        "code-auth-ed25519-vs-rsa"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-ed25519-vs-rsa",
+        "code-billing-idempotency",
+        "code-auth-rotate-jwt-key",
+        "code-api-expand",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 221,
+      "l1_tokens": 349,
+      "full_tokens": 395,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-design-002",
+      "text": "JWT vs sessions tradeoffs",
+      "answer_uuids": [
+        "code-auth-no-sessions"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-no-sessions",
+        "code-auth-user-vs-service-jwt",
+        "code-testing-fixture-vs-factory",
+        "code-testing-db-transactions",
+        "code-migrations-online-offline"
+      ],
+      "stub_tokens": 258,
+      "l1_tokens": 403,
+      "full_tokens": 406,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-design-003",
+      "text": "why short-lived tokens",
+      "answer_uuids": [
+        "code-auth-no-sessions"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-no-sessions",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-rotate-jwt-key",
+        "code-auth-public-keys",
+        "code-testing-coverage-gate"
+      ],
+      "stub_tokens": 214,
+      "l1_tokens": 359,
+      "full_tokens": 362,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-s2s-001",
+      "text": "service to service authentication",
+      "answer_uuids": [
+        "code-auth-s2s-tokens"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-auth-aud-meaning",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-s2s-tokens",
+        "code-auth-leaked-token",
+        "code-obs-dashboard-naming"
+      ],
+      "stub_tokens": 261,
+      "l1_tokens": 392,
+      "full_tokens": 439,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-s2s-002",
+      "text": "how does auth-tokens endpoint work",
+      "answer_uuids": [
+        "code-auth-s2s-tokens"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-s2s-tokens",
+        "code-auth-aud-meaning",
+        "code-obs-request-id",
+        "code-api-bulk",
+        "code-testing-snapshots"
+      ],
+      "stub_tokens": 253,
+      "l1_tokens": 422,
+      "full_tokens": 467,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-s2s-003",
+      "text": "workload identity for k8s services",
+      "answer_uuids": [
+        "code-auth-s2s-tokens"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-s2s-tokens",
+        "code-auth-leaked-token",
+        "code-deploy-pdb",
+        "code-dm-no-fk",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 251,
+      "l1_tokens": 420,
+      "full_tokens": 465,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-jwt-001",
+      "text": "user vs service JWT",
+      "answer_uuids": [
+        "code-auth-user-vs-service-jwt"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-testing-fixture-vs-factory",
+        "code-auth-aud-meaning",
+        "code-auth-s2s-tokens",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 264,
+      "l1_tokens": 443,
+      "full_tokens": 487,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-jwt-002",
+      "text": "difference between user and service tokens",
+      "answer_uuids": [
+        "code-auth-user-vs-service-jwt"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-deploy-vs-release",
+        "code-testing-fixture-vs-factory",
+        "code-auth-no-sessions",
+        "code-migrations-up-vs-expand"
+      ],
+      "stub_tokens": 252,
+      "l1_tokens": 431,
+      "full_tokens": 475,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-jwt-003",
+      "text": "audience claim JWT",
+      "answer_uuids": [
+        "code-auth-aud-meaning"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-auth-aud-meaning",
+        "code-auth-s2s-tokens",
+        "code-auth-public-keys",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 254,
+      "l1_tokens": 433,
+      "full_tokens": 477,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-jwt-004",
+      "text": "kid header meaning in JWT",
+      "answer_uuids": [
+        "code-auth-kid-meaning"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-kid-meaning",
+        "code-auth-user-vs-service-jwt",
+        "code-obs-request-id",
+        "code-api-rate-limit",
+        "code-api-versioning"
+      ],
+      "stub_tokens": 231,
+      "l1_tokens": 348,
+      "full_tokens": 389,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-keys-001",
+      "text": "where are JWT public keys stored",
+      "answer_uuids": [
+        "code-auth-public-keys"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-public-keys",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-rotate-jwt-key",
+        "code-dm-no-fk",
+        "code-testing-property-based"
+      ],
+      "stub_tokens": 261,
+      "l1_tokens": 388,
+      "full_tokens": 443,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-keys-002",
+      "text": "key rotation secrets manager",
+      "answer_uuids": [
+        "code-auth-public-keys"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-public-keys",
+        "code-auth-rotate-jwt-key",
+        "code-auth-kid-meaning",
+        "code-billing-idempotency",
+        "code-api-idempotency"
+      ],
+      "stub_tokens": 232,
+      "l1_tokens": 359,
+      "full_tokens": 414,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auth-oauth-001",
+      "text": "OAuth state validation",
+      "answer_uuids": [
+        "code-auth-oauth-state"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-oauth-state",
+        "code-testing-fixture-vs-factory",
+        "code-billing-dunning",
+        "code-auth-no-sessions",
+        "code-auth-user-vs-service-jwt"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 375,
+      "full_tokens": 414,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-math-001",
+      "text": "how is invoice line total calculated",
+      "answer_uuids": [
+        "code-billing-line-math"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-line-math",
+        "code-billing-trial",
+        "code-billing-idempotency",
+        "code-billing-refunds",
+        "code-testing-coverage-gate"
+      ],
+      "stub_tokens": 237,
+      "l1_tokens": 383,
+      "full_tokens": 385,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-math-002",
+      "text": "proration formula",
+      "answer_uuids": [
+        "code-billing-line-math",
+        "code-billing-proration-edge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-proration-edge"
+      ],
+      "stub_tokens": 58,
+      "l1_tokens": 206,
+      "full_tokens": 236,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-math-003",
+      "text": "month boundary proration",
+      "answer_uuids": [
+        "code-billing-proration-edge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-proration-edge"
+      ],
+      "stub_tokens": 58,
+      "l1_tokens": 206,
+      "full_tokens": 236,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-fx-001",
+      "text": "currency conversion storage",
+      "answer_uuids": [
+        "code-billing-no-fx-storage"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-dm-money-bigint",
+        "code-billing-no-fx-storage",
+        "code-obs-trace-sampling"
+      ],
+      "stub_tokens": 155,
+      "l1_tokens": 250,
+      "full_tokens": 290,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-fx-002",
+      "text": "when do we apply the FX rate",
+      "answer_uuids": [
+        "code-billing-no-fx-storage"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-no-fx-storage",
+        "code-api-rate-limit",
+        "code-dm-no-fk",
+        "code-migrations-rollback",
+        "code-api-versioning"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 369,
+      "full_tokens": 406,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-refund-001",
+      "text": "how are refunds represented",
+      "answer_uuids": [
+        "code-billing-refunds"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-refunds",
+        "code-dm-money-bigint",
+        "code-auth-ed25519-vs-rsa",
+        "code-testing-flaky",
+        "code-billing-trial"
+      ],
+      "stub_tokens": 230,
+      "l1_tokens": 343,
+      "full_tokens": 346,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-refund-002",
+      "text": "negative invoice lines",
+      "answer_uuids": [
+        "code-billing-refunds"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-refunds",
+        "code-billing-trial",
+        "code-billing-idempotency",
+        "code-billing-no-fx-storage",
+        "code-billing-line-math"
+      ],
+      "stub_tokens": 239,
+      "l1_tokens": 352,
+      "full_tokens": 355,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-tax-001",
+      "text": "tax inclusive prices",
+      "answer_uuids": [
+        "code-billing-tax-inclusive"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-tax-inclusive"
+      ],
+      "stub_tokens": 46,
+      "l1_tokens": 151,
+      "full_tokens": 154,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-trial-001",
+      "text": "trial period billing",
+      "answer_uuids": [
+        "code-billing-trial"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-billing-line-math",
+        "code-billing-trial",
+        "code-billing-proration-edge",
+        "code-obs-dashboard-naming",
+        "code-billing-no-fx-storage"
+      ],
+      "stub_tokens": 257,
+      "l1_tokens": 403,
+      "full_tokens": 405,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-idem-001",
+      "text": "idempotency key invoice creation",
+      "answer_uuids": [
+        "code-billing-idempotency"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-idempotency",
+        "code-api-idempotency",
+        "code-auth-kid-meaning",
+        "code-billing-no-fx-storage",
+        "code-billing-refunds"
+      ],
+      "stub_tokens": 237,
+      "l1_tokens": 361,
+      "full_tokens": 364,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-stripe-001",
+      "text": "stripe webhook signature verification",
+      "answer_uuids": [
+        "code-billing-stripe-webhook"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-stripe-webhook",
+        "code-api-webhook-sig",
+        "code-billing-payout-recon",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-oauth-state"
+      ],
+      "stub_tokens": 227,
+      "l1_tokens": 316,
+      "full_tokens": 357,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-payout-001",
+      "text": "payout reconciliation job",
+      "answer_uuids": [
+        "code-billing-payout-recon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-payout-recon",
+        "code-billing-no-fx-storage",
+        "code-dm-no-fk"
+      ],
+      "stub_tokens": 150,
+      "l1_tokens": 279,
+      "full_tokens": 281,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bill-dunning-001",
+      "text": "dunning retry schedule",
+      "answer_uuids": [
+        "code-billing-dunning"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-dunning",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 94,
+      "l1_tokens": 213,
+      "full_tokens": 216,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-safety-001",
+      "text": "add NOT NULL column safely",
+      "answer_uuids": [
+        "code-migrations-add-not-null"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-migrations-add-not-null",
+        "code-migrations-zero-downtime",
+        "code-migrations-rename-column",
+        "code-migrations-online-offline",
+        "code-dm-soft-delete"
+      ],
+      "stub_tokens": 251,
+      "l1_tokens": 380,
+      "full_tokens": 409,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-safety-002",
+      "text": "rename column without downtime",
+      "answer_uuids": [
+        "code-migrations-rename-column"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-migrations-rename-column",
+        "code-migrations-add-not-null",
+        "code-migrations-never-drop-same-release",
+        "code-migrations-zero-downtime",
+        "code-obs-slo-billing"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 401,
+      "full_tokens": 404,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-safety-003",
+      "text": "zero-downtime schema change",
+      "answer_uuids": [
+        "code-migrations-zero-downtime",
+        "code-migrations-rename-column"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-migrations-up-vs-expand",
+        "code-migrations-zero-downtime",
+        "code-deploy-rollback-cmd",
+        "code-deploy-pre-checklist",
+        "code-migrations-test-destructive"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 366,
+      "full_tokens": 368,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-online-001",
+      "text": "online vs offline schema change",
+      "answer_uuids": [
+        "code-migrations-online-offline"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-migrations-online-offline",
+        "code-migrations-up-vs-expand",
+        "code-migrations-zero-downtime",
+        "code-testing-fixture-vs-factory",
+        "code-deploy-rollback-cmd"
+      ],
+      "stub_tokens": 257,
+      "l1_tokens": 412,
+      "full_tokens": 414,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-two-001",
+      "text": "dropping a column when to do it",
+      "answer_uuids": [
+        "code-migrations-never-drop-same-release"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-migrations-add-not-null",
+        "code-migrations-zero-downtime",
+        "code-migrations-never-drop-same-release",
+        "code-obs-trace-id-prop",
+        "code-migrations-rename-column"
+      ],
+      "stub_tokens": 257,
+      "l1_tokens": 386,
+      "full_tokens": 415,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-timeout-001",
+      "text": "lock timeout in migration",
+      "answer_uuids": [
+        "code-migrations-lock-timeout"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-migrations-lock-timeout",
+        "code-dm-no-fk",
+        "code-migrations-add-not-null",
+        "code-migrations-online-offline",
+        "code-api-graceful-shutdown"
+      ],
+      "stub_tokens": 266,
+      "l1_tokens": 388,
+      "full_tokens": 391,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-test-001",
+      "text": "testing destructive migration",
+      "answer_uuids": [
+        "code-migrations-test-destructive"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-migrations-lock-timeout",
+        "code-migrations-test-destructive",
+        "code-migrations-add-not-null",
+        "code-testing-property-based",
+        "code-testing-db-transactions"
+      ],
+      "stub_tokens": 269,
+      "l1_tokens": 391,
+      "full_tokens": 394,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-audit-001",
+      "text": "schema migrations audit table",
+      "answer_uuids": [
+        "code-migrations-audit-log"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-migrations-up-vs-expand",
+        "code-migrations-add-not-null",
+        "code-migrations-audit-log",
+        "code-deploy-pre-checklist",
+        "code-billing-trial"
+      ],
+      "stub_tokens": 240,
+      "l1_tokens": 359,
+      "full_tokens": 361,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "mig-rollback-001",
+      "text": "how do I roll back a migration",
+      "answer_uuids": [
+        "code-migrations-rollback"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-migrations-lock-timeout",
+        "code-migrations-rollback",
+        "code-deploy-rollback-cmd",
+        "code-testing-db-transactions",
+        "code-migrations-test-destructive"
+      ],
+      "stub_tokens": 265,
+      "l1_tokens": 387,
+      "full_tokens": 390,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-canary-001",
+      "text": "canary window config",
+      "answer_uuids": [
+        "code-deploy-canary-window"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-canary-window",
+        "code-obs-slo-billing",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 130,
+      "l1_tokens": 225,
+      "full_tokens": 228,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-canary-002",
+      "text": "rollout error rate threshold",
+      "answer_uuids": [
+        "code-deploy-canary-window"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-canary-window",
+        "code-deploy-feature-flags",
+        "code-deploy-stuck-rollout",
+        "code-obs-slo-billing",
+        "code-deploy-rollback-cmd"
+      ],
+      "stub_tokens": 226,
+      "l1_tokens": 321,
+      "full_tokens": 324,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-rollback-001",
+      "text": "roll back a bad release",
+      "answer_uuids": [
+        "code-deploy-rollback-cmd"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-migrations-never-drop-same-release",
+        "code-deploy-rollback-cmd",
+        "code-deploy-vs-release",
+        "code-migrations-rename-column",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 384,
+      "full_tokens": 387,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-immut-001",
+      "text": "immutable image tags",
+      "answer_uuids": [
+        "code-deploy-immutable-tags"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-deploy-immutable-tags",
+        "code-deploy-stuck-rollout",
+        "code-deploy-log-format",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 202,
+      "l1_tokens": 332,
+      "full_tokens": 335,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-freeze-001",
+      "text": "deploy freeze calendar",
+      "answer_uuids": [
+        "code-deploy-freeze-calendar"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-freeze-calendar",
+        "code-deploy-vs-release",
+        "code-deploy-log-format",
+        "code-obs-error-budget",
+        "code-obs-slo-billing"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 347,
+      "full_tokens": 349,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-flag-001",
+      "text": "feature flag rollout order",
+      "answer_uuids": [
+        "code-deploy-feature-flags"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-feature-flags",
+        "code-deploy-vs-release",
+        "code-deploy-rollback-cmd",
+        "code-deploy-stuck-rollout",
+        "code-dm-no-fk"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 331,
+      "full_tokens": 334,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-checklist-001",
+      "text": "pre-deploy checklist",
+      "answer_uuids": [
+        "code-deploy-pre-checklist"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-pre-checklist"
+      ],
+      "stub_tokens": 43,
+      "l1_tokens": 146,
+      "full_tokens": 149,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-pdb-001",
+      "text": "pod disruption budget",
+      "answer_uuids": [
+        "code-deploy-pdb"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-obs-error-budget",
+        "code-obs-slo-billing",
+        "code-deploy-pdb",
+        "code-deploy-stuck-rollout",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 244,
+      "l1_tokens": 368,
+      "full_tokens": 370,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-vocab-001",
+      "text": "deploy vs release",
+      "answer_uuids": [
+        "code-deploy-vs-release"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-deploy-vs-release",
+        "code-migrations-never-drop-same-release",
+        "code-migrations-rename-column",
+        "code-deploy-rollback-cmd",
+        "code-deploy-log-format"
+      ],
+      "stub_tokens": 257,
+      "l1_tokens": 375,
+      "full_tokens": 378,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "deploy-debug-001",
+      "text": "stuck rollout debugging",
+      "answer_uuids": [
+        "code-deploy-stuck-rollout"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-stuck-rollout",
+        "code-deploy-feature-flags",
+        "code-deploy-rollback-cmd",
+        "code-obs-log-levels",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 358,
+      "full_tokens": 360,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-slo-001",
+      "text": "billing endpoint SLO",
+      "answer_uuids": [
+        "code-obs-slo-billing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-deploy-feature-flags",
+        "code-obs-slo-billing",
+        "code-auth-s2s-tokens",
+        "code-auth-aud-meaning",
+        "code-obs-dashboard-naming"
+      ],
+      "stub_tokens": 245,
+      "l1_tokens": 333,
+      "full_tokens": 336,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-sample-001",
+      "text": "trace sampling strategy",
+      "answer_uuids": [
+        "code-obs-trace-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-obs-request-id",
+        "code-obs-trace-sampling",
+        "code-obs-trace-id-prop",
+        "code-migrations-test-destructive"
+      ],
+      "stub_tokens": 209,
+      "l1_tokens": 306,
+      "full_tokens": 308,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-sample-002",
+      "text": "tail-based sampling",
+      "answer_uuids": [
+        "code-obs-trace-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-trace-sampling",
+        "code-migrations-test-destructive"
+      ],
+      "stub_tokens": 108,
+      "l1_tokens": 221,
+      "full_tokens": 223,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-page-001",
+      "text": "alerting severity levels",
+      "answer_uuids": [
+        "code-obs-alert-severity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-alert-severity",
+        "code-obs-log-levels",
+        "code-billing-dunning"
+      ],
+      "stub_tokens": 141,
+      "l1_tokens": 242,
+      "full_tokens": 245,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-page-002",
+      "text": "when do we wake everyone",
+      "answer_uuids": [
+        "code-obs-alert-severity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-alert-severity",
+        "code-billing-no-fx-storage",
+        "code-api-versioning",
+        "code-dm-no-fk",
+        "code-obs-log-levels"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 339,
+      "full_tokens": 342,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-trace-001",
+      "text": "traceparent header propagation",
+      "answer_uuids": [
+        "code-obs-trace-id-prop"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-trace-id-prop",
+        "code-obs-request-id",
+        "code-api-rate-limit",
+        "code-api-versioning",
+        "code-auth-ed25519-vs-rsa"
+      ],
+      "stub_tokens": 217,
+      "l1_tokens": 319,
+      "full_tokens": 353,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-dash-001",
+      "text": "dashboard naming convention",
+      "answer_uuids": [
+        "code-obs-dashboard-naming"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-dashboard-naming"
+      ],
+      "stub_tokens": 55,
+      "l1_tokens": 140,
+      "full_tokens": 169,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-log-001",
+      "text": "log levels in production",
+      "answer_uuids": [
+        "code-obs-log-levels"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-log-levels",
+        "code-obs-request-id",
+        "code-deploy-log-format",
+        "code-deploy-vs-release",
+        "code-billing-dunning"
+      ],
+      "stub_tokens": 246,
+      "l1_tokens": 341,
+      "full_tokens": 343,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-oncall-001",
+      "text": "on-call rotation handoff",
+      "answer_uuids": [
+        "code-obs-oncall-rotation"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-oncall-rotation",
+        "code-deploy-pre-checklist",
+        "code-obs-alert-severity",
+        "code-auth-no-sessions",
+        "code-auth-public-keys"
+      ],
+      "stub_tokens": 228,
+      "l1_tokens": 334,
+      "full_tokens": 336,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-budget-001",
+      "text": "error budget policy",
+      "answer_uuids": [
+        "code-obs-error-budget"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-error-budget",
+        "code-obs-slo-billing",
+        "code-deploy-canary-window",
+        "code-obs-user-facing-err",
+        "code-deploy-feature-flags"
+      ],
+      "stub_tokens": 236,
+      "l1_tokens": 360,
+      "full_tokens": 362,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-err-001",
+      "text": "what counts as a user-facing error",
+      "answer_uuids": [
+        "code-obs-user-facing-err"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-user-facing-err",
+        "code-deploy-canary-window",
+        "code-obs-error-budget",
+        "code-migrations-test-destructive",
+        "code-obs-slo-billing"
+      ],
+      "stub_tokens": 250,
+      "l1_tokens": 355,
+      "full_tokens": 357,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "obs-req-001",
+      "text": "request ID propagation",
+      "answer_uuids": [
+        "code-obs-request-id"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-request-id",
+        "code-obs-trace-id-prop",
+        "code-api-idempotency",
+        "code-api-pagination",
+        "code-api-bulk"
+      ],
+      "stub_tokens": 246,
+      "l1_tokens": 343,
+      "full_tokens": 345,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-int-001",
+      "text": "integration test setup",
+      "answer_uuids": [
+        "code-testing-integration-org"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-integration-org",
+        "code-testing-db-transactions",
+        "code-testing-snapshots",
+        "code-testing-flaky",
+        "code-migrations-test-destructive"
+      ],
+      "stub_tokens": 263,
+      "l1_tokens": 366,
+      "full_tokens": 368,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-fix-001",
+      "text": "fixture vs factory",
+      "answer_uuids": [
+        "code-testing-fixture-vs-factory"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-testing-fixture-vs-factory",
+        "code-testing-db-transactions",
+        "code-migrations-online-offline"
+      ],
+      "stub_tokens": 161,
+      "l1_tokens": 269,
+      "full_tokens": 272,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-mock-001",
+      "text": "mocking HTTP calls",
+      "answer_uuids": [
+        "code-testing-mock-http"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-mock-http",
+        "code-obs-trace-id-prop",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 147,
+      "l1_tokens": 234,
+      "full_tokens": 264,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-cov-001",
+      "text": "coverage gate",
+      "answer_uuids": [
+        "code-testing-coverage-gate"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-coverage-gate",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 93,
+      "l1_tokens": 155,
+      "full_tokens": 194,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-flake-001",
+      "text": "flaky test policy",
+      "answer_uuids": [
+        "code-testing-flaky"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-flaky",
+        "code-testing-integration-org",
+        "code-testing-db-transactions",
+        "code-testing-snapshots"
+      ],
+      "stub_tokens": 207,
+      "l1_tokens": 306,
+      "full_tokens": 333,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-prop-001",
+      "text": "hypothesis property-based testing",
+      "answer_uuids": [
+        "code-testing-property-based"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-property-based",
+        "code-testing-db-transactions",
+        "code-testing-load",
+        "code-testing-mock-http",
+        "code-testing-fixture-vs-factory"
+      ],
+      "stub_tokens": 254,
+      "l1_tokens": 374,
+      "full_tokens": 377,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-snap-001",
+      "text": "snapshot test review",
+      "answer_uuids": [
+        "code-testing-snapshots"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-snapshots",
+        "code-testing-integration-org",
+        "code-testing-db-transactions",
+        "code-migrations-test-destructive",
+        "code-testing-flaky"
+      ],
+      "stub_tokens": 263,
+      "l1_tokens": 355,
+      "full_tokens": 379,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-load-001",
+      "text": "load test execution",
+      "answer_uuids": [
+        "code-testing-load"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 5,
+      "topk": [
+        "code-testing-integration-org",
+        "code-testing-db-transactions",
+        "code-testing-snapshots",
+        "code-testing-flaky",
+        "code-testing-load"
+      ],
+      "stub_tokens": 254,
+      "l1_tokens": 357,
+      "full_tokens": 359,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-db-001",
+      "text": "transactional DB tests",
+      "answer_uuids": [
+        "code-testing-db-transactions"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-db-transactions",
+        "code-testing-integration-org",
+        "code-testing-flaky",
+        "code-testing-ci-parallel",
+        "code-deploy-pre-checklist"
+      ],
+      "stub_tokens": 245,
+      "l1_tokens": 370,
+      "full_tokens": 372,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "test-ci-001",
+      "text": "CI parallelization shards",
+      "answer_uuids": [
+        "code-testing-ci-parallel"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-ci-parallel",
+        "code-deploy-pre-checklist",
+        "code-testing-coverage-gate",
+        "code-testing-property-based",
+        "code-testing-flaky"
+      ],
+      "stub_tokens": 246,
+      "l1_tokens": 334,
+      "full_tokens": 336,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-page-001",
+      "text": "cursor based pagination",
+      "answer_uuids": [
+        "code-api-pagination"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-pagination",
+        "code-testing-mock-http"
+      ],
+      "stub_tokens": 96,
+      "l1_tokens": 208,
+      "full_tokens": 211,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-page-002",
+      "text": "why cursors not offsets",
+      "answer_uuids": [
+        "code-api-pagination"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-api-pagination",
+        "code-deploy-immutable-tags",
+        "code-auth-ed25519-vs-rsa",
+        "code-migrations-add-not-null",
+        "code-api-versioning"
+      ],
+      "stub_tokens": 222,
+      "l1_tokens": 334,
+      "full_tokens": 337,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-rl-001",
+      "text": "rate limiting per API key",
+      "answer_uuids": [
+        "code-api-rate-limit"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-rate-limit",
+        "code-api-idempotency",
+        "code-auth-kid-meaning",
+        "code-billing-idempotency",
+        "code-obs-dashboard-naming"
+      ],
+      "stub_tokens": 239,
+      "l1_tokens": 316,
+      "full_tokens": 342,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-rl-002",
+      "text": "429 too many requests retry",
+      "answer_uuids": [
+        "code-api-rate-limit"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-testing-mock-http",
+        "code-api-graceful-shutdown",
+        "code-api-bulk",
+        "code-deploy-vs-release",
+        "code-billing-dunning"
+      ],
+      "stub_tokens": 237,
+      "l1_tokens": 324,
+      "full_tokens": 354,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-bulk-001",
+      "text": "bulk endpoint usage",
+      "answer_uuids": [
+        "code-api-bulk"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-bulk",
+        "code-auth-s2s-tokens",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 154,
+      "l1_tokens": 247,
+      "full_tokens": 277,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-ver-001",
+      "text": "API versioning strategy",
+      "answer_uuids": [
+        "code-api-versioning"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-versioning",
+        "code-api-rate-limit",
+        "code-api-401-vs-403",
+        "code-api-graceful-shutdown",
+        "code-api-bulk"
+      ],
+      "stub_tokens": 232,
+      "l1_tokens": 303,
+      "full_tokens": 333,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-status-001",
+      "text": "401 vs 403 status code",
+      "answer_uuids": [
+        "code-api-401-vs-403"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-deploy-stuck-rollout",
+        "code-api-problem-details",
+        "code-migrations-up-vs-expand",
+        "code-migrations-never-drop-same-release",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 268,
+      "l1_tokens": 391,
+      "full_tokens": 393,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-err-001",
+      "text": "error response format",
+      "answer_uuids": [
+        "code-api-problem-details"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-deploy-canary-window",
+        "code-api-bulk",
+        "code-obs-user-facing-err",
+        "code-obs-error-budget",
+        "code-obs-slo-billing"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 337,
+      "full_tokens": 340,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-expand-001",
+      "text": "expand parameter for related objects",
+      "answer_uuids": [
+        "code-api-expand"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-expand",
+        "code-testing-fixture-vs-factory",
+        "code-migrations-up-vs-expand",
+        "code-auth-oauth-state",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 356,
+      "full_tokens": 358,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-idem-001",
+      "text": "idempotency key reuse",
+      "answer_uuids": [
+        "code-api-idempotency"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-idempotency",
+        "code-billing-idempotency",
+        "code-auth-kid-meaning",
+        "code-auth-rotate-jwt-key",
+        "code-auth-public-keys"
+      ],
+      "stub_tokens": 232,
+      "l1_tokens": 322,
+      "full_tokens": 355,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-wh-001",
+      "text": "webhook signature verification",
+      "answer_uuids": [
+        "code-api-webhook-sig"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-billing-stripe-webhook",
+        "code-api-webhook-sig",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-oauth-state",
+        "code-auth-s2s-tokens"
+      ],
+      "stub_tokens": 240,
+      "l1_tokens": 329,
+      "full_tokens": 370,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "api-shut-001",
+      "text": "graceful shutdown timeout",
+      "answer_uuids": [
+        "code-api-graceful-shutdown"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-graceful-shutdown"
+      ],
+      "stub_tokens": 49,
+      "l1_tokens": 133,
+      "full_tokens": 165,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dm-uuid-001",
+      "text": "why UUIDv7 instead of UUIDv4",
+      "answer_uuids": [
+        "code-dm-uuidv7"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-dm-uuidv7",
+        "code-obs-request-id",
+        "code-billing-idempotency",
+        "code-api-expand",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 236,
+      "l1_tokens": 361,
+      "full_tokens": 364,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dm-uuid-002",
+      "text": "time-ordered UUID",
+      "answer_uuids": [
+        "code-dm-uuidv7"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-dm-uuidv7",
+        "code-billing-idempotency",
+        "code-auth-user-vs-service-jwt"
+      ],
+      "stub_tokens": 154,
+      "l1_tokens": 279,
+      "full_tokens": 282,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dm-soft-001",
+      "text": "soft delete column",
+      "answer_uuids": [
+        "code-dm-soft-delete"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-migrations-add-not-null",
+        "code-migrations-never-drop-same-release",
+        "code-dm-soft-delete",
+        "code-migrations-zero-downtime",
+        "code-migrations-audit-log"
+      ],
+      "stub_tokens": 250,
+      "l1_tokens": 379,
+      "full_tokens": 408,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dm-time-001",
+      "text": "TIMESTAMPTZ vs TIMESTAMP",
+      "answer_uuids": [
+        "code-dm-timestamptz"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-dm-timestamptz",
+        "code-dm-soft-delete",
+        "code-testing-fixture-vs-factory",
+        "code-testing-db-transactions",
+        "code-migrations-online-offline"
+      ],
+      "stub_tokens": 255,
+      "l1_tokens": 355,
+      "full_tokens": 357,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dm-money-001",
+      "text": "storing monetary amounts",
+      "answer_uuids": [
+        "code-dm-money-bigint"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-dm-money-bigint",
+        "code-billing-no-fx-storage"
+      ],
+      "stub_tokens": 103,
+      "l1_tokens": 198,
+      "full_tokens": 238,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-bulk-001",
+      "text": "using the bulk endpoints and their request shapes",
+      "answer_uuids": [
+        "code-api-bulk"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-bulk",
+        "code-obs-request-id",
+        "code-obs-slo-billing",
+        "code-api-idempotency",
+        "code-auth-oauth-state"
+      ],
+      "stub_tokens": 233,
+      "l1_tokens": 326,
+      "full_tokens": 356,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-err-001",
+      "text": "the rationale behind our RFC 7807 error envelope",
+      "answer_uuids": [
+        "code-api-problem-details"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-deploy-canary-window",
+        "code-obs-error-budget",
+        "code-api-problem-details",
+        "code-obs-slo-billing",
+        "code-migrations-lock-timeout"
+      ],
+      "stub_tokens": 251,
+      "l1_tokens": 346,
+      "full_tokens": 349,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-expand-001",
+      "text": "the role of the expand parameter for related records",
+      "answer_uuids": [
+        "code-api-expand"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-expand",
+        "code-migrations-up-vs-expand",
+        "code-auth-oauth-state",
+        "code-auth-rotate-jwt-key",
+        "code-migrations-audit-log"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 354,
+      "full_tokens": 356,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-idem-001",
+      "text": "how idempotency keys interact with request bodies",
+      "answer_uuids": [
+        "code-api-idempotency"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-idempotency",
+        "code-auth-public-keys",
+        "code-obs-request-id",
+        "code-billing-idempotency",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 236,
+      "l1_tokens": 326,
+      "full_tokens": 359,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-page-001",
+      "text": "why GET /users returns cursor-paginated results",
+      "answer_uuids": [
+        "code-api-pagination"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-pagination",
+        "code-api-rate-limit",
+        "code-api-idempotency",
+        "code-testing-load",
+        "code-migrations-add-not-null"
+      ],
+      "stub_tokens": 236,
+      "l1_tokens": 348,
+      "full_tokens": 351,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-page-002",
+      "text": "rationale for cursors over offset pagination",
+      "answer_uuids": [
+        "code-api-pagination"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-api-pagination",
+        "code-obs-slo-billing",
+        "code-api-webhook-sig",
+        "code-deploy-canary-window",
+        "code-dm-timestamptz"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 347,
+      "full_tokens": 350,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-rl-001",
+      "text": "rate limit policies per API key",
+      "answer_uuids": [
+        "code-api-rate-limit"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-rate-limit",
+        "code-api-idempotency",
+        "code-auth-kid-meaning",
+        "code-billing-idempotency",
+        "code-obs-dashboard-naming"
+      ],
+      "stub_tokens": 239,
+      "l1_tokens": 316,
+      "full_tokens": 342,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-rl-002",
+      "text": "how clients should retry after a 429",
+      "answer_uuids": [
+        "code-api-rate-limit"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-obs-oncall-rotation",
+        "code-billing-dunning",
+        "code-auth-ed25519-vs-rsa",
+        "code-api-versioning",
+        "code-obs-log-levels"
+      ],
+      "stub_tokens": 220,
+      "l1_tokens": 326,
+      "full_tokens": 328,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-shut-001",
+      "text": "draining in-flight requests before a process exits",
+      "answer_uuids": [
+        "code-api-graceful-shutdown"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-graceful-shutdown",
+        "code-billing-stripe-webhook",
+        "code-testing-mock-http",
+        "code-api-bulk",
+        "code-auth-oauth-state"
+      ],
+      "stub_tokens": 239,
+      "l1_tokens": 323,
+      "full_tokens": 355,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-status-001",
+      "text": "when to return 401 vs 403 from the API",
+      "answer_uuids": [
+        "code-api-401-vs-403"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-api-401-vs-403",
+        "code-testing-fixture-vs-factory",
+        "code-api-rate-limit",
+        "code-auth-aud-meaning",
+        "code-obs-log-levels"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 358,
+      "full_tokens": 361,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-ver-001",
+      "text": "how we manage backwards compatibility on the API",
+      "answer_uuids": [
+        "code-api-versioning"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-oauth-state",
+        "code-dm-no-fk",
+        "code-api-rate-limit",
+        "code-billing-no-fx-storage"
+      ],
+      "stub_tokens": 232,
+      "l1_tokens": 360,
+      "full_tokens": 406,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-api-wh-001",
+      "text": "how the API verifies inbound webhook signatures",
+      "answer_uuids": [
+        "code-api-webhook-sig"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-webhook-sig",
+        "code-billing-stripe-webhook",
+        "code-api-rate-limit",
+        "code-api-versioning",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 227,
+      "l1_tokens": 340,
+      "full_tokens": 343,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-design-001",
+      "text": "rationale for choosing ed25519 over RSA for tokens",
+      "answer_uuids": [
+        "code-auth-ed25519-vs-rsa"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-ed25519-vs-rsa",
+        "code-obs-slo-billing",
+        "code-auth-rotate-jwt-key",
+        "code-auth-s2s-tokens",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 224,
+      "l1_tokens": 352,
+      "full_tokens": 398,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-design-002",
+      "text": "comparing token auth to server-side session auth",
+      "answer_uuids": [
+        "code-auth-no-sessions"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "code-auth-oauth-state",
+        "code-auth-no-sessions",
+        "code-api-401-vs-403",
+        "code-auth-leaked-token",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 227,
+      "l1_tokens": 360,
+      "full_tokens": 399,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-design-003",
+      "text": "the reasoning behind brief token expirations",
+      "answer_uuids": [
+        "code-auth-no-sessions"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-auth-leaked-token",
+        "code-auth-s2s-tokens",
+        "code-migrations-lock-timeout",
+        "code-auth-kid-meaning",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 246,
+      "l1_tokens": 383,
+      "full_tokens": 419,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-jwt-001",
+      "text": "distinguishing end-user JWTs from service JWTs",
+      "answer_uuids": [
+        "code-auth-user-vs-service-jwt"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-auth-no-sessions",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-aud-meaning",
+        "code-auth-s2s-tokens"
+      ],
+      "stub_tokens": 240,
+      "l1_tokens": 419,
+      "full_tokens": 463,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-jwt-002",
+      "text": "what sets user tokens apart from service tokens",
+      "answer_uuids": [
+        "code-auth-user-vs-service-jwt"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-testing-fixture-vs-factory",
+        "code-auth-aud-meaning",
+        "code-auth-s2s-tokens",
+        "code-auth-no-sessions"
+      ],
+      "stub_tokens": 255,
+      "l1_tokens": 434,
+      "full_tokens": 478,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-jwt-003",
+      "text": "the role of the aud claim inside a JWT",
+      "answer_uuids": [
+        "code-auth-aud-meaning"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-auth-aud-meaning",
+        "code-auth-s2s-tokens",
+        "code-auth-rotate-jwt-key",
+        "code-testing-db-transactions"
+      ],
+      "stub_tokens": 259,
+      "l1_tokens": 438,
+      "full_tokens": 482,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-jwt-004",
+      "text": "what the kid field in a JWT header identifies",
+      "answer_uuids": [
+        "code-auth-kid-meaning"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-kid-meaning",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-aud-meaning",
+        "code-auth-s2s-tokens",
+        "code-api-rate-limit"
+      ],
+      "stub_tokens": 251,
+      "l1_tokens": 368,
+      "full_tokens": 409,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-keys-001",
+      "text": "where clients fetch our JWT public keys from",
+      "answer_uuids": [
+        "code-auth-public-keys"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-public-keys",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-rotate-jwt-key",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-s2s-tokens"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 369,
+      "full_tokens": 424,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-keys-002",
+      "text": "rotating secrets through our secret manager",
+      "answer_uuids": [
+        "code-auth-public-keys"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-public-keys",
+        "code-auth-rotate-jwt-key",
+        "code-obs-request-id",
+        "code-auth-s2s-tokens",
+        "code-auth-kid-meaning"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 368,
+      "full_tokens": 423,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-oauth-001",
+      "text": "how the OAuth callback verifies the state parameter",
+      "answer_uuids": [
+        "code-auth-oauth-state"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-oauth-state",
+        "code-billing-dunning",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-no-sessions",
+        "code-auth-s2s-tokens"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 380,
+      "full_tokens": 419,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-rotate-001",
+      "text": "what's the procedure for swapping the JWT signing key",
+      "answer_uuids": [
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-auth-kid-meaning",
+        "code-auth-rotate-jwt-key",
+        "code-billing-idempotency",
+        "code-auth-public-keys"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 422,
+      "full_tokens": 466,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-rotate-002",
+      "text": "our JWT got leaked \u2014 what's our incident playbook",
+      "answer_uuids": [
+        "code-auth-leaked-token"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-obs-trace-id-prop",
+        "code-auth-aud-meaning",
+        "code-deploy-rollback-cmd",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 248,
+      "l1_tokens": 427,
+      "full_tokens": 471,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-rotate-003",
+      "text": "swap our JWT signing key without invalidating live tokens",
+      "answer_uuids": [
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-auth-rotate-jwt-key",
+        "code-auth-public-keys",
+        "code-billing-idempotency",
+        "code-auth-kid-meaning"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 422,
+      "full_tokens": 466,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-s2s-001",
+      "text": "how our backend services authenticate each other",
+      "answer_uuids": [
+        "code-auth-s2s-tokens"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-testing-db-transactions",
+        "code-deploy-feature-flags",
+        "code-testing-integration-org",
+        "code-deploy-pdb",
+        "code-migrations-lock-timeout"
+      ],
+      "stub_tokens": 253,
+      "l1_tokens": 378,
+      "full_tokens": 380,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-s2s-002",
+      "text": "explain what happens when a service hits /auth-tokens",
+      "answer_uuids": [
+        "code-auth-s2s-tokens"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-s2s-tokens",
+        "code-auth-aud-meaning",
+        "code-auth-user-vs-service-jwt",
+        "code-obs-log-levels",
+        "code-obs-trace-id-prop"
+      ],
+      "stub_tokens": 264,
+      "l1_tokens": 433,
+      "full_tokens": 478,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auth-s2s-003",
+      "text": "kubernetes workload identity for our internal services",
+      "answer_uuids": [
+        "code-auth-s2s-tokens"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-s2s-tokens",
+        "code-auth-leaked-token",
+        "code-obs-request-id",
+        "code-deploy-feature-flags",
+        "code-deploy-pdb"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 412,
+      "full_tokens": 457,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-dunning-001",
+      "text": "the cadence for retrying failed payments",
+      "answer_uuids": [
+        "code-billing-dunning"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-dunning",
+        "code-auth-rotate-jwt-key",
+        "code-auth-aud-meaning",
+        "code-auth-oauth-state",
+        "code-billing-idempotency"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 354,
+      "full_tokens": 357,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-fx-001",
+      "text": "do we persist FX rates anywhere",
+      "answer_uuids": [
+        "code-billing-no-fx-storage"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-no-fx-storage",
+        "code-api-versioning",
+        "code-dm-no-fk",
+        "code-auth-ed25519-vs-rsa",
+        "code-testing-flaky"
+      ],
+      "stub_tokens": 233,
+      "l1_tokens": 360,
+      "full_tokens": 397,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-fx-002",
+      "text": "at what point does the FX rate get applied to a charge",
+      "answer_uuids": [
+        "code-billing-no-fx-storage"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-no-fx-storage",
+        "code-billing-payout-recon",
+        "code-api-rate-limit",
+        "code-obs-trace-sampling",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 233,
+      "l1_tokens": 360,
+      "full_tokens": 397,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-idem-001",
+      "text": "using idempotency keys to safely create invoices",
+      "answer_uuids": [
+        "code-billing-idempotency"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-idempotency",
+        "code-api-idempotency",
+        "code-auth-public-keys",
+        "code-migrations-rename-column",
+        "code-migrations-zero-downtime"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 366,
+      "full_tokens": 369,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-math-001",
+      "text": "the math behind a single invoice line's total",
+      "answer_uuids": [
+        "code-billing-line-math"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-line-math",
+        "code-billing-trial",
+        "code-billing-idempotency",
+        "code-billing-refunds",
+        "code-billing-no-fx-storage"
+      ],
+      "stub_tokens": 239,
+      "l1_tokens": 385,
+      "full_tokens": 387,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-math-002",
+      "text": "what formula do we use to prorate charges",
+      "answer_uuids": [
+        "code-billing-line-math",
+        "code-billing-proration-edge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-dm-no-fk",
+        "code-auth-ed25519-vs-rsa",
+        "code-api-versioning",
+        "code-auth-no-sessions",
+        "code-testing-mock-http"
+      ],
+      "stub_tokens": 215,
+      "l1_tokens": 343,
+      "full_tokens": 345,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-math-003",
+      "text": "edge case handling for prorations that cross month-end",
+      "answer_uuids": [
+        "code-billing-proration-edge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 4,
+      "topk": [
+        "code-obs-request-id",
+        "code-auth-leaked-token",
+        "code-obs-dashboard-naming",
+        "code-billing-proration-edge",
+        "code-auth-ed25519-vs-rsa"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 338,
+      "full_tokens": 340,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-payout-001",
+      "text": "the background worker that reconciles payouts",
+      "answer_uuids": [
+        "code-billing-payout-recon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-payout-recon",
+        "code-migrations-up-vs-expand",
+        "code-auth-leaked-token",
+        "code-auth-rotate-jwt-key",
+        "code-billing-no-fx-storage"
+      ],
+      "stub_tokens": 234,
+      "l1_tokens": 363,
+      "full_tokens": 365,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-refund-001",
+      "text": "how a refund is represented in our data model",
+      "answer_uuids": [
+        "code-billing-refunds"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-dm-soft-delete",
+        "code-dm-uuidv7",
+        "code-dm-money-bigint",
+        "code-auth-no-sessions",
+        "code-auth-oauth-state"
+      ],
+      "stub_tokens": 231,
+      "l1_tokens": 342,
+      "full_tokens": 345,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-refund-002",
+      "text": "why some invoice lines show up with negative amounts",
+      "answer_uuids": [
+        "code-billing-refunds"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-refunds",
+        "code-billing-trial",
+        "code-billing-idempotency",
+        "code-billing-no-fx-storage",
+        "code-dm-money-bigint"
+      ],
+      "stub_tokens": 240,
+      "l1_tokens": 353,
+      "full_tokens": 356,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-stripe-001",
+      "text": "how do we authenticate inbound Stripe webhooks",
+      "answer_uuids": [
+        "code-billing-stripe-webhook"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-stripe-webhook",
+        "code-billing-payout-recon",
+        "code-api-versioning",
+        "code-dm-no-fk",
+        "code-billing-no-fx-storage"
+      ],
+      "stub_tokens": 236,
+      "l1_tokens": 325,
+      "full_tokens": 366,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-tax-001",
+      "text": "what does tax_mode: inclusive actually mean",
+      "answer_uuids": [
+        "code-billing-tax-inclusive"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-tax-inclusive",
+        "code-auth-aud-meaning",
+        "code-billing-refunds",
+        "code-testing-coverage-gate",
+        "code-obs-error-budget"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 346,
+      "full_tokens": 349,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bill-trial-001",
+      "text": "how do trial periods get invoiced once they convert",
+      "answer_uuids": [
+        "code-billing-trial"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-billing-trial",
+        "code-api-pagination",
+        "code-testing-flaky",
+        "code-billing-refunds",
+        "code-api-versioning"
+      ],
+      "stub_tokens": 227,
+      "l1_tokens": 332,
+      "full_tokens": 334,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-canary-001",
+      "text": "how the canary deployment stage is configured",
+      "answer_uuids": [
+        "code-deploy-canary-window"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-canary-window",
+        "code-auth-rotate-jwt-key",
+        "code-auth-aud-meaning",
+        "code-billing-line-math",
+        "code-dm-soft-delete"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 330,
+      "full_tokens": 333,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-canary-002",
+      "text": "what error rate fails a rollout and triggers rollback",
+      "answer_uuids": [
+        "code-deploy-canary-window"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-canary-window",
+        "code-deploy-feature-flags",
+        "code-deploy-rollback-cmd",
+        "code-migrations-rollback",
+        "code-obs-error-budget"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 338,
+      "full_tokens": 341,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-checklist-001",
+      "text": "the pre-release checklist before shipping",
+      "answer_uuids": [
+        "code-deploy-pre-checklist"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-auth-oauth-state",
+        "code-deploy-pre-checklist",
+        "code-billing-stripe-webhook",
+        "code-migrations-never-drop-same-release",
+        "code-migrations-rename-column"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 380,
+      "full_tokens": 419,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-debug-001",
+      "text": "how to diagnose a rollout that won't make progress",
+      "answer_uuids": [
+        "code-deploy-stuck-rollout"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-deploy-rollback-cmd",
+        "code-deploy-feature-flags",
+        "code-deploy-stuck-rollout",
+        "code-auth-leaked-token",
+        "code-deploy-pdb"
+      ],
+      "stub_tokens": 234,
+      "l1_tokens": 338,
+      "full_tokens": 341,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-flag-001",
+      "text": "how should we sequence feature flag rollouts",
+      "answer_uuids": [
+        "code-deploy-feature-flags"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-deploy-vs-release",
+        "code-deploy-feature-flags",
+        "code-deploy-stuck-rollout",
+        "code-migrations-rename-column",
+        "code-dm-no-fk"
+      ],
+      "stub_tokens": 248,
+      "l1_tokens": 366,
+      "full_tokens": 369,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-freeze-001",
+      "text": "what dates are blocked from deploys",
+      "answer_uuids": [
+        "code-deploy-freeze-calendar"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-obs-error-budget",
+        "code-auth-aud-meaning",
+        "code-billing-refunds",
+        "code-obs-user-facing-err",
+        "code-deploy-pre-checklist"
+      ],
+      "stub_tokens": 244,
+      "l1_tokens": 368,
+      "full_tokens": 370,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-immut-001",
+      "text": "rationale for never overwriting image tags",
+      "answer_uuids": [
+        "code-deploy-immutable-tags"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-deploy-immutable-tags",
+        "code-deploy-stuck-rollout",
+        "code-deploy-log-format",
+        "code-api-401-vs-403",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 258,
+      "l1_tokens": 388,
+      "full_tokens": 391,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-pdb-001",
+      "text": "how pod disruption budgets govern voluntary evictions",
+      "answer_uuids": [
+        "code-deploy-pdb"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-deploy-pdb",
+        "code-deploy-stuck-rollout",
+        "code-deploy-rollback-cmd",
+        "code-api-graceful-shutdown",
+        "code-billing-trial"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 366,
+      "full_tokens": 369,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-rollback-001",
+      "text": "how to revert a broken release",
+      "answer_uuids": [
+        "code-deploy-rollback-cmd"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 4,
+      "topk": [
+        "code-migrations-never-drop-same-release",
+        "code-migrations-rename-column",
+        "code-deploy-vs-release",
+        "code-deploy-rollback-cmd",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 384,
+      "full_tokens": 387,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-deploy-vocab-001",
+      "text": "how shipping differs from pushing out a release",
+      "answer_uuids": [
+        "code-deploy-vs-release"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 3,
+      "topk": [
+        "code-migrations-never-drop-same-release",
+        "code-migrations-rename-column",
+        "code-deploy-vs-release",
+        "code-deploy-rollback-cmd",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 384,
+      "full_tokens": 387,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dm-money-001",
+      "text": "how we store monetary amounts in the database",
+      "answer_uuids": [
+        "code-dm-money-bigint"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-billing-no-fx-storage",
+        "code-dm-money-bigint",
+        "code-testing-db-transactions",
+        "code-auth-no-sessions",
+        "code-auth-oauth-state"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 368,
+      "full_tokens": 405,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dm-soft-001",
+      "text": "implementing tombstoning via the deleted_at column",
+      "answer_uuids": [
+        "code-dm-soft-delete"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-dm-soft-delete",
+        "code-migrations-never-drop-same-release",
+        "code-migrations-add-not-null",
+        "code-migrations-zero-downtime",
+        "code-migrations-online-offline"
+      ],
+      "stub_tokens": 257,
+      "l1_tokens": 368,
+      "full_tokens": 371,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dm-time-001",
+      "text": "why all time columns use TIMESTAMPTZ",
+      "answer_uuids": [
+        "code-dm-timestamptz"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-dm-timestamptz",
+        "code-billing-no-fx-storage",
+        "code-dm-soft-delete",
+        "code-deploy-immutable-tags",
+        "code-testing-mock-http"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 338,
+      "full_tokens": 340,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dm-uuid-001",
+      "text": "why record IDs are UUIDv7 instead of UUIDv4",
+      "answer_uuids": [
+        "code-dm-uuidv7"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-dm-uuidv7",
+        "code-obs-request-id",
+        "code-billing-idempotency",
+        "code-api-expand",
+        "code-auth-ed25519-vs-rsa"
+      ],
+      "stub_tokens": 228,
+      "l1_tokens": 353,
+      "full_tokens": 356,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dm-uuid-002",
+      "text": "why a sortable UUID gives us better indexing",
+      "answer_uuids": [
+        "code-dm-uuidv7"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-auth-no-sessions",
+        "code-dm-uuidv7",
+        "code-obs-trace-sampling",
+        "code-dm-money-bigint",
+        "code-billing-idempotency"
+      ],
+      "stub_tokens": 240,
+      "l1_tokens": 385,
+      "full_tokens": 388,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-audit-001",
+      "text": "where do we record the history of schema migrations",
+      "answer_uuids": [
+        "code-migrations-audit-log"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-migrations-up-vs-expand",
+        "code-dm-no-fk",
+        "code-deploy-pre-checklist",
+        "code-billing-no-fx-storage",
+        "code-migrations-rollback"
+      ],
+      "stub_tokens": 261,
+      "l1_tokens": 380,
+      "full_tokens": 382,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-online-001",
+      "text": "picking between a live and a stopped schema change",
+      "answer_uuids": [
+        "code-migrations-online-offline"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-migrations-up-vs-expand",
+        "code-auth-public-keys",
+        "code-migrations-zero-downtime",
+        "code-auth-user-vs-service-jwt",
+        "code-billing-payout-recon"
+      ],
+      "stub_tokens": 251,
+      "l1_tokens": 370,
+      "full_tokens": 372,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-rollback-001",
+      "text": "what's the rollback procedure for a migration",
+      "answer_uuids": [
+        "code-migrations-rollback"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-migrations-lock-timeout",
+        "code-migrations-rollback",
+        "code-deploy-pre-checklist",
+        "code-auth-aud-meaning",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 248,
+      "l1_tokens": 370,
+      "full_tokens": 373,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-safety-001",
+      "text": "safely introducing a NOT NULL column to a live table",
+      "answer_uuids": [
+        "code-migrations-add-not-null"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-migrations-add-not-null",
+        "code-dm-soft-delete",
+        "code-migrations-zero-downtime",
+        "code-migrations-online-offline",
+        "code-migrations-rename-column"
+      ],
+      "stub_tokens": 251,
+      "l1_tokens": 380,
+      "full_tokens": 409,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-safety-002",
+      "text": "renaming a column with no downtime",
+      "answer_uuids": [
+        "code-migrations-rename-column"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 5,
+      "topk": [
+        "code-migrations-add-not-null",
+        "code-migrations-never-drop-same-release",
+        "code-migrations-zero-downtime",
+        "code-obs-slo-billing",
+        "code-migrations-rename-column"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 376,
+      "full_tokens": 405,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-safety-003",
+      "text": "DDL patterns that avoid service interruption",
+      "answer_uuids": [
+        "code-migrations-zero-downtime",
+        "code-migrations-rename-column"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-auth-aud-meaning",
+        "code-auth-leaked-token",
+        "code-api-401-vs-403",
+        "code-obs-dashboard-naming"
+      ],
+      "stub_tokens": 260,
+      "l1_tokens": 439,
+      "full_tokens": 483,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-test-001",
+      "text": "how do we test a destructive schema change",
+      "answer_uuids": [
+        "code-migrations-test-destructive"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 4,
+      "topk": [
+        "code-migrations-up-vs-expand",
+        "code-testing-db-transactions",
+        "code-testing-integration-org",
+        "code-migrations-test-destructive",
+        "code-testing-snapshots"
+      ],
+      "stub_tokens": 265,
+      "l1_tokens": 384,
+      "full_tokens": 386,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-timeout-001",
+      "text": "setting a cap on how long migrations wait for locks",
+      "answer_uuids": [
+        "code-migrations-lock-timeout"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-migrations-add-not-null",
+        "code-migrations-lock-timeout",
+        "code-migrations-rollback",
+        "code-api-graceful-shutdown",
+        "code-deploy-pre-checklist"
+      ],
+      "stub_tokens": 253,
+      "l1_tokens": 382,
+      "full_tokens": 411,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-mig-two-001",
+      "text": "the right release cycle for actually dropping a column",
+      "answer_uuids": [
+        "code-migrations-never-drop-same-release"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-migrations-never-drop-same-release",
+        "code-migrations-rename-column",
+        "code-deploy-vs-release",
+        "code-deploy-rollback-cmd",
+        "code-migrations-add-not-null"
+      ],
+      "stub_tokens": 252,
+      "l1_tokens": 389,
+      "full_tokens": 392,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-budget-001",
+      "text": "how the error budget is consumed and policed",
+      "answer_uuids": [
+        "code-obs-error-budget"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-error-budget",
+        "code-obs-slo-billing",
+        "code-deploy-canary-window",
+        "code-api-bulk",
+        "code-obs-user-facing-err"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 366,
+      "full_tokens": 368,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-dash-001",
+      "text": "the naming rules for our observability dashboards",
+      "answer_uuids": [
+        "code-obs-dashboard-naming"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-deploy-pre-checklist",
+        "code-obs-dashboard-naming",
+        "code-auth-rotate-jwt-key",
+        "code-obs-trace-id-prop",
+        "code-deploy-feature-flags"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 338,
+      "full_tokens": 341,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-err-001",
+      "text": "what we count as a user-visible error",
+      "answer_uuids": [
+        "code-obs-user-facing-err"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-user-facing-err",
+        "code-deploy-canary-window",
+        "code-obs-error-budget",
+        "code-dm-no-fk",
+        "code-auth-oauth-state"
+      ],
+      "stub_tokens": 255,
+      "l1_tokens": 360,
+      "full_tokens": 362,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-log-001",
+      "text": "production logging level policy",
+      "answer_uuids": [
+        "code-obs-log-levels"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "code-billing-dunning",
+        "code-api-expand",
+        "code-obs-log-levels",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 188,
+      "l1_tokens": 307,
+      "full_tokens": 310,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-oncall-001",
+      "text": "the handoff procedure for on-call rotations",
+      "answer_uuids": [
+        "code-obs-oncall-rotation"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-oncall-rotation",
+        "code-deploy-pre-checklist",
+        "code-obs-alert-severity",
+        "code-auth-rotate-jwt-key",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 234,
+      "l1_tokens": 340,
+      "full_tokens": 342,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-page-001",
+      "text": "the tiered ladder of alerting severities",
+      "answer_uuids": [
+        "code-obs-alert-severity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-alert-severity",
+        "code-deploy-canary-window",
+        "code-auth-rotate-jwt-key",
+        "code-obs-slo-billing",
+        "code-billing-line-math"
+      ],
+      "stub_tokens": 229,
+      "l1_tokens": 330,
+      "full_tokens": 333,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-page-002",
+      "text": "the criteria for paging the whole company",
+      "answer_uuids": [
+        "code-obs-alert-severity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-deploy-feature-flags",
+        "code-auth-rotate-jwt-key",
+        "code-auth-aud-meaning",
+        "code-auth-oauth-state",
+        "code-auth-s2s-tokens"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 326,
+      "full_tokens": 329,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-req-001",
+      "text": "how request IDs flow through our services",
+      "answer_uuids": [
+        "code-obs-request-id"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-request-id",
+        "code-api-idempotency",
+        "code-billing-line-math",
+        "code-deploy-pdb",
+        "code-obs-trace-id-prop"
+      ],
+      "stub_tokens": 253,
+      "l1_tokens": 350,
+      "full_tokens": 352,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-sample-001",
+      "text": "how our trace sampling is configured",
+      "answer_uuids": [
+        "code-obs-trace-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-obs-request-id",
+        "code-obs-trace-sampling",
+        "code-obs-trace-id-prop",
+        "code-deploy-canary-window",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 338,
+      "full_tokens": 340,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-sample-002",
+      "text": "explaining tail-based sampling for distributed traces",
+      "answer_uuids": [
+        "code-obs-trace-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-trace-sampling",
+        "code-migrations-test-destructive",
+        "code-auth-rotate-jwt-key",
+        "code-testing-fixture-vs-factory",
+        "code-testing-property-based"
+      ],
+      "stub_tokens": 260,
+      "l1_tokens": 373,
+      "full_tokens": 375,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-slo-001",
+      "text": "the SLO target carried by billing endpoints",
+      "answer_uuids": [
+        "code-obs-slo-billing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-slo-billing",
+        "code-deploy-feature-flags",
+        "code-auth-rotate-jwt-key",
+        "code-auth-user-vs-service-jwt",
+        "code-auth-kid-meaning"
+      ],
+      "stub_tokens": 230,
+      "l1_tokens": 339,
+      "full_tokens": 341,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-obs-trace-001",
+      "text": "the rules for propagating trace_id across services",
+      "answer_uuids": [
+        "code-obs-trace-id-prop"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-dm-no-fk",
+        "code-obs-trace-id-prop",
+        "code-deploy-pdb",
+        "code-auth-s2s-tokens",
+        "code-testing-ci-parallel"
+      ],
+      "stub_tokens": 263,
+      "l1_tokens": 391,
+      "full_tokens": 393,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-ci-001",
+      "text": "the sharding strategy that parallelizes CI",
+      "answer_uuids": [
+        "code-testing-ci-parallel"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-ci-parallel",
+        "code-migrations-up-vs-expand",
+        "code-testing-coverage-gate",
+        "code-deploy-pre-checklist",
+        "code-auth-leaked-token"
+      ],
+      "stub_tokens": 233,
+      "l1_tokens": 321,
+      "full_tokens": 323,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-cov-001",
+      "text": "the coverage threshold required to pass CI",
+      "answer_uuids": [
+        "code-testing-coverage-gate"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-coverage-gate",
+        "code-testing-ci-parallel",
+        "code-api-expand",
+        "code-deploy-pre-checklist",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 231,
+      "l1_tokens": 293,
+      "full_tokens": 332,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-db-001",
+      "text": "how our database tests use transaction rollback",
+      "answer_uuids": [
+        "code-testing-db-transactions"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-db-transactions",
+        "code-migrations-rollback",
+        "code-deploy-pre-checklist",
+        "code-auth-no-sessions",
+        "code-deploy-rollback-cmd"
+      ],
+      "stub_tokens": 237,
+      "l1_tokens": 362,
+      "full_tokens": 364,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-fix-001",
+      "text": "fixtures vs factories \u2014 when each is right",
+      "answer_uuids": [
+        "code-testing-fixture-vs-factory"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-testing-fixture-vs-factory",
+        "code-testing-db-transactions",
+        "code-obs-trace-id-prop",
+        "code-obs-log-levels",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 253,
+      "l1_tokens": 361,
+      "full_tokens": 364,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-flake-001",
+      "text": "the policy for handling flaky tests",
+      "answer_uuids": [
+        "code-testing-flaky"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-flaky",
+        "code-testing-db-transactions",
+        "code-auth-leaked-token",
+        "code-testing-ci-parallel",
+        "code-deploy-pre-checklist"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 334,
+      "full_tokens": 361,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-int-001",
+      "text": "the layout of our integration test suite",
+      "answer_uuids": [
+        "code-testing-integration-org"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-testing-db-transactions",
+        "code-testing-integration-org",
+        "code-migrations-test-destructive",
+        "code-testing-ci-parallel",
+        "code-testing-snapshots"
+      ],
+      "stub_tokens": 255,
+      "l1_tokens": 380,
+      "full_tokens": 382,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-load-001",
+      "text": "how load tests are executed in our pipeline",
+      "answer_uuids": [
+        "code-testing-load"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-load",
+        "code-testing-flaky",
+        "code-testing-db-transactions",
+        "code-testing-ci-parallel",
+        "code-testing-snapshots"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 333,
+      "full_tokens": 336,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-mock-001",
+      "text": "how to mock outbound HTTP calls in tests",
+      "answer_uuids": [
+        "code-testing-mock-http"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-mock-http",
+        "code-testing-db-transactions",
+        "code-testing-flaky",
+        "code-testing-ci-parallel",
+        "code-testing-load"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 330,
+      "full_tokens": 360,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-prop-001",
+      "text": "Hypothesis for fuzz-style test generation",
+      "answer_uuids": [
+        "code-testing-property-based"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-property-based",
+        "code-testing-integration-org",
+        "code-testing-db-transactions",
+        "code-testing-snapshots",
+        "code-testing-flaky"
+      ],
+      "stub_tokens": 264,
+      "l1_tokens": 384,
+      "full_tokens": 387,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-test-snap-001",
+      "text": "how snapshot tests are reviewed and updated",
+      "answer_uuids": [
+        "code-testing-snapshots"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-snapshots",
+        "code-deploy-pre-checklist",
+        "code-testing-flaky",
+        "code-testing-db-transactions",
+        "code-migrations-test-destructive"
+      ],
+      "stub_tokens": 254,
+      "l1_tokens": 346,
+      "full_tokens": 370,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "noans-code-adj-001",
+      "text": "how do we audit who issued each JWT",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-user-vs-service-jwt",
+        "code-billing-trial",
+        "code-testing-db-transactions",
+        "code-api-versioning",
+        "code-dm-no-fk"
+      ],
+      "stub_tokens": 245,
+      "l1_tokens": 424,
+      "full_tokens": 468,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-code-adj-002",
+      "text": "the runbook for rotating our PostgreSQL master password",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-rotate-jwt-key",
+        "code-auth-leaked-token",
+        "code-deploy-rollback-cmd",
+        "code-auth-oauth-state",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 227,
+      "l1_tokens": 341,
+      "full_tokens": 482,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-code-adj-003",
+      "text": "Aurora MySQL replication lag alerts",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [],
+      "stub_tokens": 0,
+      "l1_tokens": 0,
+      "full_tokens": 0,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-code-adj-004",
+      "text": "how to onboard a new engineer to the API design conventions",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-api-graceful-shutdown",
+        "code-migrations-zero-downtime",
+        "code-migrations-rename-column",
+        "code-api-rate-limit",
+        "code-migrations-up-vs-expand"
+      ],
+      "stub_tokens": 244,
+      "l1_tokens": 328,
+      "full_tokens": 360,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-code-adj-005",
+      "text": "Redis cache eviction policy we use for session storage",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-oauth-state",
+        "code-auth-no-sessions",
+        "code-billing-idempotency",
+        "code-dm-no-fk",
+        "code-testing-mock-http"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 371,
+      "full_tokens": 410,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-code-adj-006",
+      "text": "what's the SLO for our public marketing site",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-deploy-feature-flags",
+        "code-auth-rotate-jwt-key",
+        "code-auth-public-keys",
+        "code-auth-aud-meaning",
+        "code-obs-user-facing-err"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 323,
+      "full_tokens": 326,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-code-adj-007",
+      "text": "how do we handle billing disputes from customers",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-billing-no-fx-storage",
+        "code-api-versioning",
+        "code-billing-idempotency",
+        "code-dm-no-fk",
+        "code-billing-line-math"
+      ],
+      "stub_tokens": 245,
+      "l1_tokens": 372,
+      "full_tokens": 409,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-code-adj-008",
+      "text": "the schema for our internal feature flag service",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-deploy-feature-flags",
+        "code-deploy-vs-release",
+        "code-deploy-rollback-cmd",
+        "code-migrations-up-vs-expand",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 240,
+      "l1_tokens": 328,
+      "full_tokens": 331,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-001",
+      "text": "how do I set the --nonsense-flag on bash version 9.5.3",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-api-versioning",
+        "code-obs-trace-id-prop",
+        "code-auth-kid-meaning",
+        "code-auth-oauth-state",
+        "code-testing-load"
+      ],
+      "stub_tokens": 228,
+      "l1_tokens": 299,
+      "full_tokens": 329,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-002",
+      "text": "kubectl apply --from-coffee-mug deployment.yaml",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-deploy-rollback-cmd",
+        "code-deploy-stuck-rollout",
+        "code-migrations-rollback",
+        "code-migrations-test-destructive",
+        "code-billing-no-fx-storage"
+      ],
+      "stub_tokens": 260,
+      "l1_tokens": 364,
+      "full_tokens": 367,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-003",
+      "text": "the Python 2.4 GIL bypass syntax",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-aud-meaning",
+        "code-auth-rotate-jwt-key",
+        "code-auth-oauth-state",
+        "code-auth-s2s-tokens",
+        "code-auth-kid-meaning"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 372,
+      "full_tokens": 419,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-004",
+      "text": "redis-cli ZADD with --atomicity-level=quantum",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-api-webhook-sig",
+        "code-api-idempotency",
+        "code-auth-user-vs-service-jwt",
+        "code-billing-trial",
+        "code-migrations-up-vs-expand"
+      ],
+      "stub_tokens": 252,
+      "l1_tokens": 365,
+      "full_tokens": 368,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-005",
+      "text": "docker run --reality-distortion=true nginx",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-migrations-test-destructive",
+        "code-testing-load",
+        "code-auth-leaked-token",
+        "code-auth-rotate-jwt-key",
+        "code-deploy-rollback-cmd"
+      ],
+      "stub_tokens": 234,
+      "l1_tokens": 374,
+      "full_tokens": 376,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-009",
+      "text": "what's the best pizza place near our NYC office",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-obs-trace-id-prop",
+        "code-auth-aud-meaning",
+        "code-billing-refunds",
+        "code-auth-oauth-state",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 236,
+      "l1_tokens": 338,
+      "full_tokens": 372,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-011",
+      "text": "the recommended sleeping position for carpal tunnel",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-auth-rotate-jwt-key",
+        "code-auth-aud-meaning",
+        "code-auth-oauth-state",
+        "code-billing-idempotency",
+        "code-obs-error-budget"
+      ],
+      "stub_tokens": 242,
+      "l1_tokens": 356,
+      "full_tokens": 497,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-013",
+      "text": "git reset --temporal-paradox HEAD~3",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-api-rate-limit",
+        "code-deploy-immutable-tags"
+      ],
+      "stub_tokens": 90,
+      "l1_tokens": 167,
+      "full_tokens": 193,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-015",
+      "text": "the bash builtin time-travel syntax",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-testing-load",
+        "code-testing-integration-org",
+        "code-auth-aud-meaning",
+        "code-auth-rotate-jwt-key",
+        "code-auth-oauth-state"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 324,
+      "full_tokens": 327,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{"qid": "tx-fmla-001", "text": "transformer attention formula", "answer_uuids": ["paper-tx-scaled-dot-product"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-fmla-002", "text": "scaled dot product attention", "answer_uuids": ["paper-tx-scaled-dot-product"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-fmla-003", "text": "softmax scaling factor in attention", "answer_uuids": ["paper-tx-scaled-dot-product"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-mha-001", "text": "multi-head attention purpose", "answer_uuids": ["paper-tx-multi-head"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "tx-mha-002", "text": "how many heads in transformer base", "answer_uuids": ["paper-tx-multi-head"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-pe-001", "text": "sinusoidal positional encoding", "answer_uuids": ["paper-tx-positional"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-train-001", "text": "training compute transformer base", "answer_uuids": ["paper-tx-training-compute"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-train-002", "text": "how long to train the original transformer", "answer_uuids": ["paper-tx-training-compute"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-bleu-001", "text": "transformer BLEU on WMT", "answer_uuids": ["paper-tx-bleu-results"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tx-bleu-002", "text": "EN-DE translation improvement transformer", "answer_uuids": ["paper-tx-bleu-results"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bert-mlm-001", "text": "masked language modeling BERT", "answer_uuids": ["paper-bert-mlm"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "bert-mlm-002", "text": "what fraction of tokens masked", "answer_uuids": ["paper-bert-mlm"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bert-mlm-003", "text": "why random and unchanged tokens in MLM", "answer_uuids": ["paper-bert-mlm"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "bert-nsp-001", "text": "next sentence prediction BERT", "answer_uuids": ["paper-bert-nsp"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "bert-nsp-002", "text": "is NSP useful", "answer_uuids": ["paper-bert-nsp"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "bert-size-001", "text": "BERT base parameters", "answer_uuids": ["paper-bert-size"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bert-size-002", "text": "BERT large vs base size", "answer_uuids": ["paper-bert-size"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bert-data-001", "text": "BERT pretraining corpus", "answer_uuids": ["paper-bert-pretraining-data"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "rn-skip-001", "text": "residual connection formula", "answer_uuids": ["paper-resnet-skip"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "rn-skip-002", "text": "why skip connections help training", "answer_uuids": ["paper-resnet-skip"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "rn-skip-003", "text": "deep network training problem", "answer_uuids": ["paper-resnet-skip"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "rn-imnet-001", "text": "ResNet ImageNet error rate", "answer_uuids": ["paper-resnet-imagenet"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "rn-imnet-002", "text": "ILSVRC 2015 winner", "answer_uuids": ["paper-resnet-imagenet"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "rn-short-001", "text": "identity vs projection shortcuts", "answer_uuids": ["paper-resnet-shortcuts"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "rn-bottle-001", "text": "bottleneck block ResNet", "answer_uuids": ["paper-resnet-bottleneck"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "adam-def-001", "text": "Adam optimizer formula", "answer_uuids": ["paper-adam-moments"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "adam-def-002", "text": "what are the two moments in Adam", "answer_uuids": ["paper-adam-moments"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "adam-lr-001", "text": "Adam default learning rate", "answer_uuids": ["paper-adam-default-lr"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "adam-lr-002", "text": "Adam vs SGD learning rate", "answer_uuids": ["paper-adam-default-lr"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "adam-eps-001", "text": "epsilon in Adam optimizer", "answer_uuids": ["paper-adam-epsilon"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "adam-w-001", "text": "AdamW weight decay", "answer_uuids": ["paper-adam-adamw"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "adam-w-002", "text": "decoupled weight decay", "answer_uuids": ["paper-adam-adamw"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "fa-tile-001", "text": "FlashAttention tiling approach", "answer_uuids": ["paper-flashattn-tiling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "fa-tile-002", "text": "why FlashAttention is faster", "answer_uuids": ["paper-flashattn-tiling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "fa-soft-001", "text": "online softmax FlashAttention", "answer_uuids": ["paper-flashattn-online-softmax"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "fa-soft-002", "text": "block-wise softmax numerical stability", "answer_uuids": ["paper-flashattn-online-softmax"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "fa-hw-001", "text": "FlashAttention hardware requirements", "answer_uuids": ["paper-flashattn-hardware"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "lora-def-001", "text": "LoRA rank decomposition", "answer_uuids": ["paper-lora-decomposition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "lora-def-002", "text": "low rank adaptation formula", "answer_uuids": ["paper-lora-decomposition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "lora-r-001", "text": "LoRA rank size recommendation", "answer_uuids": ["paper-lora-rank"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "lora-r-002", "text": "what rank to use for LoRA", "answer_uuids": ["paper-lora-rank"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "lora-inf-001", "text": "merge LoRA into base model", "answer_uuids": ["paper-lora-merge"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "lora-inf-002", "text": "LoRA inference overhead", "answer_uuids": ["paper-lora-merge"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "drop-def-001", "text": "dropout regularization", "answer_uuids": ["paper-dropout-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "drop-def-002", "text": "dropout probability hidden vs input", "answer_uuids": ["paper-dropout-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "drop-ens-001", "text": "dropout as ensemble", "answer_uuids": ["paper-dropout-ensemble"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "w2v-skip-001", "text": "skip-gram negative sampling", "answer_uuids": ["paper-w2v-skipgram"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "w2v-skip-002", "text": "Word2Vec training objective", "answer_uuids": ["paper-w2v-skipgram"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "w2v-ana-001", "text": "king man woman queen analogy", "answer_uuids": ["paper-w2v-analogy"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "w2v-d-001", "text": "Word2Vec embedding dimension", "answer_uuids": ["paper-w2v-dim"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dqn-trick-001", "text": "DQN experience replay", "answer_uuids": ["paper-dqn-tricks"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "dqn-trick-002", "text": "target network DQN", "answer_uuids": ["paper-dqn-tricks"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "dqn-res-001", "text": "DQN Atari results", "answer_uuids": ["paper-dqn-atari-results"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dqn-res-002", "text": "how many Atari games did DQN beat humans", "answer_uuids": ["paper-dqn-atari-results"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dqn-clip-001", "text": "DQN reward clipping", "answer_uuids": ["paper-dqn-reward-clipping"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ppo-def-001", "text": "PPO clipped objective", "answer_uuids": ["paper-ppo-clipped-objective"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ppo-def-002", "text": "PPO surrogate loss", "answer_uuids": ["paper-ppo-clipped-objective"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ppo-default-001", "text": "default RL algorithm", "answer_uuids": ["paper-ppo-default"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ppo-default-002", "text": "PPO vs TRPO", "answer_uuids": ["paper-ppo-default"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "ppo-eps-001", "text": "PPO clipping epsilon", "answer_uuids": ["paper-ppo-epsilon"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ppo-eps-002", "text": "PPO epsilon value", "answer_uuids": ["paper-ppo-epsilon"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "vae-def-001", "text": "VAE encoder decoder", "answer_uuids": ["paper-vae-arch"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "vae-rep-001", "text": "reparameterization trick", "answer_uuids": ["paper-vae-reparameterization"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "vae-elbo-001", "text": "VAE ELBO", "answer_uuids": ["paper-vae-elbo"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bn-def-001", "text": "batch normalization", "answer_uuids": ["paper-bn-formula"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "bn-def-002", "text": "batchnorm per mini-batch", "answer_uuids": ["paper-bn-formula"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "bn-lr-001", "text": "batchnorm allows higher learning rate", "answer_uuids": ["paper-bn-lr-benefit"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "gelu-def-001", "text": "GELU activation", "answer_uuids": ["paper-gelu-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "gelu-def-002", "text": "GELU formula transformer", "answer_uuids": ["paper-gelu-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "gelu-stoch-001", "text": "GELU stochastic interpretation", "answer_uuids": ["paper-gelu-stochastic"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "yolo-def-001", "text": "YOLO real-time detection", "answer_uuids": ["paper-yolo-realtime"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "yolo-grid-001", "text": "YOLO grid cell bounding box", "answer_uuids": ["paper-yolo-grid"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "per-def-001", "text": "prioritized experience replay", "answer_uuids": ["paper-per-td-error"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "per-def-002", "text": "PER TD error priority", "answer_uuids": ["paper-per-td-error"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dist-def-001", "text": "knowledge distillation", "answer_uuids": ["paper-dist-soft-labels"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "dist-def-002", "text": "distillation soft labels", "answer_uuids": ["paper-dist-soft-labels"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "dist-temp-001", "text": "distillation temperature", "answer_uuids": ["paper-dist-temperature"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dist-dark-001", "text": "dark knowledge distillation", "answer_uuids": ["paper-dist-dark-knowledge"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "gan-def-001", "text": "GAN generator discriminator", "answer_uuids": ["paper-gan-arch"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "gan-def-002", "text": "generative adversarial network", "answer_uuids": ["paper-gan-arch"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "gan-train-001", "text": "GAN mode collapse", "answer_uuids": ["paper-gan-mode-collapse"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "gan-train-002", "text": "GAN training stability", "answer_uuids": ["paper-gan-mode-collapse"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "gan-wgan-001", "text": "Wasserstein GAN", "answer_uuids": ["paper-gan-wgan"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "gan-wgan-002", "text": "WGAN gradient penalty", "answer_uuids": ["paper-gan-wgan"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ln-def-001", "text": "LayerNorm normalization", "answer_uuids": ["paper-ln-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "ln-def-002", "text": "layer norm per example", "answer_uuids": ["paper-ln-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "ln-bn-001", "text": "LayerNorm vs BatchNorm", "answer_uuids": ["paper-ln-vs-bn"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "ln-bn-002", "text": "when to use LayerNorm", "answer_uuids": ["paper-ln-vs-bn"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "rms-def-001", "text": "RMSNorm scaling only", "answer_uuids": ["paper-rms-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "moe-def-001", "text": "sparse mixture of experts", "answer_uuids": ["paper-moe-routing"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "moe-def-002", "text": "MoE top-k routing", "answer_uuids": ["paper-moe-routing"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "moe-lb-001", "text": "MoE load balancing", "answer_uuids": ["paper-moe-load-balancing"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "moe-lb-002", "text": "expert collapse MoE", "answer_uuids": ["paper-moe-load-balancing"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "swiglu-def-001", "text": "SwiGLU activation", "answer_uuids": ["paper-swiglu-ffn"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "swiglu-def-002", "text": "gated linear unit FFN", "answer_uuids": ["paper-swiglu-ffn"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "soft-def-001", "text": "softmax function", "answer_uuids": ["paper-softmax-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "soft-def-002", "text": "softmax formula probability", "answer_uuids": ["paper-softmax-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ce-def-001", "text": "cross entropy loss", "answer_uuids": ["paper-ce-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ce-def-002", "text": "cross entropy with softmax", "answer_uuids": ["paper-ce-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "temp-def-001", "text": "sampling temperature", "answer_uuids": ["paper-temperature-sampling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "temp-def-002", "text": "temperature decoding language model", "answer_uuids": ["paper-temperature-sampling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "nuc-def-001", "text": "nucleus sampling top-p", "answer_uuids": ["paper-nucleus-sampling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "nuc-def-002", "text": "top-p sampling", "answer_uuids": ["paper-nucleus-sampling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "beam-def-001", "text": "beam search decoding", "answer_uuids": ["paper-beam-search"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "gd-def-001", "text": "gradient descent basics", "answer_uuids": ["paper-gd-basics"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "gd-def-002", "text": "SGD mini batch", "answer_uuids": ["paper-gd-basics"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "lr-def-001", "text": "learning rate Adam", "answer_uuids": ["paper-lr-importance"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "lr-def-002", "text": "Adam default learning rate", "answer_uuids": ["paper-lr-importance"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "init-def-001", "text": "Xavier initialization", "answer_uuids": ["paper-init-xavier-he"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "init-def-002", "text": "He Kaiming init", "answer_uuids": ["paper-init-xavier-he"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tok-def-001", "text": "BPE tokenization", "answer_uuids": ["paper-tok-bpe"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tok-def-002", "text": "subword tokenization", "answer_uuids": ["paper-tok-bpe"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "spec-def-001", "text": "special tokens", "answer_uuids": ["paper-tok-special"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bleu-def-001", "text": "BLEU score translation", "answer_uuids": ["paper-bleu-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bleu-def-002", "text": "BLEU modified n-gram precision", "answer_uuids": ["paper-bleu-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ppl-def-001", "text": "language model perplexity", "answer_uuids": ["paper-perplexity-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "ppl-def-002", "text": "perplexity evaluation", "answer_uuids": ["paper-perplexity-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "spear-def-001", "text": "Spearman correlation", "answer_uuids": ["paper-spearman-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "spear-def-002", "text": "rank correlation", "answer_uuids": ["paper-spearman-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auc-def-001", "text": "AUC ROC curve", "answer_uuids": ["paper-auc-roc"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auc-def-002", "text": "area under ROC", "answer_uuids": ["paper-auc-roc"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tfidf-def-001", "text": "TF-IDF information retrieval", "answer_uuids": ["paper-tfidf-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "tfidf-def-002", "text": "term frequency inverse document frequency", "answer_uuids": ["paper-tfidf-definition"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "cos-def-001", "text": "cosine similarity embeddings", "answer_uuids": ["paper-cosine-similarity"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "cos-def-002", "text": "cosine similarity formula", "answer_uuids": ["paper-cosine-similarity"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "sd-def-001", "text": "sparse vs dense retrieval", "answer_uuids": ["paper-sparse-vs-dense"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "sd-def-002", "text": "BM25 vs dense retrieval", "answer_uuids": ["paper-sparse-vs-dense"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "para-adam-def-001", "text": "the update rule for the Adam optimizer", "answer_uuids": ["paper-adam-moments"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-adam-def-002", "text": "the two exponential moving averages Adam maintains", "answer_uuids": ["paper-adam-moments"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-adam-eps-001", "text": "what epsilon does inside Adam's denominator", "answer_uuids": ["paper-adam-epsilon"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-adam-lr-001", "text": "the step size most Adam papers use out of the box", "answer_uuids": ["paper-adam-default-lr"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-adam-lr-002", "text": "the gap between Adam's and SGD's default learning rates", "answer_uuids": ["paper-adam-default-lr"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-adam-w-001", "text": "decoupling L2 from the gradient in AdamW", "answer_uuids": ["paper-adam-adamw"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-adam-w-002", "text": "the meaning of separating weight decay from the gradient step", "answer_uuids": ["paper-adam-adamw"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-auc-def-001", "text": "the area under the ROC curve as a binary classifier metric", "answer_uuids": ["paper-auc-roc"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auc-def-002", "text": "computing the area under the receiver-operating curve", "answer_uuids": ["paper-auc-roc"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-beam-def-001", "text": "keeping the k-best partial sequences at each decoding step", "answer_uuids": ["paper-beam-search"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bert-data-001", "text": "the data BERT was pretrained on", "answer_uuids": ["paper-bert-pretraining-data"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bert-mlm-001", "text": "BERT's pretraining objective based on masking tokens", "answer_uuids": ["paper-bert-mlm"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-bert-mlm-002", "text": "the proportion of tokens masked in BERT MLM", "answer_uuids": ["paper-bert-mlm"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bert-mlm-003", "text": "the motivation behind the [MASK]/random/keep trick in BERT", "answer_uuids": ["paper-bert-mlm"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-bert-nsp-001", "text": "predicting whether sentence B follows sentence A in BERT", "answer_uuids": ["paper-bert-nsp"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-bert-nsp-002", "text": "whether NSP actually helps downstream tasks", "answer_uuids": ["paper-bert-nsp"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-bert-size-001", "text": "parameter count for BERT-base", "answer_uuids": ["paper-bert-size"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bert-size-002", "text": "BERT-large vs BERT-base parameter comparison", "answer_uuids": ["paper-bert-size"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bleu-def-001", "text": "the translation evaluation metric that measures n-gram overlap", "answer_uuids": ["paper-bleu-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bleu-def-002", "text": "the modified precision component of BLEU", "answer_uuids": ["paper-bleu-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bn-def-001", "text": "what batch normalization does during training", "answer_uuids": ["paper-bn-formula"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-bn-def-002", "text": "normalizing activations across each mini-batch", "answer_uuids": ["paper-bn-formula"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-bn-lr-001", "text": "why batchnorm lets you use higher learning rates", "answer_uuids": ["paper-bn-lr-benefit"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-ce-def-001", "text": "the negative-log-likelihood objective for classification", "answer_uuids": ["paper-ce-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ce-def-002", "text": "pairing a softmax output with cross-entropy as the classifier head", "answer_uuids": ["paper-ce-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-cos-def-001", "text": "cosine similarity between embedding vectors", "answer_uuids": ["paper-cosine-similarity"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-cos-def-002", "text": "the expression for cosine similarity between two vectors", "answer_uuids": ["paper-cosine-similarity"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-dist-dark-001", "text": "the dark knowledge captured by soft labels", "answer_uuids": ["paper-dist-dark-knowledge"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-dist-def-001", "text": "teaching a small student model from a larger teacher's outputs", "answer_uuids": ["paper-dist-soft-labels"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-dist-def-002", "text": "the role of softened logits in model distillation", "answer_uuids": ["paper-dist-soft-labels"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-dist-temp-001", "text": "how the temperature parameter shapes distillation", "answer_uuids": ["paper-dist-temperature"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-dqn-clip-001", "text": "constraining rewards to {-1, 0, +1} in the DQN paper", "answer_uuids": ["paper-dqn-reward-clipping"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-dqn-res-001", "text": "Atari benchmark outcomes reported by the original DQN paper", "answer_uuids": ["paper-dqn-atari-results"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-dqn-res-002", "text": "number of Atari games where DQN outperformed humans", "answer_uuids": ["paper-dqn-atari-results"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-dqn-trick-001", "text": "storing transitions and sampling them to train DQN", "answer_uuids": ["paper-dqn-tricks"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-dqn-trick-002", "text": "why DQN keeps a separate network for computing targets", "answer_uuids": ["paper-dqn-tricks"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-drop-def-001", "text": "the technique that zeros activations randomly while training", "answer_uuids": ["paper-dropout-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-drop-def-002", "text": "how dropout rates differ for hidden vs input units", "answer_uuids": ["paper-dropout-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-drop-ens-001", "text": "viewing dropout as sampling from many thinned sub-networks", "answer_uuids": ["paper-dropout-ensemble"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-fa-hw-001", "text": "the hardware constraints required by FlashAttention", "answer_uuids": ["paper-flashattn-hardware"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-fa-soft-001", "text": "FlashAttention's running-max trick for softmax over blocks", "answer_uuids": ["paper-flashattn-online-softmax"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-fa-soft-002", "text": "how block-wise softmax stays numerically stable", "answer_uuids": ["paper-flashattn-online-softmax"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-fa-tile-001", "text": "how FlashAttention exploits tiling for speed", "answer_uuids": ["paper-flashattn-tiling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-fa-tile-002", "text": "what gives FlashAttention its speedup over naive attention", "answer_uuids": ["paper-flashattn-tiling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-gan-def-001", "text": "the generator/discriminator setup in GANs", "answer_uuids": ["paper-gan-arch"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-gan-def-002", "text": "the two-player setup that defines generative adversarial nets", "answer_uuids": ["paper-gan-arch"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-gan-train-001", "text": "when a GAN only learns a few modes of the data", "answer_uuids": ["paper-gan-mode-collapse"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-gan-train-002", "text": "why GAN training is prone to instability", "answer_uuids": ["paper-gan-mode-collapse"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-gan-wgan-001", "text": "the Wasserstein distance formulation behind WGAN", "answer_uuids": ["paper-gan-wgan"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-gan-wgan-002", "text": "the gradient-penalty regularization in Wasserstein GANs", "answer_uuids": ["paper-gan-wgan"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-gd-def-001", "text": "the basic update rule for stochastic gradient descent", "answer_uuids": ["paper-gd-basics"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-gd-def-002", "text": "mini-batch stochastic gradient descent", "answer_uuids": ["paper-gd-basics"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-gelu-def-001", "text": "the Gaussian-error linear unit activation", "answer_uuids": ["paper-gelu-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-gelu-def-002", "text": "the formula for GELU used in transformers", "answer_uuids": ["paper-gelu-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-gelu-stoch-001", "text": "interpreting GELU as stochastic dropout on the input", "answer_uuids": ["paper-gelu-stochastic"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-init-def-001", "text": "the Xavier weight initialization scheme", "answer_uuids": ["paper-init-xavier-he"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-init-def-002", "text": "He (Kaiming) initialization", "answer_uuids": ["paper-init-xavier-he"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ln-bn-001", "text": "picking between layer norm and batch norm", "answer_uuids": ["paper-ln-vs-bn"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-ln-bn-002", "text": "when to reach for LayerNorm over BatchNorm", "answer_uuids": ["paper-ln-vs-bn"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-ln-def-001", "text": "what layer normalization does", "answer_uuids": ["paper-ln-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-ln-def-002", "text": "normalizing within a single sample rather than across the batch", "answer_uuids": ["paper-ln-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-lora-def-001", "text": "how LoRA decomposes weight updates with low-rank matrices", "answer_uuids": ["paper-lora-decomposition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-lora-def-002", "text": "the math behind LoRA's AB low-rank update", "answer_uuids": ["paper-lora-decomposition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-lora-inf-001", "text": "merging LoRA adapters into the base model for inference", "answer_uuids": ["paper-lora-merge"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-lora-inf-002", "text": "the runtime cost of keeping a LoRA adapter loaded", "answer_uuids": ["paper-lora-merge"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-lora-r-001", "text": "what rank setting usually captures most LoRA gains", "answer_uuids": ["paper-lora-rank"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-lora-r-002", "text": "how to pick a rank value for LoRA", "answer_uuids": ["paper-lora-rank"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-lr-def-001", "text": "why the step size matters more than other hyperparameters", "answer_uuids": ["paper-lr-importance"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-lr-def-002", "text": "the conventional step size for Adam", "answer_uuids": ["paper-lr-importance"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-moe-def-001", "text": "a sparsely activated model with many expert sub-networks", "answer_uuids": ["paper-moe-routing"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-moe-def-002", "text": "the top-k gating used to pick experts per token", "answer_uuids": ["paper-moe-routing"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-moe-lb-001", "text": "the auxiliary loss that keeps experts evenly utilized", "answer_uuids": ["paper-moe-load-balancing"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-moe-lb-002", "text": "when an MoE routes every token to the same few experts", "answer_uuids": ["paper-moe-load-balancing"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-nuc-def-001", "text": "sampling from the smallest cumulative-probability mass at threshold p", "answer_uuids": ["paper-nucleus-sampling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-nuc-def-002", "text": "the mechanics of top-p (nucleus) sampling for text generation", "answer_uuids": ["paper-nucleus-sampling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-per-def-001", "text": "prioritizing important transitions in the replay buffer", "answer_uuids": ["paper-per-td-error"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-per-def-002", "text": "how TD error magnitude drives PER priorities", "answer_uuids": ["paper-per-td-error"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ppl-def-001", "text": "what perplexity measures for language models", "answer_uuids": ["paper-perplexity-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ppl-def-002", "text": "using perplexity as an evaluation metric", "answer_uuids": ["paper-perplexity-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ppo-def-001", "text": "the clipped probability-ratio objective behind PPO", "answer_uuids": ["paper-ppo-clipped-objective"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ppo-def-002", "text": "how PPO's surrogate loss is written in practice", "answer_uuids": ["paper-ppo-clipped-objective"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ppo-default-001", "text": "the go-to RL algorithm most practitioners reach for first", "answer_uuids": ["paper-ppo-default"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ppo-default-002", "text": "PPO versus TRPO \u2014 what's gained and lost", "answer_uuids": ["paper-ppo-default"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-ppo-eps-001", "text": "the epsilon clip that bounds how far PPO can step", "answer_uuids": ["paper-ppo-epsilon"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-ppo-eps-002", "text": "the typical value of PPO's clipping epsilon", "answer_uuids": ["paper-ppo-epsilon"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-rms-def-001", "text": "the layer-norm variant that drops the mean subtraction", "answer_uuids": ["paper-rms-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-rn-bottle-001", "text": "the bottleneck block design used in deeper ResNets", "answer_uuids": ["paper-resnet-bottleneck"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-rn-imnet-001", "text": "ResNet's classification error on ImageNet", "answer_uuids": ["paper-resnet-imagenet"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-rn-imnet-002", "text": "the model that won the 2015 ImageNet classification challenge", "answer_uuids": ["paper-resnet-imagenet"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-rn-short-001", "text": "when the residual path is identity vs a learned projection", "answer_uuids": ["paper-resnet-shortcuts"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-rn-skip-001", "text": "the residual connection equation in ResNet", "answer_uuids": ["paper-resnet-skip"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-rn-skip-002", "text": "how skip connections ease training of deeper nets", "answer_uuids": ["paper-resnet-skip"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-rn-skip-003", "text": "the training difficulty in very deep networks", "answer_uuids": ["paper-resnet-skip"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-sd-def-001", "text": "lexical retrieval versus neural retrieval \u2014 when to choose each", "answer_uuids": ["paper-sparse-vs-dense"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-sd-def-002", "text": "how BM25 stacks up against dense embedding retrieval", "answer_uuids": ["paper-sparse-vs-dense"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-soft-def-001", "text": "converting raw logits into a normalized distribution", "answer_uuids": ["paper-softmax-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-soft-def-002", "text": "the closed-form expression for the softmax function", "answer_uuids": ["paper-softmax-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-spear-def-001", "text": "the rank-based measure of monotonic association", "answer_uuids": ["paper-spearman-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-spear-def-002", "text": "rank-based correlation measures", "answer_uuids": ["paper-spearman-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-spec-def-001", "text": "the role of special tokens in tokenization", "answer_uuids": ["paper-tok-special"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-swiglu-def-001", "text": "the gated SwiGLU nonlinearity in modern transformers", "answer_uuids": ["paper-swiglu-ffn"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-swiglu-def-002", "text": "gated linear units inside transformer FFN blocks", "answer_uuids": ["paper-swiglu-ffn"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-temp-def-001", "text": "how sampling temperature affects output distribution", "answer_uuids": ["paper-temperature-sampling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-temp-def-002", "text": "how the temperature knob changes sampling sharpness", "answer_uuids": ["paper-temperature-sampling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tfidf-def-001", "text": "weighting rare terms via inverse document frequency", "answer_uuids": ["paper-tfidf-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tfidf-def-002", "text": "the TF-IDF scoring formula used in classic search engines", "answer_uuids": ["paper-tfidf-definition"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tok-def-001", "text": "byte-pair encoding as a tokenization scheme", "answer_uuids": ["paper-tok-bpe"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tok-def-002", "text": "popular subword tokenization schemes", "answer_uuids": ["paper-tok-bpe"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-tx-bleu-001", "text": "translation quality gains from the transformer architecture", "answer_uuids": ["paper-tx-bleu-results"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-bleu-002", "text": "the EN-DE BLEU delta attributed to the transformer", "answer_uuids": ["paper-tx-bleu-results"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-fmla-001", "text": "the equation used for attention in transformers", "answer_uuids": ["paper-tx-scaled-dot-product"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-fmla-002", "text": "how the attention formula scales dot products", "answer_uuids": ["paper-tx-scaled-dot-product"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-fmla-003", "text": "dividing by sqrt(d_k) inside the attention block", "answer_uuids": ["paper-tx-scaled-dot-product"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-mha-001", "text": "the motivation for splitting attention across multiple heads", "answer_uuids": ["paper-tx-multi-head"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-tx-mha-002", "text": "head count used in the base transformer configuration", "answer_uuids": ["paper-tx-multi-head"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-pe-001", "text": "how positional encoding uses sinusoids in the original paper", "answer_uuids": ["paper-tx-positional"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-train-001", "text": "compute cost to train the transformer base model", "answer_uuids": ["paper-tx-training-compute"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-tx-train-002", "text": "how long the original transformer's base training took", "answer_uuids": ["paper-tx-training-compute"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-vae-def-001", "text": "the encoder/decoder pair that gives VAEs a latent distribution", "answer_uuids": ["paper-vae-arch"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-vae-elbo-001", "text": "the ELBO objective that VAEs maximize", "answer_uuids": ["paper-vae-elbo"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-vae-rep-001", "text": "the reparameterization trick used in VAEs", "answer_uuids": ["paper-vae-reparameterization"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-w2v-ana-001", "text": "the famous king-queen analogy from Word2Vec", "answer_uuids": ["paper-w2v-analogy"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-w2v-d-001", "text": "typical embedding dimensionality for Word2Vec", "answer_uuids": ["paper-w2v-dim"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-w2v-skip-001", "text": "how the skip-gram model is trained with negative samples", "answer_uuids": ["paper-w2v-skipgram"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-w2v-skip-002", "text": "the contrastive loss used by Word2Vec's skip-gram model", "answer_uuids": ["paper-w2v-skipgram"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-yolo-def-001", "text": "YOLO framing detection as a single-shot regression problem", "answer_uuids": ["paper-yolo-realtime"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-yolo-grid-001", "text": "how YOLO's grid cells produce bounding boxes", "answer_uuids": ["paper-yolo-grid"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "noans-papers-adj-001", "text": "the pretraining objective used by GPT-2", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-papers-adj-002", "text": "T5's span corruption pretraining task", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-papers-adj-003", "text": "DQN's performance on continuous action spaces", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-papers-adj-004", "text": "the activation function used in the original AlexNet", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-papers-adj-005", "text": "the prior probability used in naive Bayes classifiers", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-papers-adj-006", "text": "Vision Transformer's patch size for image tokenization", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-papers-adj-007", "text": "the reward shaping tricks used in AlphaGo Zero", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-imp-006", "text": "how many hidden layers does perceptron rule 5 require", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-007", "text": "the convergence proof of Hinton's zookeeper algorithm", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-008", "text": "the FLOPs required to invert a Matrix in 1990", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-010", "text": "how do I make sourdough starter from scratch", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-012", "text": "lyrics to Bohemian Rhapsody second verse", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-014", "text": "the theorem proving P equals chocolate", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}

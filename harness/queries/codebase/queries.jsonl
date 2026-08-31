@@ -1,0 +1,191 @@
+{"qid": "auth-rotate-001", "text": "how do I rotate the JWT signing key", "answer_uuids": ["code-auth-rotate-jwt-key"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-rotate-002", "text": "leaked JWT token what do I do", "answer_uuids": ["code-auth-leaked-token"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-rotate-003", "text": "rotating JWT without breaking active sessions", "answer_uuids": ["code-auth-rotate-jwt-key"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-design-001", "text": "why ed25519 instead of RSA", "answer_uuids": ["code-auth-ed25519-vs-rsa"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "auth-design-002", "text": "JWT vs sessions tradeoffs", "answer_uuids": ["code-auth-no-sessions"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "auth-design-003", "text": "why short-lived tokens", "answer_uuids": ["code-auth-no-sessions"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "auth-s2s-001", "text": "service to service authentication", "answer_uuids": ["code-auth-s2s-tokens"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-s2s-002", "text": "how does auth-tokens endpoint work", "answer_uuids": ["code-auth-s2s-tokens"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-s2s-003", "text": "workload identity for k8s services", "answer_uuids": ["code-auth-s2s-tokens"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-jwt-001", "text": "user vs service JWT", "answer_uuids": ["code-auth-user-vs-service-jwt"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "auth-jwt-002", "text": "difference between user and service tokens", "answer_uuids": ["code-auth-user-vs-service-jwt"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "auth-jwt-003", "text": "audience claim JWT", "answer_uuids": ["code-auth-aud-meaning"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-jwt-004", "text": "kid header meaning in JWT", "answer_uuids": ["code-auth-kid-meaning"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-keys-001", "text": "where are JWT public keys stored", "answer_uuids": ["code-auth-public-keys"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-keys-002", "text": "key rotation secrets manager", "answer_uuids": ["code-auth-public-keys"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "auth-oauth-001", "text": "OAuth state validation", "answer_uuids": ["code-auth-oauth-state"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-math-001", "text": "how is invoice line total calculated", "answer_uuids": ["code-billing-line-math"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-math-002", "text": "proration formula", "answer_uuids": ["code-billing-line-math", "code-billing-proration-edge"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-math-003", "text": "month boundary proration", "answer_uuids": ["code-billing-proration-edge"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-fx-001", "text": "currency conversion storage", "answer_uuids": ["code-billing-no-fx-storage"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-fx-002", "text": "when do we apply the FX rate", "answer_uuids": ["code-billing-no-fx-storage"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-refund-001", "text": "how are refunds represented", "answer_uuids": ["code-billing-refunds"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-refund-002", "text": "negative invoice lines", "answer_uuids": ["code-billing-refunds"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-tax-001", "text": "tax inclusive prices", "answer_uuids": ["code-billing-tax-inclusive"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-trial-001", "text": "trial period billing", "answer_uuids": ["code-billing-trial"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-idem-001", "text": "idempotency key invoice creation", "answer_uuids": ["code-billing-idempotency"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-stripe-001", "text": "stripe webhook signature verification", "answer_uuids": ["code-billing-stripe-webhook"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-payout-001", "text": "payout reconciliation job", "answer_uuids": ["code-billing-payout-recon"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "bill-dunning-001", "text": "dunning retry schedule", "answer_uuids": ["code-billing-dunning"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-safety-001", "text": "add NOT NULL column safely", "answer_uuids": ["code-migrations-add-not-null"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-safety-002", "text": "rename column without downtime", "answer_uuids": ["code-migrations-rename-column"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-safety-003", "text": "zero-downtime schema change", "answer_uuids": ["code-migrations-zero-downtime", "code-migrations-rename-column"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-online-001", "text": "online vs offline schema change", "answer_uuids": ["code-migrations-online-offline"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "mig-two-001", "text": "dropping a column when to do it", "answer_uuids": ["code-migrations-never-drop-same-release"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-timeout-001", "text": "lock timeout in migration", "answer_uuids": ["code-migrations-lock-timeout"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-test-001", "text": "testing destructive migration", "answer_uuids": ["code-migrations-test-destructive"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-audit-001", "text": "schema migrations audit table", "answer_uuids": ["code-migrations-audit-log"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "mig-rollback-001", "text": "how do I roll back a migration", "answer_uuids": ["code-migrations-rollback"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-canary-001", "text": "canary window config", "answer_uuids": ["code-deploy-canary-window"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-canary-002", "text": "rollout error rate threshold", "answer_uuids": ["code-deploy-canary-window"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-rollback-001", "text": "roll back a bad release", "answer_uuids": ["code-deploy-rollback-cmd"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-immut-001", "text": "immutable image tags", "answer_uuids": ["code-deploy-immutable-tags"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "deploy-freeze-001", "text": "deploy freeze calendar", "answer_uuids": ["code-deploy-freeze-calendar"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-flag-001", "text": "feature flag rollout order", "answer_uuids": ["code-deploy-feature-flags"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-checklist-001", "text": "pre-deploy checklist", "answer_uuids": ["code-deploy-pre-checklist"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-pdb-001", "text": "pod disruption budget", "answer_uuids": ["code-deploy-pdb"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "deploy-vocab-001", "text": "deploy vs release", "answer_uuids": ["code-deploy-vs-release"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "deploy-debug-001", "text": "stuck rollout debugging", "answer_uuids": ["code-deploy-stuck-rollout"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-slo-001", "text": "billing endpoint SLO", "answer_uuids": ["code-obs-slo-billing"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-sample-001", "text": "trace sampling strategy", "answer_uuids": ["code-obs-trace-sampling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-sample-002", "text": "tail-based sampling", "answer_uuids": ["code-obs-trace-sampling"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-page-001", "text": "alerting severity levels", "answer_uuids": ["code-obs-alert-severity"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-page-002", "text": "when do we wake everyone", "answer_uuids": ["code-obs-alert-severity"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-trace-001", "text": "traceparent header propagation", "answer_uuids": ["code-obs-trace-id-prop"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-dash-001", "text": "dashboard naming convention", "answer_uuids": ["code-obs-dashboard-naming"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-log-001", "text": "log levels in production", "answer_uuids": ["code-obs-log-levels"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-oncall-001", "text": "on-call rotation handoff", "answer_uuids": ["code-obs-oncall-rotation"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-budget-001", "text": "error budget policy", "answer_uuids": ["code-obs-error-budget"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-err-001", "text": "what counts as a user-facing error", "answer_uuids": ["code-obs-user-facing-err"], "stub_sufficient": false, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "obs-req-001", "text": "request ID propagation", "answer_uuids": ["code-obs-request-id"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-int-001", "text": "integration test setup", "answer_uuids": ["code-testing-integration-org"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-fix-001", "text": "fixture vs factory", "answer_uuids": ["code-testing-fixture-vs-factory"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "test-mock-001", "text": "mocking HTTP calls", "answer_uuids": ["code-testing-mock-http"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-cov-001", "text": "coverage gate", "answer_uuids": ["code-testing-coverage-gate"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-flake-001", "text": "flaky test policy", "answer_uuids": ["code-testing-flaky"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-prop-001", "text": "hypothesis property-based testing", "answer_uuids": ["code-testing-property-based"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-snap-001", "text": "snapshot test review", "answer_uuids": ["code-testing-snapshots"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-load-001", "text": "load test execution", "answer_uuids": ["code-testing-load"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-db-001", "text": "transactional DB tests", "answer_uuids": ["code-testing-db-transactions"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "test-ci-001", "text": "CI parallelization shards", "answer_uuids": ["code-testing-ci-parallel"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-page-001", "text": "cursor based pagination", "answer_uuids": ["code-api-pagination"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-page-002", "text": "why cursors not offsets", "answer_uuids": ["code-api-pagination"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "api-rl-001", "text": "rate limiting per API key", "answer_uuids": ["code-api-rate-limit"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-rl-002", "text": "429 too many requests retry", "answer_uuids": ["code-api-rate-limit"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-bulk-001", "text": "bulk endpoint usage", "answer_uuids": ["code-api-bulk"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-ver-001", "text": "API versioning strategy", "answer_uuids": ["code-api-versioning"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-status-001", "text": "401 vs 403 status code", "answer_uuids": ["code-api-401-vs-403"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "api-err-001", "text": "error response format", "answer_uuids": ["code-api-problem-details"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-expand-001", "text": "expand parameter for related objects", "answer_uuids": ["code-api-expand"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-idem-001", "text": "idempotency key reuse", "answer_uuids": ["code-api-idempotency"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-wh-001", "text": "webhook signature verification", "answer_uuids": ["code-api-webhook-sig"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "api-shut-001", "text": "graceful shutdown timeout", "answer_uuids": ["code-api-graceful-shutdown"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dm-uuid-001", "text": "why UUIDv7 instead of UUIDv4", "answer_uuids": ["code-dm-uuidv7"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "dm-uuid-002", "text": "time-ordered UUID", "answer_uuids": ["code-dm-uuidv7"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dm-soft-001", "text": "soft delete column", "answer_uuids": ["code-dm-soft-delete"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "dm-time-001", "text": "TIMESTAMPTZ vs TIMESTAMP", "answer_uuids": ["code-dm-timestamptz"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "topical"}
+{"qid": "dm-money-001", "text": "storing monetary amounts", "answer_uuids": ["code-dm-money-bigint"], "stub_sufficient": true, "query_kind": "lexical", "query_type": "entity"}
+{"qid": "para-api-bulk-001", "text": "using the bulk endpoints and their request shapes", "answer_uuids": ["code-api-bulk"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-err-001", "text": "the rationale behind our RFC 7807 error envelope", "answer_uuids": ["code-api-problem-details"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-expand-001", "text": "the role of the expand parameter for related records", "answer_uuids": ["code-api-expand"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-idem-001", "text": "how idempotency keys interact with request bodies", "answer_uuids": ["code-api-idempotency"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-page-001", "text": "why GET /users returns cursor-paginated results", "answer_uuids": ["code-api-pagination"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-page-002", "text": "rationale for cursors over offset pagination", "answer_uuids": ["code-api-pagination"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-api-rl-001", "text": "rate limit policies per API key", "answer_uuids": ["code-api-rate-limit"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-rl-002", "text": "how clients should retry after a 429", "answer_uuids": ["code-api-rate-limit"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-shut-001", "text": "draining in-flight requests before a process exits", "answer_uuids": ["code-api-graceful-shutdown"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-status-001", "text": "when to return 401 vs 403 from the API", "answer_uuids": ["code-api-401-vs-403"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-api-ver-001", "text": "how we manage backwards compatibility on the API", "answer_uuids": ["code-api-versioning"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-api-wh-001", "text": "how the API verifies inbound webhook signatures", "answer_uuids": ["code-api-webhook-sig"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-design-001", "text": "rationale for choosing ed25519 over RSA for tokens", "answer_uuids": ["code-auth-ed25519-vs-rsa"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-auth-design-002", "text": "comparing token auth to server-side session auth", "answer_uuids": ["code-auth-no-sessions"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-auth-design-003", "text": "the reasoning behind brief token expirations", "answer_uuids": ["code-auth-no-sessions"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-auth-jwt-001", "text": "distinguishing end-user JWTs from service JWTs", "answer_uuids": ["code-auth-user-vs-service-jwt"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-auth-jwt-002", "text": "what sets user tokens apart from service tokens", "answer_uuids": ["code-auth-user-vs-service-jwt"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-auth-jwt-003", "text": "the role of the aud claim inside a JWT", "answer_uuids": ["code-auth-aud-meaning"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-jwt-004", "text": "what the kid field in a JWT header identifies", "answer_uuids": ["code-auth-kid-meaning"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-keys-001", "text": "where clients fetch our JWT public keys from", "answer_uuids": ["code-auth-public-keys"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-keys-002", "text": "rotating secrets through our secret manager", "answer_uuids": ["code-auth-public-keys"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-oauth-001", "text": "how the OAuth callback verifies the state parameter", "answer_uuids": ["code-auth-oauth-state"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-rotate-001", "text": "what's the procedure for swapping the JWT signing key", "answer_uuids": ["code-auth-rotate-jwt-key"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-rotate-002", "text": "our JWT got leaked \u2014 what's our incident playbook", "answer_uuids": ["code-auth-leaked-token"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-rotate-003", "text": "swap our JWT signing key without invalidating live tokens", "answer_uuids": ["code-auth-rotate-jwt-key"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-s2s-001", "text": "how our backend services authenticate each other", "answer_uuids": ["code-auth-s2s-tokens"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-s2s-002", "text": "explain what happens when a service hits /auth-tokens", "answer_uuids": ["code-auth-s2s-tokens"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-auth-s2s-003", "text": "kubernetes workload identity for our internal services", "answer_uuids": ["code-auth-s2s-tokens"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-dunning-001", "text": "the cadence for retrying failed payments", "answer_uuids": ["code-billing-dunning"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-fx-001", "text": "do we persist FX rates anywhere", "answer_uuids": ["code-billing-no-fx-storage"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-fx-002", "text": "at what point does the FX rate get applied to a charge", "answer_uuids": ["code-billing-no-fx-storage"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-idem-001", "text": "using idempotency keys to safely create invoices", "answer_uuids": ["code-billing-idempotency"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-math-001", "text": "the math behind a single invoice line's total", "answer_uuids": ["code-billing-line-math"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-math-002", "text": "what formula do we use to prorate charges", "answer_uuids": ["code-billing-line-math", "code-billing-proration-edge"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-math-003", "text": "edge case handling for prorations that cross month-end", "answer_uuids": ["code-billing-proration-edge"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-payout-001", "text": "the background worker that reconciles payouts", "answer_uuids": ["code-billing-payout-recon"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-refund-001", "text": "how a refund is represented in our data model", "answer_uuids": ["code-billing-refunds"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-refund-002", "text": "why some invoice lines show up with negative amounts", "answer_uuids": ["code-billing-refunds"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-stripe-001", "text": "how do we authenticate inbound Stripe webhooks", "answer_uuids": ["code-billing-stripe-webhook"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-tax-001", "text": "what does tax_mode: inclusive actually mean", "answer_uuids": ["code-billing-tax-inclusive"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-bill-trial-001", "text": "how do trial periods get invoiced once they convert", "answer_uuids": ["code-billing-trial"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-canary-001", "text": "how the canary deployment stage is configured", "answer_uuids": ["code-deploy-canary-window"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-canary-002", "text": "what error rate fails a rollout and triggers rollback", "answer_uuids": ["code-deploy-canary-window"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-checklist-001", "text": "the pre-release checklist before shipping", "answer_uuids": ["code-deploy-pre-checklist"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-debug-001", "text": "how to diagnose a rollout that won't make progress", "answer_uuids": ["code-deploy-stuck-rollout"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-flag-001", "text": "how should we sequence feature flag rollouts", "answer_uuids": ["code-deploy-feature-flags"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-freeze-001", "text": "what dates are blocked from deploys", "answer_uuids": ["code-deploy-freeze-calendar"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-immut-001", "text": "rationale for never overwriting image tags", "answer_uuids": ["code-deploy-immutable-tags"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-deploy-pdb-001", "text": "how pod disruption budgets govern voluntary evictions", "answer_uuids": ["code-deploy-pdb"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-rollback-001", "text": "how to revert a broken release", "answer_uuids": ["code-deploy-rollback-cmd"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-deploy-vocab-001", "text": "how shipping differs from pushing out a release", "answer_uuids": ["code-deploy-vs-release"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-dm-money-001", "text": "how we store monetary amounts in the database", "answer_uuids": ["code-dm-money-bigint"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-dm-soft-001", "text": "implementing tombstoning via the deleted_at column", "answer_uuids": ["code-dm-soft-delete"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-dm-time-001", "text": "why all time columns use TIMESTAMPTZ", "answer_uuids": ["code-dm-timestamptz"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-dm-uuid-001", "text": "why record IDs are UUIDv7 instead of UUIDv4", "answer_uuids": ["code-dm-uuidv7"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-dm-uuid-002", "text": "why a sortable UUID gives us better indexing", "answer_uuids": ["code-dm-uuidv7"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-audit-001", "text": "where do we record the history of schema migrations", "answer_uuids": ["code-migrations-audit-log"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-online-001", "text": "picking between a live and a stopped schema change", "answer_uuids": ["code-migrations-online-offline"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-mig-rollback-001", "text": "what's the rollback procedure for a migration", "answer_uuids": ["code-migrations-rollback"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-safety-001", "text": "safely introducing a NOT NULL column to a live table", "answer_uuids": ["code-migrations-add-not-null"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-safety-002", "text": "renaming a column with no downtime", "answer_uuids": ["code-migrations-rename-column"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-safety-003", "text": "DDL patterns that avoid service interruption", "answer_uuids": ["code-migrations-zero-downtime", "code-migrations-rename-column"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-test-001", "text": "how do we test a destructive schema change", "answer_uuids": ["code-migrations-test-destructive"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-timeout-001", "text": "setting a cap on how long migrations wait for locks", "answer_uuids": ["code-migrations-lock-timeout"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-mig-two-001", "text": "the right release cycle for actually dropping a column", "answer_uuids": ["code-migrations-never-drop-same-release"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-budget-001", "text": "how the error budget is consumed and policed", "answer_uuids": ["code-obs-error-budget"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-dash-001", "text": "the naming rules for our observability dashboards", "answer_uuids": ["code-obs-dashboard-naming"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-err-001", "text": "what we count as a user-visible error", "answer_uuids": ["code-obs-user-facing-err"], "stub_sufficient": false, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-log-001", "text": "production logging level policy", "answer_uuids": ["code-obs-log-levels"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-oncall-001", "text": "the handoff procedure for on-call rotations", "answer_uuids": ["code-obs-oncall-rotation"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-page-001", "text": "the tiered ladder of alerting severities", "answer_uuids": ["code-obs-alert-severity"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-page-002", "text": "the criteria for paging the whole company", "answer_uuids": ["code-obs-alert-severity"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-req-001", "text": "how request IDs flow through our services", "answer_uuids": ["code-obs-request-id"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-sample-001", "text": "how our trace sampling is configured", "answer_uuids": ["code-obs-trace-sampling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-sample-002", "text": "explaining tail-based sampling for distributed traces", "answer_uuids": ["code-obs-trace-sampling"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-slo-001", "text": "the SLO target carried by billing endpoints", "answer_uuids": ["code-obs-slo-billing"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-obs-trace-001", "text": "the rules for propagating trace_id across services", "answer_uuids": ["code-obs-trace-id-prop"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-ci-001", "text": "the sharding strategy that parallelizes CI", "answer_uuids": ["code-testing-ci-parallel"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-cov-001", "text": "the coverage threshold required to pass CI", "answer_uuids": ["code-testing-coverage-gate"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-db-001", "text": "how our database tests use transaction rollback", "answer_uuids": ["code-testing-db-transactions"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-fix-001", "text": "fixtures vs factories \u2014 when each is right", "answer_uuids": ["code-testing-fixture-vs-factory"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "topical"}
+{"qid": "para-test-flake-001", "text": "the policy for handling flaky tests", "answer_uuids": ["code-testing-flaky"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-int-001", "text": "the layout of our integration test suite", "answer_uuids": ["code-testing-integration-org"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-load-001", "text": "how load tests are executed in our pipeline", "answer_uuids": ["code-testing-load"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-mock-001", "text": "how to mock outbound HTTP calls in tests", "answer_uuids": ["code-testing-mock-http"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-prop-001", "text": "Hypothesis for fuzz-style test generation", "answer_uuids": ["code-testing-property-based"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "para-test-snap-001", "text": "how snapshot tests are reviewed and updated", "answer_uuids": ["code-testing-snapshots"], "stub_sufficient": true, "query_kind": "paraphrased", "query_type": "entity"}
+{"qid": "noans-code-adj-001", "text": "how do we audit who issued each JWT", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-code-adj-002", "text": "the runbook for rotating our PostgreSQL master password", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-code-adj-003", "text": "Aurora MySQL replication lag alerts", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-code-adj-004", "text": "how to onboard a new engineer to the API design conventions", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-code-adj-005", "text": "Redis cache eviction policy we use for session storage", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-code-adj-006", "text": "what's the SLO for our public marketing site", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-code-adj-007", "text": "how do we handle billing disputes from customers", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-code-adj-008", "text": "the schema for our internal feature flag service", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_adjacent", "query_type": "entity"}
+{"qid": "noans-imp-001", "text": "how do I set the --nonsense-flag on bash version 9.5.3", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-002", "text": "kubectl apply --from-coffee-mug deployment.yaml", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-003", "text": "the Python 2.4 GIL bypass syntax", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-004", "text": "redis-cli ZADD with --atomicity-level=quantum", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-005", "text": "docker run --reality-distortion=true nginx", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-009", "text": "what's the best pizza place near our NYC office", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-011", "text": "the recommended sleeping position for carpal tunnel", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-013", "text": "git reset --temporal-paradox HEAD~3", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}
+{"qid": "noans-imp-015", "text": "the bash builtin time-travel syntax", "answer_uuids": [], "stub_sufficient": false, "query_kind": "no_answer_impossible", "query_type": "entity"}

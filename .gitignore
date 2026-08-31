@@ -1,0 +1,107 @@
+# OS — macOS (primary target), Linux, Windows
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.AppleDouble
+.LSOverride
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+Icon?
+ehthumbs.db
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.fleet/
+.cursor/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual envs (project-local)
+.venv/
+venv/
+env/
+.python-version
+
+# uv
+uv.lock
+.uv-cache/
+
+# mypy / ruff / pytest
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs and local data
+*.log
+logs/
+local/
+tmp/
+scratch/
+
+# Generated indexes and caches — never commit
+mf.sqlite3
+mf.sqlite3-journal
+mf.sqlite3-wal
+mf.sqlite3-shm
+*.idx/
+.cache/
+indexes/
+
+# Memoryfield derived data
+# (canonical pages are committed; built indexes are not)
+**/__pycache__/
+**/.mfgpt/
+
+# Model weights — large, never commit
+models/
+*.onnx
+*.bin
+*.safetensors
+*.gguf
+*.pt
+*.pth
+*.h5
+*.tflite
+*.pb
+
+# Eval results (kept local until reported)
+results/raw/
+*.eval.json

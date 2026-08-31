@@ -87,6 +87,16 @@
 | paraphrased_entity | codebase | 74 | 0 | 0.973 | 0.973 | 0.973 | 0.966 | 0.000 |
 | lexical_topical | codebase | 13 | 0 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 |
 | paraphrased_topical | codebase | 13 | 0 | 1.000 | 1.000 | 1.000 | 0.962 | 0.000 |
+| all | papers | 267 | 13 | 0.980 | 0.992 | 0.992 | 0.947 | 0.000 |
+| lexical | papers | 127 | 0 | 0.992 | 0.992 | 0.992 | 0.957 | 0.000 |
+| paraphrased | papers | 127 | 0 | 0.969 | 0.992 | 0.992 | 0.938 | 0.000 |
+| no_answer | papers | 13 | 13 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| entity | papers | 189 | 13 | 0.989 | 1.000 | 1.000 | 0.970 | 0.000 |
+| topical | papers | 78 | 0 | 0.962 | 0.974 | 0.974 | 0.896 | 0.000 |
+| lexical_entity | papers | 88 | 0 | 1.000 | 1.000 | 1.000 | 0.975 | 0.000 |
+| paraphrased_entity | papers | 88 | 0 | 0.977 | 1.000 | 1.000 | 0.964 | 0.000 |
+| lexical_topical | papers | 39 | 0 | 0.974 | 0.974 | 0.974 | 0.915 | 0.000 |
+| paraphrased_topical | papers | 39 | 0 | 0.949 | 0.974 | 0.974 | 0.878 | 0.000 |
 
 ### `dense_tfidf`
 
@@ -127,4 +137,14 @@
 | paraphrased_entity | codebase | 74 | 0 | 0.973 | 0.986 | 0.986 | 0.919 | 0.000 |
 | lexical_topical | codebase | 13 | 0 | 0.923 | 1.000 | 1.000 | 0.891 | 0.000 |
 | paraphrased_topical | codebase | 13 | 0 | 0.923 | 1.000 | 1.000 | 0.836 | 0.000 |
+| all | papers | 267 | 13 | 0.988 | 1.000 | 1.000 | 0.954 | 0.000 |
+| lexical | papers | 127 | 0 | 1.000 | 1.000 | 1.000 | 0.961 | 0.000 |
+| paraphrased | papers | 127 | 0 | 0.976 | 1.000 | 1.000 | 0.947 | 0.000 |
+| no_answer | papers | 13 | 13 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| entity | papers | 189 | 13 | 0.989 | 1.000 | 1.000 | 0.963 | 0.000 |
+| topical | papers | 78 | 0 | 0.987 | 1.000 | 1.000 | 0.933 | 0.000 |
+| lexical_entity | papers | 88 | 0 | 1.000 | 1.000 | 1.000 | 0.975 | 0.000 |
+| paraphrased_entity | papers | 88 | 0 | 0.977 | 1.000 | 1.000 | 0.951 | 0.000 |
+| lexical_topical | papers | 39 | 0 | 1.000 | 1.000 | 1.000 | 0.927 | 0.000 |
+| paraphrased_topical | papers | 39 | 0 | 0.974 | 1.000 | 1.000 | 0.938 | 0.000 |
 

@@ -256,7 +256,21 @@ def substantive_findings(summary: list[dict]) -> str:
             return 0.0
         return sum(m[metric] for m in by_baseline[baseline]) / len(by_baseline[baseline])
 
+    def val(metric: str, baseline: str, domain: str) -> float:
+        for m in by_baseline.get(baseline, []):
+            if m["domain"] == domain:
+                return m[metric]
+        return 0.0
+
     out = ["", "## Substantive findings", ""]
+    out.append(
+        "_This section previously claimed FTS won on every axis. That "
+        "claim was an artifact of two bugs in the dense baseline (embedding "
+        "text was summary-only, and BGE's query prefix was missing) and is "
+        "no longer accurate — see the finding below. Read the numbers here, "
+        "not the git history of this file's prose._"
+    )
+    out.append("")
     out.append("### Headline (averaged across both domains)")
     out.append("")
     out.append("| Baseline | P@3 | P@5 | R@5 | MRR |")
@@ -271,35 +285,50 @@ def substantive_findings(summary: list[dict]) -> str:
         )
     out.append("")
 
-    out.append("### What the new query set reveals")
+    out.append("### What the bug fixes reveal")
     out.append("")
     out.append(
-        "1. **The query set is no longer at ceiling.** Original 214 lexical "
-        "queries had P@3 ≥ 0.88 for every method (an averaging artifact). "
-        "The expanded 458-query set (lexical + paraphrased + no-answer) "
-        "spreads the methods: FTS still ≥ 0.95, but nomic drops to 0.72 on "
-        "paraphrased-paper queries."
+        "1. **What you embed matters more than which model you run.** "
+        "Fixing the dense embedding text (summary-only -> title + summary + "
+        f"L1 body) moved dense_nomic papers P@3 from 0.717 to "
+        f"{val('p_at_3', 'dense_nomic', 'papers'):.3f} — a 27-point swing. "
+        "Adding BGE's required query prefix moved dense_bge by a similar "
+        "margin. Both were plan-specified conventions the first "
+        "implementation silently dropped. No baseline-vs-baseline gap in "
+        "this report comes close to that size — the harness's biggest "
+        "finding is about embedding-input construction, not model choice."
     )
     out.append(
-        "2. **FTS > real dense on paraphrased queries.** Across both domains, "
-        f"FTS paraphrased P@3 = {avg('p_at_3', 'fts'):.3f} (avg) > "
-        f"nomic {avg('p_at_3', 'dense_nomic'):.3f} = bge "
-        f"{avg('p_at_3', 'dense_bge'):.3f}. The intuition that "
-        "paraphrase-friendliness favors dense didn't materialize — domain "
-        "vocabulary overlap survives paraphrasing in this corpus."
+        "2. **The query set is back at ceiling.** Real-answer P@3 now "
+        f"clears 0.94 for fts ({avg('p_at_3', 'fts'):.3f}), dense_nomic "
+        f"({avg('p_at_3', 'dense_nomic'):.3f}), dense_bge "
+        f"({avg('p_at_3', 'dense_bge'):.3f}), and hybrid "
+        f"({avg('p_at_3', 'hybrid'):.3f}) alike. When every method clears "
+        "0.94, the query set has stopped discriminating between lexical "
+        "and dense retrieval on this corpus. That ceiling is conditional "
+        "on the corpus's writing discipline (answer-dense summaries) and "
+        "on its shared authoring process (pages, then queries, then "
+        "paraphrases, all from the same vocabulary) — it doesn't transfer "
+        "to a sloppier corpus, for either retriever."
     )
     out.append(
-        "3. **No-answer false-positive rate is the real surprise.** Even "
-        "the best method (FTS) returns 1-3 irrelevant pages for every "
-        "adjacent-but-missing query. This is the failure mode the stub-first "
-        "design either absorbs (agent reads stub, sees no answer) or "
-        "amplifies (agent treats irrelevant results as answers)."
+        "3. **No-answer abstention is the one axis that still "
+        "discriminates.** FTS returns an empty top-k for 6.7% of "
+        "no-answer queries; dense_nomic, dense_bge, and hybrid return "
+        "something for essentially all of them (0.0% empty). Neither is a "
+        "real confidence mechanism — FTS's empty results are a side effect "
+        "of strict term matching, not a designed abstention feature — but "
+        "it's the only place any baseline shows abstention-like behavior "
+        "at all, which is why it's the calibration set for M1's confidence "
+        "gate, not retriever choice."
     )
     out.append(
-        f"4. **Hybrid (FTS+nomic RRF) is a wash.** Hybrid avg P@3 = "
-        f"{avg('p_at_3', 'hybrid'):.3f}, FTS avg = "
-        f"{avg('p_at_3', 'fts'):.3f}. The fusion isn't a clear win — but "
-        "neither is it a clear loss, so it doesn't force a redesign."
+        f"4. **Hybrid (FTS+nomic RRF) has nothing left to fuse.** Hybrid "
+        f"avg P@3 = {avg('p_at_3', 'hybrid'):.3f} vs FTS "
+        f"{avg('p_at_3', 'fts'):.3f} and dense_nomic "
+        f"{avg('p_at_3', 'dense_nomic'):.3f} alone — RRF isn't diluting a "
+        "strong signal anymore, but it also isn't adding one: both inputs "
+        "are near ceiling, so there's little headroom for fusion to find."
     )
     out.append("")
     out.append("### Where the plan's design bets hold")
@@ -309,63 +338,92 @@ def substantive_findings(summary: list[dict]) -> str:
         "Stub summaries continue to anchor retrieval."
     )
     out.append(
-        "- **Stub-end rate remains high.** 0.62-0.78 across baselines on "
+        "- **Stub-end rate remains high.** 0.52-0.82 across baselines on "
         "real-answer queries. The de-biased label rate (~0.99) is higher "
         "because it uses a different bar (\"stub has the answer\") than "
         "the original (\"agent wouldn't need the body\"). Both numbers are "
         "valid; they answer different questions."
     )
     out.append(
-        "- **FTS5 is a strong default for personal memory.** Outperforms "
-        "real dense on paraphrased queries; in-process; no model dependency."
+        "- **FTS5 is still the right default, for operational reasons.** "
+        "It no longer wins on raw P@3 — dense_bge and hybrid both edge it "
+        "out — but it needs no model at query time, indexes incrementally "
+        "in-process, and has zero download/version-drift surface. On this "
+        "corpus that operational case, not a quality gap, is what carries "
+        "it as the M1 default."
     )
     out.append("")
     out.append("### Where the data surprised us")
     out.append("")
     out.append(
-        "- **BGE-large matches FTS on codebase.** Nomic (the plan's spec) "
-        "is *worse* than BGE-large on both domains. Plan deviation worth "
-        "flagging."
+        "- **Model choice is close to a coin flip once the embedding-input "
+        f"bugs are fixed.** dense_bge wins codebase "
+        f"({val('p_at_3', 'dense_bge', 'codebase'):.3f} vs nomic "
+        f"{val('p_at_3', 'dense_nomic', 'codebase'):.3f}); dense_nomic wins "
+        f"papers ({val('p_at_3', 'dense_nomic', 'papers'):.3f} vs bge "
+        f"{val('p_at_3', 'dense_bge', 'papers'):.3f}). The gap in either "
+        "direction is 1-2 points — noise-level, not a plan deviation worth "
+        "flagging. Nomic (270MB, the plan's spec) is vindicated; bge-large's "
+        "extra ~1GB buys nothing measurable here."
     )
     out.append(
-        "- **Dense degrades sharply on technical-paper queries.** Nomic "
-        "P@3 papers = 0.717 vs codebase = 0.845 — a 13-point gap that FTS "
-        "doesn't have (papers 0.961 vs codebase 0.943, actually *better* on "
-        "papers). FTS loves domain-specific vocabulary; dense is more "
-        "generalist."
+        "- **The embedding-input and prefix bugs, not model architecture, "
+        "explain the entire earlier 'FTS wins' result.** Before the fixes, "
+        "dense_nomic papers P@3 was 0.717 — a result that looked like a "
+        "fundamental dense-vs-lexical gap but was actually a bug in what "
+        "text got embedded."
     )
     out.append(
         "- **Topical vs entity differential is weak.** 26% of codebase "
-        "queries are topical, 29% of papers. Topical queries show modest "
-        "differential behavior across methods, not the dramatic split the "
-        "literature suggests. The corpus may not have enough topical "
-        "breadth to test the hypothesis."
+        "queries are topical, 29% of papers. Topical queries score "
+        "consistently 1-3 points below entity queries across every "
+        "baseline, not the dramatic split the literature suggests. The "
+        "corpus may not have enough topical breadth to test the hypothesis."
     )
     out.append("")
     out.append("### M1 gate (revised)")
     out.append("")
     out.append(
-        "M1 (read path: `init`, `index`, `search`, `read`) can proceed with "
-        "**FTS5 as the primary retriever** and dense as an optional "
-        "second-stage reranker for paraphrase-heavy corpora. Specifically:"
+        "M1 (read path: `init`, `index`, `search`, `read`) proceeds with "
+        "**FTS5-first, sequenced retrieval** — not fused, and not because "
+        "FTS wins on quality anymore. Both retrievers are effectively "
+        "solved on this corpus; the case for FTS-first is now operational, "
+        "and dense moves from 'unproven fallback' to 'proven co-equal that "
+        "we sequence rather than fuse':"
     )
     out.append("")
     out.append(
-        "1. **Default to FTS5-only retrieval.** No model server, no embedder "
-        "warmup, no version drift. The data supports it on every axis."
+        "1. **FTS answers first.** No model server, no embedder warmup, no "
+        "version drift, instant incremental indexing. This is the free "
+        "option and it clears the quality bar on its own."
     )
     out.append(
-        "2. **Stub-first reads confirmed.** Stub-end rate holds at 60-78% "
+        "2. **Dense runs as the recall net, gated by confidence.** When "
+        "FTS's score gate signals low confidence, dense provides a second "
+        "opinion rather than being fused in unconditionally (RRF at equal "
+        "weights has nothing to add when both signals are already near "
+        "ceiling — see finding 4 above)."
+    )
+    out.append(
+        "3. **The vec table stays, independent of the ranking verdict.** "
+        "It's load-bearing for kNN neighbor stubs and write-time dedup of "
+        "paraphrased near-duplicates, in addition to fallback ranking — "
+        "losing the ranking argument for dense doesn't touch those two "
+        "uses."
+    )
+    out.append(
+        "4. **Stub-first reads confirmed.** Stub-end rate holds at 52-82% "
         "across baselines. The architecture is the right shape."
     )
     out.append(
-        "3. **Watch list for M1 follow-on:**"
+        "5. **Watch list for M1 follow-on:**"
     )
     out.append(
-        "   - **No-answer precision.** Adjacent-but-missing queries produce "
-        "false positives in top-k. M1 should expose a confidence threshold "
-        "or 'low confidence' indicator so the agent knows when to fall "
-        "through to broader search."
+        "   - **The confidence/abstention gate has no numbers behind it "
+        "yet.** No-answer queries are the only axis where baselines "
+        "differ (finding 3 above); a per-query floor + relative-gap "
+        "heuristic needs to be calibrated against those 30 queries before "
+        "`search` can expose a `confidence: low` flag."
     )
     out.append(
         "   - **Real agent trial.** Stub-end labels are author/computer "
@@ -375,6 +433,13 @@ def substantive_findings(summary: list[dict]) -> str:
         "   - **bge-m3 (multilingual, hybrid retrieval).** We substituted "
         "bge-large-en for fastembed-compatibility. The plan specifies "
         "bge-m3 which isn't directly available in fastembed."
+    )
+    out.append(
+        "   - **A vocabulary-mismatch query set.** Every query in this "
+        "harness was authored with visibility into the corpus, even the "
+        "'paraphrased' ones. A query set written blind to the corpus "
+        "vocabulary is the only way to find out whether dense's paraphrase "
+        "advantage ever materializes, since this corpus can't show it."
     )
     return "\n".join(out)
 

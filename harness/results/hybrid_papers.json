@@ -1,0 +1,6154 @@
+{
+  "baseline": "hybrid",
+  "domain": "papers",
+  "n_pages": 82,
+  "n_queries": 267,
+  "n_no_answer": 13,
+  "no_answer_correct": 0,
+  "no_answer_rate": 0.0,
+  "stub_end_given_hit_rate": 1.0,
+  "n_given_hit": 251,
+  "p_at_3_95ci": [
+    0.9881889763779528,
+    0.9724409448818898,
+    1.0
+  ],
+  "p_at_5_95ci": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "elapsed_seconds": 693.6007,
+  "metrics": {
+    "baseline": "hybrid",
+    "domain": "papers",
+    "n_queries": 267,
+    "p_at_3": 0.9881889763779528,
+    "p_at_5": 1.0,
+    "r_at_5": 1.0,
+    "mrr": 0.953740157480315,
+    "stub_end_rate": 0.8127340823970037,
+    "tokens_stub_median": 295,
+    "tokens_stub_p95": 316.7,
+    "tokens_l1_median": 444,
+    "tokens_full_median": 449,
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/hybrid_papers.json"
+  },
+  "per_query": [
+    {
+      "qid": "tx-fmla-001",
+      "text": "transformer attention formula",
+      "answer_uuids": [
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-scaled-dot-product",
+        "paper-tx-multi-head",
+        "paper-flashattn-tiling",
+        "paper-alibi-definition",
+        "paper-gelu-definition"
+      ],
+      "stub_tokens": 280,
+      "l1_tokens": 376,
+      "full_tokens": 379,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-fmla-002",
+      "text": "scaled dot product attention",
+      "answer_uuids": [
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-scaled-dot-product",
+        "paper-flashattn-tiling",
+        "paper-rope-relative",
+        "paper-tx-multi-head",
+        "paper-adam-default-lr"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 388,
+      "full_tokens": 391,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-fmla-003",
+      "text": "softmax scaling factor in attention",
+      "answer_uuids": [
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-scaled-dot-product",
+        "paper-flashattn-tiling",
+        "paper-flashattn-online-softmax",
+        "paper-dist-temperature",
+        "paper-softmax-definition"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 384,
+      "full_tokens": 387,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-mha-001",
+      "text": "multi-head attention purpose",
+      "answer_uuids": [
+        "paper-tx-multi-head"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-tx-multi-head",
+        "paper-flashattn-tiling",
+        "paper-alibi-definition",
+        "paper-tx-scaled-dot-product",
+        "paper-mamba-arch"
+      ],
+      "stub_tokens": 296,
+      "l1_tokens": 403,
+      "full_tokens": 406,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-mha-002",
+      "text": "how many heads in transformer base",
+      "answer_uuids": [
+        "paper-tx-multi-head"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-multi-head",
+        "paper-bert-size",
+        "paper-tx-training-compute",
+        "paper-moe-routing",
+        "paper-rms-definition"
+      ],
+      "stub_tokens": 270,
+      "l1_tokens": 377,
+      "full_tokens": 380,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-pe-001",
+      "text": "sinusoidal positional encoding",
+      "answer_uuids": [
+        "paper-tx-positional"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-positional",
+        "paper-rope-definition",
+        "paper-rope-relative",
+        "paper-vae-arch",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 287,
+      "l1_tokens": 406,
+      "full_tokens": 409,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-train-001",
+      "text": "training compute transformer base",
+      "answer_uuids": [
+        "paper-tx-training-compute"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-training-compute",
+        "paper-lora-merge",
+        "paper-tx-multi-head",
+        "paper-moe-routing",
+        "paper-rms-definition"
+      ],
+      "stub_tokens": 280,
+      "l1_tokens": 397,
+      "full_tokens": 399,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-train-002",
+      "text": "how long to train the original transformer",
+      "answer_uuids": [
+        "paper-tx-training-compute"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-training-compute",
+        "paper-adam-adamw",
+        "paper-tx-positional",
+        "paper-gelu-definition",
+        "paper-resnet-skip"
+      ],
+      "stub_tokens": 286,
+      "l1_tokens": 403,
+      "full_tokens": 405,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-bleu-001",
+      "text": "transformer BLEU on WMT",
+      "answer_uuids": [
+        "paper-tx-bleu-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-bleu-results",
+        "paper-bleu-definition",
+        "paper-swiglu-ffn",
+        "paper-gelu-definition",
+        "paper-rms-definition"
+      ],
+      "stub_tokens": 279,
+      "l1_tokens": 382,
+      "full_tokens": 385,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tx-bleu-002",
+      "text": "EN-DE translation improvement transformer",
+      "answer_uuids": [
+        "paper-tx-bleu-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-bleu-results",
+        "paper-bleu-definition",
+        "paper-adam-epsilon",
+        "paper-gelu-definition",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 268,
+      "l1_tokens": 371,
+      "full_tokens": 374,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-mlm-001",
+      "text": "masked language modeling BERT",
+      "answer_uuids": [
+        "paper-bert-mlm"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-bert-size",
+        "paper-tok-bpe",
+        "paper-mamba-arch"
+      ],
+      "stub_tokens": 280,
+      "l1_tokens": 393,
+      "full_tokens": 396,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-mlm-002",
+      "text": "what fraction of tokens masked",
+      "answer_uuids": [
+        "paper-bert-mlm"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-bert-pretraining-data",
+        "paper-w2v-dim",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 282,
+      "l1_tokens": 395,
+      "full_tokens": 398,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-mlm-003",
+      "text": "why random and unchanged tokens in MLM",
+      "answer_uuids": [
+        "paper-bert-mlm"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-gelu-stochastic",
+        "paper-moe-routing",
+        "paper-moe-load-balancing"
+      ],
+      "stub_tokens": 285,
+      "l1_tokens": 398,
+      "full_tokens": 401,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-nsp-001",
+      "text": "next sentence prediction BERT",
+      "answer_uuids": [
+        "paper-bert-nsp"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-nsp",
+        "paper-bert-mlm",
+        "paper-w2v-skipgram",
+        "paper-bert-size",
+        "paper-yolo-grid"
+      ],
+      "stub_tokens": 262,
+      "l1_tokens": 384,
+      "full_tokens": 406,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-nsp-002",
+      "text": "is NSP useful",
+      "answer_uuids": [
+        "paper-bert-nsp"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-nsp",
+        "paper-ln-vs-bn",
+        "paper-resnet-shortcuts",
+        "paper-w2v-skipgram",
+        "paper-tx-positional"
+      ],
+      "stub_tokens": 271,
+      "l1_tokens": 393,
+      "full_tokens": 415,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-size-001",
+      "text": "BERT base parameters",
+      "answer_uuids": [
+        "paper-bert-size"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-size",
+        "paper-bert-pretraining-data",
+        "paper-bert-mlm",
+        "paper-adam-default-lr",
+        "paper-lora-merge"
+      ],
+      "stub_tokens": 268,
+      "l1_tokens": 371,
+      "full_tokens": 373,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-size-002",
+      "text": "BERT large vs base size",
+      "answer_uuids": [
+        "paper-bert-size"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-size",
+        "paper-sparse-vs-dense",
+        "paper-bert-pretraining-data",
+        "paper-bert-mlm",
+        "paper-softmax-definition"
+      ],
+      "stub_tokens": 265,
+      "l1_tokens": 368,
+      "full_tokens": 370,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bert-data-001",
+      "text": "BERT pretraining corpus",
+      "answer_uuids": [
+        "paper-bert-pretraining-data"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-pretraining-data",
+        "paper-bert-mlm",
+        "paper-bert-size",
+        "paper-bert-nsp",
+        "paper-tok-special"
+      ],
+      "stub_tokens": 259,
+      "l1_tokens": 368,
+      "full_tokens": 370,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rn-skip-001",
+      "text": "residual connection formula",
+      "answer_uuids": [
+        "paper-resnet-skip"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-skip",
+        "paper-resnet-shortcuts",
+        "paper-init-xavier-he",
+        "paper-why-dropping-mean-centering-works",
+        "paper-rope-relative"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 437,
+      "full_tokens": 440,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rn-skip-002",
+      "text": "why skip connections help training",
+      "answer_uuids": [
+        "paper-resnet-skip"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-skip",
+        "paper-w2v-skipgram",
+        "paper-why-dropping-mean-centering-works",
+        "paper-dropout-definition",
+        "paper-gd-basics"
+      ],
+      "stub_tokens": 301,
+      "l1_tokens": 446,
+      "full_tokens": 449,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rn-skip-003",
+      "text": "deep network training problem",
+      "answer_uuids": [
+        "paper-resnet-skip"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "paper-dqn-tricks",
+        "paper-resnet-skip",
+        "paper-gan-arch",
+        "paper-dropout-ensemble",
+        "paper-gan-mode-collapse"
+      ],
+      "stub_tokens": 310,
+      "l1_tokens": 469,
+      "full_tokens": 472,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rn-imnet-001",
+      "text": "ResNet ImageNet error rate",
+      "answer_uuids": [
+        "paper-resnet-imagenet"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-imagenet",
+        "paper-resnet-skip",
+        "paper-resnet-bottleneck",
+        "paper-resnet-shortcuts",
+        "paper-auc-roc"
+      ],
+      "stub_tokens": 281,
+      "l1_tokens": 374,
+      "full_tokens": 377,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rn-imnet-002",
+      "text": "ILSVRC 2015 winner",
+      "answer_uuids": [
+        "paper-resnet-imagenet"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-imagenet",
+        "paper-adam-default-lr",
+        "paper-init-xavier-he",
+        "paper-auc-roc",
+        "paper-bert-mlm"
+      ],
+      "stub_tokens": 273,
+      "l1_tokens": 366,
+      "full_tokens": 369,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rn-short-001",
+      "text": "identity vs projection shortcuts",
+      "answer_uuids": [
+        "paper-resnet-shortcuts"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-shortcuts",
+        "paper-resnet-skip",
+        "paper-dqn-reward-clipping",
+        "paper-ppo-clipped-objective",
+        "paper-tx-multi-head"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 455,
+      "full_tokens": 457,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rn-bottle-001",
+      "text": "bottleneck block ResNet",
+      "answer_uuids": [
+        "paper-resnet-bottleneck"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-bottleneck",
+        "paper-resnet-skip",
+        "paper-resnet-imagenet",
+        "paper-flashattn-online-softmax",
+        "paper-resnet-shortcuts"
+      ],
+      "stub_tokens": 286,
+      "l1_tokens": 413,
+      "full_tokens": 416,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "adam-def-001",
+      "text": "Adam optimizer formula",
+      "answer_uuids": [
+        "paper-adam-moments"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-adam-adamw",
+        "paper-adam-moments",
+        "paper-lr-importance",
+        "paper-adam-epsilon"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 432,
+      "full_tokens": 434,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "adam-def-002",
+      "text": "what are the two moments in Adam",
+      "answer_uuids": [
+        "paper-adam-moments"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-moments",
+        "paper-adam-adamw",
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-adam-epsilon"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 454,
+      "full_tokens": 457,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "adam-lr-001",
+      "text": "Adam default learning rate",
+      "answer_uuids": [
+        "paper-adam-default-lr"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-adam-adamw",
+        "paper-bn-lr-benefit",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 438,
+      "full_tokens": 440,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "adam-lr-002",
+      "text": "Adam vs SGD learning rate",
+      "answer_uuids": [
+        "paper-adam-default-lr"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-adam-adamw",
+        "paper-gd-basics",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 431,
+      "full_tokens": 433,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "adam-eps-001",
+      "text": "epsilon in Adam optimizer",
+      "answer_uuids": [
+        "paper-adam-epsilon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-epsilon",
+        "paper-adam-adamw",
+        "paper-adam-default-lr",
+        "paper-ppo-epsilon",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 407,
+      "full_tokens": 410,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "adam-w-001",
+      "text": "AdamW weight decay",
+      "answer_uuids": [
+        "paper-adam-adamw"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-adamw",
+        "paper-lr-importance",
+        "paper-lora-decomposition",
+        "paper-init-xavier-he",
+        "paper-gan-wgan"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 473,
+      "full_tokens": 475,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "adam-w-002",
+      "text": "decoupled weight decay",
+      "answer_uuids": [
+        "paper-adam-adamw"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-adam-adamw",
+        "paper-lora-decomposition",
+        "paper-dropout-definition",
+        "paper-lr-importance",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 306,
+      "l1_tokens": 479,
+      "full_tokens": 481,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "fa-tile-001",
+      "text": "FlashAttention tiling approach",
+      "answer_uuids": [
+        "paper-flashattn-tiling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-tiling",
+        "paper-flashattn-online-softmax",
+        "paper-flashattn-hardware",
+        "paper-yolo-grid",
+        "paper-ppo-default"
+      ],
+      "stub_tokens": 294,
+      "l1_tokens": 453,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "fa-tile-002",
+      "text": "why FlashAttention is faster",
+      "answer_uuids": [
+        "paper-flashattn-tiling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 3,
+      "topk": [
+        "paper-flashattn-hardware",
+        "paper-flashattn-online-softmax",
+        "paper-flashattn-tiling",
+        "paper-ppo-epsilon",
+        "paper-yolo-realtime"
+      ],
+      "stub_tokens": 294,
+      "l1_tokens": 416,
+      "full_tokens": 418,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "fa-soft-001",
+      "text": "online softmax FlashAttention",
+      "answer_uuids": [
+        "paper-flashattn-online-softmax"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-online-softmax",
+        "paper-flashattn-tiling",
+        "paper-flashattn-hardware",
+        "paper-softmax-definition",
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 454,
+      "full_tokens": 456,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "fa-soft-002",
+      "text": "block-wise softmax numerical stability",
+      "answer_uuids": [
+        "paper-flashattn-online-softmax"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-online-softmax",
+        "paper-softmax-definition",
+        "paper-dist-temperature",
+        "paper-tx-scaled-dot-product",
+        "paper-gan-mode-collapse"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 464,
+      "full_tokens": 466,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "fa-hw-001",
+      "text": "FlashAttention hardware requirements",
+      "answer_uuids": [
+        "paper-flashattn-hardware"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-hardware",
+        "paper-flashattn-online-softmax",
+        "paper-flashattn-tiling",
+        "paper-adam-default-lr",
+        "paper-mamba-arch"
+      ],
+      "stub_tokens": 314,
+      "l1_tokens": 436,
+      "full_tokens": 438,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lora-def-001",
+      "text": "LoRA rank decomposition",
+      "answer_uuids": [
+        "paper-lora-decomposition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-decomposition",
+        "paper-lora-rank",
+        "paper-lora-merge",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-spearman-definition"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 450,
+      "full_tokens": 453,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lora-def-002",
+      "text": "low rank adaptation formula",
+      "answer_uuids": [
+        "paper-lora-decomposition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-decomposition",
+        "paper-lora-rank",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-lr-importance",
+        "paper-lora-merge"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 444,
+      "full_tokens": 447,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lora-r-001",
+      "text": "LoRA rank size recommendation",
+      "answer_uuids": [
+        "paper-lora-rank"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-rank",
+        "paper-lora-decomposition",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-merge",
+        "paper-spearman-definition"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 399,
+      "full_tokens": 425,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lora-r-002",
+      "text": "what rank to use for LoRA",
+      "answer_uuids": [
+        "paper-lora-rank"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-rank",
+        "paper-lora-decomposition",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-merge",
+        "paper-spearman-definition"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 399,
+      "full_tokens": 425,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lora-inf-001",
+      "text": "merge LoRA into base model",
+      "answer_uuids": [
+        "paper-lora-merge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-merge",
+        "paper-lora-decomposition",
+        "paper-bert-size",
+        "paper-lora-rank",
+        "paper-tx-training-compute"
+      ],
+      "stub_tokens": 257,
+      "l1_tokens": 353,
+      "full_tokens": 385,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lora-inf-002",
+      "text": "LoRA inference overhead",
+      "answer_uuids": [
+        "paper-lora-merge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-merge",
+        "paper-lora-decomposition",
+        "paper-lora-rank",
+        "paper-dropout-definition",
+        "paper-mamba-arch"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 396,
+      "full_tokens": 428,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "drop-def-001",
+      "text": "dropout regularization",
+      "answer_uuids": [
+        "paper-dropout-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dropout-definition",
+        "paper-dropout-ensemble",
+        "paper-gelu-stochastic",
+        "paper-adam-adamw",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 474,
+      "full_tokens": 476,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "drop-def-002",
+      "text": "dropout probability hidden vs input",
+      "answer_uuids": [
+        "paper-dropout-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dropout-definition",
+        "paper-dropout-ensemble",
+        "paper-gelu-stochastic",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-dqn-atari-results"
+      ],
+      "stub_tokens": 315,
+      "l1_tokens": 477,
+      "full_tokens": 479,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "drop-ens-001",
+      "text": "dropout as ensemble",
+      "answer_uuids": [
+        "paper-dropout-ensemble"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dropout-ensemble",
+        "paper-dropout-definition",
+        "paper-resnet-imagenet",
+        "paper-gelu-stochastic",
+        "paper-vae-reparameterization"
+      ],
+      "stub_tokens": 289,
+      "l1_tokens": 426,
+      "full_tokens": 429,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "w2v-skip-001",
+      "text": "skip-gram negative sampling",
+      "answer_uuids": [
+        "paper-w2v-skipgram"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-skipgram",
+        "paper-per-td-error",
+        "paper-vae-reparameterization",
+        "paper-nucleus-sampling",
+        "paper-temperature-sampling"
+      ],
+      "stub_tokens": 307,
+      "l1_tokens": 461,
+      "full_tokens": 464,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "w2v-skip-002",
+      "text": "Word2Vec training objective",
+      "answer_uuids": [
+        "paper-w2v-skipgram"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-skipgram",
+        "paper-w2v-dim",
+        "paper-w2v-analogy",
+        "paper-gan-arch",
+        "paper-dropout-definition"
+      ],
+      "stub_tokens": 299,
+      "l1_tokens": 453,
+      "full_tokens": 456,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "w2v-ana-001",
+      "text": "king man woman queen analogy",
+      "answer_uuids": [
+        "paper-w2v-analogy"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-analogy",
+        "paper-dqn-reward-clipping",
+        "paper-dqn-tricks",
+        "paper-rms-definition",
+        "paper-rope-definition"
+      ],
+      "stub_tokens": 308,
+      "l1_tokens": 432,
+      "full_tokens": 434,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "w2v-d-001",
+      "text": "Word2Vec embedding dimension",
+      "answer_uuids": [
+        "paper-w2v-dim"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-dim",
+        "paper-w2v-analogy",
+        "paper-resnet-shortcuts",
+        "paper-rope-definition",
+        "paper-w2v-skipgram"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 397,
+      "full_tokens": 425,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dqn-trick-001",
+      "text": "DQN experience replay",
+      "answer_uuids": [
+        "paper-dqn-tricks"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-tricks",
+        "paper-dqn-atari-results",
+        "paper-per-td-error",
+        "paper-dqn-reward-clipping",
+        "paper-yolo-realtime"
+      ],
+      "stub_tokens": 318,
+      "l1_tokens": 477,
+      "full_tokens": 480,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dqn-trick-002",
+      "text": "target network DQN",
+      "answer_uuids": [
+        "paper-dqn-tricks"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-tricks",
+        "paper-dqn-atari-results",
+        "paper-resnet-skip",
+        "paper-dqn-reward-clipping",
+        "paper-gan-arch"
+      ],
+      "stub_tokens": 308,
+      "l1_tokens": 467,
+      "full_tokens": 470,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dqn-res-001",
+      "text": "DQN Atari results",
+      "answer_uuids": [
+        "paper-dqn-atari-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-atari-results",
+        "paper-per-td-error",
+        "paper-dqn-reward-clipping",
+        "paper-dqn-tricks",
+        "paper-rank-based-vs-proportional-prioritization"
+      ],
+      "stub_tokens": 327,
+      "l1_tokens": 477,
+      "full_tokens": 479,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dqn-res-002",
+      "text": "how many Atari games did DQN beat humans",
+      "answer_uuids": [
+        "paper-dqn-atari-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-atari-results",
+        "paper-dqn-reward-clipping",
+        "paper-per-td-error",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-dqn-tricks"
+      ],
+      "stub_tokens": 327,
+      "l1_tokens": 477,
+      "full_tokens": 479,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dqn-clip-001",
+      "text": "DQN reward clipping",
+      "answer_uuids": [
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-reward-clipping",
+        "paper-dqn-atari-results",
+        "paper-dpo-loss",
+        "paper-dqn-tricks",
+        "paper-ppo-clipped-objective"
+      ],
+      "stub_tokens": 317,
+      "l1_tokens": 468,
+      "full_tokens": 470,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppo-def-001",
+      "text": "PPO clipped objective",
+      "answer_uuids": [
+        "paper-ppo-clipped-objective"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-clipped-objective",
+        "paper-ppo-epsilon",
+        "paper-dpo-loss",
+        "paper-dqn-reward-clipping",
+        "paper-ppo-default"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 471,
+      "full_tokens": 473,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppo-def-002",
+      "text": "PPO surrogate loss",
+      "answer_uuids": [
+        "paper-ppo-clipped-objective"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-clipped-objective",
+        "paper-dpo-loss",
+        "paper-ppo-default",
+        "paper-ppo-epsilon",
+        "paper-moe-load-balancing"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 461,
+      "full_tokens": 463,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppo-default-001",
+      "text": "default RL algorithm",
+      "answer_uuids": [
+        "paper-ppo-default"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-default",
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-init-xavier-he",
+        "paper-ppo-clipped-objective"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 439,
+      "full_tokens": 442,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppo-default-002",
+      "text": "PPO vs TRPO",
+      "answer_uuids": [
+        "paper-ppo-default"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-default",
+        "paper-dpo-loss",
+        "paper-ppo-clipped-objective",
+        "paper-ppo-epsilon",
+        "paper-rank-based-vs-proportional-prioritization"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 453,
+      "full_tokens": 456,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppo-eps-001",
+      "text": "PPO clipping epsilon",
+      "answer_uuids": [
+        "paper-ppo-epsilon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-epsilon",
+        "paper-ppo-clipped-objective",
+        "paper-adam-epsilon",
+        "paper-ppo-default",
+        "paper-dpo-loss"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 414,
+      "full_tokens": 417,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppo-eps-002",
+      "text": "PPO epsilon value",
+      "answer_uuids": [
+        "paper-ppo-epsilon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-epsilon",
+        "paper-adam-epsilon",
+        "paper-dpo-loss",
+        "paper-ppo-clipped-objective",
+        "paper-ppo-default"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 414,
+      "full_tokens": 417,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "vae-def-001",
+      "text": "VAE encoder decoder",
+      "answer_uuids": [
+        "paper-vae-arch"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-vae-arch",
+        "paper-vae-reparameterization",
+        "paper-tx-positional",
+        "paper-vae-elbo",
+        "paper-tok-bpe"
+      ],
+      "stub_tokens": 286,
+      "l1_tokens": 452,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "vae-rep-001",
+      "text": "reparameterization trick",
+      "answer_uuids": [
+        "paper-vae-reparameterization"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-vae-reparameterization",
+        "paper-dqn-reward-clipping",
+        "paper-flashattn-online-softmax",
+        "paper-dqn-tricks",
+        "paper-vae-arch"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 452,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "vae-elbo-001",
+      "text": "VAE ELBO",
+      "answer_uuids": [
+        "paper-vae-elbo"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-vae-elbo",
+        "paper-vae-arch",
+        "paper-vae-reparameterization",
+        "paper-adam-epsilon",
+        "paper-tok-bpe"
+      ],
+      "stub_tokens": 285,
+      "l1_tokens": 401,
+      "full_tokens": 403,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bn-def-001",
+      "text": "batch normalization",
+      "answer_uuids": [
+        "paper-bn-formula"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bn-formula",
+        "paper-ln-definition",
+        "paper-gd-basics",
+        "paper-ln-vs-bn",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 284,
+      "l1_tokens": 418,
+      "full_tokens": 451,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bn-def-002",
+      "text": "batchnorm per mini-batch",
+      "answer_uuids": [
+        "paper-bn-formula"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bn-formula",
+        "paper-ln-definition",
+        "paper-ln-vs-bn",
+        "paper-gd-basics",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 284,
+      "l1_tokens": 418,
+      "full_tokens": 451,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bn-lr-001",
+      "text": "batchnorm allows higher learning rate",
+      "answer_uuids": [
+        "paper-bn-lr-benefit"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bn-lr-benefit",
+        "paper-ln-vs-bn",
+        "paper-adam-default-lr",
+        "paper-bn-formula",
+        "paper-ln-definition"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 418,
+      "full_tokens": 420,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gelu-def-001",
+      "text": "GELU activation",
+      "answer_uuids": [
+        "paper-gelu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gelu-definition",
+        "paper-gelu-stochastic",
+        "paper-swiglu-ffn",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 436,
+      "full_tokens": 439,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gelu-def-002",
+      "text": "GELU formula transformer",
+      "answer_uuids": [
+        "paper-gelu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gelu-definition",
+        "paper-gelu-stochastic",
+        "paper-swiglu-ffn",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 436,
+      "full_tokens": 439,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gelu-stoch-001",
+      "text": "GELU stochastic interpretation",
+      "answer_uuids": [
+        "paper-gelu-stochastic"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gelu-stochastic",
+        "paper-gelu-definition",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-swiglu-ffn",
+        "paper-perplexity-definition"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 425,
+      "full_tokens": 428,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "yolo-def-001",
+      "text": "YOLO real-time detection",
+      "answer_uuids": [
+        "paper-yolo-realtime"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-yolo-realtime",
+        "paper-yolo-grid",
+        "paper-flashattn-tiling",
+        "paper-ppo-default",
+        "paper-alibi-definition"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 417,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "yolo-grid-001",
+      "text": "YOLO grid cell bounding box",
+      "answer_uuids": [
+        "paper-yolo-grid"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-yolo-grid",
+        "paper-yolo-realtime",
+        "paper-flashattn-tiling",
+        "paper-vae-elbo",
+        "paper-parameter-equivalent-vs-parameter-matched"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 443,
+      "full_tokens": 445,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "per-def-001",
+      "text": "prioritized experience replay",
+      "answer_uuids": [
+        "paper-per-td-error"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-per-td-error",
+        "paper-dqn-tricks",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-dqn-atari-results",
+        "paper-dpo-loss"
+      ],
+      "stub_tokens": 327,
+      "l1_tokens": 492,
+      "full_tokens": 495,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "per-def-002",
+      "text": "PER TD error priority",
+      "answer_uuids": [
+        "paper-per-td-error"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-per-td-error",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-adam-default-lr",
+        "paper-resnet-imagenet",
+        "paper-gd-basics"
+      ],
+      "stub_tokens": 299,
+      "l1_tokens": 464,
+      "full_tokens": 467,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dist-def-001",
+      "text": "knowledge distillation",
+      "answer_uuids": [
+        "paper-dist-soft-labels"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dist-soft-labels",
+        "paper-dist-temperature",
+        "paper-dist-dark-knowledge",
+        "paper-perplexity-definition",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 306,
+      "l1_tokens": 459,
+      "full_tokens": 461,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dist-def-002",
+      "text": "distillation soft labels",
+      "answer_uuids": [
+        "paper-dist-soft-labels"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "paper-dist-dark-knowledge",
+        "paper-dist-soft-labels",
+        "paper-dist-temperature",
+        "paper-ce-definition",
+        "paper-flashattn-online-softmax"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 470,
+      "full_tokens": 472,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dist-temp-001",
+      "text": "distillation temperature",
+      "answer_uuids": [
+        "paper-dist-temperature"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dist-temperature",
+        "paper-dist-soft-labels",
+        "paper-dist-dark-knowledge",
+        "paper-temperature-sampling",
+        "paper-perplexity-definition"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 423,
+      "full_tokens": 425,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "dist-dark-001",
+      "text": "dark knowledge distillation",
+      "answer_uuids": [
+        "paper-dist-dark-knowledge"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 3,
+      "topk": [
+        "paper-dist-temperature",
+        "paper-dist-soft-labels",
+        "paper-dist-dark-knowledge",
+        "paper-perplexity-definition",
+        "paper-dqn-atari-results"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 422,
+      "full_tokens": 424,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gan-def-001",
+      "text": "GAN generator discriminator",
+      "answer_uuids": [
+        "paper-gan-arch"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-arch",
+        "paper-gan-wgan",
+        "paper-gan-mode-collapse",
+        "paper-dqn-atari-results",
+        "paper-gelu-stochastic"
+      ],
+      "stub_tokens": 307,
+      "l1_tokens": 453,
+      "full_tokens": 456,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gan-def-002",
+      "text": "generative adversarial network",
+      "answer_uuids": [
+        "paper-gan-arch"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-arch",
+        "paper-dqn-tricks",
+        "paper-resnet-skip",
+        "paper-moe-routing",
+        "paper-dropout-ensemble"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 451,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gan-train-001",
+      "text": "GAN mode collapse",
+      "answer_uuids": [
+        "paper-gan-mode-collapse"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-mode-collapse",
+        "paper-gan-wgan",
+        "paper-gan-arch",
+        "paper-moe-load-balancing",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 473,
+      "full_tokens": 475,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gan-train-002",
+      "text": "GAN training stability",
+      "answer_uuids": [
+        "paper-gan-mode-collapse"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-mode-collapse",
+        "paper-gan-wgan",
+        "paper-dqn-tricks",
+        "paper-gan-arch",
+        "paper-dropout-definition"
+      ],
+      "stub_tokens": 323,
+      "l1_tokens": 501,
+      "full_tokens": 503,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gan-wgan-001",
+      "text": "Wasserstein GAN",
+      "answer_uuids": [
+        "paper-gan-wgan"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gan-wgan",
+        "paper-gan-mode-collapse",
+        "paper-gan-arch",
+        "paper-init-xavier-he",
+        "paper-swiglu-ffn"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 466,
+      "full_tokens": 468,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gan-wgan-002",
+      "text": "WGAN gradient penalty",
+      "answer_uuids": [
+        "paper-gan-wgan"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gan-wgan",
+        "paper-gan-mode-collapse",
+        "paper-alibi-definition",
+        "paper-vae-reparameterization",
+        "paper-ce-definition"
+      ],
+      "stub_tokens": 294,
+      "l1_tokens": 460,
+      "full_tokens": 462,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ln-def-001",
+      "text": "LayerNorm normalization",
+      "answer_uuids": [
+        "paper-ln-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ln-definition",
+        "paper-ln-vs-bn",
+        "paper-rms-definition",
+        "paper-why-dropping-mean-centering-works",
+        "paper-bn-formula"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 453,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ln-def-002",
+      "text": "layer norm per example",
+      "answer_uuids": [
+        "paper-ln-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ln-definition",
+        "paper-rms-definition",
+        "paper-bn-formula",
+        "paper-w2v-analogy",
+        "paper-resnet-skip"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 456,
+      "full_tokens": 458,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ln-bn-001",
+      "text": "LayerNorm vs BatchNorm",
+      "answer_uuids": [
+        "paper-ln-vs-bn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ln-vs-bn",
+        "paper-ln-definition",
+        "paper-bn-lr-benefit",
+        "paper-rms-definition",
+        "paper-bn-formula"
+      ],
+      "stub_tokens": 286,
+      "l1_tokens": 417,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ln-bn-002",
+      "text": "when to use LayerNorm",
+      "answer_uuids": [
+        "paper-ln-vs-bn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "paper-ln-definition",
+        "paper-ln-vs-bn",
+        "paper-rms-definition",
+        "paper-init-xavier-he",
+        "paper-why-dropping-mean-centering-works"
+      ],
+      "stub_tokens": 278,
+      "l1_tokens": 439,
+      "full_tokens": 441,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "rms-def-001",
+      "text": "RMSNorm scaling only",
+      "answer_uuids": [
+        "paper-rms-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-rms-definition",
+        "paper-why-dropping-mean-centering-works",
+        "paper-adam-default-lr",
+        "paper-tx-scaled-dot-product",
+        "paper-bn-formula"
+      ],
+      "stub_tokens": 301,
+      "l1_tokens": 421,
+      "full_tokens": 423,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "moe-def-001",
+      "text": "sparse mixture of experts",
+      "answer_uuids": [
+        "paper-moe-routing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-moe-routing",
+        "paper-sparse-vs-dense",
+        "paper-moe-load-balancing",
+        "paper-dist-soft-labels",
+        "paper-dist-temperature"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 452,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "moe-def-002",
+      "text": "MoE top-k routing",
+      "answer_uuids": [
+        "paper-moe-routing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-moe-routing",
+        "paper-moe-load-balancing",
+        "paper-beam-search",
+        "paper-nucleus-sampling",
+        "paper-resnet-skip"
+      ],
+      "stub_tokens": 306,
+      "l1_tokens": 466,
+      "full_tokens": 469,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "moe-lb-001",
+      "text": "MoE load balancing",
+      "answer_uuids": [
+        "paper-moe-load-balancing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-moe-load-balancing",
+        "paper-moe-routing",
+        "paper-why-dropping-mean-centering-works",
+        "paper-bert-nsp",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 287,
+      "l1_tokens": 446,
+      "full_tokens": 448,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "moe-lb-002",
+      "text": "expert collapse MoE",
+      "answer_uuids": [
+        "paper-moe-load-balancing"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-moe-load-balancing",
+        "paper-moe-routing",
+        "paper-gan-mode-collapse",
+        "paper-dqn-atari-results",
+        "paper-dist-soft-labels"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 464,
+      "full_tokens": 466,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "swiglu-def-001",
+      "text": "SwiGLU activation",
+      "answer_uuids": [
+        "paper-swiglu-ffn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-swiglu-ffn",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-gelu-definition",
+        "paper-init-xavier-he",
+        "paper-why-dropping-mean-centering-works"
+      ],
+      "stub_tokens": 301,
+      "l1_tokens": 447,
+      "full_tokens": 449,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "swiglu-def-002",
+      "text": "gated linear unit FFN",
+      "answer_uuids": [
+        "paper-swiglu-ffn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-swiglu-ffn",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-gelu-definition",
+        "paper-dropout-definition",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 315,
+      "l1_tokens": 461,
+      "full_tokens": 463,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "soft-def-001",
+      "text": "softmax function",
+      "answer_uuids": [
+        "paper-softmax-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "paper-flashattn-online-softmax",
+        "paper-softmax-definition",
+        "paper-dist-temperature",
+        "paper-tx-scaled-dot-product",
+        "paper-ce-definition"
+      ],
+      "stub_tokens": 283,
+      "l1_tokens": 449,
+      "full_tokens": 451,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "soft-def-002",
+      "text": "softmax formula probability",
+      "answer_uuids": [
+        "paper-softmax-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-softmax-definition",
+        "paper-dist-temperature",
+        "paper-flashattn-online-softmax",
+        "paper-dist-soft-labels",
+        "paper-ce-definition"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 451,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ce-def-001",
+      "text": "cross entropy loss",
+      "answer_uuids": [
+        "paper-ce-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ce-definition",
+        "paper-perplexity-definition",
+        "paper-moe-load-balancing",
+        "paper-lr-importance",
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 427,
+      "full_tokens": 430,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ce-def-002",
+      "text": "cross entropy with softmax",
+      "answer_uuids": [
+        "paper-ce-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ce-definition",
+        "paper-perplexity-definition",
+        "paper-flashattn-online-softmax",
+        "paper-softmax-definition",
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_tokens": 290,
+      "l1_tokens": 419,
+      "full_tokens": 422,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "temp-def-001",
+      "text": "sampling temperature",
+      "answer_uuids": [
+        "paper-temperature-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-temperature-sampling",
+        "paper-dist-temperature",
+        "paper-per-td-error",
+        "paper-vae-reparameterization",
+        "paper-dist-soft-labels"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 444,
+      "full_tokens": 446,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "temp-def-002",
+      "text": "temperature decoding language model",
+      "answer_uuids": [
+        "paper-temperature-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-temperature-sampling",
+        "paper-dist-soft-labels",
+        "paper-bert-mlm",
+        "paper-dist-temperature",
+        "paper-vae-arch"
+      ],
+      "stub_tokens": 287,
+      "l1_tokens": 433,
+      "full_tokens": 435,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "nuc-def-001",
+      "text": "nucleus sampling top-p",
+      "answer_uuids": [
+        "paper-nucleus-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-nucleus-sampling",
+        "paper-per-td-error",
+        "paper-vae-reparameterization",
+        "paper-w2v-skipgram",
+        "paper-temperature-sampling"
+      ],
+      "stub_tokens": 307,
+      "l1_tokens": 453,
+      "full_tokens": 456,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "nuc-def-002",
+      "text": "top-p sampling",
+      "answer_uuids": [
+        "paper-nucleus-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-nucleus-sampling",
+        "paper-per-td-error",
+        "paper-vae-reparameterization",
+        "paper-w2v-skipgram",
+        "paper-temperature-sampling"
+      ],
+      "stub_tokens": 307,
+      "l1_tokens": 453,
+      "full_tokens": 456,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "beam-def-001",
+      "text": "beam search decoding",
+      "answer_uuids": [
+        "paper-beam-search"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-beam-search",
+        "paper-vae-arch",
+        "paper-flashattn-tiling",
+        "paper-resnet-bottleneck",
+        "paper-temperature-sampling"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 434,
+      "full_tokens": 437,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gd-def-001",
+      "text": "gradient descent basics",
+      "answer_uuids": [
+        "paper-gd-basics"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gd-basics",
+        "paper-vae-reparameterization",
+        "paper-gan-wgan",
+        "paper-bn-lr-benefit",
+        "paper-gan-mode-collapse"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 437,
+      "full_tokens": 440,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "gd-def-002",
+      "text": "SGD mini batch",
+      "answer_uuids": [
+        "paper-gd-basics"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gd-basics",
+        "paper-bn-formula",
+        "paper-adam-default-lr",
+        "paper-ln-definition",
+        "paper-swiglu-ffn"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 445,
+      "full_tokens": 448,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lr-def-001",
+      "text": "learning rate Adam",
+      "answer_uuids": [
+        "paper-lr-importance"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-bn-lr-benefit",
+        "paper-adam-adamw",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 438,
+      "full_tokens": 440,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "lr-def-002",
+      "text": "Adam default learning rate",
+      "answer_uuids": [
+        "paper-lr-importance"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-adam-adamw",
+        "paper-bn-lr-benefit",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 438,
+      "full_tokens": 440,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "init-def-001",
+      "text": "Xavier initialization",
+      "answer_uuids": [
+        "paper-init-xavier-he"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-init-xavier-he",
+        "paper-bn-lr-benefit",
+        "paper-adam-default-lr",
+        "paper-flashattn-hardware",
+        "paper-resnet-shortcuts"
+      ],
+      "stub_tokens": 289,
+      "l1_tokens": 421,
+      "full_tokens": 424,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "init-def-002",
+      "text": "He Kaiming init",
+      "answer_uuids": [
+        "paper-init-xavier-he"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-init-xavier-he",
+        "paper-flashattn-tiling",
+        "paper-bert-mlm",
+        "paper-bn-lr-benefit",
+        "paper-tok-special"
+      ],
+      "stub_tokens": 273,
+      "l1_tokens": 405,
+      "full_tokens": 408,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tok-def-001",
+      "text": "BPE tokenization",
+      "answer_uuids": [
+        "paper-tok-bpe"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tok-bpe",
+        "paper-tok-special",
+        "paper-bert-mlm",
+        "paper-bert-pretraining-data",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 287,
+      "l1_tokens": 457,
+      "full_tokens": 459,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tok-def-002",
+      "text": "subword tokenization",
+      "answer_uuids": [
+        "paper-tok-bpe"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-tok-bpe",
+        "paper-tok-special",
+        "paper-bert-mlm",
+        "paper-bert-pretraining-data",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 287,
+      "l1_tokens": 457,
+      "full_tokens": 459,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "spec-def-001",
+      "text": "special tokens",
+      "answer_uuids": [
+        "paper-tok-special"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tok-special",
+        "paper-bert-mlm",
+        "paper-tok-bpe",
+        "paper-bert-pretraining-data",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 287,
+      "l1_tokens": 440,
+      "full_tokens": 443,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bleu-def-001",
+      "text": "BLEU score translation",
+      "answer_uuids": [
+        "paper-bleu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bleu-definition",
+        "paper-tx-bleu-results",
+        "paper-alibi-definition",
+        "paper-dqn-reward-clipping",
+        "paper-dqn-atari-results"
+      ],
+      "stub_tokens": 291,
+      "l1_tokens": 459,
+      "full_tokens": 462,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "bleu-def-002",
+      "text": "BLEU modified n-gram precision",
+      "answer_uuids": [
+        "paper-bleu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bleu-definition",
+        "paper-tx-bleu-results",
+        "paper-alibi-definition",
+        "paper-gelu-stochastic",
+        "paper-parameter-equivalent-vs-parameter-matched"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 465,
+      "full_tokens": 468,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppl-def-001",
+      "text": "language model perplexity",
+      "answer_uuids": [
+        "paper-perplexity-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-perplexity-definition",
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-mamba-arch",
+        "paper-lora-merge"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 451,
+      "full_tokens": 453,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "ppl-def-002",
+      "text": "perplexity evaluation",
+      "answer_uuids": [
+        "paper-perplexity-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-perplexity-definition",
+        "paper-alibi-definition",
+        "paper-per-td-error",
+        "paper-gan-wgan",
+        "paper-bleu-definition"
+      ],
+      "stub_tokens": 308,
+      "l1_tokens": 467,
+      "full_tokens": 469,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "spear-def-001",
+      "text": "Spearman correlation",
+      "answer_uuids": [
+        "paper-spearman-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-spearman-definition",
+        "paper-gan-wgan",
+        "paper-dqn-tricks",
+        "paper-lr-importance",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 316,
+      "l1_tokens": 463,
+      "full_tokens": 466,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "spear-def-002",
+      "text": "rank correlation",
+      "answer_uuids": [
+        "paper-spearman-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-spearman-definition",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-rank",
+        "paper-auc-roc",
+        "paper-dqn-tricks"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 459,
+      "full_tokens": 462,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auc-def-001",
+      "text": "AUC ROC curve",
+      "answer_uuids": [
+        "paper-auc-roc"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-auc-roc",
+        "paper-adam-epsilon",
+        "paper-lr-importance",
+        "paper-resnet-imagenet",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 271,
+      "l1_tokens": 431,
+      "full_tokens": 433,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "auc-def-002",
+      "text": "area under ROC",
+      "answer_uuids": [
+        "paper-auc-roc"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-auc-roc",
+        "paper-resnet-imagenet",
+        "paper-resnet-skip",
+        "paper-ppo-epsilon",
+        "paper-nucleus-sampling"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 448,
+      "full_tokens": 450,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tfidf-def-001",
+      "text": "TF-IDF information retrieval",
+      "answer_uuids": [
+        "paper-tfidf-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tfidf-definition",
+        "paper-sparse-vs-dense",
+        "paper-swiglu-ffn",
+        "paper-beam-search",
+        "paper-dist-soft-labels"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 470,
+      "full_tokens": 472,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "tfidf-def-002",
+      "text": "term frequency inverse document frequency",
+      "answer_uuids": [
+        "paper-tfidf-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tfidf-definition",
+        "paper-sparse-vs-dense",
+        "paper-perplexity-definition",
+        "paper-rms-definition",
+        "paper-vae-arch"
+      ],
+      "stub_tokens": 294,
+      "l1_tokens": 462,
+      "full_tokens": 464,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "cos-def-001",
+      "text": "cosine similarity embeddings",
+      "answer_uuids": [
+        "paper-cosine-similarity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-cosine-similarity",
+        "paper-w2v-dim",
+        "paper-w2v-analogy",
+        "paper-lr-importance",
+        "paper-dist-dark-knowledge"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 456,
+      "full_tokens": 458,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "cos-def-002",
+      "text": "cosine similarity formula",
+      "answer_uuids": [
+        "paper-cosine-similarity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-cosine-similarity",
+        "paper-lr-importance",
+        "paper-dist-dark-knowledge",
+        "paper-tx-positional",
+        "paper-sparse-vs-dense"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 452,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "sd-def-001",
+      "text": "sparse vs dense retrieval",
+      "answer_uuids": [
+        "paper-sparse-vs-dense"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-sparse-vs-dense",
+        "paper-moe-routing",
+        "paper-tfidf-definition",
+        "paper-spearman-definition",
+        "paper-rank-based-vs-proportional-prioritization"
+      ],
+      "stub_tokens": 317,
+      "l1_tokens": 468,
+      "full_tokens": 471,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "sd-def-002",
+      "text": "BM25 vs dense retrieval",
+      "answer_uuids": [
+        "paper-sparse-vs-dense"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "lexical",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-sparse-vs-dense",
+        "paper-tx-bleu-results",
+        "paper-moe-routing",
+        "paper-tfidf-definition",
+        "paper-parameter-equivalent-vs-parameter-matched"
+      ],
+      "stub_tokens": 299,
+      "l1_tokens": 450,
+      "full_tokens": 453,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-adam-def-001",
+      "text": "the update rule for the Adam optimizer",
+      "answer_uuids": [
+        "paper-adam-moments"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 4,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-adam-adamw",
+        "paper-adam-epsilon",
+        "paper-adam-moments",
+        "paper-ppo-epsilon"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 426,
+      "full_tokens": 428,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-adam-def-002",
+      "text": "the two exponential moving averages Adam maintains",
+      "answer_uuids": [
+        "paper-adam-moments"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-moments",
+        "paper-adam-adamw",
+        "paper-adam-default-lr",
+        "paper-bn-formula",
+        "paper-lr-importance"
+      ],
+      "stub_tokens": 315,
+      "l1_tokens": 466,
+      "full_tokens": 469,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-adam-eps-001",
+      "text": "what epsilon does inside Adam's denominator",
+      "answer_uuids": [
+        "paper-adam-epsilon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-epsilon",
+        "paper-adam-adamw",
+        "paper-adam-default-lr",
+        "paper-ppo-epsilon",
+        "paper-vae-reparameterization"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 403,
+      "full_tokens": 406,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-adam-lr-001",
+      "text": "the step size most Adam papers use out of the box",
+      "answer_uuids": [
+        "paper-adam-default-lr"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "paper-adam-adamw",
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-w2v-dim",
+        "paper-adam-epsilon"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 473,
+      "full_tokens": 475,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-adam-lr-002",
+      "text": "the gap between Adam's and SGD's default learning rates",
+      "answer_uuids": [
+        "paper-adam-default-lr"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-adam-adamw",
+        "paper-gd-basics",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 431,
+      "full_tokens": 433,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-adam-w-001",
+      "text": "decoupling L2 from the gradient in AdamW",
+      "answer_uuids": [
+        "paper-adam-adamw"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-adamw",
+        "paper-vae-reparameterization",
+        "paper-ce-definition",
+        "paper-adam-moments",
+        "paper-gan-arch"
+      ],
+      "stub_tokens": 290,
+      "l1_tokens": 463,
+      "full_tokens": 465,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-adam-w-002",
+      "text": "the meaning of separating weight decay from the gradient step",
+      "answer_uuids": [
+        "paper-adam-adamw"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-adam-adamw",
+        "paper-gd-basics",
+        "paper-why-dropping-mean-centering-works",
+        "paper-gan-wgan",
+        "paper-lora-decomposition"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 478,
+      "full_tokens": 480,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auc-def-001",
+      "text": "the area under the ROC curve as a binary classifier metric",
+      "answer_uuids": [
+        "paper-auc-roc"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-auc-roc",
+        "paper-bleu-definition",
+        "paper-w2v-skipgram",
+        "paper-lora-merge",
+        "paper-ce-definition"
+      ],
+      "stub_tokens": 281,
+      "l1_tokens": 441,
+      "full_tokens": 443,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-auc-def-002",
+      "text": "computing the area under the receiver-operating curve",
+      "answer_uuids": [
+        "paper-auc-roc"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-auc-roc",
+        "paper-bn-formula",
+        "paper-resnet-bottleneck",
+        "paper-adam-epsilon",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 299,
+      "l1_tokens": 459,
+      "full_tokens": 461,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-beam-def-001",
+      "text": "keeping the k-best partial sequences at each decoding step",
+      "answer_uuids": [
+        "paper-beam-search"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-beam-search",
+        "paper-vae-arch",
+        "paper-tx-positional",
+        "paper-flashattn-online-softmax",
+        "paper-mamba-selective"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 442,
+      "full_tokens": 445,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-data-001",
+      "text": "the data BERT was pretrained on",
+      "answer_uuids": [
+        "paper-bert-pretraining-data"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-pretraining-data",
+        "paper-bert-mlm",
+        "paper-bert-size",
+        "paper-bert-nsp",
+        "paper-lora-merge"
+      ],
+      "stub_tokens": 256,
+      "l1_tokens": 365,
+      "full_tokens": 367,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-mlm-001",
+      "text": "BERT's pretraining objective based on masking tokens",
+      "answer_uuids": [
+        "paper-bert-mlm"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-bert-pretraining-data",
+        "paper-bert-size",
+        "paper-tok-bpe"
+      ],
+      "stub_tokens": 267,
+      "l1_tokens": 380,
+      "full_tokens": 383,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-mlm-002",
+      "text": "the proportion of tokens masked in BERT MLM",
+      "answer_uuids": [
+        "paper-bert-mlm"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-bert-pretraining-data",
+        "paper-bert-size",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 268,
+      "l1_tokens": 381,
+      "full_tokens": 384,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-mlm-003",
+      "text": "the motivation behind the [MASK]/random/keep trick in BERT",
+      "answer_uuids": [
+        "paper-bert-mlm"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-vae-reparameterization",
+        "paper-tok-special",
+        "paper-bert-size",
+        "paper-dqn-tricks"
+      ],
+      "stub_tokens": 270,
+      "l1_tokens": 383,
+      "full_tokens": 386,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-nsp-001",
+      "text": "predicting whether sentence B follows sentence A in BERT",
+      "answer_uuids": [
+        "paper-bert-nsp"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-nsp",
+        "paper-bert-mlm",
+        "paper-bert-size",
+        "paper-w2v-skipgram",
+        "paper-bert-pretraining-data"
+      ],
+      "stub_tokens": 262,
+      "l1_tokens": 384,
+      "full_tokens": 406,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-nsp-002",
+      "text": "whether NSP actually helps downstream tasks",
+      "answer_uuids": [
+        "paper-bert-nsp"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-nsp",
+        "paper-why-dropping-mean-centering-works",
+        "paper-dropout-definition",
+        "paper-tx-positional",
+        "paper-dpo-loss"
+      ],
+      "stub_tokens": 306,
+      "l1_tokens": 428,
+      "full_tokens": 450,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-size-001",
+      "text": "parameter count for BERT-base",
+      "answer_uuids": [
+        "paper-bert-size"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-size",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-lora-rank",
+        "paper-bleu-definition",
+        "paper-adam-default-lr"
+      ],
+      "stub_tokens": 283,
+      "l1_tokens": 386,
+      "full_tokens": 388,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bert-size-002",
+      "text": "BERT-large vs BERT-base parameter comparison",
+      "answer_uuids": [
+        "paper-bert-size"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bert-size",
+        "paper-adam-default-lr",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-sparse-vs-dense",
+        "paper-ln-vs-bn"
+      ],
+      "stub_tokens": 280,
+      "l1_tokens": 383,
+      "full_tokens": 385,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bleu-def-001",
+      "text": "the translation evaluation metric that measures n-gram overlap",
+      "answer_uuids": [
+        "paper-bleu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bleu-definition",
+        "paper-perplexity-definition",
+        "paper-alibi-definition",
+        "paper-spearman-definition",
+        "paper-w2v-skipgram"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 473,
+      "full_tokens": 476,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bleu-def-002",
+      "text": "the modified precision component of BLEU",
+      "answer_uuids": [
+        "paper-bleu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bleu-definition",
+        "paper-tx-bleu-results",
+        "paper-alibi-definition",
+        "paper-gelu-stochastic",
+        "paper-gelu-definition"
+      ],
+      "stub_tokens": 283,
+      "l1_tokens": 451,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bn-def-001",
+      "text": "what batch normalization does during training",
+      "answer_uuids": [
+        "paper-bn-formula"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bn-formula",
+        "paper-bn-lr-benefit",
+        "paper-ln-definition",
+        "paper-gd-basics",
+        "paper-dropout-definition"
+      ],
+      "stub_tokens": 304,
+      "l1_tokens": 438,
+      "full_tokens": 471,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bn-def-002",
+      "text": "normalizing activations across each mini-batch",
+      "answer_uuids": [
+        "paper-bn-formula"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bn-formula",
+        "paper-ln-definition",
+        "paper-gd-basics",
+        "paper-bn-lr-benefit",
+        "paper-gelu-definition"
+      ],
+      "stub_tokens": 291,
+      "l1_tokens": 425,
+      "full_tokens": 458,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-bn-lr-001",
+      "text": "why batchnorm lets you use higher learning rates",
+      "answer_uuids": [
+        "paper-bn-lr-benefit"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bn-lr-benefit",
+        "paper-ln-vs-bn",
+        "paper-adam-default-lr",
+        "paper-bn-formula",
+        "paper-dist-dark-knowledge"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 421,
+      "full_tokens": 423,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ce-def-001",
+      "text": "the negative-log-likelihood objective for classification",
+      "answer_uuids": [
+        "paper-ce-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ce-definition",
+        "paper-gan-arch",
+        "paper-yolo-realtime",
+        "paper-w2v-skipgram",
+        "paper-softmax-definition"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 417,
+      "full_tokens": 420,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ce-def-002",
+      "text": "pairing a softmax output with cross-entropy as the classifier head",
+      "answer_uuids": [
+        "paper-ce-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ce-definition",
+        "paper-softmax-definition",
+        "paper-flashattn-online-softmax",
+        "paper-tx-multi-head",
+        "paper-w2v-skipgram"
+      ],
+      "stub_tokens": 291,
+      "l1_tokens": 420,
+      "full_tokens": 423,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-cos-def-001",
+      "text": "cosine similarity between embedding vectors",
+      "answer_uuids": [
+        "paper-cosine-similarity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-cosine-similarity",
+        "paper-rope-definition",
+        "paper-w2v-dim",
+        "paper-w2v-analogy",
+        "paper-rope-relative"
+      ],
+      "stub_tokens": 296,
+      "l1_tokens": 455,
+      "full_tokens": 457,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-cos-def-002",
+      "text": "the expression for cosine similarity between two vectors",
+      "answer_uuids": [
+        "paper-cosine-similarity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-cosine-similarity",
+        "paper-lr-importance",
+        "paper-spearman-definition",
+        "paper-rope-relative",
+        "paper-rope-definition"
+      ],
+      "stub_tokens": 310,
+      "l1_tokens": 469,
+      "full_tokens": 471,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dist-dark-001",
+      "text": "the dark knowledge captured by soft labels",
+      "answer_uuids": [
+        "paper-dist-dark-knowledge"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dist-dark-knowledge",
+        "paper-dist-soft-labels",
+        "paper-dist-temperature",
+        "paper-ce-definition",
+        "paper-lora-rank"
+      ],
+      "stub_tokens": 281,
+      "l1_tokens": 453,
+      "full_tokens": 455,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dist-def-001",
+      "text": "teaching a small student model from a larger teacher's outputs",
+      "answer_uuids": [
+        "paper-dist-soft-labels"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dist-soft-labels",
+        "paper-dist-dark-knowledge",
+        "paper-gan-arch",
+        "paper-tx-multi-head",
+        "paper-bert-mlm"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 446,
+      "full_tokens": 448,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dist-def-002",
+      "text": "the role of softened logits in model distillation",
+      "answer_uuids": [
+        "paper-dist-soft-labels"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dist-soft-labels",
+        "paper-dist-temperature",
+        "paper-softmax-definition",
+        "paper-dist-dark-knowledge",
+        "paper-temperature-sampling"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 451,
+      "full_tokens": 453,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dist-temp-001",
+      "text": "how the temperature parameter shapes distillation",
+      "answer_uuids": [
+        "paper-dist-temperature"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dist-temperature",
+        "paper-dist-soft-labels",
+        "paper-temperature-sampling",
+        "paper-dist-dark-knowledge",
+        "paper-adam-epsilon"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 413,
+      "full_tokens": 415,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dqn-clip-001",
+      "text": "constraining rewards to {-1, 0, +1} in the DQN paper",
+      "answer_uuids": [
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-reward-clipping",
+        "paper-dqn-atari-results",
+        "paper-dpo-loss",
+        "paper-dqn-tricks",
+        "paper-ppo-epsilon"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 463,
+      "full_tokens": 465,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dqn-res-001",
+      "text": "Atari benchmark outcomes reported by the original DQN paper",
+      "answer_uuids": [
+        "paper-dqn-atari-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-atari-results",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-per-td-error",
+        "paper-dqn-tricks",
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_tokens": 327,
+      "l1_tokens": 477,
+      "full_tokens": 479,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dqn-res-002",
+      "text": "number of Atari games where DQN outperformed humans",
+      "answer_uuids": [
+        "paper-dqn-atari-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-atari-results",
+        "paper-dqn-reward-clipping",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-per-td-error",
+        "paper-dqn-tricks"
+      ],
+      "stub_tokens": 327,
+      "l1_tokens": 477,
+      "full_tokens": 479,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dqn-trick-001",
+      "text": "storing transitions and sampling them to train DQN",
+      "answer_uuids": [
+        "paper-dqn-tricks"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-tricks",
+        "paper-per-td-error",
+        "paper-dqn-atari-results",
+        "paper-w2v-skipgram",
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_tokens": 315,
+      "l1_tokens": 474,
+      "full_tokens": 477,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-dqn-trick-002",
+      "text": "why DQN keeps a separate network for computing targets",
+      "answer_uuids": [
+        "paper-dqn-tricks"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-tricks",
+        "paper-resnet-skip",
+        "paper-dqn-atari-results",
+        "paper-moe-routing",
+        "paper-dropout-ensemble"
+      ],
+      "stub_tokens": 304,
+      "l1_tokens": 463,
+      "full_tokens": 466,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-drop-def-001",
+      "text": "the technique that zeros activations randomly while training",
+      "answer_uuids": [
+        "paper-dropout-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dropout-definition",
+        "paper-why-dropping-mean-centering-works",
+        "paper-bn-formula",
+        "paper-bn-lr-benefit",
+        "paper-lora-merge"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 471,
+      "full_tokens": 473,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-drop-def-002",
+      "text": "how dropout rates differ for hidden vs input units",
+      "answer_uuids": [
+        "paper-dropout-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-dropout-definition",
+        "paper-dropout-ensemble",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-bn-lr-benefit",
+        "paper-gelu-stochastic"
+      ],
+      "stub_tokens": 316,
+      "l1_tokens": 478,
+      "full_tokens": 480,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-drop-ens-001",
+      "text": "viewing dropout as sampling from many thinned sub-networks",
+      "answer_uuids": [
+        "paper-dropout-ensemble"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dropout-ensemble",
+        "paper-nucleus-sampling",
+        "paper-dropout-definition",
+        "paper-w2v-skipgram",
+        "paper-gelu-stochastic"
+      ],
+      "stub_tokens": 315,
+      "l1_tokens": 452,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-fa-hw-001",
+      "text": "the hardware constraints required by FlashAttention",
+      "answer_uuids": [
+        "paper-flashattn-hardware"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-hardware",
+        "paper-flashattn-tiling",
+        "paper-flashattn-online-softmax",
+        "paper-ppo-clipped-objective",
+        "paper-per-td-error"
+      ],
+      "stub_tokens": 304,
+      "l1_tokens": 426,
+      "full_tokens": 428,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-fa-soft-001",
+      "text": "FlashAttention's running-max trick for softmax over blocks",
+      "answer_uuids": [
+        "paper-flashattn-online-softmax"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-online-softmax",
+        "paper-flashattn-tiling",
+        "paper-flashattn-hardware",
+        "paper-softmax-definition",
+        "paper-dist-temperature"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 458,
+      "full_tokens": 460,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-fa-soft-002",
+      "text": "how block-wise softmax stays numerically stable",
+      "answer_uuids": [
+        "paper-flashattn-online-softmax"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-online-softmax",
+        "paper-softmax-definition",
+        "paper-dist-temperature",
+        "paper-ppo-epsilon",
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_tokens": 286,
+      "l1_tokens": 452,
+      "full_tokens": 454,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-fa-tile-001",
+      "text": "how FlashAttention exploits tiling for speed",
+      "answer_uuids": [
+        "paper-flashattn-tiling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-tiling",
+        "paper-flashattn-online-softmax",
+        "paper-flashattn-hardware",
+        "paper-ppo-epsilon",
+        "paper-yolo-realtime"
+      ],
+      "stub_tokens": 294,
+      "l1_tokens": 453,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-fa-tile-002",
+      "text": "what gives FlashAttention its speedup over naive attention",
+      "answer_uuids": [
+        "paper-flashattn-tiling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-flashattn-tiling",
+        "paper-flashattn-hardware",
+        "paper-tx-scaled-dot-product",
+        "paper-flashattn-online-softmax",
+        "paper-alibi-definition"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 447,
+      "full_tokens": 449,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gan-def-001",
+      "text": "the generator/discriminator setup in GANs",
+      "answer_uuids": [
+        "paper-gan-arch"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-arch",
+        "paper-gan-wgan",
+        "paper-gan-mode-collapse",
+        "paper-dqn-reward-clipping",
+        "paper-dqn-atari-results"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 458,
+      "full_tokens": 461,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gan-def-002",
+      "text": "the two-player setup that defines generative adversarial nets",
+      "answer_uuids": [
+        "paper-gan-arch"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-arch",
+        "paper-dqn-atari-results",
+        "paper-ppo-default",
+        "paper-vae-arch",
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 446,
+      "full_tokens": 449,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gan-train-001",
+      "text": "when a GAN only learns a few modes of the data",
+      "answer_uuids": [
+        "paper-gan-mode-collapse"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-mode-collapse",
+        "paper-gan-arch",
+        "paper-gan-wgan",
+        "paper-adam-default-lr",
+        "paper-resnet-skip"
+      ],
+      "stub_tokens": 311,
+      "l1_tokens": 489,
+      "full_tokens": 491,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gan-train-002",
+      "text": "why GAN training is prone to instability",
+      "answer_uuids": [
+        "paper-gan-mode-collapse"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gan-mode-collapse",
+        "paper-gan-arch",
+        "paper-gan-wgan",
+        "paper-why-dropping-mean-centering-works",
+        "paper-dropout-definition"
+      ],
+      "stub_tokens": 321,
+      "l1_tokens": 499,
+      "full_tokens": 501,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gan-wgan-001",
+      "text": "the Wasserstein distance formulation behind WGAN",
+      "answer_uuids": [
+        "paper-gan-wgan"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gan-wgan",
+        "paper-gan-mode-collapse",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-rope-relative",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 475,
+      "full_tokens": 477,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gan-wgan-002",
+      "text": "the gradient-penalty regularization in Wasserstein GANs",
+      "answer_uuids": [
+        "paper-gan-wgan"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gan-wgan",
+        "paper-gan-mode-collapse",
+        "paper-gan-arch",
+        "paper-adam-adamw",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 478,
+      "full_tokens": 480,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gd-def-001",
+      "text": "the basic update rule for stochastic gradient descent",
+      "answer_uuids": [
+        "paper-gd-basics"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gd-basics",
+        "paper-lora-decomposition",
+        "paper-gelu-stochastic",
+        "paper-adam-moments",
+        "paper-ppo-epsilon"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 430,
+      "full_tokens": 433,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gd-def-002",
+      "text": "mini-batch stochastic gradient descent",
+      "answer_uuids": [
+        "paper-gd-basics"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gd-basics",
+        "paper-bn-formula",
+        "paper-vae-reparameterization",
+        "paper-bn-lr-benefit",
+        "paper-gelu-stochastic"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 434,
+      "full_tokens": 437,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gelu-def-001",
+      "text": "the Gaussian-error linear unit activation",
+      "answer_uuids": [
+        "paper-gelu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gelu-definition",
+        "paper-swiglu-ffn",
+        "paper-dropout-definition",
+        "paper-init-xavier-he",
+        "paper-alibi-definition"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 432,
+      "full_tokens": 435,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gelu-def-002",
+      "text": "the formula for GELU used in transformers",
+      "answer_uuids": [
+        "paper-gelu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-gelu-definition",
+        "paper-gelu-stochastic",
+        "paper-swiglu-ffn",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 436,
+      "full_tokens": 439,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-gelu-stoch-001",
+      "text": "interpreting GELU as stochastic dropout on the input",
+      "answer_uuids": [
+        "paper-gelu-stochastic"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-gelu-stochastic",
+        "paper-dropout-definition",
+        "paper-gelu-definition",
+        "paper-dropout-ensemble",
+        "paper-swiglu-ffn"
+      ],
+      "stub_tokens": 304,
+      "l1_tokens": 420,
+      "full_tokens": 423,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-init-def-001",
+      "text": "the Xavier weight initialization scheme",
+      "answer_uuids": [
+        "paper-init-xavier-he"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-init-xavier-he",
+        "paper-bn-lr-benefit",
+        "paper-adam-adamw",
+        "paper-per-td-error",
+        "paper-lora-decomposition"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 434,
+      "full_tokens": 437,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-init-def-002",
+      "text": "He (Kaiming) initialization",
+      "answer_uuids": [
+        "paper-init-xavier-he"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-init-xavier-he",
+        "paper-bn-lr-benefit",
+        "paper-flashattn-tiling",
+        "paper-flashattn-hardware",
+        "paper-adam-default-lr"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 420,
+      "full_tokens": 423,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ln-bn-001",
+      "text": "picking between layer norm and batch norm",
+      "answer_uuids": [
+        "paper-ln-vs-bn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 3,
+      "topk": [
+        "paper-ln-definition",
+        "paper-rms-definition",
+        "paper-ln-vs-bn",
+        "paper-bn-formula",
+        "paper-gd-basics"
+      ],
+      "stub_tokens": 279,
+      "l1_tokens": 440,
+      "full_tokens": 442,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ln-bn-002",
+      "text": "when to reach for LayerNorm over BatchNorm",
+      "answer_uuids": [
+        "paper-ln-vs-bn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ln-vs-bn",
+        "paper-ln-definition",
+        "paper-bn-lr-benefit",
+        "paper-rms-definition",
+        "paper-bn-formula"
+      ],
+      "stub_tokens": 286,
+      "l1_tokens": 417,
+      "full_tokens": 455,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ln-def-001",
+      "text": "what layer normalization does",
+      "answer_uuids": [
+        "paper-ln-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 4,
+      "topk": [
+        "paper-why-dropping-mean-centering-works",
+        "paper-bn-formula",
+        "paper-bn-lr-benefit",
+        "paper-ln-definition",
+        "paper-adam-default-lr"
+      ],
+      "stub_tokens": 314,
+      "l1_tokens": 482,
+      "full_tokens": 484,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ln-def-002",
+      "text": "normalizing within a single sample rather than across the batch",
+      "answer_uuids": [
+        "paper-ln-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "paper-bn-formula",
+        "paper-ln-definition",
+        "paper-w2v-skipgram",
+        "paper-vae-reparameterization",
+        "paper-gd-basics"
+      ],
+      "stub_tokens": 290,
+      "l1_tokens": 424,
+      "full_tokens": 457,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lora-def-001",
+      "text": "how LoRA decomposes weight updates with low-rank matrices",
+      "answer_uuids": [
+        "paper-lora-decomposition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-decomposition",
+        "paper-lora-merge",
+        "paper-ppo-epsilon",
+        "paper-lora-rank",
+        "paper-adam-adamw"
+      ],
+      "stub_tokens": 281,
+      "l1_tokens": 433,
+      "full_tokens": 436,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lora-def-002",
+      "text": "the math behind LoRA's AB low-rank update",
+      "answer_uuids": [
+        "paper-lora-decomposition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-decomposition",
+        "paper-lora-merge",
+        "paper-lora-rank",
+        "paper-ppo-epsilon",
+        "paper-adam-epsilon"
+      ],
+      "stub_tokens": 269,
+      "l1_tokens": 421,
+      "full_tokens": 424,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lora-inf-001",
+      "text": "merging LoRA adapters into the base model for inference",
+      "answer_uuids": [
+        "paper-lora-merge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-merge",
+        "paper-lora-decomposition",
+        "paper-dropout-definition",
+        "paper-lora-rank",
+        "paper-bert-size"
+      ],
+      "stub_tokens": 271,
+      "l1_tokens": 367,
+      "full_tokens": 399,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lora-inf-002",
+      "text": "the runtime cost of keeping a LoRA adapter loaded",
+      "answer_uuids": [
+        "paper-lora-merge"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-merge",
+        "paper-lora-decomposition",
+        "paper-lora-rank",
+        "paper-adam-default-lr",
+        "paper-moe-load-balancing"
+      ],
+      "stub_tokens": 282,
+      "l1_tokens": 378,
+      "full_tokens": 410,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lora-r-001",
+      "text": "what rank setting usually captures most LoRA gains",
+      "answer_uuids": [
+        "paper-lora-rank"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-lora-rank",
+        "paper-lora-decomposition",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-spearman-definition",
+        "paper-lora-merge"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 399,
+      "full_tokens": 425,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lora-r-002",
+      "text": "how to pick a rank value for LoRA",
+      "answer_uuids": [
+        "paper-lora-rank"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "paper-lora-decomposition",
+        "paper-lora-rank",
+        "paper-spearman-definition",
+        "paper-lora-merge",
+        "paper-rank-based-vs-proportional-prioritization"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 450,
+      "full_tokens": 453,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lr-def-001",
+      "text": "why the step size matters more than other hyperparameters",
+      "answer_uuids": [
+        "paper-lr-importance"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "paper-w2v-dim",
+        "paper-ppo-epsilon",
+        "paper-lr-importance",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-why-dropping-mean-centering-works"
+      ],
+      "stub_tokens": 306,
+      "l1_tokens": 410,
+      "full_tokens": 438,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-lr-def-002",
+      "text": "the conventional step size for Adam",
+      "answer_uuids": [
+        "paper-lr-importance"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 4,
+      "topk": [
+        "paper-adam-adamw",
+        "paper-adam-default-lr",
+        "paper-adam-epsilon",
+        "paper-lr-importance",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 476,
+      "full_tokens": 478,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-moe-def-001",
+      "text": "a sparsely activated model with many expert sub-networks",
+      "answer_uuids": [
+        "paper-moe-routing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-moe-routing",
+        "paper-dropout-ensemble",
+        "paper-moe-load-balancing",
+        "paper-sparse-vs-dense",
+        "paper-dqn-atari-results"
+      ],
+      "stub_tokens": 291,
+      "l1_tokens": 451,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-moe-def-002",
+      "text": "the top-k gating used to pick experts per token",
+      "answer_uuids": [
+        "paper-moe-routing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-moe-routing",
+        "paper-nucleus-sampling",
+        "paper-beam-search",
+        "paper-alibi-definition",
+        "paper-moe-load-balancing"
+      ],
+      "stub_tokens": 306,
+      "l1_tokens": 466,
+      "full_tokens": 469,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-moe-lb-001",
+      "text": "the auxiliary loss that keeps experts evenly utilized",
+      "answer_uuids": [
+        "paper-moe-load-balancing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-moe-load-balancing",
+        "paper-lr-importance",
+        "paper-moe-routing",
+        "paper-ce-definition",
+        "paper-vae-elbo"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 447,
+      "full_tokens": 449,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-moe-lb-002",
+      "text": "when an MoE routes every token to the same few experts",
+      "answer_uuids": [
+        "paper-moe-load-balancing"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-moe-load-balancing",
+        "paper-moe-routing",
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-tok-bpe"
+      ],
+      "stub_tokens": 285,
+      "l1_tokens": 444,
+      "full_tokens": 446,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-nuc-def-001",
+      "text": "sampling from the smallest cumulative-probability mass at threshold p",
+      "answer_uuids": [
+        "paper-nucleus-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-nucleus-sampling",
+        "paper-w2v-skipgram",
+        "paper-per-td-error",
+        "paper-auc-roc",
+        "paper-vae-reparameterization"
+      ],
+      "stub_tokens": 308,
+      "l1_tokens": 454,
+      "full_tokens": 457,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-nuc-def-002",
+      "text": "the mechanics of top-p (nucleus) sampling for text generation",
+      "answer_uuids": [
+        "paper-nucleus-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-nucleus-sampling",
+        "paper-per-td-error",
+        "paper-w2v-skipgram",
+        "paper-vae-reparameterization",
+        "paper-temperature-sampling"
+      ],
+      "stub_tokens": 307,
+      "l1_tokens": 453,
+      "full_tokens": 456,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-per-def-001",
+      "text": "prioritizing important transitions in the replay buffer",
+      "answer_uuids": [
+        "paper-per-td-error"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-per-td-error",
+        "paper-dqn-tricks",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-bn-lr-benefit",
+        "paper-lr-importance"
+      ],
+      "stub_tokens": 323,
+      "l1_tokens": 488,
+      "full_tokens": 491,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-per-def-002",
+      "text": "how TD error magnitude drives PER priorities",
+      "answer_uuids": [
+        "paper-per-td-error"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-per-td-error",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-adam-default-lr",
+        "paper-dqn-reward-clipping",
+        "paper-ppo-epsilon"
+      ],
+      "stub_tokens": 322,
+      "l1_tokens": 487,
+      "full_tokens": 490,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppl-def-001",
+      "text": "what perplexity measures for language models",
+      "answer_uuids": [
+        "paper-perplexity-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-perplexity-definition",
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-mamba-arch",
+        "paper-mamba-selective"
+      ],
+      "stub_tokens": 304,
+      "l1_tokens": 463,
+      "full_tokens": 465,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppl-def-002",
+      "text": "using perplexity as an evaluation metric",
+      "answer_uuids": [
+        "paper-perplexity-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-perplexity-definition",
+        "paper-bleu-definition",
+        "paper-auc-roc",
+        "paper-alibi-definition",
+        "paper-dqn-atari-results"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 457,
+      "full_tokens": 459,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppo-def-001",
+      "text": "the clipped probability-ratio objective behind PPO",
+      "answer_uuids": [
+        "paper-ppo-clipped-objective"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-clipped-objective",
+        "paper-ppo-epsilon",
+        "paper-dpo-loss",
+        "paper-dqn-reward-clipping",
+        "paper-ppo-default"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 471,
+      "full_tokens": 473,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppo-def-002",
+      "text": "how PPO's surrogate loss is written in practice",
+      "answer_uuids": [
+        "paper-ppo-clipped-objective"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-clipped-objective",
+        "paper-dpo-loss",
+        "paper-ppo-epsilon",
+        "paper-ppo-default",
+        "paper-moe-load-balancing"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 461,
+      "full_tokens": 463,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppo-default-001",
+      "text": "the go-to RL algorithm most practitioners reach for first",
+      "answer_uuids": [
+        "paper-ppo-default"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-default",
+        "paper-lora-rank",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-lr-importance",
+        "paper-per-td-error"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 447,
+      "full_tokens": 450,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppo-default-002",
+      "text": "PPO versus TRPO \u2014 what's gained and lost",
+      "answer_uuids": [
+        "paper-ppo-default"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-default",
+        "paper-ppo-clipped-objective",
+        "paper-dpo-loss",
+        "paper-ppo-epsilon",
+        "paper-tx-bleu-results"
+      ],
+      "stub_tokens": 289,
+      "l1_tokens": 433,
+      "full_tokens": 436,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppo-eps-001",
+      "text": "the epsilon clip that bounds how far PPO can step",
+      "answer_uuids": [
+        "paper-ppo-epsilon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-epsilon",
+        "paper-ppo-clipped-objective",
+        "paper-adam-epsilon",
+        "paper-vae-elbo",
+        "paper-ppo-default"
+      ],
+      "stub_tokens": 283,
+      "l1_tokens": 405,
+      "full_tokens": 408,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-ppo-eps-002",
+      "text": "the typical value of PPO's clipping epsilon",
+      "answer_uuids": [
+        "paper-ppo-epsilon"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-epsilon",
+        "paper-ppo-clipped-objective",
+        "paper-adam-epsilon",
+        "paper-ppo-default",
+        "paper-dpo-loss"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 414,
+      "full_tokens": 417,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rms-def-001",
+      "text": "the layer-norm variant that drops the mean subtraction",
+      "answer_uuids": [
+        "paper-rms-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-rms-definition",
+        "paper-why-dropping-mean-centering-works",
+        "paper-ln-definition",
+        "paper-softmax-definition",
+        "paper-dropout-ensemble"
+      ],
+      "stub_tokens": 296,
+      "l1_tokens": 416,
+      "full_tokens": 418,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rn-bottle-001",
+      "text": "the bottleneck block design used in deeper ResNets",
+      "answer_uuids": [
+        "paper-resnet-bottleneck"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-bottleneck",
+        "paper-resnet-skip",
+        "paper-flashattn-online-softmax",
+        "paper-resnet-imagenet",
+        "paper-resnet-shortcuts"
+      ],
+      "stub_tokens": 286,
+      "l1_tokens": 413,
+      "full_tokens": 416,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rn-imnet-001",
+      "text": "ResNet's classification error on ImageNet",
+      "answer_uuids": [
+        "paper-resnet-imagenet"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-imagenet",
+        "paper-resnet-skip",
+        "paper-resnet-bottleneck",
+        "paper-resnet-shortcuts",
+        "paper-auc-roc"
+      ],
+      "stub_tokens": 281,
+      "l1_tokens": 374,
+      "full_tokens": 377,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rn-imnet-002",
+      "text": "the model that won the 2015 ImageNet classification challenge",
+      "answer_uuids": [
+        "paper-resnet-imagenet"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-imagenet",
+        "paper-resnet-skip",
+        "paper-bert-mlm",
+        "paper-dpo-loss",
+        "paper-tx-training-compute"
+      ],
+      "stub_tokens": 275,
+      "l1_tokens": 368,
+      "full_tokens": 371,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rn-short-001",
+      "text": "when the residual path is identity vs a learned projection",
+      "answer_uuids": [
+        "paper-resnet-shortcuts"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-shortcuts",
+        "paper-resnet-skip",
+        "paper-vae-reparameterization",
+        "paper-adam-default-lr",
+        "paper-alibi-definition"
+      ],
+      "stub_tokens": 294,
+      "l1_tokens": 449,
+      "full_tokens": 451,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rn-skip-001",
+      "text": "the residual connection equation in ResNet",
+      "answer_uuids": [
+        "paper-resnet-skip"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-skip",
+        "paper-resnet-bottleneck",
+        "paper-resnet-shortcuts",
+        "paper-resnet-imagenet",
+        "paper-dqn-tricks"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 433,
+      "full_tokens": 436,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rn-skip-002",
+      "text": "how skip connections ease training of deeper nets",
+      "answer_uuids": [
+        "paper-resnet-skip"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-skip",
+        "paper-w2v-skipgram",
+        "paper-gan-arch",
+        "paper-resnet-bottleneck",
+        "paper-dropout-ensemble"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 438,
+      "full_tokens": 441,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-rn-skip-003",
+      "text": "the training difficulty in very deep networks",
+      "answer_uuids": [
+        "paper-resnet-skip"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "paper-dqn-tricks",
+        "paper-resnet-skip",
+        "paper-gan-arch",
+        "paper-dropout-ensemble",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 464,
+      "full_tokens": 467,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-sd-def-001",
+      "text": "lexical retrieval versus neural retrieval \u2014 when to choose each",
+      "answer_uuids": [
+        "paper-sparse-vs-dense"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-sparse-vs-dense",
+        "paper-beam-search",
+        "paper-tfidf-definition",
+        "paper-yolo-realtime",
+        "paper-dqn-tricks"
+      ],
+      "stub_tokens": 307,
+      "l1_tokens": 458,
+      "full_tokens": 461,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-sd-def-002",
+      "text": "how BM25 stacks up against dense embedding retrieval",
+      "answer_uuids": [
+        "paper-sparse-vs-dense"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-sparse-vs-dense",
+        "paper-moe-routing",
+        "paper-w2v-dim",
+        "paper-tfidf-definition",
+        "paper-w2v-analogy"
+      ],
+      "stub_tokens": 294,
+      "l1_tokens": 445,
+      "full_tokens": 448,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-soft-def-001",
+      "text": "converting raw logits into a normalized distribution",
+      "answer_uuids": [
+        "paper-softmax-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-softmax-definition",
+        "paper-temperature-sampling",
+        "paper-moe-routing",
+        "paper-bn-formula",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 461,
+      "full_tokens": 464,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-soft-def-002",
+      "text": "the closed-form expression for the softmax function",
+      "answer_uuids": [
+        "paper-softmax-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 3,
+      "topk": [
+        "paper-flashattn-online-softmax",
+        "paper-tx-scaled-dot-product",
+        "paper-softmax-definition",
+        "paper-dist-temperature",
+        "paper-ce-definition"
+      ],
+      "stub_tokens": 283,
+      "l1_tokens": 449,
+      "full_tokens": 451,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-spear-def-001",
+      "text": "the rank-based measure of monotonic association",
+      "answer_uuids": [
+        "paper-spearman-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-spearman-definition",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-rank",
+        "paper-adam-moments",
+        "paper-auc-roc"
+      ],
+      "stub_tokens": 304,
+      "l1_tokens": 451,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-spear-def-002",
+      "text": "rank-based correlation measures",
+      "answer_uuids": [
+        "paper-spearman-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-spearman-definition",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-dqn-tricks",
+        "paper-lora-rank",
+        "paper-auc-roc"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 459,
+      "full_tokens": 462,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-spec-def-001",
+      "text": "the role of special tokens in tokenization",
+      "answer_uuids": [
+        "paper-tok-special"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tok-special",
+        "paper-bert-mlm",
+        "paper-tok-bpe",
+        "paper-moe-load-balancing",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 285,
+      "l1_tokens": 438,
+      "full_tokens": 441,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-swiglu-def-001",
+      "text": "the gated SwiGLU nonlinearity in modern transformers",
+      "answer_uuids": [
+        "paper-swiglu-ffn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-swiglu-ffn",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-init-xavier-he",
+        "paper-gelu-definition",
+        "paper-rms-definition"
+      ],
+      "stub_tokens": 290,
+      "l1_tokens": 436,
+      "full_tokens": 438,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-swiglu-def-002",
+      "text": "gated linear units inside transformer FFN blocks",
+      "answer_uuids": [
+        "paper-swiglu-ffn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-swiglu-ffn",
+        "paper-gelu-definition",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-resnet-bottleneck",
+        "paper-dropout-definition"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 458,
+      "full_tokens": 460,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-temp-def-001",
+      "text": "how sampling temperature affects output distribution",
+      "answer_uuids": [
+        "paper-temperature-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-temperature-sampling",
+        "paper-dist-temperature",
+        "paper-dist-soft-labels",
+        "paper-nucleus-sampling",
+        "paper-per-td-error"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 458,
+      "full_tokens": 460,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-temp-def-002",
+      "text": "how the temperature knob changes sampling sharpness",
+      "answer_uuids": [
+        "paper-temperature-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-temperature-sampling",
+        "paper-dist-temperature",
+        "paper-nucleus-sampling",
+        "paper-per-td-error",
+        "paper-dist-soft-labels"
+      ],
+      "stub_tokens": 312,
+      "l1_tokens": 458,
+      "full_tokens": 460,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tfidf-def-001",
+      "text": "weighting rare terms via inverse document frequency",
+      "answer_uuids": [
+        "paper-tfidf-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tfidf-definition",
+        "paper-sparse-vs-dense",
+        "paper-dropout-definition",
+        "paper-why-dropping-mean-centering-works",
+        "paper-bert-mlm"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 470,
+      "full_tokens": 472,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tfidf-def-002",
+      "text": "the TF-IDF scoring formula used in classic search engines",
+      "answer_uuids": [
+        "paper-tfidf-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tfidf-definition",
+        "paper-sparse-vs-dense",
+        "paper-alibi-definition",
+        "paper-beam-search",
+        "paper-bleu-definition"
+      ],
+      "stub_tokens": 296,
+      "l1_tokens": 464,
+      "full_tokens": 466,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tok-def-001",
+      "text": "byte-pair encoding as a tokenization scheme",
+      "answer_uuids": [
+        "paper-tok-bpe"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tok-bpe",
+        "paper-tok-special",
+        "paper-init-xavier-he",
+        "paper-tx-positional",
+        "paper-bert-mlm"
+      ],
+      "stub_tokens": 272,
+      "l1_tokens": 442,
+      "full_tokens": 444,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tok-def-002",
+      "text": "popular subword tokenization schemes",
+      "answer_uuids": [
+        "paper-tok-bpe"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-tok-bpe",
+        "paper-tok-special",
+        "paper-bert-mlm",
+        "paper-init-xavier-he",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 280,
+      "l1_tokens": 450,
+      "full_tokens": 452,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-bleu-001",
+      "text": "translation quality gains from the transformer architecture",
+      "answer_uuids": [
+        "paper-tx-bleu-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-bleu-results",
+        "paper-bleu-definition",
+        "paper-rms-definition",
+        "paper-lora-rank",
+        "paper-adam-adamw"
+      ],
+      "stub_tokens": 276,
+      "l1_tokens": 379,
+      "full_tokens": 382,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-bleu-002",
+      "text": "the EN-DE BLEU delta attributed to the transformer",
+      "answer_uuids": [
+        "paper-tx-bleu-results"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-bleu-results",
+        "paper-bleu-definition",
+        "paper-gelu-definition",
+        "paper-swiglu-ffn",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 276,
+      "l1_tokens": 379,
+      "full_tokens": 382,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-fmla-001",
+      "text": "the equation used for attention in transformers",
+      "answer_uuids": [
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "paper-tx-multi-head",
+        "paper-tx-scaled-dot-product",
+        "paper-mamba-arch",
+        "paper-flashattn-tiling",
+        "paper-gelu-definition"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 400,
+      "full_tokens": 403,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-fmla-002",
+      "text": "how the attention formula scales dot products",
+      "answer_uuids": [
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-scaled-dot-product",
+        "paper-rope-relative",
+        "paper-flashattn-tiling",
+        "paper-alibi-definition",
+        "paper-tx-multi-head"
+      ],
+      "stub_tokens": 285,
+      "l1_tokens": 381,
+      "full_tokens": 384,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-fmla-003",
+      "text": "dividing by sqrt(d_k) inside the attention block",
+      "answer_uuids": [
+        "paper-tx-scaled-dot-product"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-scaled-dot-product",
+        "paper-flashattn-tiling",
+        "paper-adam-epsilon",
+        "paper-why-dropping-mean-centering-works",
+        "paper-alibi-definition"
+      ],
+      "stub_tokens": 285,
+      "l1_tokens": 381,
+      "full_tokens": 384,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-mha-001",
+      "text": "the motivation for splitting attention across multiple heads",
+      "answer_uuids": [
+        "paper-tx-multi-head"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-tx-multi-head",
+        "paper-alibi-definition",
+        "paper-tx-scaled-dot-product",
+        "paper-flashattn-tiling",
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_tokens": 291,
+      "l1_tokens": 398,
+      "full_tokens": 401,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-mha-002",
+      "text": "head count used in the base transformer configuration",
+      "answer_uuids": [
+        "paper-tx-multi-head"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-multi-head",
+        "paper-tx-training-compute",
+        "paper-bert-size",
+        "paper-swiglu-ffn",
+        "paper-gelu-definition"
+      ],
+      "stub_tokens": 270,
+      "l1_tokens": 377,
+      "full_tokens": 380,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-pe-001",
+      "text": "how positional encoding uses sinusoids in the original paper",
+      "answer_uuids": [
+        "paper-tx-positional"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-positional",
+        "paper-rope-definition",
+        "paper-rope-relative",
+        "paper-alibi-definition",
+        "paper-w2v-skipgram"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 412,
+      "full_tokens": 415,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-train-001",
+      "text": "compute cost to train the transformer base model",
+      "answer_uuids": [
+        "paper-tx-training-compute"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-training-compute",
+        "paper-tx-multi-head",
+        "paper-lora-merge",
+        "paper-tx-positional",
+        "paper-resnet-skip"
+      ],
+      "stub_tokens": 276,
+      "l1_tokens": 393,
+      "full_tokens": 395,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-tx-train-002",
+      "text": "how long the original transformer's base training took",
+      "answer_uuids": [
+        "paper-tx-training-compute"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-tx-training-compute",
+        "paper-adam-adamw",
+        "paper-lora-merge",
+        "paper-tx-positional",
+        "paper-gan-mode-collapse"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 409,
+      "full_tokens": 411,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-vae-def-001",
+      "text": "the encoder/decoder pair that gives VAEs a latent distribution",
+      "answer_uuids": [
+        "paper-vae-arch"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-vae-arch",
+        "paper-tok-bpe",
+        "paper-vae-reparameterization",
+        "paper-vae-elbo",
+        "paper-ce-definition"
+      ],
+      "stub_tokens": 284,
+      "l1_tokens": 450,
+      "full_tokens": 453,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-vae-elbo-001",
+      "text": "the ELBO objective that VAEs maximize",
+      "answer_uuids": [
+        "paper-vae-elbo"
+      ],
+      "stub_sufficient": false,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-vae-elbo",
+        "paper-gan-arch",
+        "paper-ppo-clipped-objective",
+        "paper-vae-arch",
+        "paper-vae-reparameterization"
+      ],
+      "stub_tokens": 290,
+      "l1_tokens": 406,
+      "full_tokens": 408,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-vae-rep-001",
+      "text": "the reparameterization trick used in VAEs",
+      "answer_uuids": [
+        "paper-vae-reparameterization"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-vae-reparameterization",
+        "paper-vae-arch",
+        "paper-vae-elbo",
+        "paper-dqn-reward-clipping",
+        "paper-w2v-dim"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 433,
+      "full_tokens": 435,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-w2v-ana-001",
+      "text": "the famous king-queen analogy from Word2Vec",
+      "answer_uuids": [
+        "paper-w2v-analogy"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-analogy",
+        "paper-w2v-skipgram",
+        "paper-w2v-dim",
+        "paper-bert-pretraining-data",
+        "paper-rope-relative"
+      ],
+      "stub_tokens": 290,
+      "l1_tokens": 414,
+      "full_tokens": 416,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-w2v-d-001",
+      "text": "typical embedding dimensionality for Word2Vec",
+      "answer_uuids": [
+        "paper-w2v-dim"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-dim",
+        "paper-w2v-analogy",
+        "paper-w2v-skipgram",
+        "paper-sparse-vs-dense",
+        "paper-rope-definition"
+      ],
+      "stub_tokens": 291,
+      "l1_tokens": 395,
+      "full_tokens": 423,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-w2v-skip-001",
+      "text": "how the skip-gram model is trained with negative samples",
+      "answer_uuids": [
+        "paper-w2v-skipgram"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-skipgram",
+        "paper-temperature-sampling",
+        "paper-per-td-error",
+        "paper-vae-reparameterization",
+        "paper-gan-arch"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 451,
+      "full_tokens": 454,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-w2v-skip-002",
+      "text": "the contrastive loss used by Word2Vec's skip-gram model",
+      "answer_uuids": [
+        "paper-w2v-skipgram"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-w2v-skipgram",
+        "paper-w2v-dim",
+        "paper-lr-importance",
+        "paper-w2v-analogy",
+        "paper-moe-load-balancing"
+      ],
+      "stub_tokens": 289,
+      "l1_tokens": 443,
+      "full_tokens": 446,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-yolo-def-001",
+      "text": "YOLO framing detection as a single-shot regression problem",
+      "answer_uuids": [
+        "paper-yolo-realtime"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-yolo-realtime",
+        "paper-yolo-grid",
+        "paper-w2v-skipgram",
+        "paper-gan-mode-collapse",
+        "paper-gelu-stochastic"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 430,
+      "full_tokens": 467,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "para-yolo-grid-001",
+      "text": "how YOLO's grid cells produce bounding boxes",
+      "answer_uuids": [
+        "paper-yolo-grid"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "paraphrased",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-yolo-grid",
+        "paper-yolo-realtime",
+        "paper-ppo-epsilon",
+        "paper-gan-mode-collapse",
+        "paper-flashattn-tiling"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 439,
+      "full_tokens": 441,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "noans-papers-adj-001",
+      "text": "the pretraining objective used by GPT-2",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-init-xavier-he",
+        "paper-gan-arch",
+        "paper-bert-mlm",
+        "paper-yolo-realtime",
+        "paper-gd-basics"
+      ],
+      "stub_tokens": 274,
+      "l1_tokens": 406,
+      "full_tokens": 409,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-papers-adj-002",
+      "text": "T5's span corruption pretraining task",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-bert-pretraining-data",
+        "paper-dropout-definition",
+        "paper-temperature-sampling",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 287,
+      "l1_tokens": 400,
+      "full_tokens": 403,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-papers-adj-003",
+      "text": "DQN's performance on continuous action spaces",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-dqn-atari-results",
+        "paper-ppo-default",
+        "paper-dqn-tricks",
+        "paper-dqn-reward-clipping",
+        "paper-gan-arch"
+      ],
+      "stub_tokens": 308,
+      "l1_tokens": 458,
+      "full_tokens": 460,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-papers-adj-004",
+      "text": "the activation function used in the original AlexNet",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-swiglu-ffn",
+        "paper-init-xavier-he",
+        "paper-gelu-definition",
+        "paper-bn-formula",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 291,
+      "l1_tokens": 437,
+      "full_tokens": 439,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-papers-adj-005",
+      "text": "the prior probability used in naive Bayes classifiers",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-yolo-realtime",
+        "paper-nucleus-sampling",
+        "paper-per-td-error",
+        "paper-dropout-definition",
+        "paper-auc-roc"
+      ],
+      "stub_tokens": 324,
+      "l1_tokens": 449,
+      "full_tokens": 486,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-papers-adj-006",
+      "text": "Vision Transformer's patch size for image tokenization",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-swiglu-ffn",
+        "paper-adam-adamw",
+        "paper-w2v-dim",
+        "paper-yolo-grid",
+        "paper-ln-definition"
+      ],
+      "stub_tokens": 300,
+      "l1_tokens": 446,
+      "full_tokens": 448,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-papers-adj-007",
+      "text": "the reward shaping tricks used in AlphaGo Zero",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_adjacent",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-dqn-reward-clipping",
+        "paper-dpo-loss",
+        "paper-dropout-definition",
+        "paper-vae-reparameterization",
+        "paper-adam-epsilon"
+      ],
+      "stub_tokens": 308,
+      "l1_tokens": 459,
+      "full_tokens": 461,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-006",
+      "text": "how many hidden layers does perceptron rule 5 require",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-dropout-definition",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-bert-size",
+        "paper-resnet-skip",
+        "paper-ppo-epsilon"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 454,
+      "full_tokens": 456,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-007",
+      "text": "the convergence proof of Hinton's zookeeper algorithm",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-ppo-default",
+        "paper-gan-mode-collapse",
+        "paper-gan-wgan",
+        "paper-dist-dark-knowledge",
+        "paper-vae-reparameterization"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 449,
+      "full_tokens": 452,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-008",
+      "text": "the FLOPs required to invert a Matrix in 1990",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-rope-definition",
+        "paper-dropout-definition",
+        "paper-flashattn-online-softmax",
+        "paper-flashattn-tiling"
+      ],
+      "stub_tokens": 322,
+      "l1_tokens": 486,
+      "full_tokens": 489,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-010",
+      "text": "how do I make sourdough starter from scratch",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-vae-reparameterization",
+        "paper-w2v-skipgram",
+        "paper-nucleus-sampling",
+        "paper-moe-routing",
+        "paper-per-td-error"
+      ],
+      "stub_tokens": 310,
+      "l1_tokens": 450,
+      "full_tokens": 452,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-012",
+      "text": "lyrics to Bohemian Rhapsody second verse",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-adam-moments",
+        "paper-w2v-analogy",
+        "paper-dist-dark-knowledge",
+        "paper-vae-reparameterization",
+        "paper-tx-positional"
+      ],
+      "stub_tokens": 289,
+      "l1_tokens": 440,
+      "full_tokens": 443,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "noans-imp-014",
+      "text": "the theorem proving P equals chocolate",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "no_answer_impossible",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "paper-dqn-reward-clipping",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-adam-epsilon",
+        "paper-ce-definition",
+        "paper-perplexity-definition"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 454,
+      "full_tokens": 456,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    }
+  ]
+}

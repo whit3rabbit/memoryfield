@@ -32,7 +32,7 @@ harness/
   queries/               # labeled query sets (one file per domain)
     codebase/
     papers/
-  results/               # raw JSON outputs of baseline runs (gitignored)
+  results/               # raw JSON outputs of baseline runs (tracked)
   mf_harness.py          # the eval rig (Python, stdlib only)
   baselines/
     grep_baseline.py     # grep-only baseline
@@ -92,13 +92,14 @@ The full numbers land in `M0_REPORT.md` at the end of M0.
 ## How to run
 
 ```bash
-# from the repo root
-python3 harness/build_corpus.py        # writes harness/corpus/{codebase,papers}/
-python3 harness/run_baselines.py       # writes harness/results/*.json
-python3 harness/report.py              # writes M0_REPORT.md
+# from the repo root, using the hermes-agent venv (fastembed lives there)
+~/.hermes/hermes-agent/venv/bin/python3 -m harness.build_corpus   # writes harness/corpus/{codebase,papers}/
+~/.hermes/hermes-agent/venv/bin/python3 -m harness.run_baselines  # writes harness/results/*.json
+~/.hermes/hermes-agent/venv/bin/python3 -m harness.report         # writes M0_REPORT.md
 ```
 
-The harness uses Python stdlib only. No `pip install` for M0.
+grep/fts/dense_tfidf need stdlib only. dense_nomic/dense_bge/hybrid need
+fastembed, which is why every command above goes through the venv.
 
 ## What M0 is *not*
 

@@ -10,6 +10,8 @@ today (ROADMAP.md 1.1-1.6); `write`/`raw add`/`lint` are not built yet
 (Phase 2/3). This skill covers the read path and the page conventions a
 hand-authored page still needs to follow so `mf index` and `mf search`
 treat it correctly. It does not cover `write`, which does not exist yet.
+The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
+20-task real-agent trial (ROADMAP.md 1.9), not a guess.
 
 ## Do
 
@@ -17,6 +19,18 @@ treat it correctly. It does not cover `write`, which does not exist yet.
   reading files cold, run `mf search "<question>" --field <dir>`. A field
   with an `mf.sqlite3` already has this indexed; asking first is cheaper
   than rediscovering an answer that's already written down.
+- **For a direct point lookup, call `mf search` with a small `--limit`
+  (2-3) and `--neighbor-limit 0`, not the defaults.** The defaults
+  (`--limit 5 --neighbor-limit 3`) can render up to 20 stubs in one
+  call; a real-agent trial (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`)
+  measured the default call costing *more* tokens than just reading the
+  target page directly (~1014 vs ~173 tokens/lookup on a 20-task
+  sample) when the question only ever needed the single top stub, which
+  it did in 20/20 trial tasks. A lean call (`--limit 1
+  --neighbor-limit 0`) cost ~55 tokens/lookup on the same tasks -- the
+  tool only delivers its savings called this way. Widen the call only
+  when `confidence` comes back `low`/`none`, or the question genuinely
+  needs several related pages at once.
 - **Read the confidence field before trusting the results.**
   `mf search` returns `confidence: high|low|none` alongside the results,
   not just a ranked list:
@@ -80,6 +94,9 @@ treat it correctly. It does not cover `write`, which does not exist yet.
   `none` — verify against the actual code or ask, don't cite it.
 - Don't pull L2 by default "just in case." That defeats the token-budget
   point of tiered reading (PLAN.md section 6).
+- Don't call `mf search` with the default `--limit`/`--neighbor-limit`
+  for a simple point lookup -- see the lean-call note above. The
+  default is for genuinely broad questions, not the common case.
 - Don't reach for `mf write`, `mf raw add`, or `mf lint` — none of them
   exist yet. Author pages by hand following the conventions above.
 - Don't `cat`/`Read` a memoryfield page directly when `mf read` would do

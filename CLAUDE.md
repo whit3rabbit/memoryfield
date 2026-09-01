@@ -269,6 +269,28 @@ Organized by where they will bite next.
     none` roughly doubling versus the 19.8% M0.5 baseline. See
     ROADMAP.md 1.8 for the full numbers and methodology.
 
+26. **`mf search`'s default flags (`--limit 5 --neighbor-limit 3`) can
+    cost more tokens than just reading the target page directly.** A
+    20-task real-agent trial (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`)
+    found every task answerable from the single top stub, but the
+    default call renders 5 top-level stubs plus up to 3 neighbors
+    each -- 1014 tokens/task average, 5.85x *more* than raw file
+    exploration (173/task) on the same tasks. A lean call (`--limit 1
+    --neighbor-limit 0`) cost 55 tokens/task, 3.2x *less* than raw --
+    the shape that actually delivers PLAN.md section 6's modeled
+    savings. Also surfaced by the same trial: the Agent tool's own
+    `subagent_tokens` figure is USELESS for measuring this, since ~50k
+    of fixed per-agent-session overhead swamps the few-hundred-token
+    difference the retrieval mechanism itself produces -- isolate
+    content tokens directly (`eval/agent_trial_token_costs.py`) instead
+    of trusting a full-session token count as a proxy for one
+    mechanism's cost. `.claude/skills/mf/SKILL.md` now teaches the lean
+    call; `mf/search.py`'s `DEFAULT_LIMIT`/`DEFAULT_NEIGHBOR_LIMIT`
+    constants are untouched on purpose -- they're load-bearing for
+    1.4's confidence-gate calibration (run at `limit=5`), so changing
+    them is separate follow-up work, not a fix to bundle into a
+    measurement task.
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md) section 9 for the full milestone list.
@@ -276,11 +298,11 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
 - [x] M0: eval harness, labeled corpus, 6 baselines.
 - [x] M0.5: real dense baselines, 458-query set, per-axis breakdown.
       See "Where things stand" for the corrected headline.
-- [ ] M1, read path (`init`, `index`, `search`, `read`, skill). 1.1
-      through 1.7 are done: `mf init`/`mf index`/`mf search`/`mf read`
-      all work end to end against real sqlite-vec + fastembed and a
-      real 157-page corpus, 99/99 tests passing. `search` now runs
-      dense on every query (not only as a fallback) so the calibrated
+- [x] M1, read path (`init`, `index`, `search`, `read`, skill). All of
+      1.1-1.9 done: `mf init`/`mf index`/`mf search`/`mf read` all work
+      end to end against real sqlite-vec + fastembed and a real
+      157-page corpus, 99/99 tests passing. `search` now runs dense on
+      every query (not only as a fallback) so the calibrated
       confidence gate's FTS/dense-agreement signal is always available
       -- a real design change from the plan's original "dense as
       fallback only," forced by 1.4's calibration result (gotcha 15).
@@ -292,8 +314,13 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       blind (vocabulary-mismatch) query set found the M0.5 headline
       numbers hold up (real embedding models flat to slightly up,
       lexical/TF-IDF methods degrade) but also found a real gap in the
-      calibrated confidence gate under mismatch (gotcha 25) -- 1.9
-      (real-agent trial) is the only item left before Phase 1 exits.
+      calibrated confidence gate under mismatch (gotcha 25). 1.9's
+      real-agent trial (20 tasks x 2 conditions, real Claude subagents)
+      found the tool's default flags cost *more* tokens than raw
+      exploration for a point lookup, and only deliver PLAN.md section
+      6's modeled savings when called leanly (gotcha 26) -- the skill
+      now teaches that. Only 0.5's unsent upstream email remains open
+      from Phase 0/1.
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
       `pack`/`unpack`). `lint` is load-bearing now (gotcha 16), not
       optional.

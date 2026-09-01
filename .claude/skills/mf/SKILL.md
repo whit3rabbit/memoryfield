@@ -20,28 +20,33 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   reading files cold, run `mf search "<question>" --field <dir>`. A field
   with an `mf.sqlite3` already has this indexed; asking first is cheaper
   than rediscovering an answer that's already written down.
-- **For a direct point lookup, call `mf search` with a small `--limit`
-  (2-3) and `--neighbor-limit 0`, not the defaults.** The defaults
-  (`--limit 5 --neighbor-limit 3`) can render up to 20 stubs in one
-  call; a real-agent trial (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`)
-  measured the default call costing *more* tokens than just reading the
-  target page directly (~1014 vs ~173 tokens/lookup on a 20-task
-  sample) when the question only ever needed the single top stub, which
-  it did in 20/20 trial tasks. A lean call (`--limit 1
-  --neighbor-limit 0`) cost ~55 tokens/lookup on the same tasks -- the
-  tool only delivers its savings called this way. Widen the call only
-  when `confidence` comes back `low`/`none`, or the question genuinely
-  needs several related pages at once.
+- **Keep `mf search` calls lean.** The defaults are now `--limit 3
+  --neighbor-limit 1` (ROADMAP.md 2.7). For a direct point lookup,
+  `--limit 1 --neighbor-limit 0` is cheaper still: a real-agent trial
+  (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`) measured that call at
+  ~55 tokens/lookup against ~173 for reading the target page directly,
+  and the old defaults (5 / 3) at ~1014, more than the raw read. Widen
+  the call only when `confidence` comes back `low`/`none`, or the
+  question genuinely needs several related pages at once. The one
+  neighbor slot in the default exists to surface a `supersedes` or
+  `contradicts` link on the top hit; drop it with `--neighbor-limit 0`
+  when you only need the answer.
 - **Read the confidence field before trusting the results.**
   `mf search` returns `confidence: high|low|none` alongside the results,
   not just a ranked list:
-  - `high` — FTS and dense retrieval agree on the top hit. Trust the stub.
-  - `low` — they disagree, or the bm25 floor was barely cleared. The stub
-    might still be right; treat it as a lead, not an answer, and be more
-    willing to escalate to L2 or fall back to exploring the codebase.
-  - `none` — no real FTS hit at all (empty query terms or nothing matched).
-    What's returned, if anything, is a best-effort dense guess. Don't
-    treat a `none`-confidence result as a citation.
+  - `high` — FTS and dense retrieval agree on the top hit and the
+    embedding match is close. Trust the stub. Measured false-high on
+    no-answer queries: 1 in 78 (ROADMAP.md 2.7).
+  - `low` — one signal passed (a lexical anchor, a close embedding, or
+    the two retrievers agreeing on a weak match) but not the pair that
+    makes `high`. The stub is right most of the time on a real question,
+    and it's also what a question the field can't answer gets 15-30% of
+    the time: a topically-adjacent page. Treat it as a lead, not an
+    answer. Read the stub critically, escalate to L1 if it's plausible,
+    fall back to exploring if it isn't.
+  - `none` — nothing passed: no lexical anchor, no close embedding, no
+    agreement. What's returned is a best-effort dense guess. Don't cite
+    it.
 - **Stub-first reading.** `mf search` returns stubs (`uuid`, `title`,
   `summary`, `status`, `tokens`), not full page bodies. Decide relevance
   from the stub and its neighbors before spending a `read` call: the
@@ -108,9 +113,9 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   `none` — verify against the actual code or ask, don't cite it.
 - Don't pull L2 by default "just in case." That defeats the token-budget
   point of tiered reading (PLAN.md section 6).
-- Don't call `mf search` with the default `--limit`/`--neighbor-limit`
-  for a simple point lookup -- see the lean-call note above. The
-  default is for genuinely broad questions, not the common case.
+- Don't widen `--limit`/`--neighbor-limit` past the defaults for a
+  simple point lookup -- see the lean-call note above. Wide calls are
+  for genuinely broad questions, not the common case.
 - Don't hand-edit a page file and stop there. Run `mf write` (new page)
   or `mf write --update <uuid>` (existing page) so it's actually
   validated, dedup-checked, and indexed -- a page that's only on disk

@@ -1,0 +1,20 @@
+{"qid": "blind-code-na-101", "text": "how do we name and merge feature branches", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-102", "text": "where are app secrets stored and how does a service load them", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-103", "text": "transactional email retry backoff logic", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-104", "text": "file upload size limit and target bucket", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-105", "text": "do we have opensearch and how does indexing work", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-106", "text": "how does the German localization workflow work", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-107", "text": "push notification setup APNs FCM", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-108", "text": "job queue retry policy dead letter", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-109", "text": "websocket load balancing and keepalive", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-110", "text": "client SDK codegen and release process from API spec", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-111", "text": "how to restore prod db from backup", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-112", "text": "can we read from db replica and replication lag", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-113", "text": "how is tenant data isolated between customers", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-114", "text": "password reset flow and hashing", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-115", "text": "do we support SAML SSO with Okta", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-116", "text": "how do we track cloud spend by team", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-117", "text": "do we scan container images for CVEs before deploy", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-118", "text": "code review approval requirements and turnaround", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-119", "text": "policy for upgrading third-party dependencies", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-code-na-120", "text": "how does admin user impersonation work", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}

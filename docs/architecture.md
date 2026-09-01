@@ -96,88 +96,88 @@ pages, and fallback ranking when FTS returns nothing.
 
 ### 3. Retrieval
 
-`search` (`mf/search.py`, ROADMAP.md 1.5) runs **FTS5 first. Dense runs
-on every query but is never fused into or re-ranked against FTS's
-list.** This was the M0.5 gate decision (CLAUDE.md gotcha 13), reversing
-the plan's original symmetric-RRF hybrid, and it is now scheduled for a
-re-decision (ROADMAP.md 2.6). The reasoning, then and now:
+`search` (`mf/search.py`) runs **dense first: the result set is dense's
+top-k by cosine distance. FTS runs on every query too, but as a gate
+signal, not a ranking.** This is the third ranking design (ROADMAP.md
+2.6). The plan said symmetric RRF. M0.5 picked FTS-first because both
+signals were at ceiling on the in-vocabulary set and FTS needed no
+model (CLAUDE.md gotcha 13). 1.4 then made dense run on every query for
+the gate, which killed the cost argument, and the blind set (1.8) was
+the first data where the two diverged. 2.6 measured all three through
+the real pipeline on the cosine `vec` table
+(`eval/calibrate_confidence_blind.py`, top-1 accuracy of the presented
+result):
 
-1. FTS answers first. The original argument was "no model server, no
-   embedder warmup." That argument no longer holds: dense runs on every
-   query anyway (point 2), so the cost is paid whether or not dense
-   ranks.
-2. Dense runs on every query because the confidence gate's high/low
-   signal is FTS/dense top-1 agreement (below), and that needs both.
-   Dense's own top-k becomes the *result set* only in the one case FTS
-   has nothing at all (empty MATCH expression or zero hits). On the
-   blind query set that branch fired 0% of the time (ROADMAP.md 1.8),
-   because OR-joined tokenization nearly always finds some overlap.
-3. The decision was made where it couldn't matter. Both signals were at
-   ceiling on the in-vocabulary set. The first data where they diverge
-   is the blind set, and there dense wins on the codebase domain:
+| Ranking | codebase, original (n=174) | codebase, blind (n=20) | papers, original (n=254) | papers, blind (n=20) |
+|---|---|---|---|---|
+| FTS-first (1.5 design) | 0.828 | 0.700 | 0.882 | 0.800 |
+| RRF, k=60 (plan) | 0.862 | 0.800 | 0.917 | 0.850 |
+| **dense-first** | **0.925** | **0.950** | **0.921** | **0.900** |
 
-   | codebase, blind (n=24) | P@3 | MRR |
-   |---|---|---|
-   | fts | 0.85 | 0.79 |
-   | dense_nomic | 1.00 | 0.975 |
-   | hybrid (RRF) | 1.00 | 0.925 |
+Dense wins every cell, in-vocabulary included. RRF loses to dense-first
+because it averages in FTS's noise. Inserting FTS's top-1 at rank 2
+under dense moved MRR by under 0.01 either way and was not adopted.
 
-   ROADMAP.md 1.8 reported the two-domain average (0.925 for FTS), which
-   hid this. Papers held for both. 2.6 re-runs the choice through the
-   real `mf search` pipeline, FTS-first vs RRF vs dense-first.
-4. Results return as the top-k stubs (uuid, title, summary, status,
-   tokens; `k=5` by default, `mf search --limit`) with up to n neighbor
-   stubs each (`n=3` by default, `--neighbor-limit`, typed links first,
-   then kNN). `co_read` rows exist and accumulate from `mf read` but are
-   not consulted for neighbor ranking yet (ROADMAP.md 4.4).
-5. Superseded pages, as built, return as a `{uuid, superseded_by}`
+1. Results return as the top-k stubs (uuid, title, summary, status,
+   tokens; `k=3` by default, `mf search --limit`) with up to n neighbor
+   stubs each (`n=1` by default, `--neighbor-limit`, typed links first,
+   then kNN). The old defaults (5 / 3) cost 1,014 tokens per point
+   lookup (ROADMAP.md 1.9). 3 / 1 is the compromise: three stubs recover
+   from a wrong top-1, one neighbor slot surfaces a typed
+   `supersedes`/`contradicts` link, which an agent must not miss.
+   `co_read` rows accumulate from `mf read` but are not consulted for
+   neighbor ranking yet (ROADMAP.md 4.4).
+2. FTS's ranked list is the result set only when dense has nothing (an
+   empty `vec` table). A stopword-only query (empty FTS expression) is
+   still ranked by dense.
+3. Superseded pages, as built, return as a `{uuid, superseded_by}`
    pointer that **occupies a result slot**. PLAN.md section 2 put the
-   pointer on the winner instead. The difference matters under the lean
-   call the skill teaches (`--limit 1`): a superseded top hit yields one
-   pointer and no answer. ROADMAP.md 2.8 resolves the superseder inline.
-6. Reranker (cross-encoder over the top 20) was to be cut unless the
-   blind set showed P@3 under ~0.8. 1.8 ran that test and baseline P@3
-   held, but the metric was wrong: what matters is the tool's own top-1
-   through the gate, which on the blind set is 0.70 (codebase) and 0.80
-   (papers). ROADMAP.md 4.1 re-decides against that metric after 2.6/2.7.
+   pointer on the winner instead. Under a lean call (`--limit 1`) a
+   superseded top hit yields one pointer and no answer. ROADMAP.md 2.8
+   resolves the superseder inline.
+4. Reranker (cross-encoder over the top 20): the tool's own blind top-1
+   is now 0.95 / 0.90 through the real pipeline, above the ~0.8 trigger
+   in ROADMAP.md 4.1. Cut, not deferred, unless a later blind set says
+   otherwise.
 
 Output is JSON or a compact text table. The agent never sees a body
 unless it asks.
 
-**Confidence gate: calibrated, wired into `search`, and known to be
-miscalibrated for realistic phrasing.** `mf/confidence.py` computes
-`confidence: high|low|none` from two signals: FTS's bm25 score
-normalized by matched-term count decides none vs. not-none, and
-FTS/dense top-1 agreement decides high vs. low.
+**Confidence gate: three signals, recalibrated on blind phrasing
+(ROADMAP.md 2.7).** `mf/confidence.py` computes
+`confidence: high|low|none`:
 
-Calibrated numbers (`eval/calibrate_confidence.py`) next to the blind
-re-test (ROADMAP.md 1.8, `eval/blind_fallback_check.py`):
+- **not-none** if any of: normalized bm25 (FTS top score / matched-term
+  count) at or above `FLOOR` (2.0), dense top-1 cosine distance at or
+  below `DENSE_FLOOR` (0.30), or FTS and dense agree on top-1.
+- **high** if agreement *and* the dense floor both pass, else **low**.
 
-| Measurement | In-vocabulary set | Blind set |
-|---|---|---|
-| `FLOOR` (normalized bm25, `mf.confidence.FLOOR`) | 2.0 | same |
-| FTS/dense top-1 agreement, correct hits | 97.0% | not re-measured |
-| FTS/dense top-1 agreement, no-answer queries | 16.7% | not re-measured |
-| False-high-confidence on no-answer queries | 0% (n=30) | 1/8 |
-| Correct hits demoted to `none` | 19.8% | 45% (both domains) |
-| Tool top-1 accuracy, real-answer queries | 0.83 / 0.88 | 0.70 / 0.80 |
+The 1.4 design used the bm25 floor alone for none vs. not-none, and
+agreement alone for high vs. low. The blind sets showed two failures:
+45% of answerable blind queries came back `none` (and the skill says
+not to cite `none`), and bm25's IDF term shrinks with corpus size, so a
+10-page field returned `none` for 80% of correct answers. Real fields
+start small. The dense floor is size-independent and the agreement
+rescue costs nothing in false-high. Measured through the real pipeline
+(`eval/calibrate_confidence_blind.py`; "usable" = presented top-1
+correct and confidence not `none`; no-answer sets are the original 30
+plus 48 blind ones authored without seeing the corpus):
 
-Three caveats, in order of weight:
+| Measurement | codebase, original | codebase, blind | papers, original | papers, blind |
+|---|---|---|---|---|
+| Usable answers, 1.4 gate | 0.667 | 0.550 | 0.728 | 0.550 |
+| **Usable answers, 2.7 gate** | **0.920** | **0.900** | **0.913** | **0.850** |
+| False-high on no-answer queries | 0/17 | 1/24 | 0/13 | 0/24 |
+| No-answer queries returned as `low` | 5/17 | 4/24 | 2/13 | 4/24 |
+| Usable answers on a 10-page subsample, 1.4 gate | 0.185 | | 0.300 | |
+| Usable answers on a 10-page subsample, 2.7 gate | 0.889 | | 1.000 | |
 
-- The "accepted cost" of 19.8% is 45% on blind phrasing, and the skill
-  tells the agent not to cite a `none` result. Read jointly with 1.9
-  (whose tasks were deliberately in-vocabulary), roughly half of
-  realistic lookups pay for the search and then fall back to raw
-  exploration. That undercuts PLAN.md section 6's savings case, which
-  neither 1.8 nor 1.9 noticed on its own.
-- The floor is corpus-size dependent (bm25's IDF term). A 4-page field
-  reads permanently `none` at `FLOOR=2.0` (ROADMAP.md 1.5). Real fields
-  start small.
-- The agreement signal was calibrated on cosine top-1 and, until schema
-  v2, ran in production on raw L2 top-1 (section 2). Fixed by 2.5.
-
-ROADMAP.md 2.7 recalibrates on the blind sets with a larger blind
-no-answer sample and a corpus-size sweep, on the v2 metric.
+The cost is the `low` row: a no-answer query gets a topically-adjacent
+page labelled `low` 15-30% of the time instead of `none`. `low` means
+"a lead, not an answer" (SKILL.md), which is the right label for that
+page. The one blind false-high is the GDPR query from 1.8 (CLAUDE.md
+gotcha 25), which both retrievers still land on. The full parameter
+grid is in the calibration script.
 
 ### 4. Read
 
@@ -281,7 +281,7 @@ measured (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`):
 | Target | Measured | Caveat |
 |---|---|---|
 | Session-start injection under 200 tokens | not measured | `.claude/skills/mf/SKILL.md` is ~8.3 KB, roughly 2,000 tokens per session that triggers it. At the lean call's ~118 tokens/lookup saving over raw, break-even is ~17 lookups per session. ROADMAP.md 2.11. |
-| Under 1,200 tokens per lookup, most ending at the stub | 55 (lean call) / 1,014 (default flags) | In-vocabulary tasks only. Blind phrasing sends ~45% of lookups to `none` (section 3). |
+| Under 1,200 tokens per lookup, most ending at the stub | 55 (lean call) / 1,014 (old default flags) | In-vocabulary tasks. The 2.7 gate cuts blind `none` from 45% to 10%; the new default (3 / 1) hasn't been re-measured with the 1.9 method (ROADMAP.md 2.11). |
 | 2 tool calls per lookup | 1 (stub-end 20/20) | Same in-vocabulary caveat. |
 
 ## Known gaps
@@ -303,10 +303,9 @@ with the roadmap item that closes it:
 - `bge-large-en-v1.5` is evaluated but not a selectable `mf init` model
   (`MODEL_REGISTRY` only wires nomic). ROADMAP.md 2.9.
 - `claims.slug` has no definition: pages have no slug. ROADMAP.md 4.3.
-- `DEFAULT_LIMIT`/`DEFAULT_NEIGHBOR_LIMIT` were chosen before the 1.9
-  cost data and are wrong for the common case (CLAUDE.md gotcha 26).
-  Left in place because 1.4's calibration ran at `limit=5`. ROADMAP.md
-  2.7 revisits them alongside the recalibration.
+- `DEFAULT_LIMIT`/`DEFAULT_NEIGHBOR_LIMIT` moved from 5 / 3 to 3 / 1
+  with 2.7 (CLAUDE.md gotcha 26). The token cost of the new default
+  hasn't been re-measured with the 1.9 method. ROADMAP.md 2.11.
 
 ## Stack
 
@@ -324,7 +323,7 @@ with the roadmap item that closes it:
   the prefix trap, gotcha 4 on running nomic and bge in separate
   processes). `mf/embed_backend.py` can select an MLX backend on Apple
   Silicon, but the CLI path is fastembed-only today.
-- Reranker: none by default, see section 3 point 6.
+- Reranker: none, see section 3 point 4.
 - LLM: none. Extraction and consolidation are done by the host agent
   that's already running, the tool never calls an LLM itself.
 
@@ -334,5 +333,7 @@ with the roadmap item that closes it:
 - Current phase status and the Phase 2.5 hardening items: [ROADMAP.md](../ROADMAP.md).
 - Numbered gotchas referenced above by number: [CLAUDE.md](../CLAUDE.md).
 - Eval evidence behind the retrieval design: [M0.5_REPORT.md](../M0.5_REPORT.md).
-- Confidence gate calibration methodology and full trade-off table:
-  `eval/calibrate_confidence.py`. Blind re-test: `eval/blind_fallback_check.py`.
+- Confidence gate and ranking calibration, full parameter grid and
+  corpus-size sweep: `eval/calibrate_confidence_blind.py` (2.7). The
+  1.4 calibration (`eval/calibrate_confidence.py`) and 1.8 re-test
+  (`eval/blind_fallback_check.py`) are kept as the record.

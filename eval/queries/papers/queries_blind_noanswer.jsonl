@@ -1,0 +1,20 @@
+{"qid": "blind-paper-na-101", "text": "why do LSTM/GRU gates decide what to forget", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-102", "text": "KV cache purpose in transformer decoding", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-103", "text": "int8 vs int4 quantization tradeoffs", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-104", "text": "how CLIP builds positive negative pairs", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-105", "text": "diffusion model denoising intuition", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-106", "text": "how does gradient boosting work on tabular data", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-107", "text": "k-means centroid initialization importance", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-108", "text": "what does PCA do to your data", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-109", "text": "SVM kernel trick explained", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-110", "text": "common data augmentation for images", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-111", "text": "how does k-fold cross-validation work", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-112", "text": "speculative decoding draft model explained", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-113", "text": "RAG pipeline prompt construction with retrieved passages", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-114", "text": "vision transformer image patches", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-115", "text": "CTC loss speech recognition", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-116", "text": "label smoothing effect on training targets calibration", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-117", "text": "curriculum learning easy to hard examples", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-118", "text": "federated learning without centralizing data", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-119", "text": "graph neural network message passing", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-paper-na-120", "text": "ROUGE metric vs n-gram precision", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}

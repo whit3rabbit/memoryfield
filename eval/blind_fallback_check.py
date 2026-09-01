@@ -1,5 +1,10 @@
 """ROADMAP.md 1.8: does `mf/search.py`'s dense fallback ever fire?
 
+Superseded as a question by ROADMAP.md 2.6: `mf search` now ranks by
+dense on every query, so "FTS empty -> dense" is no longer a fallback
+branch. Kept runnable as the 1.8 record; `eval/calibrate_confidence_blind.py`
+is the current measurement of the pipeline.
+
 The 6-baseline eval matrix (`run_baselines.py`) can't answer this on its
 own: every baseline's top-k always returns k (CLAUDE.md gotcha 6), so
 none of them ever have an "FTS found nothing" case to fall back from.

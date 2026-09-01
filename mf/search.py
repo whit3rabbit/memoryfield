@@ -1,12 +1,13 @@
-"""`mf search` — FTS-first retrieval with a calibrated confidence gate.
+"""`mf search` — dense-first retrieval with a calibrated confidence gate.
 
-Per docs/architecture.md: FTS ranks, dense is not fused into that
-ranking. What changed with the 1.4 confidence gate (ROADMAP.md 1.4,
-CLAUDE.md gotcha 15): dense now runs on every query, not only when FTS
-comes back empty, because the gate's high/low signal is FTS/dense
-top-1 agreement (mf/confidence.py) and that needs both. Dense's own
-top-k is only used as the result set when FTS finds nothing at all
-(docs/architecture.md's third `vec` table job: fallback ranking).
+Ranking is dense's top-k (ROADMAP.md 2.6). Measured through this
+pipeline on the cosine `vec` table, dense-first beat both FTS-first
+(the 1.5 design) and RRF on every query set, in-vocabulary included:
+codebase top-1 0.925 vs 0.828 vs 0.862 on the original set, 0.95 vs
+0.70 vs 0.80 blind (`eval/calibrate_confidence_blind.py`). FTS still
+runs on every query: its top score and top-1 are two of the three
+gate signals (mf/confidence.py), and its ranked list is the result set
+only when dense has nothing (an empty `vec` table).
 
 A superseded page never appears as a full stub in results -- it folds
 into a compact `{uuid, superseded_by}` pointer (docs/architecture.md
@@ -24,8 +25,15 @@ from .query_prep import fts_query
 from .schema import DEFAULT_MODEL_CODE, get_config
 from .tokens import default_tokenize
 
-DEFAULT_LIMIT = 5
-DEFAULT_NEIGHBOR_LIMIT = 3
+# ROADMAP.md 1.9 measured the old defaults (5 / 3) at 1014 tokens per
+# point lookup, 5.85x a raw file read; the skill's lean call (1 / 0) at
+# 55. 3 / 1 is the compromise chosen with the 2.7 recalibration: three
+# stubs recover from a wrong top-1 (dense top-1 is 0.90-0.95 on blind
+# queries), and one neighbor slot is enough to surface a typed
+# supersedes/contradicts link, which is the neighbor kind an agent must
+# not miss. Typed links rank before kNN in _neighbors().
+DEFAULT_LIMIT = 3
+DEFAULT_NEIGHBOR_LIMIT = 1
 _LINK_KINDS = ("supersedes", "contradicts", "depends_on")
 
 
@@ -90,12 +98,15 @@ def _fts_search(conn: Connection, query: str, limit: int) -> tuple[list[tuple[st
     return [(row[0], row[1]) for row in cur.fetchall()], term_count
 
 
-def _dense_search(conn: Connection, query_vector: list[float], limit: int) -> list[str]:
+def _dense_search(
+    conn: Connection, query_vector: list[float], limit: int
+) -> list[tuple[str, float]]:
+    """Top-`limit` (uuid, cosine distance) pairs, nearest first."""
     cur = conn.execute(
-        "SELECT page_uuid FROM vec WHERE embedding MATCH ? AND k = ?",
+        "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = ?",
         (_vec_literal(query_vector), limit),
     )
-    return [row[0] for row in cur.fetchall()]
+    return [(row[0], row[1]) for row in cur.fetchall()]
 
 
 def _superseded_by(conn: Connection, uuid: str) -> str | None:
@@ -211,17 +222,19 @@ def search(
 
     fts_ranked, term_count = _fts_search(conn, query, limit)
     query_vector = _embed_query(query, entry["kind"], entry["fastembed_name"])
-    dense_top1 = _dense_search(conn, query_vector, limit=1)
+    dense_ranked = _dense_search(conn, query_vector, limit)
 
     fts_top1 = fts_ranked[0][0] if fts_ranked else None
     top_score = fts_ranked[0][1] if fts_ranked else None
-    agree = bool(fts_top1) and bool(dense_top1) and fts_top1 == dense_top1[0]
-    conf = confidence(top_score, term_count, agree)
+    dense_top1 = dense_ranked[0][0] if dense_ranked else None
+    dense_distance = dense_ranked[0][1] if dense_ranked else None
+    agree = fts_top1 is not None and fts_top1 == dense_top1
+    conf = confidence(top_score, term_count, agree, dense_distance)
 
-    if fts_ranked:
-        primary_uuids = [uuid for uuid, _ in fts_ranked]
+    if dense_ranked:
+        primary_uuids = [uuid for uuid, _ in dense_ranked]
     else:
-        primary_uuids = _dense_search(conn, query_vector, limit)
+        primary_uuids = [uuid for uuid, _ in fts_ranked]
 
     results: list[Stub] = []
     for uuid in primary_uuids:

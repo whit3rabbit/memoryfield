@@ -138,7 +138,8 @@ Organized by where they will bite next.
 
 ### Plan-design gotchas (for M1 implementation)
 
-13. **Resolved (ROADMAP.md 1.5).** Symmetric RRF at equal weights had
+13. **Superseded by ROADMAP.md 2.6 (dense-first ranking, gotcha 36); kept
+    as the record of the 1.5 decision.** Symmetric RRF at equal weights had
     nothing to add once both signals were near ceiling. `mf/search.py`
     doesn't fuse: FTS ranks, dense never re-ranks or merges into that
     ranking. Dense still runs on every query now (not fused, but not a
@@ -153,8 +154,9 @@ Organized by where they will bite next.
     near-duplicates, and fallback ranking when FTS returns nothing.
     Only the ranking use was ever contested.
 
-15. **The plan's "per-query floor plus relative-gap heuristic" doesn't
-    work as literally specified.** A floor on raw FTS bm25 score cannot
+15. **Superseded by ROADMAP.md 2.7 (three-signal gate, gotcha 36); kept
+    as the record of the 1.4 decision.** The plan's "per-query floor plus
+    relative-gap heuristic" doesn't work as literally specified.** A floor on raw FTS bm25 score cannot
     separate no-answer from real-answer queries on this corpus: their
     score ranges overlap almost completely (gotcha 7's vocabulary-
     sharing ceiling effect again, on a new axis). What worked instead
@@ -379,6 +381,24 @@ Organized by where they will bite next.
     measure the same pipeline under different conditions, write the
     joint reading down.
 
+36. **Every retrieval decision so far was right on the data it had and
+    wrong on the next set.** Ranking: the plan said RRF, M0.5 said
+    FTS-first (both at ceiling, FTS cheaper), 2.6 measured through the
+    real pipeline on blind phrasing and dense-first beat both on every
+    cell, in-vocabulary included (RRF averages in FTS's noise). Gate: 1.4
+    calibrated a bm25 floor on the in-vocabulary no-answer set, 2.7 found
+    it demoted 45% of blind answers and 80% of answers on a 10-page field
+    (bm25's IDF term shrinks with N). The fix each time was the same: run
+    the *real* `mf search` code on a query set authored without seeing
+    the corpus, and sweep corpus size, before hardcoding a constant.
+    `eval/calibrate_confidence_blind.py` is the template. Two pitfalls
+    from writing it: score "usable answer" with the top-1 the tool
+    actually *presents* (the FTS-scored and dense-scored numbers differ
+    on every low-confidence query), and fastembed/onnxruntime aborts with
+    `recursive_mutex lock failed` at interpreter exit when a module-level
+    model is torn down (gotcha 4's family), so the script flushes and
+    `os._exit(0)`s.
+
 ### Tooling patterns worth reusing
 
 29. **Quick real-corpus smoke test, cheaper than writing new fixtures:**
@@ -412,11 +432,9 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
 - [x] M1, read path (`init`, `index`, `search`, `read`, skill). All of
       1.1-1.9 done: `mf init`/`mf index`/`mf search`/`mf read` all work
       end to end against real sqlite-vec + fastembed and a real
-      157-page corpus, 99/99 tests passing. `search` now runs dense on
-      every query (not only as a fallback) so the calibrated
-      confidence gate's FTS/dense-agreement signal is always available
-      -- a real design change from the plan's original "dense as
-      fallback only," forced by 1.4's calibration result (gotcha 15).
+      157-page corpus, 99/99 tests passing. `search` ran FTS-first with
+      dense on every query for the gate's agreement signal (gotcha 15);
+      as of 2.6 it ranks dense-first (gotcha 36).
       `mf read` adds a `reads` log table and is the only path that
       populates `co_read` weight in `links` (multi-ref calls bump
       every pair). `.claude/skills/mf/SKILL.md` (1.7) documented only
@@ -444,7 +462,7 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       entry for `raw` before this, though PLAN.md's spec requires
       implementations not index it -- a raw extract that happened to
       parse as valid frontmatter could have been silently indexed as a
-      page. 128/128 tests passing. `.claude/skills/mf/SKILL.md` updated
+      page. 134/134 tests passing. `.claude/skills/mf/SKILL.md` updated
       to teach `mf write` as the write path (`raw add` isn't
       skill-taught yet -- it's meant to be called by the not-yet-built
       SessionEnd hook, ROADMAP.md 3.1, not typed by an agent directly).
@@ -454,8 +472,15 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       (cosine metric, ranking re-decision, gate recalibration, write-path
       semantics, one embedding entry point, dedup and skill-cost
       calibration), ordered before 2.3/2.4. Gotchas 32-35 record what it
-      found. Only 0.5's unsent upstream email remains open from Phase
-      0/1.
+      found. 2.5-2.7 are done: `vec` is cosine (schema v2), ranking is
+      dense-first (beat FTS-first and RRF on every set through the real
+      pipeline), and the gate is three-signal (bm25 floor OR dense
+      cosine floor OR agreement for not-none; agreement AND dense floor
+      for high), recalibrated on 48 blind no-answer queries and a
+      corpus-size sweep. Usable blind answers went from 0.55 to
+      0.90/0.85; a 10-page field from 0.19 to 0.89. Search defaults are
+      now `--limit 3 --neighbor-limit 1`. Gotcha 36. 2.8-2.11 open.
+      Only 0.5's unsent upstream email remains open from Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).
 - [ ] M4, reranker and eval gate, only if P@3 drops below 0.8, which

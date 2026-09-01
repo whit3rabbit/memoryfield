@@ -11,7 +11,7 @@ from mf.schema import EMBEDDING_DIM
 # high/low agreement decision (not floor calibration, which is
 # unit-tested directly in test_confidence.py) use floor=0.0 so the
 # floor check itself never masks what's being tested.
-_low_floor_confidence = functools.partial(confidence_mod.confidence, floor=0.0)
+_low_floor_confidence = functools.partial(confidence_mod.confidence, floor=0.0)  # FTS floor always passes
 
 PAGE_ROTATE = """\
 ---
@@ -139,14 +139,39 @@ def test_confidence_low_when_fts_and_dense_disagree(tmp_path, monkeypatch):
     conn.close()
 
 
-def test_confidence_none_when_no_fts_hit(tmp_path, monkeypatch):
+def test_no_fts_hit_still_ranks_by_dense(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
     monkeypatch.setattr(search, "_embed_query", _agree_with("page-billing"))
 
     # Stopwords-only query: fts_query() returns an empty expression, so
-    # there's no FTS hit at all regardless of the corpus.
+    # there's no FTS hit at all. Dense still ranks; the fake query
+    # vector is exactly page-billing's (distance 0), so the dense floor
+    # passes and the gate says low (a lead), not none.
+    result = search.search(conn, "is the a of", limit=5)
+    assert result.results[0].uuid == "page-billing"
+    assert result.confidence == "low"
+    conn.close()
+
+
+def test_no_fts_hit_and_far_dense_is_none(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    far = [0.0] * EMBEDDING_DIM
+    far[EMBEDDING_DIM - 1] = 1.0  # orthogonal to every page vector
+    monkeypatch.setattr(search, "_embed_query", lambda q, k, n: far)
+
     result = search.search(conn, "is the a of", limit=5)
     assert result.confidence == "none"
+    assert result.results  # best-effort candidates still returned
+    conn.close()
+
+
+def test_ranking_is_dense_first(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    # FTS would rank the rotate pages first for this query; dense says
+    # billing. Dense wins the presented order (ROADMAP.md 2.6).
+    monkeypatch.setattr(search, "_embed_query", _agree_with("page-billing"))
+    result = search.search(conn, "rotate signing key", limit=5)
+    assert result.results[0].uuid == "page-billing"
     conn.close()
 
 

@@ -513,11 +513,13 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       layout could not be verified (no copy in the repo). 185/185
       tests. **M2 is closed.**
       Only 0.5's unsent upstream email remains open from Phase 0/1.
-- [ ] M3, hooks and imports. 3.1 done: `mf hook stop` (once-per-
+- [x] M3, hooks and imports. 3.1 done: `mf hook stop` (once-per-
       session capture reminder via `additionalContext`) and `mf hook
       session-end` (transcript pointer to `raw/`, not the transcript),
-      contract verified against the live hooks doc. 3.2 importers and
-      3.3 CI recipe open.
+      contract verified against the live hooks doc. 3.2 done: `mf
+      import claude-memory` / `wiki`, formats read off a real memory
+      directory, idempotent, `source` set. 3.3 done as documentation
+      (README "CI recipe"). **M3 is closed.** 194/194 tests.
 - [ ] M4, reranker and eval gate, only if P@3 drops below 0.8, which
       it currently clears by a wide margin.
 - [ ] M5, consolidation and multi-writer (`consolidate --plan`, a

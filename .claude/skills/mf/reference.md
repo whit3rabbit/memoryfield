@@ -150,6 +150,16 @@ Before exploring this codebase, run `mf search "<question>" --field .`.
 Before finishing, write what you learned as a page with `mf write`, or stage it with `mf raw add`.
 ```
 
+## Importing existing notes
+
+`mf import claude-memory <dir> --field <field>` (a Claude Code memory
+directory) and `mf import wiki <dir> --field <field>` (an `index.md`
+plus pages) generate pages under `<field>/claude-memory/` or
+`<field>/wiki/` and index them without the dedup gate. `--dry-run`
+first. Imported summaries are whatever the source had (a description
+or a first paragraph), so run `mf lint` and rewrite the ones it flags
+as topic-shaped.
+
 ## Other commands
 
 `mf index [DIR]` is the un-gated bulk path: imports, hand edits, or

@@ -10,7 +10,7 @@ the gap is named.
 
 ## Layers
 
-Seven layers. The first is the spec, the rest are derived or conventional.
+Eight layers. The first is the spec, the rest are derived or conventional.
 
 ### 1. Pages (canonical)
 
@@ -351,6 +351,26 @@ session pointers (`*-session.md`). Nothing consumes either until
 `consolidate --plan` (ROADMAP.md 4.2). The cheaper path, when the
 lesson is already page-shaped, is `mf write` directly, and the Stop
 reminder says so first.
+
+### 8. Import
+
+**Built (ROADMAP.md 3.2).** `mf/importers.py`: `mf import claude-memory
+<dir>` and `mf import wiki <dir>`, each `[--field DIR] [--dry-run]
+[--json]`. Both write generated pages into a subdirectory of the field
+(`claude-memory/`, `wiki/`) and run the un-gated bulk index. Formats
+were taken from real examples, not the plan's one-liners: a Claude
+Code memory directory is `MEMORY.md` (`- [Title](file.md) — hook`
+lines) plus topic files with `name`/`description`/`metadata.type`
+frontmatter, so title comes from the index link, summary from
+`description`, the tag from the type, and an index line whose file is
+gone becomes a stub-only page. A wiki is `index.md` (`- [Title](path):
+description`) plus pages; subdirectories flatten into the filename,
+the H1 becomes the title (index link text wins) and is stripped from
+the body, and the index description or first paragraph becomes the
+summary. Uuids derive from source names, so re-import is idempotent
+(`indexed 0` the second time), and `source` on every page is the
+original path. What an import can't do is write good summaries: a
+first paragraph is a topic, not an answer, and `mf lint` will say so.
 
 ## Writing conventions (enforced by `lint`, taught by the skill)
 

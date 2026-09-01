@@ -1,8 +1,8 @@
 """Command-line entry point for `mf`.
 
-Every Phase 1 and Phase 2 command is real: `init`/`index`/`search`/
-`read`/`write`/`raw add`/`lint`/`pack`/`unpack` (ROADMAP.md 1.3-1.6,
-2.1-2.4).
+Every Phase 1-3 command is real: `init`/`index`/`search`/`read`/
+`write`/`raw add`/`lint`/`pack`/`unpack`/`hook`/`import` (ROADMAP.md
+1.3-1.6, 2.1-2.4, 3.1-3.2).
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-from mf import __version__, db, embedder, indexer
+from mf import __version__, db, embedder, importers, indexer
 from mf import hooks as hooks_mod
 from mf import lint as lint_mod
 from mf import pack as pack_mod
@@ -98,6 +98,18 @@ def build_parser() -> argparse.ArgumentParser:
     unpack_parser.add_argument("--sha256", default=None, help="expected digest (default: the .sha256 sidecar, if present)")
     unpack_parser.add_argument("--force", action="store_true", help="extract into a non-empty destination")
     unpack_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    import_parser = subparsers.add_parser("import", help="import an existing note collection as pages")
+    import_sub = import_parser.add_subparsers(dest="import_kind")
+    for kind, help_text in (
+        ("claude-memory", "a Claude Code auto-memory directory (MEMORY.md + topic files)"),
+        ("wiki", "a Karpathy-style wiki (index.md + pages, subdirs flattened)"),
+    ):
+        sp = import_sub.add_parser(kind, help=help_text)
+        sp.add_argument("src", help="source directory")
+        sp.add_argument("--field", default=".", help="field directory (default: cwd)")
+        sp.add_argument("--dry-run", action="store_true", help="list what would be written, write nothing")
+        sp.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     hook_parser = subparsers.add_parser("hook", help="Claude Code hook handlers (read the hook JSON on stdin)")
     hook_sub = hook_parser.add_subparsers(dest="hook_command")
@@ -359,6 +371,39 @@ def _cmd_unpack(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_import(args: argparse.Namespace) -> int:
+    if args.import_kind not in ("claude-memory", "wiki"):
+        sys.stderr.write("mf import: expected a kind (claude-memory, wiki)\n")
+        return 1
+    field_dir = Path(args.field).resolve()
+    src = Path(args.src)
+    if not src.is_dir():
+        sys.stderr.write(f"mf import: {src} is not a directory\n")
+        return 1
+    try:
+        conn = db.open_field(field_dir)
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
+        sys.stderr.write(f"mf import: {e}\n")
+        return 1
+    try:
+        fn = importers.import_claude_memory if args.import_kind == "claude-memory" else importers.import_wiki
+        result = fn(src, field_dir, conn, dry_run=args.dry_run)
+    finally:
+        conn.close()
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        verb = "Would write" if result.dry_run else "Wrote"
+        print(f"{verb} {len(result.pages)} page(s) from {src} ({result.kind})")
+        for p in result.pages:
+            print(f"  {p.dest}  [{p.uuid}] {p.title}")
+        for s in result.skipped:
+            print(f"  skipped: {s}")
+        if not result.dry_run:
+            print(f"indexed {result.indexed} page(s); run `mf lint {field_dir}` next")
+    return 0
+
+
 def _cmd_hook(args: argparse.Namespace) -> int:
     payload = hooks_mod.read_payload(sys.stdin)
     if args.hook_command == "stop":
@@ -420,6 +465,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_pack(args)
     if args.command == "unpack":
         return _cmd_unpack(args)
+    if args.command == "import":
+        return _cmd_import(args)
     if args.command == "hook":
         return _cmd_hook(args)
     if args.command == "raw":

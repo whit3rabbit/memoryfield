@@ -117,4 +117,7 @@ after a stale refusal. `mf raw add [text]` appends a freeform session
 extract to `raw/`, which nothing indexes; it is the session-end staging
 step (ROADMAP.md 3.1), not something to call during a lookup. `mf init
 [DIR] [--model nomic-embed-text-v1.5|bge-large-en-v1.5]` creates the
-index; the model is fixed per field.
+index; the model is fixed per field. `mf pack [DIR]` writes
+`<name>.memoryfield.zip` plus a `.sha256` sidecar (index included);
+`mf unpack ZIP [DEST]` verifies the digest and extracts, and the
+extracted index works as-is.

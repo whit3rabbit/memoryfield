@@ -1,17 +1,20 @@
 """Command-line entry point for `mf`.
 
-`init`/`index`/`search`/`read`/`write`/`raw add`/`lint` are real
-(ROADMAP.md 1.3-1.6, 2.1-2.3). `pack`/`unpack` (2.4) aren't built yet.
+Every Phase 1 and Phase 2 command is real: `init`/`index`/`search`/
+`read`/`write`/`raw add`/`lint`/`pack`/`unpack` (ROADMAP.md 1.3-1.6,
+2.1-2.4).
 """
 from __future__ import annotations
 
 import argparse
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 from mf import __version__, db, embedder, indexer
 from mf import lint as lint_mod
+from mf import pack as pack_mod
 from mf import raw as raw_mod
 from mf import read as read_mod
 from mf import search as search_mod
@@ -80,6 +83,20 @@ def build_parser() -> argparse.ArgumentParser:
     lint_parser.add_argument("--check", action="store_true", help="exit 1 on any error or warning (CI)")
     lint_parser.add_argument("--all", action="store_true", help="also print info-level findings")
     lint_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    pack_parser = subparsers.add_parser("pack", help="archive a field as <name>.memoryfield.zip + .sha256")
+    pack_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+    pack_parser.add_argument("--out", default=None, help="archive path (default: ../<field name>.memoryfield.zip)")
+    pack_parser.add_argument("--no-index", action="store_true", help="leave mf.sqlite3 out")
+    pack_parser.add_argument("--no-raw", action="store_true", help="leave raw/ out")
+    pack_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    unpack_parser = subparsers.add_parser("unpack", help="verify and extract a .memoryfield.zip")
+    unpack_parser.add_argument("zip", help="archive path")
+    unpack_parser.add_argument("dest", nargs="?", default=None, help="destination directory (default: ./<name>)")
+    unpack_parser.add_argument("--sha256", default=None, help="expected digest (default: the .sha256 sidecar, if present)")
+    unpack_parser.add_argument("--force", action="store_true", help="extract into a non-empty destination")
+    unpack_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     raw_parser = subparsers.add_parser("raw", help="raw/ staging-area operations")
     raw_subparsers = raw_parser.add_subparsers(dest="raw_command")
@@ -295,6 +312,47 @@ def _cmd_lint(args: argparse.Namespace) -> int:
     return 1 if (args.check and result.failed) else 0
 
 
+def _cmd_pack(args: argparse.Namespace) -> int:
+    field_dir = Path(args.dir).resolve()
+    if not field_dir.is_dir():
+        sys.stderr.write(f"mf pack: {field_dir} is not a directory\n")
+        return 1
+    result = pack_mod.pack_field(
+        field_dir, out=Path(args.out) if args.out else None,
+        include_index=not args.no_index, include_raw=not args.no_raw,
+    )
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        print(f"Packed {result.files} files ({result.bytes} bytes) to {result.path}")
+        print(f"sha256 {result.sha256} (sidecar {result.path.name}{pack_mod.SIDECAR_SUFFIX})")
+    return 0
+
+
+def _cmd_unpack(args: argparse.Namespace) -> int:
+    try:
+        result = pack_mod.unpack_field(
+            Path(args.zip), dest=Path(args.dest) if args.dest else None,
+            expected_sha256=args.sha256, force=args.force,
+        )
+    except pack_mod.PackVerifyError as e:
+        sys.stderr.write(f"mf unpack: {e}\n")
+        return 2
+    except (pack_mod.UnpackError, FileNotFoundError, zipfile.BadZipFile) as e:
+        sys.stderr.write(f"mf unpack: {e}\n")
+        return 1
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        v = "verified" if result.verified else "not verified (no sidecar, no --sha256)"
+        print(f"Unpacked {result.files} files to {result.dest}; sha256 {result.sha256[:12]}... {v}")
+        if result.stripped_prefix:
+            print(f"stripped top-level directory {result.stripped_prefix!r}")
+        for note in result.notes:
+            print(f"note: {note}")
+    return 0
+
+
 def _cmd_raw_add(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
     try:
@@ -338,6 +396,10 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_write(args)
     if args.command == "lint":
         return _cmd_lint(args)
+    if args.command == "pack":
+        return _cmd_pack(args)
+    if args.command == "unpack":
+        return _cmd_unpack(args)
     if args.command == "raw":
         if args.raw_command == "add":
             return _cmd_raw_add(args)

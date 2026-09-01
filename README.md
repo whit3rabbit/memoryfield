@@ -13,9 +13,9 @@ Start here:
 - **Eval harness complete (M0/M0.5).** 157-page labeled corpus, 458-query
   set plus blind vocabulary-mismatch sets, six baselines. Results in
   `eval/results/`, reports in `M0.5_REPORT.md`.
-- **`mf` CLI: `init`, `index`, `search`, `read`, `write`, `lint`, `raw
-  add` are real** and verified against the full corpus. `pack`/`unpack`
-  is not built (ROADMAP.md 2.4). Retrieval is dense-first with a
+- **Every Phase 1 and 2 command is real** (`init`, `index`, `search`,
+  `read`, `write`, `lint`, `pack`/`unpack`, `raw add`) and verified
+  against the full corpus. Next: Phase 3, hooks and imports. Retrieval is dense-first with a
   three-signal confidence gate, both calibrated on blind queries through
   the real pipeline (ROADMAP.md 2.6-2.7).
 - **Index schema is v2** (cosine `vec`). A v1 `mf.sqlite3` is refused:

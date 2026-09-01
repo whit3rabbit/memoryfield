@@ -10,7 +10,7 @@ the gap is named.
 
 ## Layers
 
-Five layers. The first is the spec, the rest are derived or conventional.
+Six layers. The first is the spec, the rest are derived or conventional.
 
 ### 1. Pages (canonical)
 
@@ -300,6 +300,30 @@ in prose with no `## Don't` section, a page under 100 tokens). `--check`
 exits 1 on any error or warning; info prints only with `--all`.
 Baseline on the eval corpus: codebase 0 errors, 3 warnings (two
 relative-time phrases, one two-section short page); papers 0 and 0.
+
+### 6. Pack
+
+**Built (ROADMAP.md 2.4).** `mf/pack.py`: `pack [DIR] [--out PATH]
+[--no-index] [--no-raw]` and `unpack ZIP [DEST] [--sha256 HEX]
+[--force]`. The archive root mirrors the field root: pages keep their
+relative paths, `raw/` and `mf.sqlite3` are included by default, and
+everything `mf index` skips is left out. A sidecar
+`<name>.memoryfield.zip.sha256` holds the digest in `sha256sum` form.
+Members are written sorted with a fixed timestamp, so the archive is
+reproducible: same content, same digest. `unpack` verifies the digest
+(sidecar or `--sha256`) before extracting (exit 2 on mismatch), refuses
+member paths that escape the destination, refuses a non-empty
+destination unless `--force`, strips a single top-level directory when
+every member sits under one (a folder zipped from a file manager), and
+reports how many pages disagree with the packed index. The extracted
+index works as-is because `pages.filename` is field-relative; a
+spec-plain field (four spec fields, no index) unpacks and then needs
+`mf init` + `mf index`.
+
+What is not verified: the memoryfield spec's own zip layout. No copy of
+it exists in this repo (the same gap that blocks ROADMAP.md 0.5), so
+"root mirrors field, plus a folder-zipped variant" is a stated
+assumption, and compatibility with a real spec archive is untested.
 
 ## Writing conventions (enforced by `lint`, taught by the skill)
 

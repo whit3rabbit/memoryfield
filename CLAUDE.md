@@ -6,8 +6,8 @@ Memoryfield eval harness. Context for the next agent, human or model.
 
 The `mf` memoryfield tool described in PLAN.md, plus its eval harness.
 `mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`).
-`init`/`index`/`search`/`read`/`write`/`raw add`/`lint` are real
-(ROADMAP.md 1.3-1.6, 2.1-2.3); `pack`/`unpack` (2.4) aren't built yet. `eval/` (formerly `harness/`) is the eval and corpus rig
+Every Phase 1 and 2 command is real: `init`/`index`/`search`/`read`/
+`write`/`raw add`/`lint`/`pack`/`unpack` (ROADMAP.md 1.3-1.6, 2.1-2.4). `eval/` (formerly `harness/`) is the eval and corpus rig
 from M0/M0.5; it's complete and unrelated to whether `mf/` itself has the
 rest of the write path yet.
 
@@ -457,7 +457,7 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       flags cost *more* tokens than raw exploration for a point
       lookup, and only deliver PLAN.md section 6's modeled savings
       when called leanly (gotcha 26) -- the skill teaches that now.
-- [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
+- [x] M2, write path (`write` with dedup gate, `raw add`, `lint`,
       `pack`/`unpack`). `lint` is load-bearing (gotcha 16), not
       optional, once it exists. 2.1 (`mf write`) is done: frontmatter
       validation plus a dense-similarity dedup gate (`vec` table's
@@ -505,8 +505,11 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       is closed. 2.3 (`mf lint`) is done: shape checks grounded in a
       corpus survey, three severities, `--check` for CI, baseline 3
       warnings on the real corpus; it also found PLAN.md section 5's
-      300-token floor contradicted by the corpus itself. 172/172 tests.
-      2.4 (`pack`/`unpack`) is next.
+      300-token floor contradicted by the corpus itself. 2.4 (`pack`/
+      `unpack`) is done: reproducible archive with a sha256 sidecar,
+      verified extraction, packed index usable as-is; the spec's own zip
+      layout could not be verified (no copy in the repo). 185/185
+      tests. **M2 is closed.**
       Only 0.5's unsent upstream email remains open from Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).

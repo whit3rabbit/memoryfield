@@ -143,11 +143,17 @@ Organized by where they will bite next.
     near-duplicates, and fallback ranking when FTS returns nothing.
     Only the ranking use was ever contested.
 
-15. **The plan needs a no-answer confidence signal before M1 ships.**
-    It currently returns top-k unconditionally. Add a per-query floor
-    plus relative-gap heuristic, and a `confidence: low` flag in the
-    search response. The 30 no-answer queries are the calibration set,
-    and the only axis where baselines still differ near ceiling.
+15. **The plan's "per-query floor plus relative-gap heuristic" doesn't
+    work as literally specified.** A floor on raw FTS bm25 score cannot
+    separate no-answer from real-answer queries on this corpus: their
+    score ranges overlap almost completely (gotcha 7's vocabulary-
+    sharing ceiling effect again, on a new axis). What worked instead
+    (ROADMAP.md 1.4, `mf/confidence.py`): normalize bm25 by matched-term
+    count for the none/not-none decision, and use FTS/dense top-1
+    agreement (97.0% on correct hits, 16.7% on no-answer queries) for
+    the high/low decision. Two independently-calibrated signals, not
+    one heuristic. See `eval/calibrate_confidence.py` for the trade-off
+    table and gotcha 18 for a bug caught mid-calibration.
 
 16. **`lint` is load-bearing infrastructure, not a nice-to-have.**
     Every quality number in this eval holds because page summaries are
@@ -167,6 +173,22 @@ Organized by where they will bite next.
     computed field isn't wired into the report, verify it directly
     (don't assume "it's in the JSON" means "it's correct" or "it's
     used").
+
+18. **A "0% false-positive" calibration result is itself worth
+    re-deriving before trusting it.** Calibrating the confidence gate
+    (gotcha 15), an early pass normalized the top score but not the
+    second score before comparing them in the gap check. The scale
+    mismatch made the gap check fire almost unconditionally, which
+    reclassified nearly everything passing the floor from "high" down
+    to "low" -- including no-answer queries that should have been
+    "high" (wrong) but got counted as "low" (not counted as a false
+    positive by the metric). The result looked like a clean win (0%
+    false-high at floor=1.5); the real number, after fixing the scale
+    mismatch, was 13.3%. Caught by re-deriving the same result a second
+    way (a combined gate using a different signal for high/low) and
+    noticing the numbers didn't match, not by code review. A surprising
+    "it just works" calibration result is exactly the kind of thing
+    worth checking twice before it becomes a hardcoded constant.
 
 ## Roadmap
 

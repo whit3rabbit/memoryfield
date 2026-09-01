@@ -75,11 +75,16 @@ plan's original symmetric-RRF hybrid:
 Output is JSON or a compact text table. The agent never sees a body
 unless it asks.
 
-**Confidence gate, not yet built, the actual M1 blocker** (CLAUDE.md
-gotcha 15). `search` currently has no notion of "no answer here."
-Needed before M1 ships: a per-query floor plus relative-gap heuristic,
-calibrated on the 30 no-answer queries, exposed as `confidence:
-high|low|none` on every result set.
+**Confidence gate: calibrated, not yet wired into `search`** (CLAUDE.md
+gotcha 15/18). `mf/confidence.py` computes `confidence: high|low|none`
+from two signals, not one heuristic: FTS's bm25 score normalized by
+matched-term count decides none vs. not-none (raw magnitude alone
+doesn't separate no-answer from real-answer queries on this corpus);
+FTS/dense top-1 agreement decides high vs. low. `search` (roadmap 1.5)
+still needs to call it, and needs to decide whether running dense on
+every query (not just as a fallback) to get the agreement signal is an
+acceptable cost, or whether the gate should degrade to floor-only when
+dense isn't run.
 
 ### 4. Read
 

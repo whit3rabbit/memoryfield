@@ -253,17 +253,19 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
 - [x] M0: eval harness, labeled corpus, 6 baselines.
 - [x] M0.5: real dense baselines, 458-query set, per-axis breakdown.
       See "Where things stand" for the corrected headline.
-- [ ] M1, read path (`init`, `index`, `search`, `read`). 1.1 through 1.6
-      are done: `mf init`/`mf index`/`mf search`/`mf read` all work end
-      to end against real sqlite-vec + fastembed and a real 157-page
-      corpus, 99/99 tests passing. `search` now runs dense on every
-      query (not only as a fallback) so the calibrated confidence
-      gate's FTS/dense-agreement signal is always available -- a real
-      design change from the plan's original "dense as fallback only,"
-      forced by 1.4's calibration result (gotcha 15). `mf read` adds a
-      `reads` log table and is the only path that populates `co_read`
-      weight in `links` (multi-ref calls bump every pair). `mf write`
-      is still a stub.
+- [ ] M1, read path (`init`, `index`, `search`, `read`, skill). 1.1
+      through 1.7 are done: `mf init`/`mf index`/`mf search`/`mf read`
+      all work end to end against real sqlite-vec + fastembed and a
+      real 157-page corpus, 99/99 tests passing. `search` now runs
+      dense on every query (not only as a fallback) so the calibrated
+      confidence gate's FTS/dense-agreement signal is always available
+      -- a real design change from the plan's original "dense as
+      fallback only," forced by 1.4's calibration result (gotcha 15).
+      `mf read` adds a `reads` log table and is the only path that
+      populates `co_read` weight in `links` (multi-ref calls bump
+      every pair). `.claude/skills/mf/SKILL.md` (1.7) documents only
+      what's built -- `mf write` is still a stub, and the skill says so
+      rather than describing the aspirational full command set.
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
       `pack`/`unpack`). `lint` is load-bearing now (gotcha 16), not
       optional.

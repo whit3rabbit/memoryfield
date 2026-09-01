@@ -15,14 +15,12 @@ gate still has to have an opinion about what counts as a candidate --
 `--force`/`--update` are how the calling agent overrides that opinion
 once it's made the actual judgment call.
 
-DEDUP_THRESHOLD is a first-cut estimate, not a calibrated constant like
-mf/confidence.py's FLOOR (CLAUDE.md gotcha 18's calibration process).
-It comes from one synthetic probe: a paraphrased near-duplicate of a
-real corpus page landed at L2 distance ~4.9 from the original, while
-the nearest genuinely-different-but-topically-related page sat at
-~10.2 -- a wide, cleanly-separated gap on that single example. Revisit
-with a real labeled near-duplicate set before trusting the exact
-number the way mf/confidence.py's FLOOR is trusted.
+DEDUP_THRESHOLD is cosine distance (1 - cos, ROADMAP.md 2.5; the `vec`
+table's metric) and is still a first-cut estimate, not a calibrated
+constant like mf/confidence.py's FLOOR. It was re-derived on the real
+157-page corpus when the metric changed: see the DEDUP_THRESHOLD
+comment below for the measured numbers. ROADMAP.md 2.10 builds a real
+labeled near-duplicate set before trusting the exact number.
 """
 from __future__ import annotations
 
@@ -36,7 +34,15 @@ from .indexer import MODEL_REGISTRY, UnknownModelCodeError
 from .page import Page, load_page
 from .schema import DEFAULT_MODEL_CODE, get_config
 
-DEDUP_THRESHOLD = 7.0
+# Cosine distance (1 - cos). Measured on the real 157-page corpus after
+# the vec table moved to cosine (ROADMAP.md 2.5): two hand-written
+# paraphrases of real pages landed at 0.038 and 0.063 from their
+# originals, while the closest pair of genuinely different pages sat at
+# 0.096 (papers, where sibling claim pages about one paper are near each
+# other by design) and 0.131 (codebase). 0.08 splits that gap; the
+# papers-side margin is thin, which is what ROADMAP.md 2.10's labeled
+# set is for.
+DEDUP_THRESHOLD = 0.08
 DEDUP_CANDIDATES = 5
 
 
@@ -107,7 +113,8 @@ def _find_duplicates(
 
     candidates: list[DedupCandidate] = []
     for uuid, distance in rows:
-        if uuid == exclude_uuid or distance > threshold:
+        # distance is NULL for a degenerate (zero) vector under cosine.
+        if uuid == exclude_uuid or distance is None or distance > threshold:
             continue
         row = conn.execute(
             "SELECT title, summary FROM pages WHERE uuid = ?", (uuid,)

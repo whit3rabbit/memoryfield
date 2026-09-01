@@ -25,6 +25,13 @@ class FieldNotFoundError(FileNotFoundError):
     """Raised when a command needs mf.sqlite3 but it doesn't exist."""
 
 
+class SchemaVersionError(RuntimeError):
+    """Raised by open_field() when mf.sqlite3 was built by a different
+    schema version. There is no in-place migration: vec0 tables can't
+    change distance metric, and the index is rebuildable anyway.
+    """
+
+
 def connect(db_path: Path) -> sqlite3.Connection:
     """Open `db_path` with sqlite-vec loaded and foreign keys enabled."""
     conn = sqlite3.connect(db_path)
@@ -69,4 +76,15 @@ def open_field(field_dir: Path) -> sqlite3.Connection:
         raise FieldNotFoundError(
             f"{db_path} not found; run `mf init` in {field_dir} first"
         )
-    return connect(db_path)
+    conn = connect(db_path)
+    version = schema.get_config(conn, "schema_version")
+    if version != str(schema.SCHEMA_VERSION):
+        conn.close()
+        raise SchemaVersionError(
+            f"{db_path} is schema v{version or '?'}, this mf needs "
+            f"v{schema.SCHEMA_VERSION}. The index is derived: delete "
+            f"{DB_FILENAME}, then run `mf init` and `mf index` in {field_dir}. "
+            "Note: the reads log and co_read weights are not derived and "
+            "will be lost (docs/architecture.md, Index layer)."
+        )
+    return conn

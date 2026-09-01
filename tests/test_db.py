@@ -35,3 +35,13 @@ def test_connect_loads_sqlite_vec(tmp_path):
     version, = conn.execute("select vec_version()").fetchone()
     assert version
     conn.close()
+
+
+def test_open_field_refuses_other_schema_version(tmp_path):
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    schema.set_config(conn, "schema_version", "1")
+    conn.commit()
+    conn.close()
+    with pytest.raises(db.SchemaVersionError, match="schema v1"):
+        db.open_field(tmp_path)

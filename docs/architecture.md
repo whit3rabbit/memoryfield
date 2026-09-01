@@ -44,7 +44,7 @@ vec     -- sqlite-vec, embedding of title+summary+L1 only
 links   (src, dst, kind, weight)      -- kind: supersedes|contradicts|depends_on|co_read
 claims  (slug, claimed_by, claimed_at) -- for multi-writer create/update resolution
 config  (key, value)                  -- model_code, embedding_dim, schema_version
-reads   (id, uuid, section, tier, read_at) -- append-only log written by `mf read`
+reads   (id, uuid, section, tier, read_at, call_id) -- append-only log written by `mf read`
 ```
 
 **What is and isn't rebuildable.** `pages`, `sections`, `fts`, `vec`,
@@ -54,9 +54,10 @@ identical from `mf index`. Three things are not: the `reads` log,
 and have no other source, so deleting `mf.sqlite3` loses them. `mf
 index` preserves `co_read` across page edits and drops it only when the
 page's file is gone (fixed during the Phase 2 review, it used to wipe
-it on every upsert). `reads` has no call-group column, so `co_read`
-can't be rebuilt from it either. ROADMAP.md 2.5 adds `reads.call_id`
-so that at least becomes possible.
+it on every upsert). `reads.call_id` groups the rows of one `mf read`
+call (schema v2), so `co_read` is rebuildable from `reads` alone: every
+pair of distinct uuids sharing a `call_id` is one increment. Nothing
+runs that rebuild yet.
 
 `pages.filename` is stored relative to the field directory (POSIX
 form), so the index survives the field moving: a fresh clone, or the
@@ -72,19 +73,22 @@ never go stale. Only typed links and co-reads are stored.
 `config`'s three keys are what make "never conflate model versions"
 enforceable rather than aspirational: `model_code` defaults to
 `nomic-embed-text-v1.5`, `embedding_dim` to `768` (the `vec` table's
-fixed vector width), `schema_version` to `1`. Set once by `mf init`,
+fixed vector width), `schema_version` to `2`. Set once by `mf init`,
 read by `mf index`/`mf search` on every call. Model identity lives here,
-at the index level, not per `vec` row.
+at the index level, not per `vec` row. `open_field()` refuses an index
+whose `schema_version` doesn't match and says to delete it and rerun
+`mf init` + `mf index`: there is no in-place migration, because a
+`vec0` table can't change metric and the index is derived anyway.
 
-**Distance metric, as built.** `vec` is a `vec0` table with the default
-metric, Euclidean L2, over raw fastembed output. The nomic vectors are
-not unit-normalized (norm around 20, measured), so every distance the
-tool computes, kNN neighbor order, the FTS/dense agreement signal, and
-`mf write`'s dedup threshold, is raw L2 on variable-norm vectors. The
-eval baselines and the 1.4 gate calibration normalized and used cosine.
-That is a calibration/production mismatch of the same shape as CLAUDE.md
-gotcha 18 (see gotcha 32), and ROADMAP.md 2.5 moves `vec` to cosine
-before anything is recalibrated on top of it.
+**Distance metric: cosine (schema v2, ROADMAP.md 2.5).** `vec` is a
+`vec0` table declared `distance_metric=cosine`, so every distance the
+tool computes (kNN neighbor order, the FTS/dense agreement signal, the
+dedup threshold) is `1 - cos`, range 0 to 2, and matches what the eval
+baselines and gate calibration compute. Schema v1 used `vec0`'s default
+Euclidean L2 over raw fastembed output, and the nomic vectors are not
+unit-normalized (norm around 20, measured), so v1 distances mixed vector
+magnitude into all three. That was a calibration/production mismatch of
+the same shape as CLAUDE.md gotcha 18 (see gotcha 32).
 
 The `vec` table backs three separate features, not one (CLAUDE.md
 gotcha 14): kNN neighbor stubs, write-time dedup of near-duplicate
@@ -169,11 +173,11 @@ Three caveats, in order of weight:
 - The floor is corpus-size dependent (bm25's IDF term). A 4-page field
   reads permanently `none` at `FLOOR=2.0` (ROADMAP.md 1.5). Real fields
   start small.
-- The agreement signal was calibrated on cosine top-1 and runs in
-  production on raw L2 top-1 (section 2).
+- The agreement signal was calibrated on cosine top-1 and, until schema
+  v2, ran in production on raw L2 top-1 (section 2). Fixed by 2.5.
 
 ROADMAP.md 2.7 recalibrates on the blind sets with a larger blind
-no-answer sample and a corpus-size sweep, after 2.5 fixes the metric.
+no-answer sample and a corpus-size sweep, on the v2 metric.
 
 ### 4. Read
 
@@ -202,8 +206,8 @@ page must already exist as a Markdown file inside the field directory.
 It parses via `mf.page.load_page()` (raises on missing `uuid`/`title`,
 same as `index`), then runs the dedup gate: embeds the page
 (`document_text()`, the same function `index` uses) and kNN-queries
-`vec` for existing pages within `DEDUP_THRESHOLD` (7.0, raw L2, see
-section 2), excluding the page's own uuid. A hit returns the candidates
+`vec` for existing pages within `DEDUP_THRESHOLD` (0.08 cosine
+distance, see section 2), excluding the page's own uuid. A hit returns the candidates
 and exit code 2 without writing anything. `--update UUID` (must match
 the page's own frontmatter `uuid`) or `--force` skip the gate. On a
 pass, `write` calls the same `indexer.index_field()` `mf index` uses.
@@ -216,15 +220,21 @@ is not what PLAN.md section 2 describes. ROADMAP.md 2.8 changes `write`
 to take a draft from outside the field, copy it in only on a pass, and
 index only that page.
 
-`DEDUP_THRESHOLD` is a first-cut estimate, not calibrated like
-`mf/confidence.py`'s `FLOOR` (CLAUDE.md gotcha 27): one synthetic probe
-put a paraphrased near-duplicate at L2 distance ~4.9 from the original,
-against ~10.2 for the nearest genuinely-different-but-related page.
-Confirmed against the real corpus (a hand-written paraphrase of an
-actual page landed at 5.74, correctly blocked). Because the vectors are
-unnormalized, those distances are in units that vary with vector norm.
-ROADMAP.md 2.10 builds a labeled near-duplicate set and re-expresses the
-threshold in cosine after 2.5.
+`DEDUP_THRESHOLD` was re-derived on the real corpus when the metric
+changed, but is still an estimate, not calibrated like
+`mf/confidence.py`'s `FLOOR` (CLAUDE.md gotcha 27). Measured after 2.5:
+
+| Cosine distance | Value |
+|---|---|
+| Hand-written paraphrase of `code-deploy-rollback-cmd` to its original | 0.038 |
+| Hand-written paraphrase of `code-api-401-vs-403` to its original | 0.063 |
+| Closest pair of genuinely different pages, papers (sibling claim pages about one paper) | 0.096 |
+| Closest pair of genuinely different pages, codebase | 0.131 |
+| `DEDUP_THRESHOLD` | 0.08 |
+
+Two paraphrases and a nearest-neighbor floor from 157 pages is not a
+labeled set. The papers-side margin (0.063 to 0.096) is thin.
+ROADMAP.md 2.10 builds the labeled near-duplicate set.
 
 Dedup is deliberately a gate, not just an FYI (PLAN.md section 10):
 `--force`/`--update` are how the calling agent overrides the tool's
@@ -305,8 +315,8 @@ with the roadmap item that closes it:
   server. Each CLI call loads the model from scratch, which is the main
   latency cost of a lean `mf search`. A long-lived MCP server (ROADMAP.md
   5.1) would amortize it. Rust port only if install friction becomes
-  the top complaint, and only after the schema stops changing (it is
-  changing again in 2.5).
+  the top complaint, and only after the schema stops changing (v2
+  landed with 2.5).
 - Embedder: `nomic-embed-text-v1.5` (270 MB, 768-d, asymmetric
   `search_query:`/`search_document:` prefixes). M0.5 confirmed
   `bge-large-en-v1.5` is within noise of nomic on this corpus and

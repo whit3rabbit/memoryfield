@@ -193,3 +193,14 @@ def test_read_works_after_the_field_directory_moves(tmp_path, monkeypatch):
     r = read.read(conn, ["page-rotate"], field_dir=moved)[0]
     assert "make rotate-key" in r.body
     conn.close()
+
+
+def test_reads_share_a_call_id_per_call(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    read.read(conn, ["page-rotate", "page-billing"], field_dir=tmp_path)
+    read.read(conn, ["page-rotate"], field_dir=tmp_path)
+    rows = conn.execute("SELECT uuid, call_id FROM reads ORDER BY id").fetchall()
+    assert len(rows) == 3
+    assert rows[0][1] == rows[1][1]
+    assert rows[2][1] != rows[0][1]
+    conn.close()

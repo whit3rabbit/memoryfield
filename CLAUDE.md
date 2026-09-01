@@ -344,7 +344,11 @@ Organized by where they will bite next.
     all calibrated or estimated against one metric and run under
     another. Same shape as gotcha 18. Any time a constant is calibrated
     in the eval harness and consumed in `mf/`, check that both sides
-    compute the same quantity. ROADMAP.md 2.5 moves `vec` to cosine.
+    compute the same quantity. Fixed by ROADMAP.md 2.5 (schema v2,
+    `vec` is cosine). Second-order lesson from doing it: a zero vector
+    has no cosine distance (sqlite-vec returns NULL), so any test
+    fixture that used `[0.0] * dim` as a "base" vector silently broke,
+    and the dedup gate needed a NULL guard.
 
 33. **Not everything in `mf.sqlite3` is derived from the pages.** The
     `reads` log, `co_read` rows in `links`, and `claims` accumulate from

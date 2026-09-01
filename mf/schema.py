@@ -9,7 +9,11 @@ from __future__ import annotations
 
 import sqlite3
 
-SCHEMA_VERSION = 1
+# v2 (ROADMAP.md 2.5): `vec` uses cosine distance instead of vec0's
+# default Euclidean L2, and `reads` gained `call_id`. A v1 index can't be
+# migrated in place (vec0 tables can't change metric), so open_field()
+# refuses it and asks for `mf init` + `mf index`.
+SCHEMA_VERSION = 2
 
 # nomic-embed-text-v1.5's native output dimension. See mf/embedding.py
 # and PLAN.md's embedder table.
@@ -68,14 +72,20 @@ CREATE TABLE IF NOT EXISTS reads (
     uuid    TEXT NOT NULL,
     section TEXT,
     tier    TEXT,
-    read_at TEXT NOT NULL
+    read_at TEXT NOT NULL,
+    call_id TEXT NOT NULL  -- one `mf read` invocation; co_read is rebuildable from rows sharing it
 );
 """
 
+# Cosine, not vec0's default L2: fastembed's nomic vectors are not
+# unit-normalized (norm ~20, measured), so L2 distance mixed vector
+# magnitude into every kNN order, agreement signal, and dedup threshold,
+# while the eval harness that calibrated those numbers used cosine
+# (CLAUDE.md gotcha 32). Cosine distance here is 1 - cos, range [0, 2].
 _VEC_DDL_TEMPLATE = """
 CREATE VIRTUAL TABLE IF NOT EXISTS vec USING vec0(
     page_uuid TEXT PRIMARY KEY,
-    embedding FLOAT[{dim}]
+    embedding FLOAT[{dim}] distance_metric=cosine
 );
 """
 

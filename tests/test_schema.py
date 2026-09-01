@@ -40,3 +40,17 @@ def test_config_round_trip():
     assert schema.get_config(conn, "model_code") == "nomic-embed-text-v1.5"
     schema.set_config(conn, "model_code", "updated-value")
     assert schema.get_config(conn, "model_code") == "updated-value"
+
+
+def test_vec_uses_cosine_distance():
+    """A scaled copy of a vector must be at distance 0 (cosine), not at
+    its L2 gap -- the metric the eval harness calibrated on (gotcha 32).
+    """
+    conn = _connect_memory()
+    schema.apply_schema(conn, embedding_dim=3)
+    conn.execute("INSERT INTO vec VALUES ('a', '[1,0,0]')")
+    conn.execute("INSERT INTO vec VALUES ('b', '[0,1,0]')")
+    rows = conn.execute(
+        "SELECT page_uuid, distance FROM vec WHERE embedding MATCH '[5,0,0]' AND k = 2"
+    ).fetchall()
+    assert rows == [("a", 0.0), ("b", 1.0)]

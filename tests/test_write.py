@@ -32,19 +32,26 @@ NOT_A_PAGE = "# Just a readme\n\nNo frontmatter.\n"
 
 
 def _zero_vec() -> list[float]:
-    return [0.0] * EMBEDDING_DIM
+    # The "existing page" vector: one-hot on axis 0. (A literal zero
+    # vector has no cosine distance -- sqlite-vec returns NULL.)
+    vec = [0.0] * EMBEDDING_DIM
+    vec[0] = 1.0
+    return vec
 
 
 def _near_dup_vec() -> list[float]:
-    # L2 distance from _zero_vec() is 0.5 -- well under DEDUP_THRESHOLD.
+    # Cosine distance from _zero_vec() is ~0.005 -- well under DEDUP_THRESHOLD.
     vec = [0.0] * EMBEDDING_DIM
-    vec[-1] = 0.5
+    vec[0] = 1.0
+    vec[-1] = 0.1
     return vec
 
 
 def _far_vec() -> list[float]:
-    # L2 distance from _zero_vec() is sqrt(768) =~ 27.7 -- well over DEDUP_THRESHOLD.
-    return [1.0] * EMBEDDING_DIM
+    # Orthogonal to _zero_vec(): cosine distance 1.0 -- well over DEDUP_THRESHOLD.
+    vec = [0.0] * EMBEDDING_DIM
+    vec[1] = 1.0
+    return vec
 
 
 def _fake_embed_pages(pages, model_code):

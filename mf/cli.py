@@ -87,7 +87,7 @@ def _cmd_index(args: argparse.Namespace) -> int:
     field_dir = Path(args.dir).resolve()
     try:
         conn = db.open_field(field_dir)
-    except db.FieldNotFoundError as e:
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
         sys.stderr.write(f"mf index: {e}\n")
         return 1
     try:
@@ -127,7 +127,7 @@ def _cmd_search(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
     try:
         conn = db.open_field(field_dir)
-    except db.FieldNotFoundError as e:
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
         sys.stderr.write(f"mf search: {e}\n")
         return 1
     try:
@@ -160,7 +160,7 @@ def _cmd_read(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
     try:
         conn = db.open_field(field_dir)
-    except db.FieldNotFoundError as e:
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
         sys.stderr.write(f"mf read: {e}\n")
         return 1
     try:
@@ -195,7 +195,7 @@ def _cmd_write(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
     try:
         conn = db.open_field(field_dir)
-    except db.FieldNotFoundError as e:
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
         sys.stderr.write(f"mf write: {e}\n")
         return 1
     try:
@@ -220,7 +220,7 @@ def _cmd_raw_add(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
     try:
         conn = db.open_field(field_dir)
-    except db.FieldNotFoundError as e:
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
         sys.stderr.write(f"mf raw add: {e}\n")
         return 1
     conn.close()  # raw/ never touches the index; only used to validate the field exists

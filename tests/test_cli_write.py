@@ -29,17 +29,23 @@ Failed payments trigger dunning_level increments.
 
 
 def _zero_vec():
-    return [0.0] * EMBEDDING_DIM
+    # One-hot on axis 0: a literal zero vector has no cosine distance.
+    vec = [0.0] * EMBEDDING_DIM
+    vec[0] = 1.0
+    return vec
 
 
 def _near_dup_vec():
     vec = [0.0] * EMBEDDING_DIM
-    vec[-1] = 0.5
+    vec[0] = 1.0
+    vec[-1] = 0.1
     return vec
 
 
 def _far_vec():
-    return [1.0] * EMBEDDING_DIM
+    vec = [0.0] * EMBEDDING_DIM
+    vec[1] = 1.0
+    return vec
 
 
 def _fake_embed_pages(pages, model_code):

@@ -21,6 +21,7 @@ used as-is until the next `mf index` rewrites them.
 """
 from __future__ import annotations
 
+import uuid as uuid_mod
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -109,11 +110,16 @@ def _read_one(
     )
 
 
-def _log_read(conn: Connection, result: ReadResult) -> None:
+def _log_read(conn: Connection, result: ReadResult, call_id: str) -> None:
+    # call_id groups the rows of one read() call, so co_read (which is
+    # otherwise not derivable from anything, CLAUDE.md gotcha 33) can be
+    # rebuilt from `reads` alone: every pair of distinct uuids sharing a
+    # call_id is one co_read increment.
     conn.execute(
-        "INSERT INTO reads (uuid, section, tier, read_at) VALUES (?, ?, ?, ?)",
+        "INSERT INTO reads (uuid, section, tier, read_at, call_id) "
+        "VALUES (?, ?, ?, ?, ?)",
         (result.uuid, result.section, result.tier,
-         datetime.now(UTC).isoformat()),
+         datetime.now(UTC).isoformat(), call_id),
     )
 
 
@@ -142,8 +148,9 @@ def read(
     is stored relative to it (mf/indexer.py's discover_pages()).
     """
     results = [_read_one(conn, ref, tier, field_dir) for ref in refs]
+    call_id = uuid_mod.uuid4().hex
     for result in results:
-        _log_read(conn, result)
+        _log_read(conn, result, call_id)
     if len(refs) > 1:
         _bump_co_read(conn, [r.uuid for r in results])
     conn.commit()

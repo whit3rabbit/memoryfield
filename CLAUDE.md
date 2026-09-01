@@ -8,6 +8,9 @@ Eval harness for the `mf` memoryfield tool described in PLAN.md. No tool
 implementation lives here yet: M0 and M0.5 are eval and corpus only. M1
 (`init`, `index`, `search`, `read`, `write`) is the first code that ships.
 
+For the schema and retrieval design as currently decided (not the
+eval narrative), see [docs/architecture.md](docs/architecture.md).
+
 ## Where things stand
 
 Everything described here is committed. Run `git log --oneline` for the
@@ -110,7 +113,8 @@ Organized by where they will bite next.
     suite exists.** `ruff check harness/` caught a real bug:
     `run_with_model()` called `idx.query()` twice per lookup, once used
     and once discarded, doubling the embedding cost of every dense and
-    hybrid call. Run both before trusting a baseline change.
+    hybrid call. Run both before trusting a baseline change. Bare
+    `pyright` isn't on PATH here: use `npx --yes pyright <files>`.
 
 ### Plan-design gotchas (for M1 implementation)
 

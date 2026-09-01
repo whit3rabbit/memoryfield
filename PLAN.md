@@ -1,5 +1,11 @@
 # mf — plan
 
+> Design document as originally written. Where the built tool differs,
+> [docs/architecture.md](docs/architecture.md) is current and this file
+> is the record of the starting bet. The two biggest departures so far:
+> retrieval ranks dense-first, not RRF (ROADMAP.md 2.6), and the
+> confidence gate is three signals rather than a score floor (2.7).
+
 Working name `mf`. Context-frugal memoryfield tool. Reads and writes
 memoryfield-spec pages unchanged, adds a derived SQLite index with hybrid
 search, returns stubs instead of pages, and pushes every judgment call to the

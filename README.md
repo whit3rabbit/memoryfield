@@ -5,21 +5,29 @@ Start here:
 - **[CLAUDE.md](CLAUDE.md)** — context for the next agent (human or model). Gotchas, lessons learned, current state, roadmap status. Read this first.
 - **[PLAN.md](PLAN.md)** — the design document. Architecture, writing conventions, stack, milestones.
 
+- **[docs/architecture.md](docs/architecture.md)** — what the schema and retrieval design currently are, with the measurements behind each decision.
+- **[ROADMAP.md](ROADMAP.md)** — phase status and the per-item record of what was built, measured, and changed.
+
 ## Repo status
 
-- **M0 + M0.5 eval harness complete.** 157-page labeled corpus, 458-query
-  set (lexical + blind paraphrases + no-answer queries), six baselines
-  (grep, FTS5, TF-IDF, nomic, BGE-large, hybrid).
-- **`mf` CLI is a stub.** `mf init` / `mf index` / `mf search` / `mf read` /
-  `mf write` all exist as subcommands but aren't implemented yet — that
-  lands starting M1 (ROADMAP.md Phase 1).
+- **Eval harness complete (M0/M0.5).** 157-page labeled corpus, 458-query
+  set plus blind vocabulary-mismatch sets, six baselines. Results in
+  `eval/results/`, reports in `M0.5_REPORT.md`.
+- **`mf` CLI: `init`, `index`, `search`, `read`, `write`, `raw add` are
+  real** and verified against the full corpus. `lint`, `pack`/`unpack` are
+  not built (ROADMAP.md 2.3-2.4). Retrieval is dense-first with a
+  three-signal confidence gate, both calibrated on blind queries through
+  the real pipeline (ROADMAP.md 2.6-2.7).
+- **Index schema is v2** (cosine `vec`). A v1 `mf.sqlite3` is refused:
+  delete it, `mf init`, `mf index`.
 
 ## Quick start
 
 ```bash
-# Install the mf CLI (stub commands only until M1 lands)
+# Install the mf CLI
 uv tool install .
-mf --help
+mf init /path/to/field && mf index /path/to/field
+mf search "how do we roll back a deploy" --field /path/to/field
 
 # Install eval's dependencies (fastembed) into a local venv
 uv sync --extra eval

@@ -1,0 +1,7 @@
+codebase: n=75 nearest-distinct-neighbor cosine distance: min=0.131 p5=0.132 p25=0.181 median=0.228
+  5 closest: ['0.131', '0.131', '0.132', '0.132', '0.144']
+  paraphrase para-rollback: [('code-deploy-rollback-cmd', 0.038), ('code-deploy-stuck-rollout', 0.122), ('code-deploy-canary-window', 0.226)]
+  paraphrase para-401: [('code-api-401-vs-403', 0.063), ('code-api-problem-details', 0.304), ('code-billing-dunning', 0.316)]
+papers: n=82 nearest-distinct-neighbor cosine distance: min=0.096 p5=0.104 p25=0.156 median=0.195
+  5 closest: ['0.096', '0.096', '0.104', '0.104', '0.104']
+DEDUP_THRESHOLD = 0.08

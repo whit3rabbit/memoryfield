@@ -35,8 +35,8 @@ At FLOOR=2.0, DENSE_FLOOR=0.30, presented result = dense top-1
 The cost is the "na not-none" row: a no-answer query gets `low` (never
 `high`, except the 1/24) 15-30% of the time instead of `none`. `low`
 means "a lead, not an answer" (SKILL.md), which is the right label for
-a topically-adjacent page. Full grid in the calibration script; don't
-hand-copy more of it here.
+a topically-adjacent page. Full grid in eval/results/calibration_2_7.txt;
+don't hand-copy more of it here.
 """
 from __future__ import annotations
 

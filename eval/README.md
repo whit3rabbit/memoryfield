@@ -1,3 +1,26 @@
+# eval — harness, query sets, calibration scripts
+
+This README was written for M0 and describes the baseline rig. Since
+then the directory also holds the scripts that calibrated the tool
+itself. Newest first, each with the ROADMAP.md item it belongs to and
+where its output is recorded:
+
+| Script | Roadmap | Output |
+|---|---|---|
+| `calibrate_confidence_blind.py` | 2.6, 2.7 | `results/calibration_2_7.txt`: gate designs over a parameter grid, FTS-first vs RRF vs dense-first, corpus-size sweep, all through the real `mf search` pipeline |
+| `dedup_cosine_probe.py` | 2.5 | `results/dedup_cosine_probe.txt`: nearest-neighbor floor and paraphrase distances that bound `DEDUP_THRESHOLD` |
+| `blind_fallback_check.py` | 1.8 | stdout: did the FTS-empty fallback ever fire (moot since 2.6) |
+| `agent_trial_token_costs.py` | 1.9 | `agent_trial_1_9.md`: content tokens per lookup, default vs lean call vs raw read |
+| `calibrate_confidence.py` | 1.4 | stdout: the original bm25-floor calibration (superseded by 2.7) |
+| `axis_breakdown.py`, `report.py` | 0.3 | `axis_breakdown.md`, `../M0.5_REPORT.md` |
+
+Query sets under `queries/<domain>/`: `queries.jsonl` (in-vocabulary,
+includes 30 no-answer), `queries_blind.jsonl` (1.8, authored without
+seeing the corpus, 40 real + 8 no-answer), `queries_blind_noanswer.jsonl`
+(2.7, 40 more blind no-answer).
+
+---
+
 # M0 — eval harness
 
 > **Nothing else ships until this exists.** — PLAN.md §9

@@ -255,10 +255,11 @@ Organized by where they will bite next.
 
 ### M1 calibration gotchas (surfaced by ROADMAP.md 1.8)
 
-25. **The confidence gate's "0% false-high-confidence" claim (gotcha
-    15/18) was calibrated against a no-answer set drawn from the same
-    vocabulary as the corpus (gotcha 7's ceiling effect again) -- it
-    does not hold under vocabulary mismatch.** The 1.8 blind query set
+25. **Re-measured and largely closed by ROADMAP.md 2.7 (gotcha 36);
+    kept as the record.** The confidence gate's "0% false-high-confidence"
+    claim (gotcha 15/18) was calibrated against a no-answer set drawn
+    from the same vocabulary as the corpus (gotcha 7's ceiling effect
+    again) -- it does not hold under vocabulary mismatch. The 1.8 blind query set
     (queries authored without seeing the corpus) found one: `"GDPR
     deletion request process for customer data"` -- a genuine no-answer
     query, no page in the corpus covers this topic -- returned
@@ -276,8 +277,10 @@ Organized by where they will bite next.
     none` roughly doubling versus the 19.8% M0.5 baseline. See
     ROADMAP.md 1.8 for the full numbers and methodology.
 
-26. **`mf search`'s default flags (`--limit 5 --neighbor-limit 3`) can
-    cost more tokens than just reading the target page directly.** A
+26. **Defaults changed to `--limit 3 --neighbor-limit 1` in ROADMAP.md
+    2.7; the measurement stands.** `mf search`'s old default flags
+    (`--limit 5 --neighbor-limit 3`) cost more tokens than just reading
+    the target page directly. A
     20-task real-agent trial (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`)
     found every task answerable from the single top stub, but the
     default call renders 5 top-level stubs plus up to 3 neighbors
@@ -300,9 +303,11 @@ Organized by where they will bite next.
 
 ### M2 write-path gotchas
 
-27. **`mf write`'s dedup gate (`mf/write.py`'s `DEDUP_THRESHOLD = 7.0`,
-    ROADMAP.md 2.1) is a first-cut estimate from one synthetic probe,
-    not a calibrated constant.** Unlike `mf/confidence.py`'s `FLOOR`
+27. **`mf write`'s dedup gate (`mf/write.py`'s `DEDUP_THRESHOLD`, now
+    0.08 cosine after ROADMAP.md 2.5, re-derived by
+    `eval/dedup_cosine_probe.py`) is still an estimate from two
+    paraphrases and a nearest-neighbor floor, not a calibrated
+    constant.** The rest of this entry is the 2.1 record in L2 units. Unlike `mf/confidence.py`'s `FLOOR`
     (calibrated against a real 30-query labeled no-answer set, gotcha
     18), there's no labeled near-duplicate set to calibrate dedup
     against yet. The one data point: a paraphrased near-duplicate of a

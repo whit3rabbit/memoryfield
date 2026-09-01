@@ -41,12 +41,19 @@ fts     -- FTS5 over title, summary, body (full page)
 vec     -- sqlite-vec, embedding of title+summary+L1 only, model-tagged
 links   (src, dst, kind, weight)      -- kind: supersedes|contradicts|depends_on|co_read
 claims  (slug, claimed_by, claimed_at) -- for multi-writer create/update resolution
+config  (key, value)                  -- model_code, embedding_dim, schema_version
 ```
 
 Dense covers L0+L1 (what a page is *for*), FTS covers the full body
 (the port number in paragraph six). Neither is precomputed against the
 other: kNN neighbors are computed at query time from `vec`, so they
 never go stale. Only typed links and co-reads are stored.
+
+`config`'s three keys are what make "never conflate model versions"
+enforceable rather than aspirational: `model_code` defaults to
+`nomic-embed-text-v1.5`, `embedding_dim` to `768` (the `vec` table's
+fixed vector width), `schema_version` to `1`. Set once by `mf init`,
+read by `mf index`/`mf search` on every call.
 
 The `vec` table backs three separate features, not one (CLAUDE.md
 gotcha 14): kNN neighbor stubs, write-time dedup of near-duplicate
@@ -69,10 +76,11 @@ symmetric-RRF hybrid:
    case FTS has nothing at all (empty MATCH expression or zero hits) --
    that's the `vec` table's fallback-ranking job.
 3. Results return as the top-k stubs (uuid, title, summary, status,
-   tokens) with up to n neighbor stubs each (typed links first, then
-   kNN; co_read is a documented no-op until `mf read`/1.6 populates
-   it). Superseded pages return only as a `{uuid, superseded_by}`
-   pointer, not a full stub.
+   tokens; `k=5` by default, `mf search --limit`) with up to n
+   neighbor stubs each (`n=3` by default, `--neighbor-limit`; typed
+   links first, then kNN; co_read is a documented no-op until `mf
+   read`/1.6 populates it). Superseded pages return only as a
+   `{uuid, superseded_by}` pointer, not a full stub.
 4. Reranker (cross-encoder over the top 20) is cut, not deferred,
    unless the blind vocabulary-mismatch query set (roadmap 1.8) shows
    P@3 dropping below ~0.8. See M4 in the roadmap.
@@ -87,6 +95,23 @@ matched-term count decides none vs. not-none (raw magnitude alone
 doesn't separate no-answer from real-answer queries on this corpus,
 and is corpus-size-dependent besides); FTS/dense top-1 agreement
 decides high vs. low.
+
+Calibrated numbers (`eval/calibrate_confidence.py`, methodology and
+full trade-off table there):
+
+| Constant / measurement | Value |
+|---|---|
+| `FLOOR` (normalized bm25, `mf.confidence.FLOOR`) | `2.0` |
+| FTS/dense top-1 agreement, genuinely correct hits | 97.0% |
+| FTS/dense top-1 agreement, no-answer queries | 16.7% |
+| False-high-confidence rate at `FLOOR=2.0` (30-query no-answer set) | 0% |
+| Correct hits demoted to `none` at `FLOOR=2.0` | 19.8% |
+
+The 19.8% figure is an accepted, deliberate cost, not a bug: it's the
+price of a true 0% false-high rate on this corpus. All of these numbers
+are conditional on the corpus/query-set relationship in gotcha 7 (the
+query set was authored from the corpus) and are the ones roadmap 1.8's
+blind query set is meant to re-test.
 
 ### 4. Read
 
@@ -139,7 +164,9 @@ design verdict above changes with it.
   `bge-large-en-v1.5` is within noise of nomic on this corpus and
   costs ~1 GB more, so nomic stays the default (CLAUDE.md gotcha 3 on
   the prefix trap, gotcha 4 on running nomic and bge in separate
-  processes).
+  processes). `mf/indexer.py`'s `MODEL_REGISTRY` currently only wires
+  up nomic -- bge is evaluated in the eval harness but isn't yet a
+  selectable `mf init` option.
 - Reranker: none by default, see the M4 condition above.
 - LLM: none. Extraction and consolidation are done by the host agent
   that's already running, the tool never calls an LLM itself.
@@ -149,3 +176,5 @@ design verdict above changes with it.
 - Milestone list and scope per milestone: [PLAN.md](../PLAN.md) section 9.
 - Numbered gotchas referenced above by number: [CLAUDE.md](../CLAUDE.md).
 - Eval evidence behind the retrieval design: [M0.5_REPORT.md](../M0.5_REPORT.md).
+- Confidence gate calibration methodology and full trade-off table:
+  `eval/calibrate_confidence.py`.

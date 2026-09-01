@@ -210,6 +210,42 @@ Organized by where they will bite next.
     just from a different cause. Test new parsers against the real
     corpus before trusting hand-written fixtures to represent it.
 
+### Environment / tooling gotchas
+
+20. **Three different Python environments coexist for this repo:**
+    system `python3`, the project `.venv` (`uv sync`), and the global
+    tool install (`uv tool install .`). `uv run python3 -m mf.cli ...`
+    uses `.venv` and reflects source changes immediately; the installed
+    `mf` command does not until you `uv tool install --force .` again.
+    A "module not found" error is often just the wrong environment, not
+    a missing dependency.
+
+21. **`uv sync --extra X` and `uv sync --group Y` don't compose across
+    separate calls** -- each `uv sync` invocation resets the venv to
+    exactly what that invocation specifies. Running eval baselines and
+    the test suite together needs `uv sync --extra eval --group dev`
+    in one call, not two sequential ones.
+
+22. **`pyrightconfig.json`'s `include` list needs a manual update
+    whenever a new top-level package appears** (`mf`, `eval`, `tests`
+    so far). A missing entry doesn't error -- it silently skips
+    type-checking that directory, so a clean `pyright` run can hide
+    real problems in unlisted code.
+
+23. **`ruff check mf/ eval/ tests/` has a stable baseline of 7
+    pre-existing findings, all `ISC004` (implicit string concatenation)
+    in `eval/report.py`'s hardcoded prose strings.** Compare the count
+    after a change instead of re-diagnosing the same 7 every time, and
+    don't fold fixing them into unrelated work.
+
+24. **This repo can have more than one Claude Code session running
+    against it at once.** Before assuming sole-writer state -- especially
+    on shared files like `pyproject.toml`, `README.md`, or
+    `eval/run_baselines.py` -- check `git status` and file mtimes. A
+    file that changed on disk since you last read it may be another
+    session's legitimate concurrent work, not corruption; investigate
+    before overwriting it.
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md) section 9 for the full milestone list.

@@ -6,10 +6,10 @@ Memoryfield eval harness. Context for the next agent, human or model.
 
 The `mf` memoryfield tool described in PLAN.md, plus its eval harness.
 `mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`).
-`init`/`index`/`search`/`read`/`write` are real (ROADMAP.md 1.3-1.6,
-2.1); `raw add`/`lint`/`pack`/`unpack` (rest of Phase 2) aren't built
-yet. `eval/` (formerly `harness/`) is the eval and corpus rig from
-M0/M0.5; it's complete and unrelated to whether `mf/` itself has the
+`init`/`index`/`search`/`read`/`write`/`raw add` are real (ROADMAP.md
+1.3-1.6, 2.1-2.2); `lint`/`pack`/`unpack` (rest of Phase 2) aren't
+built yet. `eval/` (formerly `harness/`) is the eval and corpus rig
+from M0/M0.5; it's complete and unrelated to whether `mf/` itself has the
 rest of the write path yet.
 
 For the schema and retrieval design as currently decided (not the
@@ -312,6 +312,22 @@ Organized by where they will bite next.
     unclaimed follow-up work, same shape as gotcha 25's unclaimed
     blind-no-answer recalibration.
 
+28. **`mf/indexer.py`'s `_SKIP_DIRS` had no entry for `raw/` from 1.3
+    through 2.1, even though PLAN.md's spec explicitly requires
+    implementations not index it.** Nothing had exercised the gap
+    until `mf raw add` (ROADMAP.md 2.2) existed to create files there:
+    before 2.2, a `raw/` directory could only appear by an agent
+    creating one by hand, which never happened in this repo's own
+    testing. A raw session extract that happened to parse as valid
+    frontmatter (plausible -- extracts are freeform text, and this
+    project's own pages use a permissive quoted-scalar YAML parser,
+    gotcha 19) would have been silently indexed as a real page. Fixed
+    by adding `"raw"` to `_SKIP_DIRS`; verified with a test that writes
+    a `raw/` entry containing valid-looking frontmatter and confirms
+    `mf index` reports `0 upserted`. Same silent-failure shape as
+    gotchas 17 and 19: a spec requirement with no code enforcing it and
+    no test exercising the path where it would matter.
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md) section 9 for the full milestone list.
@@ -345,13 +361,21 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       `pack`/`unpack`). `lint` is load-bearing (gotcha 16), not
       optional, once it exists. 2.1 (`mf write`) is done: frontmatter
       validation plus a dense-similarity dedup gate (`vec` table's
-      second job) with `--update`/`--force` escape hatches, 112/112
-      tests passing, verified against the real corpus (gotcha 27 --
-      the dedup threshold is a first-cut estimate, not calibrated).
-      `.claude/skills/mf/SKILL.md` updated to teach `mf write` as the
-      write path. 2.2-2.4 (`raw add`, `lint`, `pack`/`unpack`) not
-      started. Only 0.5's unsent upstream email remains open from
-      Phase 0/1.
+      second job) with `--update`/`--force` escape hatches, verified
+      against the real corpus (gotcha 27 -- the dedup threshold is a
+      first-cut estimate, not calibrated). 2.2 (`mf raw add`) is done:
+      appends a freeform session extract to `raw/`, with a prefix-based
+      double-fire guard for a retried or racing SessionEnd hook. Fixed
+      a real gap along the way: `mf/indexer.py`'s `_SKIP_DIRS` had no
+      entry for `raw` before this, though PLAN.md's spec requires
+      implementations not index it -- a raw extract that happened to
+      parse as valid frontmatter could have been silently indexed as a
+      page. 125/125 tests passing; `.claude/skills/mf/SKILL.md` updated
+      to teach `mf write` as the write path (`raw add` isn't
+      skill-taught yet -- it's meant to be called by the not-yet-built
+      SessionEnd hook, ROADMAP.md 3.1, not typed by an agent directly).
+      2.3-2.4 (`lint`, `pack`/`unpack`) not started. Only 0.5's unsent
+      upstream email remains open from Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).
 - [ ] M4, reranker and eval gate, only if P@3 drops below 0.8, which

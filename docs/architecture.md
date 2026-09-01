@@ -167,6 +167,20 @@ have an opinion to gate on) -- `--force`/`--update` are how the
 calling agent overrides that opinion once it's made the actual
 judgment call.
 
+**`raw add` built (ROADMAP.md 2.2).** `mf/raw.py`, wired into
+`mf/cli.py`: `raw add [text] [--field DIR] [--json]` (reads stdin if
+`text` is omitted). Appends a freeform session extract as a
+timestamped file under `raw/`, the staging area PLAN.md's spec
+requires implementations not index (`mf/indexer.py`'s `_SKIP_DIRS` now
+includes `raw`, closing a real gap: before 2.2 nothing skipped it
+explicitly, and a raw extract that happened to parse as valid
+frontmatter could have been silently indexed as a page). Guards
+against a session-end hook double-firing: if the new text is a prefix
+of the most recent `raw/` entry, or vice versa, the call is a no-op
+(no new file, no error) rather than writing a near-identical
+duplicate. `consolidate --plan` (ROADMAP.md 4.2, not yet built) is
+what eventually turns a `raw/` entry into a real page via `write`.
+
 `lint` enforces the writing conventions below and is load-bearing, not
 cosmetic (CLAUDE.md gotcha 16): every retrieval quality number this
 project has measured holds because page summaries are information-dense,

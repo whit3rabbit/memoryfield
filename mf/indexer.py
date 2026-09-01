@@ -19,8 +19,11 @@ from .embedding import document_text
 from .page import Page, PageParseError, load_page
 from .tokens import default_tokenize
 
-# Directories never walked looking for pages.
-_SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".mfgpt"}
+# Directories never walked looking for pages. "raw" is the mf.raw
+# staging area (ROADMAP.md 2.2) -- PLAN.md's spec requires
+# implementations not index it, since its entries are freeform session
+# extracts, not memoryfield pages.
+_SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".mfgpt", "raw"}
 
 # Spec model_code (docs/architecture.md, PLAN.md) -> fastembed registry name
 # and the prefix "kind" mf/embedding.py's DOCUMENT_PREFIXES/QUERY_PREFIXES

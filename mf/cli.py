@@ -1,7 +1,8 @@
 """Command-line entry point for `mf`.
 
-`init`/`index`/`search`/`read`/`write` are real (ROADMAP.md 1.3-1.6,
-2.1). `raw add`/`lint`/`pack`/`unpack` (rest of Phase 2) aren't built yet.
+`init`/`index`/`search`/`read`/`write`/`raw add` are real (ROADMAP.md
+1.3-1.6, 2.1-2.2). `lint`/`pack`/`unpack` (rest of Phase 2) aren't
+built yet.
 """
 from __future__ import annotations
 
@@ -11,6 +12,7 @@ import sys
 from pathlib import Path
 
 from mf import __version__, db, indexer
+from mf import raw as raw_mod
 from mf import read as read_mod
 from mf import search as search_mod
 from mf import write as write_mod
@@ -55,6 +57,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     write_parser.add_argument("--force", action="store_true", help="skip the dedup gate")
     write_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    raw_parser = subparsers.add_parser("raw", help="raw/ staging-area operations")
+    raw_subparsers = raw_parser.add_subparsers(dest="raw_command")
+    raw_add_parser = raw_subparsers.add_parser("add", help="append a session extract to raw/")
+    raw_add_parser.add_argument(
+        "text", nargs="?", default=None, help="text to append; reads stdin if omitted"
+    )
+    raw_add_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    raw_add_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     for name in STUB_COMMANDS:
         subparsers.add_parser(name)
@@ -205,6 +216,31 @@ def _cmd_write(args: argparse.Namespace) -> int:
     return 0 if result.written else 2
 
 
+def _cmd_raw_add(args: argparse.Namespace) -> int:
+    field_dir = Path(args.field).resolve()
+    try:
+        conn = db.open_field(field_dir)
+    except db.FieldNotFoundError as e:
+        sys.stderr.write(f"mf raw add: {e}\n")
+        return 1
+    conn.close()  # raw/ never touches the index; only used to validate the field exists
+
+    text = args.text if args.text is not None else sys.stdin.read()
+    try:
+        result = raw_mod.add_raw(field_dir, text)
+    except raw_mod.EmptyRawTextError as e:
+        sys.stderr.write(f"mf raw add: {e}\n")
+        return 1
+
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    elif result.written:
+        print(f"Appended to {result.path}")
+    else:
+        print(f"Skipped: duplicate of {result.path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -221,6 +257,11 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_read(args)
     if args.command == "write":
         return _cmd_write(args)
+    if args.command == "raw":
+        if args.raw_command == "add":
+            return _cmd_raw_add(args)
+        sys.stderr.write("mf raw: expected a subcommand (add)\n")
+        return 1
     sys.stderr.write(
         f"mf {args.command}: not implemented yet — see ROADMAP.md Phase 1/2.\n"
     )

@@ -13,9 +13,11 @@ mf/search.py's `_neighbors()`). An agent that reads a page by
 trace here -- an accepted gap, PLAN.md section 10.
 
 Page content itself is never cached in the index: `mf.sqlite3` only
-stores enough (`filename`) to find the page again, and this module
-re-parses it fresh off disk every call via mf.page.load_page(), the
-same parser `mf index` uses.
+stores enough (`filename`, relative to the field directory) to find the
+page again, and this module re-parses it fresh off disk every call via
+mf.page.load_page(), the same parser `mf index` uses. An index built
+before filenames were stored relative holds absolute paths; those are
+used as-is until the next `mf index` rewrites them.
 """
 from __future__ import annotations
 
@@ -75,10 +77,17 @@ def _page_filename(conn: Connection, uuid: str) -> tuple[str, str]:
     return row[0], row[1]
 
 
-def _read_one(conn: Connection, ref: str, tier: str | None) -> ReadResult:
+def _resolve_path(field_dir: Path, filename: str) -> Path:
+    path = Path(filename)
+    return path if path.is_absolute() else field_dir / path
+
+
+def _read_one(
+    conn: Connection, ref: str, tier: str | None, field_dir: Path
+) -> ReadResult:
     uuid, section = parse_ref(ref)
     title, filename = _page_filename(conn, uuid)
-    page = load_page(Path(filename))
+    page = load_page(_resolve_path(field_dir, filename))
 
     if section is not None:
         for s in page.sections:
@@ -123,9 +132,16 @@ def _bump_co_read(conn: Connection, uuids: list[str]) -> None:
 
 
 def read(
-    conn: Connection, refs: list[str], tier: str | None = None
+    conn: Connection,
+    refs: list[str],
+    tier: str | None = None,
+    *,
+    field_dir: Path,
 ) -> list[ReadResult]:
-    results = [_read_one(conn, ref, tier) for ref in refs]
+    """`field_dir` is the directory `mf.sqlite3` lives in; `pages.filename`
+    is stored relative to it (mf/indexer.py's discover_pages()).
+    """
+    results = [_read_one(conn, ref, tier, field_dir) for ref in refs]
     for result in results:
         _log_read(conn, result)
     if len(refs) > 1:

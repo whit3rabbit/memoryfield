@@ -129,3 +129,65 @@ def test_index_field_reembeds_on_content_change(tmp_path, monkeypatch):
     ).fetchall()
     assert sections == [("steps",), ("rationale",), ("new-section",)]
     conn.close()
+
+
+PAGE_2 = """\
+---
+uuid: page-002
+title: "Billing retries"
+summary: "Dunning levels 1-4"
+---
+
+## Steps
+
+Failed payments increment dunning_level.
+"""
+
+
+def test_index_stores_field_relative_filenames(tmp_path, monkeypatch):
+    monkeypatch.setattr(indexer, "_embed_pages", _fake_embed_pages)
+    sub = tmp_path / "nested"
+    sub.mkdir()
+    _write(sub, "page1.md", PAGE_1)
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    indexer.index_field(tmp_path, conn)
+
+    (filename,) = conn.execute("SELECT filename FROM pages WHERE uuid = 'page-001'").fetchone()
+    assert filename == "nested/page1.md"
+    conn.close()
+
+
+def test_reindex_of_an_edited_page_keeps_co_read(tmp_path, monkeypatch):
+    """Regression: _delete_page_rows used to drop every links row with the
+    page as src, including co_read weight that only `mf read` can create.
+    """
+    from mf import read
+
+    monkeypatch.setattr(indexer, "_embed_pages", _fake_embed_pages)
+    page1 = tmp_path / "page1.md"
+    page1.write_text(PAGE_1)
+    _write(tmp_path, "page2.md", PAGE_2)
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    indexer.index_field(tmp_path, conn)
+    read.read(conn, ["page-001", "page-002"], field_dir=tmp_path)
+
+    page1.write_text(PAGE_1 + "\n## Edited\n\nNew content.\n")
+    result = indexer.index_field(tmp_path, conn)
+    assert result.upserted == ["page-001"]
+
+    rows = conn.execute(
+        "SELECT src, dst, weight FROM links WHERE kind = 'co_read'"
+    ).fetchall()
+    assert rows == [("page-001", "page-002", 1.0)]
+    # Typed links are still rebuilt from frontmatter on the same upsert.
+    typed = conn.execute(
+        "SELECT dst FROM links WHERE src = 'page-001' AND kind = 'supersedes'"
+    ).fetchall()
+    assert typed == [("page-000",)]
+
+    page1.unlink()
+    indexer.index_field(tmp_path, conn)
+    assert conn.execute("SELECT * FROM links WHERE kind = 'co_read'").fetchall() == []
+    conn.close()

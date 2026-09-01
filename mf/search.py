@@ -162,9 +162,10 @@ def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
                     neighbors.append(stub)
                     seen.add(candidate[0])
 
-    # co_read is mf read's job (ROADMAP.md 1.6, not built yet) -- this
-    # tier is a documented no-op, not a missing feature masquerading as
-    # done.
+    # co_read rows exist (mf read populates them, ROADMAP.md 1.6) but
+    # aren't consulted for neighbor ranking yet -- that's ROADMAP.md 4.4,
+    # gated on enough signal accumulating. Documented no-op, not a
+    # missing feature masquerading as done.
     return neighbors
 
 

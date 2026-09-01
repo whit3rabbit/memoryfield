@@ -164,7 +164,7 @@ def _cmd_read(args: argparse.Namespace) -> int:
         sys.stderr.write(f"mf read: {e}\n")
         return 1
     try:
-        results = read_mod.read(conn, args.refs, tier=args.tier)
+        results = read_mod.read(conn, args.refs, tier=args.tier, field_dir=field_dir)
     except (read_mod.PageNotFoundError, read_mod.SectionNotFoundError) as e:
         sys.stderr.write(f"mf read: not found: {e}\n")
         return 1

@@ -332,6 +332,49 @@ Organized by where they will bite next.
     gotchas 17 and 19: a spec requirement with no code enforcing it and
     no test exercising the path where it would matter.
 
+### Phase 2 review gotchas
+
+32. **The distance metric the eval calibrated on is not the one
+    production runs.** fastembed's nomic vectors are not unit-normalized
+    (norm ~20, measured), `mf/schema.py`'s `vec0` table uses the default
+    Euclidean L2, and `eval/baselines/dense_real_baseline.py` (used by
+    `eval/calibrate_confidence.py`) normalizes and ranks by cosine. So the
+    97.0%/16.7% FTS/dense agreement numbers behind `mf/confidence.py`,
+    the kNN neighbor order, and `mf/write.py`'s `DEDUP_THRESHOLD` were
+    all calibrated or estimated against one metric and run under
+    another. Same shape as gotcha 18. Any time a constant is calibrated
+    in the eval harness and consumed in `mf/`, check that both sides
+    compute the same quantity. ROADMAP.md 2.5 moves `vec` to cosine.
+
+33. **Not everything in `mf.sqlite3` is derived from the pages.** The
+    `reads` log, `co_read` rows in `links`, and `claims` accumulate from
+    tool calls and have no other source, so "delete the index and
+    rebuild" loses them. Until the Phase 2 review, `mf/indexer.py`'s
+    `_delete_page_rows` ran `DELETE FROM links WHERE src = ?` on every
+    upsert, so *editing* a page silently wiped its `co_read` history on
+    the next `mf index`. Nothing caught it because no test ever read two
+    pages together and then reindexed. Upserts now delete only the three
+    typed link kinds, and a removed page drops its `co_read` rows in both
+    directions. `reads` still can't rebuild `co_read` (no call-group
+    column), which ROADMAP.md 2.5 adds.
+
+34. **A per-domain gap can hide inside a two-domain average.** ROADMAP.md
+    1.8's headline reported FTS at 0.925 P@3 on the blind set ("flat"),
+    averaged across domains. The codebase domain alone was 0.85 against
+    nomic's 1.0 (MRR 0.79 vs 0.975, n=24). Report per-domain numbers
+    whenever the two domains are expected to stress different retrievers
+    (codebase pages are anchor-heavy, papers pages are prose-heavy).
+
+35. **Two measurements that each look fine can be bad together.** 1.8
+    found 45% of answerable blind queries return `confidence: none`. 1.9
+    found 100% stub-end at 55 tokens/lookup, on deliberately in-vocabulary
+    tasks. Neither entry cross-referenced the other. Read jointly: under
+    realistic phrasing about half of lookups pay for the search, get told
+    not to cite the result, and fall back to raw exploration, which
+    undercuts PLAN.md section 6's savings case. When two eval tasks
+    measure the same pipeline under different conditions, write the
+    joint reading down.
+
 ### Tooling patterns worth reusing
 
 29. **Quick real-corpus smoke test, cheaper than writing new fixtures:**
@@ -397,12 +440,18 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       entry for `raw` before this, though PLAN.md's spec requires
       implementations not index it -- a raw extract that happened to
       parse as valid frontmatter could have been silently indexed as a
-      page. 125/125 tests passing; `.claude/skills/mf/SKILL.md` updated
+      page. 128/128 tests passing. `.claude/skills/mf/SKILL.md` updated
       to teach `mf write` as the write path (`raw add` isn't
       skill-taught yet -- it's meant to be called by the not-yet-built
       SessionEnd hook, ROADMAP.md 3.1, not typed by an agent directly).
-      2.3-2.4 (`lint`, `pack`/`unpack`) not started. Only 0.5's unsent
-      upstream email remains open from Phase 0/1.
+      2.3-2.4 (`lint`, `pack`/`unpack`) not started. The Phase 2
+      stop-and-see review fixed two bugs (co_read wiped on reindex,
+      absolute filenames in the index) and added ROADMAP.md Phase 2.5
+      (cosine metric, ranking re-decision, gate recalibration, write-path
+      semantics, one embedding entry point, dedup and skill-cost
+      calibration), ordered before 2.3/2.4. Gotchas 32-35 record what it
+      found. Only 0.5's unsent upstream email remains open from Phase
+      0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).
 - [ ] M4, reranker and eval gate, only if P@3 drops below 0.8, which

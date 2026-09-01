@@ -53,6 +53,11 @@ def discover_pages(field_dir: Path) -> dict[str, Page]:
     pages. Files without a frontmatter block (or missing required
     fields) are silently not pages -- that's how a plain README.md or
     CLAUDE.md in the same tree is told apart from an indexable page.
+
+    `Page.filename` is recorded relative to `field_dir` (POSIX form), not
+    absolute: the index has to keep working after the field directory
+    moves (a fresh clone, a `pack`/`unpack` round trip). `mf read`
+    re-joins it with the field directory it was given.
     """
     pages: dict[str, Page] = {}
     for dirpath, dirnames, filenames in os.walk(field_dir):
@@ -62,7 +67,7 @@ def discover_pages(field_dir: Path) -> dict[str, Page]:
         for name in fnmatch.filter(filenames, "*.md"):
             path = Path(dirpath) / name
             try:
-                page = load_page(path)
+                page = load_page(path, filename=path.relative_to(field_dir).as_posix())
             except PageParseError:
                 continue
             pages[page.uuid] = page
@@ -94,18 +99,43 @@ def _embed_pages(
     return {p.uuid: list(map(float, v)) for p, v in zip(pages, vecs)}
 
 
-def _delete_page_rows(conn: sqlite3.Connection, uuid: str) -> None:
+_TYPED_LINK_KINDS = ("supersedes", "contradicts", "depends_on")
+
+
+def _delete_page_rows(
+    conn: sqlite3.Connection, uuid: str, *, page_removed: bool
+) -> None:
+    """Drop everything the index derives from one page's file.
+
+    Typed links (supersedes/contradicts/depends_on) come from the page's
+    own frontmatter, so they're rebuilt on every upsert. `co_read` rows
+    are NOT derived from the file -- they accumulate from `mf read`
+    calls and can't be reconstructed from anything else in the index --
+    so an upsert must leave them alone. Before this distinction existed,
+    editing a page silently wiped its co_read history on the next
+    `mf index`. Only when the page's file is gone (`page_removed`) does
+    its co_read history go with it, in both link directions.
+    """
     conn.execute("DELETE FROM pages WHERE uuid = ?", (uuid,))
     conn.execute("DELETE FROM sections WHERE uuid = ?", (uuid,))
     conn.execute("DELETE FROM fts WHERE uuid = ?", (uuid,))
     conn.execute("DELETE FROM vec WHERE page_uuid = ?", (uuid,))
-    conn.execute("DELETE FROM links WHERE src = ?", (uuid,))
+    placeholders = ",".join("?" for _ in _TYPED_LINK_KINDS)
+    conn.execute(
+        f"DELETE FROM links WHERE src = ? AND kind IN ({placeholders})",
+        (uuid, *_TYPED_LINK_KINDS),
+    )
+    if page_removed:
+        conn.execute(
+            "DELETE FROM links WHERE kind = 'co_read' AND (src = ? OR dst = ?)",
+            (uuid, uuid),
+        )
 
 
 def _write_page(
     conn: sqlite3.Connection, page: Page, embedding: list[float] | None
 ) -> None:
-    _delete_page_rows(conn, page.uuid)
+    _delete_page_rows(conn, page.uuid, page_removed=False)
 
     total_tokens = default_tokenize(page.body) + default_tokenize(page.summary)
     conn.execute(
@@ -134,10 +164,8 @@ def _write_page(
             (page.uuid, _vec_literal(embedding)),
         )
 
-    for kind, targets in (
-        ("supersedes", page.supersedes),
-        ("contradicts", page.contradicts),
-        ("depends_on", page.depends_on),
+    for kind, targets in zip(
+        _TYPED_LINK_KINDS, (page.supersedes, page.contradicts, page.depends_on)
     ):
         for dst in targets:
             conn.execute(
@@ -167,7 +195,7 @@ def index_field(field_dir: Path, conn: sqlite3.Connection) -> IndexResult:
     embeddings = _embed_pages(to_upsert, model_code)
 
     for uuid in to_delete:
-        _delete_page_rows(conn, uuid)
+        _delete_page_rows(conn, uuid, page_removed=True)
     for page in to_upsert:
         _write_page(conn, page, embeddings.get(page.uuid))
 

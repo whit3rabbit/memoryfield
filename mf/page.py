@@ -202,6 +202,11 @@ def parse_page(text: str, filename: str = "") -> Page:
     )
 
 
-def load_page(path: Path) -> Page:
+def load_page(path: Path, filename: str | None = None) -> Page:
+    """Parse the page at `path`. `filename` is what gets recorded as the
+    page's identity in the index (mf/indexer.py stores it field-relative
+    so an index survives the field directory moving, e.g. a clone or a
+    `pack`/`unpack` round trip); it defaults to `path` itself.
+    """
     raw = path.read_bytes()
-    return parse_page(raw.decode("utf-8"), filename=str(path))
+    return parse_page(raw.decode("utf-8"), filename=filename or str(path))

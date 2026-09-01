@@ -5,9 +5,10 @@ description: Use the mf memoryfield CLI (`mf search`, `mf read`, `mf write`) to 
 
 # mf: search-first project memory
 
-`mf` is a local memory index for a project: `search`, `read`, and
-`write` are real today (ROADMAP.md 1.1-1.6, 2.1); `raw add`/`lint` are
-not built yet (rest of Phase 2). This skill covers the read and write
+`mf` is a local memory index for a project: `search`, `read`, `write`,
+and `raw add` are real today (ROADMAP.md 1.1-1.6, 2.1-2.2); `lint` is
+not built yet. `raw add` is the session-end staging step (ROADMAP.md
+3.1), not a lookup command, so this skill covers the read and write
 paths and the page conventions a page still needs to follow so `mf
 write`/`mf index`/`mf search` treat it correctly.
 The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
@@ -115,7 +116,10 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   validated, dedup-checked, and indexed -- a page that's only on disk
   won't show up in `mf search` results, and one written straight into
   the index bypasses the dedup gate entirely.
-- Don't reach for `mf raw add` or `mf lint` — neither exists yet.
+- Don't reach for `mf lint`, it doesn't exist yet. Don't use `mf raw add`
+  during a lookup: it only appends freeform text to `raw/`, which nothing
+  indexes or consumes yet (ROADMAP.md 4.2). It's for a session-end
+  extract, and the hook that drives it isn't built (ROADMAP.md 3.1).
 - Don't `cat`/`Read` a memoryfield page directly when `mf read` would do
   the same job: a direct file read never logs to `reads` or contributes
   to `co_read`, so the field's own retrieval quality never improves from

@@ -60,15 +60,19 @@ if any existing page is within cosine distance 0.10 (ROADMAP.md 2.5,
 2.10). It catches copies and light rewordings; a thorough rewrite of
 an existing page gets past it about one time in eight, so search
 before writing. `--update <uuid>` (must match the page's own `uuid`, edit the
-existing file in place) and `--force` skip it. `mf write` is the only
-check a page gets until `lint` exists, so follow the conventions:
+existing file in place) and `--force` skip it. `mf write` checks
+frontmatter and duplicates; `mf lint` checks the conventions below and
+reports index drift (stale, unindexed, or missing pages). Errors and
+warnings fail `--check`; `--all` also prints the advice-level findings
+(missing `source`, no typed links, a negation outside `## Don't`).
 
 - `summary` is the answer, not the topic: `"Integration tests: make
   test-integration; needs DATABASE_URL"`, not `"Notes on testing."`
 - The first `##` section answers the question. Rationale and history
   come after, in later sections.
-- 300-800 tokens per page, 8 KB ceiling. One page per question someone
-  would ask, not one page per topic.
+- Up to 800 tokens per page, 8 KB ceiling (the eval corpus averages
+  ~240). One page per question someone would ask, not one page per
+  topic. One headed section until 300 tokens, `## Don't` excepted.
 - Verbatim anchors for stable values (commands, hostnames, error
   strings). Pointers, not copied values, for things that drift (SHAs,
   counts, relative dates).

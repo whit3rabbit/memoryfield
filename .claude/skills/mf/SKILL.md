@@ -7,7 +7,7 @@ description: Use the mf memoryfield CLI (`mf search`, `mf read`, `mf write`) to 
 
 `mf` indexes a memoryfield (a directory of Markdown pages with
 frontmatter) and answers questions with stubs, not pages. Built:
-`search`, `read`, `write`, `index`, `raw add`. Not built: `lint`. The
+`search`, `read`, `write`, `lint`, `index`, `raw add`. The
 numbers behind every rule here, the page-writing conventions, and the
 full exit-code contract are in [reference.md](reference.md). Read it
 before writing a page.
@@ -33,6 +33,9 @@ before writing a page.
   <uuid>`, or `--force` if it's genuinely different. Retire a page by
   writing its replacement with `supersedes: [old-uuid]`, not by
   deleting it.
+- **Run `mf lint <dir>` after writing.** It checks the conventions in
+  reference.md (summary shaped as an answer, no tables, no copied SHAs
+  or relative dates, links resolve) and index drift. `--check` for CI.
 
 ## Don't
 
@@ -44,8 +47,7 @@ before writing a page.
   (exit 3) until `mf index` runs, or pass `--stale-ok`.
 - Don't `cat`/`Read` a page that `mf read` would return: that loses
   the read log and `co_read`.
-- Don't call `mf raw add` during a lookup (it's session-end staging)
-  or `mf lint` (not built).
+- Don't call `mf raw add` during a lookup (it's session-end staging).
 
 ## Commands
 
@@ -53,8 +55,9 @@ before writing a page.
 mf search "<query>" [--field DIR] [--limit N] [--neighbor-limit N] [--budget N] [--stale-ok] [--json]
 mf read <uuid>[#section] [<uuid2>[#section] ...] [--tier L1|L2] [--field DIR] [--json]
 mf write <draft-path | -> [--field DIR] [--dest NAME] [--update UUID] [--force] [--json]
+mf lint [DIR] [--check] [--all] [--json]
 mf index [DIR]
 ```
 
 Exit codes: `write` 0 written, 1 invalid, 2 dedup-blocked. `search` 0
-ok, 1 no field, 3 stale index.
+ok, 1 no field, 3 stale index. `lint --check` 1 on any error or warning.

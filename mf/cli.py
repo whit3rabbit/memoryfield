@@ -1,8 +1,7 @@
 """Command-line entry point for `mf`.
 
-`init`/`index`/`search`/`read`/`write`/`raw add` are real (ROADMAP.md
-1.3-1.6, 2.1-2.2). `lint`/`pack`/`unpack` (rest of Phase 2) aren't
-built yet.
+`init`/`index`/`search`/`read`/`write`/`raw add`/`lint` are real
+(ROADMAP.md 1.3-1.6, 2.1-2.3). `pack`/`unpack` (2.4) aren't built yet.
 """
 from __future__ import annotations
 
@@ -12,6 +11,7 @@ import sys
 from pathlib import Path
 
 from mf import __version__, db, embedder, indexer
+from mf import lint as lint_mod
 from mf import raw as raw_mod
 from mf import read as read_mod
 from mf import search as search_mod
@@ -74,6 +74,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     write_parser.add_argument("--force", action="store_true", help="skip the dedup gate")
     write_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    lint_parser = subparsers.add_parser("lint", help="check pages against the writing conventions")
+    lint_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+    lint_parser.add_argument("--check", action="store_true", help="exit 1 on any error or warning (CI)")
+    lint_parser.add_argument("--all", action="store_true", help="also print info-level findings")
+    lint_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     raw_parser = subparsers.add_parser("raw", help="raw/ staging-area operations")
     raw_subparsers = raw_parser.add_subparsers(dest="raw_command")
@@ -252,6 +258,43 @@ def _cmd_write(args: argparse.Namespace) -> int:
     return 0 if result.written else 2
 
 
+def _render_lint_text(result: lint_mod.LintResult, show_all: bool) -> str:
+    lines = []
+    for f in result.findings:
+        if f.severity == "info" and not show_all:
+            continue
+        where = f"{f.filename} [{f.uuid}]" if f.uuid else f.filename
+        lines.append(f"{f.severity}: {f.code}: {where}: {f.message}")
+    hidden = "" if show_all else " (--all to show info)"
+    lines.append(
+        f"{result.pages} pages: {result.count('error')} errors, "
+        f"{result.count('warning')} warnings, {result.count('info')} info{hidden}"
+    )
+    return "\n".join(lines)
+
+
+def _cmd_lint(args: argparse.Namespace) -> int:
+    field_dir = Path(args.dir).resolve()
+    conn = None
+    try:
+        conn = db.open_field(field_dir)
+    except db.FieldNotFoundError:
+        pass  # lint the pages alone; index-drift checks need mf init
+    except db.SchemaVersionError as e:
+        sys.stderr.write(f"mf lint: {e}\n")
+        return 1
+    try:
+        result = lint_mod.lint_field(field_dir, conn)
+    finally:
+        if conn is not None:
+            conn.close()
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        print(_render_lint_text(result, args.all))
+    return 1 if (args.check and result.failed) else 0
+
+
 def _cmd_raw_add(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
     try:
@@ -293,6 +336,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_read(args)
     if args.command == "write":
         return _cmd_write(args)
+    if args.command == "lint":
+        return _cmd_lint(args)
     if args.command == "raw":
         if args.raw_command == "add":
             return _cmd_raw_add(args)

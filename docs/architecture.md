@@ -282,18 +282,34 @@ versa, the call is a no-op. Nothing consumes `raw/` until `consolidate
 --plan` (ROADMAP.md 4.2). It is meant to be called by the session-end
 path (ROADMAP.md 3.1), not typed by an agent during a lookup.
 
-`lint` (ROADMAP.md 2.3, not built) enforces the writing conventions
-below and is load-bearing, not cosmetic (CLAUDE.md gotcha 16): every
-retrieval quality number this project has measured holds because page
-summaries are information-dense, and that density is a writing-
-discipline property, not a retrieval one.
+**`lint` built (ROADMAP.md 2.3).** `mf/lint.py`, `mf lint [DIR]
+[--check] [--all] [--json]`. It enforces the writing conventions below
+and is load-bearing, not cosmetic (CLAUDE.md gotcha 16): every retrieval
+quality number this project has measured holds because page summaries
+are information-dense, and that density is a writing-discipline
+property, not a retrieval one. It checks shape, not quality (PLAN.md
+section 10). Three severities: `error` (the page will misbehave:
+duplicate uuid, missing summary, dangling typed link, bad status, over
+8 KB), `warning` (a convention the eval depends on: summary shaped as
+a topic or shorter than five words, a table, a copied SHA or relative
+time, headed sections in a page under 300 tokens with `## Don't`
+excepted, `active` but superseded, `superseded` but unlinked, and index
+drift: stale, unindexed, or missing-file pages when `mf.sqlite3`
+exists), `info` (advice: missing `source`, no typed links, a negation
+in prose with no `## Don't` section, a page under 100 tokens). `--check`
+exits 1 on any error or warning; info prints only with `--all`.
+Baseline on the eval corpus: codebase 0 errors, 3 warnings (two
+relative-time phrases, one two-section short page); papers 0 and 0.
 
 ## Writing conventions (enforced by `lint`, taught by the skill)
 
 - `summary` is the answer: "Integration tests: `make test-integration`;
   needs `DATABASE_URL`", not "Notes on testing."
 - First section answers, and rationale and history follow.
-- 300-800 tokens per page, 8 KB ceiling.
+- Up to 800 tokens per page, 8 KB ceiling. PLAN.md section 5 says
+  300-800, but not one of the eval corpus's 157 pages reaches 300 (they
+  average ~240) and every retrieval number was measured on them, so
+  `lint` treats 300 as the headers cutoff, not a floor.
 - One page per question someone would ask, not per topic.
 - Verbatim anchors for stable values (commands, hostnames, error
   strings). Pointers for moving values (SHAs, counts).

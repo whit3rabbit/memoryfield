@@ -6,9 +6,8 @@ Memoryfield eval harness. Context for the next agent, human or model.
 
 The `mf` memoryfield tool described in PLAN.md, plus its eval harness.
 `mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`).
-`init`/`index`/`search`/`read`/`write`/`raw add` are real (ROADMAP.md
-1.3-1.6, 2.1-2.2); `lint`/`pack`/`unpack` (rest of Phase 2) aren't
-built yet. `eval/` (formerly `harness/`) is the eval and corpus rig
+`init`/`index`/`search`/`read`/`write`/`raw add`/`lint` are real
+(ROADMAP.md 1.3-1.6, 2.1-2.3); `pack`/`unpack` (2.4) aren't built yet. `eval/` (formerly `harness/`) is the eval and corpus rig
 from M0/M0.5; it's complete and unrelated to whether `mf/` itself has the
 rest of the write path yet.
 
@@ -503,7 +502,11 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       done: a 32-paraphrase labeled set moved `DEDUP_THRESHOLD` to
       0.10 and showed the gate misses thorough rewrites one time in
       eight at any threshold that spares real sibling pages. Phase 2.5
-      is closed; 2.3 (`lint`) and 2.4 (`pack`) are next.
+      is closed. 2.3 (`mf lint`) is done: shape checks grounded in a
+      corpus survey, three severities, `--check` for CI, baseline 3
+      warnings on the real corpus; it also found PLAN.md section 5's
+      300-token floor contradicted by the corpus itself. 172/172 tests.
+      2.4 (`pack`/`unpack`) is next.
       Only 0.5's unsent upstream email remains open from Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).

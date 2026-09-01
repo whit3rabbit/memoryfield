@@ -113,6 +113,43 @@ never shows the old page as a neighbor of its replacement.
   stubs marked `stale`.
 - `mf read`: 0 ok, 1 unknown uuid or section.
 
+## Session-end capture (hooks)
+
+Two Claude Code hooks, both handled by `mf` itself (read the hook JSON
+on stdin, nothing else to install). Add to `.claude/settings.json` (or
+`settings.local.json`) in a project whose root is a field:
+
+```json
+{
+  "hooks": {
+    "Stop": [{"hooks": [{"type": "command", "command": "mf hook stop"}]}],
+    "SessionEnd": [{"hooks": [{"type": "command", "command": "mf hook session-end"}]}]
+  }
+}
+```
+
+`mf hook stop` runs when the agent is about to finish a turn. Once per
+session, if the directory is a field and the session hasn't already
+run `mf write` or `mf raw add`, it adds one system reminder: write the
+reusable lesson as a page (draft outside the field, `mf write`), or
+pipe an extract of at most ~2K tokens to `mf raw add`, or just finish.
+It stays silent on the continuation turn (`stop_hook_active`) and on
+every later turn of that session, so an agent that decides there's
+nothing to keep isn't asked twice. `mf hook session-end` writes a
+pointer entry (`raw/<timestamp>-session.md`: session id, transcript
+path, end reason) and never the transcript body; SessionEnd hooks
+share a 1.5-second budget and the installed `mf` binary handles it in
+about a quarter of a second. Use the `uv tool install` binary in the
+hook command, not `uv run`, for that reason.
+
+For a CLAUDE.md or AGENTS.md in a project that has a field, two lines
+are enough:
+
+```
+Before exploring this codebase, run `mf search "<question>" --field .`.
+Before finishing, write what you learned as a page with `mf write`, or stage it with `mf raw add`.
+```
+
 ## Other commands
 
 `mf index [DIR]` is the un-gated bulk path: imports, hand edits, or

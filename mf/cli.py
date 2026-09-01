@@ -13,6 +13,7 @@ import zipfile
 from pathlib import Path
 
 from mf import __version__, db, embedder, indexer
+from mf import hooks as hooks_mod
 from mf import lint as lint_mod
 from mf import pack as pack_mod
 from mf import raw as raw_mod
@@ -97,6 +98,11 @@ def build_parser() -> argparse.ArgumentParser:
     unpack_parser.add_argument("--sha256", default=None, help="expected digest (default: the .sha256 sidecar, if present)")
     unpack_parser.add_argument("--force", action="store_true", help="extract into a non-empty destination")
     unpack_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    hook_parser = subparsers.add_parser("hook", help="Claude Code hook handlers (read the hook JSON on stdin)")
+    hook_sub = hook_parser.add_subparsers(dest="hook_command")
+    hook_sub.add_parser("stop", help="Stop hook: ask the agent to capture before finishing, once per session")
+    hook_sub.add_parser("session-end", help="SessionEnd hook: write a transcript pointer to raw/")
 
     raw_parser = subparsers.add_parser("raw", help="raw/ staging-area operations")
     raw_subparsers = raw_parser.add_subparsers(dest="raw_command")
@@ -353,6 +359,20 @@ def _cmd_unpack(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_hook(args: argparse.Namespace) -> int:
+    payload = hooks_mod.read_payload(sys.stdin)
+    if args.hook_command == "stop":
+        result = hooks_mod.stop(payload)
+        if result.output is not None:
+            print(json.dumps(result.output))
+        return 0
+    if args.hook_command == "session-end":
+        hooks_mod.session_end(payload)  # fire-and-forget; stdout isn't shown
+        return 0
+    sys.stderr.write("mf hook: expected a subcommand (stop, session-end)\n")
+    return 1
+
+
 def _cmd_raw_add(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
     try:
@@ -400,6 +420,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_pack(args)
     if args.command == "unpack":
         return _cmd_unpack(args)
+    if args.command == "hook":
+        return _cmd_hook(args)
     if args.command == "raw":
         if args.raw_command == "add":
             return _cmd_raw_add(args)

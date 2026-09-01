@@ -10,7 +10,7 @@ the gap is named.
 
 ## Layers
 
-Six layers. The first is the spec, the rest are derived or conventional.
+Seven layers. The first is the spec, the rest are derived or conventional.
 
 ### 1. Pages (canonical)
 
@@ -327,6 +327,30 @@ What is not verified: the memoryfield spec's own zip layout. No copy of
 it exists in this repo (the same gap that blocks ROADMAP.md 0.5), so
 "root mirrors field, plus a folder-zipped variant" is a stated
 assumption, and compatibility with a real spec archive is untested.
+
+### 7. Session capture
+
+**Built (ROADMAP.md 3.1).** `mf/hooks.py`: `mf hook stop` and `mf hook
+session-end`, Claude Code hook handlers that read the event JSON on
+stdin. The plan's `raw add --from-transcript` was dropped because a
+SessionEnd hook has no LLM and a transcript is 50-200K tokens, not the
+~2K extract PLAN.md section 6 costs consolidation at. Instead the
+capture happens while the agent's context is hot: the Stop hook adds
+one `additionalContext` reminder per session (write the lesson as a
+page via `mf write`, or stage a short extract via `mf raw add`, or
+finish), guarded by `stop_hook_active`, by a per-session marker file
+in the temp dir, and by a transcript scan for a capture already done.
+The SessionEnd hook writes only a pointer (`raw/<timestamp>-session.md`
+with session id, transcript path, and end reason), deduped on session
+id, in about a quarter of a second against the 1.5-second budget
+SessionEnd hooks share. Neither hook is installed by this repo; the
+settings snippet lives in the skill's reference.
+
+What `raw/` now holds: agent-authored extracts (`mf raw add`) and
+session pointers (`*-session.md`). Nothing consumes either until
+`consolidate --plan` (ROADMAP.md 4.2). The cheaper path, when the
+lesson is already page-shaped, is `mf write` directly, and the Stop
+reminder says so first.
 
 ## Writing conventions (enforced by `lint`, taught by the skill)
 

@@ -21,6 +21,14 @@ Start here:
 - **Index schema is v2** (cosine `vec`). A v1 `mf.sqlite3` is refused:
   delete it, `mf init`, `mf index`.
 
+## Session-end capture
+
+`mf hook stop` and `mf hook session-end` are Claude Code hook handlers
+(ROADMAP.md 3.1). The settings snippet and the two-line CLAUDE.md text
+are in [.claude/skills/mf/reference.md](.claude/skills/mf/reference.md).
+Use the installed `mf` binary in the hook command: SessionEnd hooks get
+1.5 seconds in total.
+
 ## Quick start
 
 ```bash

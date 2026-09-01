@@ -513,8 +513,11 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       layout could not be verified (no copy in the repo). 185/185
       tests. **M2 is closed.**
       Only 0.5's unsent upstream email remains open from Phase 0/1.
-- [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
-      integration, importers).
+- [ ] M3, hooks and imports. 3.1 done: `mf hook stop` (once-per-
+      session capture reminder via `additionalContext`) and `mf hook
+      session-end` (transcript pointer to `raw/`, not the transcript),
+      contract verified against the live hooks doc. 3.2 importers and
+      3.3 CI recipe open.
 - [ ] M4, reranker and eval gate, only if P@3 drops below 0.8, which
       it currently clears by a wide margin.
 - [ ] M5, consolidation and multi-writer (`consolidate --plan`, a

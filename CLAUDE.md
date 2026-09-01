@@ -133,10 +133,15 @@ Organized by where they will bite next.
 
 ### Plan-design gotchas (for M1 implementation)
 
-13. **The plan's "hybrid" needs redesign.** Symmetric RRF at equal
-    weights has nothing to add once both signals are near ceiling,
-    which they now are. Options: sequence rather than fuse (FTS first,
-    dense as fallback), or weight FTS higher in RRF.
+13. **Resolved (ROADMAP.md 1.5).** Symmetric RRF at equal weights had
+    nothing to add once both signals were near ceiling. `mf/search.py`
+    doesn't fuse: FTS ranks, dense never re-ranks or merges into that
+    ranking. Dense still runs on every query now (not fused, but not a
+    true fallback either), because the confidence gate's high/low
+    signal is FTS/dense top-1 agreement (gotcha 15) and that needs both
+    every time. Dense's own top-k becomes the *result set* only in the
+    one case FTS has literally nothing: an empty MATCH expression or a
+    zero-hit query.
 
 14. **The vec table is load-bearing for three features, not one.** It
     backs kNN neighbor stubs, write-time dedup of paraphrased
@@ -190,6 +195,21 @@ Organized by where they will bite next.
     "it just works" calibration result is exactly the kind of thing
     worth checking twice before it becomes a hardcoded constant.
 
+19. **A parser that only ever sees synthetic test fixtures will pass
+    while rejecting most of the real corpus.** `mf/page.py`'s frontmatter
+    parser used real YAML and had unit tests, all passing, but every
+    fixture happened to use values simple enough to parse as plain
+    scalars. Run against the actual 157-page eval corpus, it rejected
+    10-75+ pages per domain: this project's own `"Topic: specific
+    question"` title convention (an unescaped `": "` in an unquoted
+    value reads as a nested mapping) and any value starting with a
+    backtick both fail plain-scalar YAML. `mf index` reported "0
+    upserted" with no indication why, because `discover_pages()`
+    correctly treats a `PageParseError` as "not a page" rather than an
+    error worth surfacing -- the same silent-failure shape as gotcha 17,
+    just from a different cause. Test new parsers against the real
+    corpus before trusting hand-written fixtures to represent it.
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md) section 9 for the full milestone list.
@@ -197,14 +217,15 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
 - [x] M0: eval harness, labeled corpus, 6 baselines.
 - [x] M0.5: real dense baselines, 458-query set, per-axis breakdown.
       See "Where things stand" for the corrected headline.
-- [ ] M1, read path (`init`, `index`, `search`, `read`). 1.1 (repo
-      restructure), 1.2 (`embedding_text()`/`fts_query()` single source
-      of truth), and 1.3 (schema + real `mf init`/`mf index`) are done.
-      `mf init`/`mf index` work end to end against real sqlite-vec +
-      fastembed (nomic), incremental on sha256, 53/53 tests passing.
-      `mf search`/`mf read`/`mf write` are still stubs. Open before
-      those can land: decide hybrid design (gotcha 13), add the
-      confidence signal (gotcha 15).
+- [ ] M1, read path (`init`, `index`, `search`, `read`). 1.1 through 1.5
+      are done: `mf init`/`mf index`/`mf search` all work end to end
+      against real sqlite-vec + fastembed and a real 157-page corpus,
+      80/80 tests passing. `search` now runs dense on every query (not
+      only as a fallback) so the calibrated confidence gate's
+      FTS/dense-agreement signal is always available -- a real design
+      change from the plan's original "dense as fallback only," forced
+      by 1.4's calibration result (gotcha 15). `mf read`/`mf write` are
+      still stubs.
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
       `pack`/`unpack`). `lint` is load-bearing now (gotcha 16), not
       optional.

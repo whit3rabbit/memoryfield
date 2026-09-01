@@ -23,6 +23,17 @@ FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n?(.*)\Z", re.DOTALL)
 _SECTION_RE = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
 
+# Plain (unquoted) YAML scalars reject a long, easy-to-hit list of
+# leading/embedded characters -- an unescaped ": " (this project's own
+# "Topic: specific question" title convention), a leading backtick (a
+# summary that opens with an inline-code term, e.g. `` `Idempotency-Key`
+# ties... ``), and others. Rather than track every case PyYAML's scanner
+# rejects, or require the whole corpus to requote itself to a stricter
+# convention, quote every scalar value for the author before handing
+# the block to yaml.safe_load() -- a quoted plain string round-trips
+# to the identical Python str either way.
+_FM_LINE_RE = re.compile(r"^(?P<indent>\s*)(?P<key>[A-Za-z_][\w-]*):[ \t](?P<value>.*)$")
+
 
 class PageParseError(ValueError):
     """Raised when a Markdown file isn't a valid memoryfield page."""
@@ -111,6 +122,28 @@ def _split_sections(body: str) -> list[Section]:
     return out
 
 
+def _quote_ambiguous_values(fm_blob: str) -> str:
+    """Quote every `key: value` line's value, unless it's empty, already
+    quoted, or a flow list (`key: [a, b]`). A quoted plain scalar parses
+    to the identical Python str either way, so this is strictly safer
+    than trying to detect which specific values would trip up PyYAML's
+    plain-scalar scanner.
+    """
+    out_lines = []
+    for line in fm_blob.splitlines():
+        m = _FM_LINE_RE.match(line)
+        if not m:
+            out_lines.append(line)
+            continue
+        value = m.group("value")
+        if not value or value[0] in "[\"'{":
+            out_lines.append(line)
+            continue
+        escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+        out_lines.append(f'{m.group("indent")}{m.group("key")}: "{escaped}"')
+    return "\n".join(out_lines)
+
+
 def _as_list(value: object) -> list[str]:
     if value is None:
         return []
@@ -133,7 +166,7 @@ def parse_page(text: str, filename: str = "") -> Page:
     fm_blob, body = m.group(1), m.group(2)
 
     try:
-        fm = yaml.safe_load(fm_blob)
+        fm = yaml.safe_load(_quote_ambiguous_values(fm_blob))
     except yaml.YAMLError as e:
         raise PageParseError(f"{filename}: invalid frontmatter YAML: {e}") from e
     if fm is None:

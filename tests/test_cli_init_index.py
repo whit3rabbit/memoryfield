@@ -53,6 +53,6 @@ def test_index_reports_counts(tmp_path, capsys, monkeypatch):
 
 
 def test_stub_commands_still_exit_nonzero(capsys):
-    exit_code = cli.main(["search"])
+    exit_code = cli.main(["read"])
     assert exit_code == 1
     assert "not implemented" in capsys.readouterr().err

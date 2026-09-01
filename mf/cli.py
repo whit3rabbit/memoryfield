@@ -1,17 +1,19 @@
 """Command-line entry point for `mf`.
 
-`init`/`index` are real (ROADMAP.md 1.3). `search`/`read` (Phase 1) and
-`write` (Phase 2) are still stubs.
+`init`/`index`/`search` are real (ROADMAP.md 1.3/1.4/1.5). `read`
+(Phase 1) and `write` (Phase 2) are still stubs.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
 from mf import __version__, db, indexer
+from mf import search as search_mod
 
-STUB_COMMANDS = ("search", "read", "write")
+STUB_COMMANDS = ("read", "write")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -24,6 +26,16 @@ def build_parser() -> argparse.ArgumentParser:
 
     index_parser = subparsers.add_parser("index", help="scan a field's pages into mf.sqlite3")
     index_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+
+    search_parser = subparsers.add_parser("search", help="search a field")
+    search_parser.add_argument("query", help="the search query text")
+    search_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    search_parser.add_argument("--limit", type=int, default=search_mod.DEFAULT_LIMIT)
+    search_parser.add_argument(
+        "--neighbor-limit", type=int, default=search_mod.DEFAULT_NEIGHBOR_LIMIT
+    )
+    search_parser.add_argument("--budget", type=int, default=None, help="token cap on the result set")
+    search_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     for name in STUB_COMMANDS:
         subparsers.add_parser(name)
@@ -59,6 +71,50 @@ def _cmd_index(args: argparse.Namespace) -> int:
     return 0
 
 
+def _render_stub_text(stub: search_mod.Stub, indent: str = "") -> str:
+    if stub.superseded_by:
+        return f"{indent}- [{stub.uuid}] -> superseded_by {stub.superseded_by}"
+    lines = [f"{indent}- [{stub.uuid}] {stub.title}"]
+    if stub.summary:
+        lines.append(f"{indent}    {stub.summary}")
+    if stub.status != "active":
+        lines.append(f"{indent}    status: {stub.status}")
+    for neighbor in stub.neighbors:
+        lines.append(_render_stub_text(neighbor, indent + "    "))
+    return "\n".join(lines)
+
+
+def _render_text(result: search_mod.SearchResult) -> str:
+    lines = [f"confidence: {result.confidence}"]
+    if not result.results:
+        lines.append("(no results)")
+    for stub in result.results:
+        lines.append(_render_stub_text(stub))
+    return "\n".join(lines)
+
+
+def _cmd_search(args: argparse.Namespace) -> int:
+    field_dir = Path(args.field).resolve()
+    try:
+        conn = db.open_field(field_dir)
+    except db.FieldNotFoundError as e:
+        sys.stderr.write(f"mf search: {e}\n")
+        return 1
+    try:
+        result = search_mod.search(
+            conn, args.query, limit=args.limit,
+            neighbor_limit=args.neighbor_limit, budget=args.budget,
+        )
+    finally:
+        conn.close()
+
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        print(_render_text(result))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -69,6 +125,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_init(args)
     if args.command == "index":
         return _cmd_index(args)
+    if args.command == "search":
+        return _cmd_search(args)
     sys.stderr.write(
         f"mf {args.command}: not implemented yet — see ROADMAP.md Phase 1/2.\n"
     )

@@ -55,19 +55,24 @@ ranking argument for dense (see below) doesn't touch the other two.
 
 ### 3. Retrieval
 
-`search` runs **FTS5 first, dense as a gated fallback**, not fused.
-This is the M0.5 gate decision (CLAUDE.md gotcha 13), reversing the
-plan's original symmetric-RRF hybrid:
+`search` (`mf/search.py`, ROADMAP.md 1.5) runs **FTS5 first; dense
+never fuses into or re-ranks FTS's results.** This is the M0.5 gate
+decision (CLAUDE.md gotcha 13), reversing the plan's original
+symmetric-RRF hybrid:
 
 1. FTS answers first. No model server, no embedder warmup, no version
    drift, instant incremental indexing.
-2. Dense runs as the recall net when FTS's score gate signals low
-   confidence, not fused in unconditionally. Symmetric RRF at equal
-   weights has nothing to add once both signals are near ceiling.
+2. Dense still runs on every query, not fused into ranking but not a
+   true fallback either: the confidence gate's high/low signal is
+   FTS/dense top-1 agreement (see below), and that needs both every
+   time. Dense's own top-k becomes the *result set* only in the one
+   case FTS has nothing at all (empty MATCH expression or zero hits) --
+   that's the `vec` table's fallback-ranking job.
 3. Results return as the top-k stubs (uuid, title, summary, status,
    tokens) with up to n neighbor stubs each (typed links first, then
-   kNN, then co_read). Superseded pages return only as a
-   `superseded_by` pointer on the winner.
+   kNN; co_read is a documented no-op until `mf read`/1.6 populates
+   it). Superseded pages return only as a `{uuid, superseded_by}`
+   pointer, not a full stub.
 4. Reranker (cross-encoder over the top 20) is cut, not deferred,
    unless the blind vocabulary-mismatch query set (roadmap 1.8) shows
    P@3 dropping below ~0.8. See M4 in the roadmap.
@@ -75,16 +80,13 @@ plan's original symmetric-RRF hybrid:
 Output is JSON or a compact text table. The agent never sees a body
 unless it asks.
 
-**Confidence gate: calibrated, not yet wired into `search`** (CLAUDE.md
-gotcha 15/18). `mf/confidence.py` computes `confidence: high|low|none`
+**Confidence gate: calibrated and wired into `search`** (CLAUDE.md
+gotcha 15/18/19). `mf/confidence.py` computes `confidence: high|low|none`
 from two signals, not one heuristic: FTS's bm25 score normalized by
 matched-term count decides none vs. not-none (raw magnitude alone
-doesn't separate no-answer from real-answer queries on this corpus);
-FTS/dense top-1 agreement decides high vs. low. `search` (roadmap 1.5)
-still needs to call it, and needs to decide whether running dense on
-every query (not just as a fallback) to get the agreement signal is an
-acceptable cost, or whether the gate should degrade to floor-only when
-dense isn't run.
+doesn't separate no-answer from real-answer queries on this corpus,
+and is corpus-size-dependent besides); FTS/dense top-1 agreement
+decides high vs. low.
 
 ### 4. Read
 

@@ -94,3 +94,39 @@ def test_sha256_changes_when_text_changes():
 def test_slugify_strips_punctuation_and_lowercases():
     assert slugify("Don't do this!") == "don-t-do-this"
     assert slugify("  Spaced  Out  ") == "spaced-out"
+
+
+def test_unquoted_value_with_colon_is_not_a_parse_error():
+    # "Topic: specific question" is this project's own title convention
+    # (see eval/corpus/) -- a bare "key: value: rest" is invalid plain
+    # YAML (the second colon+space reads as a nested mapping) unless the
+    # parser quotes it first.
+    text = (
+        "---\nuuid: page-005\n"
+        "title: Auth: rotating the JWT signing key\n"
+        "summary: Run make rotate-key; old key valid 5 minutes\n"
+        "---\n\nBody.\n"
+    )
+    page = parse_page(text, filename="colon.md")
+    assert page.title == "Auth: rotating the JWT signing key"
+    assert page.summary == "Run make rotate-key; old key valid 5 minutes"
+
+
+def test_value_starting_with_backtick_is_not_a_parse_error():
+    # A leading backtick can't start a plain YAML scalar either -- this
+    # value is deliberately unquoted in the source to test that.
+    text = (
+        "---\nuuid: page-006\ntitle: Backtick lead\n"
+        "summary: `Idempotency-Key` ties a response to a request\n---\n\nBody.\n"
+    )
+    page = parse_page(text, filename="backtick.md")
+    assert page.summary == "`Idempotency-Key` ties a response to a request"
+
+
+def test_value_with_backslash_round_trips():
+    text = (
+        "---\nuuid: page-007\ntitle: Backslash\n"
+        "summary: C:\\Users\\path style, not escaped by the author\n---\n\nBody.\n"
+    )
+    page = parse_page(text, filename="backslash.md")
+    assert page.summary == "C:\\Users\\path style, not escaped by the author"

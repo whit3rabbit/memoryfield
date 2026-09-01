@@ -41,7 +41,8 @@ CORPUS_DIR = ROOT / "corpus" / "codebase"
 _MODEL_CACHE: dict = {}
 
 
-def _cached_embed_query(query: str, model_kind: str, model_name: str) -> list[float]:
+def _cached_embed_query(query: str, model_code: str) -> list[float]:
+    model_kind, model_name = "nomic", "nomic-ai/nomic-embed-text-v1.5"
     if model_name not in _MODEL_CACHE:
         from fastembed import TextEmbedding
         _MODEL_CACHE[model_name] = TextEmbedding(model_name=model_name)

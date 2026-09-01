@@ -26,7 +26,7 @@ Start here:
 ```bash
 # Install the mf CLI
 uv tool install .
-mf init /path/to/field && mf index /path/to/field
+mf init /path/to/field && mf index /path/to/field   # --model bge-large-en-v1.5 for a 1024-d field
 mf search "how do we roll back a deploy" --field /path/to/field
 
 # Install eval's dependencies (fastembed) into a local venv

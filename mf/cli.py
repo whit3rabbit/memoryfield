@@ -11,12 +11,13 @@ import json
 import sys
 from pathlib import Path
 
-from mf import __version__, db, indexer
+from mf import __version__, db, embedder, indexer
 from mf import raw as raw_mod
 from mf import read as read_mod
 from mf import search as search_mod
 from mf import write as write_mod
 from mf.page import PageParseError
+from mf.schema import DEFAULT_MODEL_CODE
 
 STUB_COMMANDS = ()
 
@@ -28,6 +29,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     init_parser = subparsers.add_parser("init", help="create mf.sqlite3 in a field")
     init_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+    init_parser.add_argument(
+        "--model", choices=sorted(embedder.MODEL_REGISTRY), default=DEFAULT_MODEL_CODE,
+        help="embedding model for this field; fixed at init (default: %(default)s)",
+    )
 
     index_parser = subparsers.add_parser("index", help="scan a field's pages into mf.sqlite3")
     index_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
@@ -86,12 +91,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _cmd_init(args: argparse.Namespace) -> int:
     field_dir = Path(args.dir).resolve()
+    entry = embedder.registry_entry(args.model)
     try:
-        db_path = db.init_field(field_dir)
+        db_path = db.init_field(field_dir, model_code=args.model, embedding_dim=entry["dim"])
     except db.FieldExistsError as e:
         sys.stderr.write(f"mf init: {e} already exists; nothing to do.\n")
         return 1
-    print(f"Initialized empty field at {db_path}")
+    print(f"Initialized empty field at {db_path} (model {args.model}, {entry['dim']}-d)")
     return 0
 
 

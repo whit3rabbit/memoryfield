@@ -25,9 +25,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from sqlite3 import Connection
 
-from . import indexer
-from .embedding import document_text
-from .indexer import MODEL_REGISTRY, UnknownModelCodeError
+from . import embedder, indexer
+from .embedder import vec_literal
 from .page import Page, load_page, parse_page
 from .schema import DEFAULT_MODEL_CODE, get_config
 
@@ -89,22 +88,11 @@ class WriteResult:
         return d
 
 
-def _vec_literal(vector: list[float]) -> str:
-    return "[" + ",".join(repr(v) for v in vector) + "]"
-
-
 def _embed_page(page: Page, model_code: str) -> list[float]:
-    if model_code not in MODEL_REGISTRY:
-        raise UnknownModelCodeError(
-            f"unknown model_code {model_code!r}; known: {list(MODEL_REGISTRY)}"
-        )
-    entry = MODEL_REGISTRY[model_code]
-    from fastembed import TextEmbedding
-
-    model = TextEmbedding(model_name=entry["fastembed_name"])
-    text = document_text(page.title, page.summary, page.l1, entry["kind"])
-    vec = next(iter(model.embed([text])))
-    return [float(v) for v in vec]
+    """Thin wrapper over mf.embedder so tests can monkeypatch the gate
+    without loading a model. The model is cached process-wide, so the
+    index step after a gate pass reuses it."""
+    return embedder.embed_page(page, model_code)
 
 
 def _find_duplicates(
@@ -118,7 +106,7 @@ def _find_duplicates(
     # page being re-written in place isn't a duplicate of itself).
     rows = conn.execute(
         "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = ?",
-        (_vec_literal(embedding), limit + 1),
+        (vec_literal(embedding), limit + 1),
     ).fetchall()
 
     candidates: list[DedupCandidate] = []

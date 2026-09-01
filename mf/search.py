@@ -27,9 +27,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from sqlite3 import Connection
 
+from . import embedder
 from .confidence import Confidence, confidence
-from .embedding import query_text
-from .indexer import MODEL_REGISTRY, UnknownModelCodeError
+from .embedder import vec_literal
 from .query_prep import fts_query
 from .schema import DEFAULT_MODEL_CODE, get_config
 from .tokens import default_tokenize
@@ -97,15 +97,10 @@ class SearchResult:
         }
 
 
-def _vec_literal(vector: list[float]) -> str:
-    return "[" + ",".join(repr(v) for v in vector) + "]"
-
-
-def _embed_query(query: str, model_kind: str, model_name: str) -> list[float]:
-    from fastembed import TextEmbedding
-    model = TextEmbedding(model_name=model_name)
-    vec = next(iter(model.embed([query_text(query, model_kind)])))
-    return [float(v) for v in vec]
+def _embed_query(query: str, model_code: str) -> list[float]:
+    """Thin wrapper over mf.embedder so tests can monkeypatch the query
+    path without loading a model."""
+    return embedder.embed_query(query, model_code)
 
 
 def _fts_search(conn: Connection, query: str, limit: int) -> tuple[list[tuple[str, float]], int]:
@@ -130,7 +125,7 @@ def _dense_search(
     """Top-`limit` (uuid, cosine distance) pairs, nearest first."""
     cur = conn.execute(
         "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = ?",
-        (_vec_literal(query_vector), limit),
+        (vec_literal(query_vector), limit),
     )
     return [(row[0], row[1]) for row in cur.fetchall()]
 
@@ -277,14 +272,10 @@ def search(
     on-disk sha256 to the index); without it no check runs. `stale_ok`
     downgrades a stale hit from an error to a `stale: true` flag."""
     model_code = get_config(conn, "model_code") or DEFAULT_MODEL_CODE
-    if model_code not in MODEL_REGISTRY:
-        raise UnknownModelCodeError(
-            f"unknown model_code {model_code!r}; known: {list(MODEL_REGISTRY)}"
-        )
-    entry = MODEL_REGISTRY[model_code]
+    embedder.registry_entry(model_code)  # raises UnknownModelCodeError early
 
     fts_ranked, term_count = _fts_search(conn, query, limit)
-    query_vector = _embed_query(query, entry["kind"], entry["fastembed_name"])
+    query_vector = _embed_query(query, model_code)
     dense_ranked = _dense_search(conn, query_vector, limit)
 
     fts_top1 = fts_ranked[0][0] if fts_ranked else None

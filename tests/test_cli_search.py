@@ -20,7 +20,7 @@ def _fake_embed_pages(pages, model_code):
     return {p.uuid: [0.1] * EMBEDDING_DIM for p in pages}
 
 
-def _fake_embed_query(query, model_kind, model_name):
+def _fake_embed_query(query, model_code):
     return [0.1] * EMBEDDING_DIM
 
 

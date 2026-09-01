@@ -99,7 +99,7 @@ def _build_field(tmp_path, monkeypatch):
 
 
 def _agree_with(uuid: str):
-    def _fake_embed_query(query, model_kind, model_name):
+    def _fake_embed_query(query, model_code):
         return _PAGE_VECTORS[uuid]
     return _fake_embed_query
 
@@ -160,7 +160,7 @@ def test_no_fts_hit_and_far_dense_is_none(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
     far = [0.0] * EMBEDDING_DIM
     far[EMBEDDING_DIM - 1] = 1.0  # orthogonal to every page vector
-    monkeypatch.setattr(search, "_embed_query", lambda q, k, n: far)
+    monkeypatch.setattr(search, "_embed_query", lambda q, m: far)
 
     result = search.search(conn, "is the a of", limit=5)
     assert result.confidence == "none"

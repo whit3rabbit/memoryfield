@@ -489,8 +489,11 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       only on a gate pass, indexing just that page (the in-field flow
       made the gate advisory: `mf index` picked up blocked drafts);
       superseded hits resolve inline to their superseder; `mf search`
-      refuses a stale index (exit 3) unless `--stale-ok`. 148/148
-      tests. 2.9-2.11 open.
+      refuses a stale index (exit 3) unless `--stale-ok`. 2.9 is done:
+      `mf/embedder.py` is the one embedding entry point (registry,
+      per-process model cache, `vec_literal`), and `mf init --model
+      bge-large-en-v1.5` builds a 1024-d field. 156/156 tests.
+      2.10-2.11 open.
       Only 0.5's unsent upstream email remains open from Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).

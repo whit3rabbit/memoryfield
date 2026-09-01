@@ -14,8 +14,12 @@ import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
 
-from . import schema
-from .embedding import document_text
+from . import embedder, schema
+from .embedder import (  # noqa: F401  (re-exported)
+    MODEL_REGISTRY,
+    UnknownModelCodeError,
+    vec_literal,
+)
 from .page import Page, PageParseError, load_page
 from .tokens import default_tokenize
 
@@ -24,22 +28,6 @@ from .tokens import default_tokenize
 # implementations not index it, since its entries are freeform session
 # extracts, not memoryfield pages.
 _SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".mfgpt", "raw"}
-
-# Spec model_code (docs/architecture.md, PLAN.md) -> fastembed registry name
-# and the prefix "kind" mf/embedding.py's DOCUMENT_PREFIXES/QUERY_PREFIXES
-# key on. Only nomic is wired: it's the spec default (PLAN.md's embedder
-# table) and the only model init_field() currently configures.
-MODEL_REGISTRY = {
-    "nomic-embed-text-v1.5": {
-        "fastembed_name": "nomic-ai/nomic-embed-text-v1.5",
-        "kind": "nomic",
-    },
-}
-
-
-class UnknownModelCodeError(ValueError):
-    pass
-
 
 @dataclass
 class IndexResult:
@@ -82,21 +70,9 @@ def _existing_sha256(conn: sqlite3.Connection) -> dict[str, str]:
 def _embed_pages(
     pages: list[Page], model_code: str
 ) -> dict[str, list[float]]:
-    if not pages:
-        return {}
-    if model_code not in MODEL_REGISTRY:
-        raise UnknownModelCodeError(
-            f"unknown model_code {model_code!r}; known: {list(MODEL_REGISTRY)}"
-        )
-    entry = MODEL_REGISTRY[model_code]
-    from fastembed import TextEmbedding
-
-    model = TextEmbedding(model_name=entry["fastembed_name"])
-    texts = [
-        document_text(p.title, p.summary, p.l1, entry["kind"]) for p in pages
-    ]
-    vecs = list(model.embed(texts, batch_size=32))
-    return {p.uuid: list(map(float, v)) for p, v in zip(pages, vecs)}
+    """Thin wrapper over mf.embedder so tests can monkeypatch the index
+    path without loading a model."""
+    return embedder.embed_pages(pages, model_code)
 
 
 _TYPED_LINK_KINDS = ("supersedes", "contradicts", "depends_on")
@@ -161,7 +137,7 @@ def _write_page(
     if embedding is not None:
         conn.execute(
             "INSERT INTO vec (page_uuid, embedding) VALUES (?, ?)",
-            (page.uuid, _vec_literal(embedding)),
+            (page.uuid, vec_literal(embedding)),
         )
 
     for kind, targets in zip(
@@ -173,10 +149,6 @@ def _write_page(
                 "VALUES (?, ?, ?, 1.0)",
                 (page.uuid, dst, kind),
             )
-
-
-def _vec_literal(vector: list[float]) -> str:
-    return "[" + ",".join(repr(v) for v in vector) + "]"
 
 
 def index_page(field_dir: Path, conn: sqlite3.Connection, page_path: Path) -> str:

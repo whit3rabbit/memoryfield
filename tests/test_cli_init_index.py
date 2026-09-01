@@ -1,3 +1,5 @@
+import pytest
+
 from mf import cli, indexer
 
 PAGE_1 = """\
@@ -50,3 +52,22 @@ def test_index_reports_counts(tmp_path, capsys, monkeypatch):
     exit_code = cli.main(["index", str(tmp_path)])
     assert exit_code == 0
     assert "0 upserted, 1 unchanged, 0 deleted" in capsys.readouterr().out
+
+
+def test_init_with_bge_sets_dim_and_vec_width(tmp_path, capsys):
+    from mf import db, schema
+
+    exit_code = cli.main(["init", str(tmp_path), "--model", "bge-large-en-v1.5"])
+    assert exit_code == 0
+    assert "1024-d" in capsys.readouterr().out
+    conn = db.open_field(tmp_path)
+    assert schema.get_config(conn, "model_code") == "bge-large-en-v1.5"
+    assert schema.get_config(conn, "embedding_dim") == "1024"
+    conn.execute("INSERT INTO vec VALUES ('p', ?)", ("[" + ",".join(["0.1"] * 1024) + "]",))
+    conn.close()
+
+
+def test_init_rejects_unknown_model(tmp_path, capsys):
+    with pytest.raises(SystemExit):
+        cli.main(["init", str(tmp_path), "--model", "nope"])
+    assert "invalid choice" in capsys.readouterr().err

@@ -54,9 +54,9 @@ from typing import Any
 from eval.mf_harness import Query, load_queries
 from mf import db, indexer
 from mf.confidence import Confidence
+from mf.embedder import vec_literal
 from mf.embedding import document_text, query_text
 from mf.query_prep import fts_query
-from mf.search import _vec_literal
 
 ROOT = Path(__file__).parent
 CORPUS_DIR = ROOT / "corpus"
@@ -178,7 +178,7 @@ def _observe(conn: Connection, q: Query, set_name: str) -> Obs:
         ).fetchall()
     dense = conn.execute(
         "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = ?",
-        (_vec_literal(_embed_query(q.text)), TOPK),
+        (vec_literal(_embed_query(q.text)), TOPK),
     ).fetchall()
     return Obs(q.qid, set_name, list(q.answer_uuids), [tuple(r) for r in fts],
                term_count, [tuple(r) for r in dense])

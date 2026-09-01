@@ -303,16 +303,6 @@ measured (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`):
 Things the code does that the docs used to describe differently, each
 with the roadmap item that closes it:
 
-- Embedding is instantiated in three places (`mf/search.py`,
-  `mf/write.py`, `mf/indexer.py`), each loading a fresh `fastembed`
-  model, and `_vec_literal` is copied into all three. `mf/embed_backend.py`
-  (the MLX/fastembed selector) exists but only the eval harness uses it.
-  This is exactly the single-source-of-truth drift the roadmap checklist's
-  item 1 warns about. ROADMAP.md 2.9.
-- `mf write` loads the model twice per call (once for the gate, once
-  inside `index_page`). Same fix.
-- `bge-large-en-v1.5` is evaluated but not a selectable `mf init` model
-  (`MODEL_REGISTRY` only wires nomic). ROADMAP.md 2.9.
 - `claims.slug` has no definition: pages have no slug. ROADMAP.md 4.3.
 - `DEFAULT_LIMIT`/`DEFAULT_NEIGHBOR_LIMIT` moved from 5 / 3 to 3 / 1
   with 2.7 (CLAUDE.md gotcha 26). The token cost of the new default
@@ -332,8 +322,17 @@ with the roadmap item that closes it:
   `bge-large-en-v1.5` is within noise of nomic on this corpus and
   costs ~1 GB more, so nomic stays the default (CLAUDE.md gotcha 3 on
   the prefix trap, gotcha 4 on running nomic and bge in separate
-  processes). `mf/embed_backend.py` can select an MLX backend on Apple
-  Silicon, but the CLI path is fastembed-only today.
+  processes). `mf init --model bge-large-en-v1.5` builds a 1024-d field
+  with it (2.9); the model is fixed per field. All three commands embed
+  through `mf/embedder.py`, which owns the model registry, a per-process
+  model cache (so `mf write` loads once for gate and index), and
+  `vec_literal()`. Backend is fastembed unless `MF_EMBED_BACKEND=mlx`;
+  not auto-selected, because an index's vectors must come from one
+  runtime and the backend isn't recorded in `config`. Caveat: `FLOOR`,
+  `DENSE_FLOOR`, and `DEDUP_THRESHOLD` were calibrated on nomic
+  distances; a bge field runs on those constants uncalibrated (bge's
+  cosine distances sit in a different range). Recalibrate before
+  trusting a bge field's `confidence`.
 - Reranker: none, see section 3 point 4.
 - LLM: none. Extraction and consolidation are done by the host agent
   that's already running, the tool never calls an LLM itself.

@@ -19,7 +19,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from mf import db, indexer, write
+from mf import db, embedder, indexer, write
 from mf.page import load_page
 
 ROOT = Path(__file__).parent / "corpus"
@@ -75,7 +75,7 @@ def main() -> int:
             emb = write._embed_page(load_page(path), MODEL_CODE)
             rows = conn.execute(
                 "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = 3",
-                (write._vec_literal(emb),),
+                (embedder.vec_literal(emb),),
             ).fetchall()
             print(f"  paraphrase {pu}:", [(r[0], round(r[1], 3)) for r in rows])
         conn.close()

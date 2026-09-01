@@ -22,7 +22,7 @@ def test_apply_schema_creates_every_table():
             "SELECT name FROM sqlite_master WHERE type IN ('table', 'view')"
         )
     }
-    for table in ("config", "pages", "sections", "fts", "links", "claims", "vec"):
+    for table in ("config", "pages", "sections", "fts", "links", "claims", "vec", "reads"):
         assert table in names, f"missing table: {table}"
 
 

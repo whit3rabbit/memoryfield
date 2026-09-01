@@ -1,7 +1,7 @@
 """Command-line entry point for `mf`.
 
-`init`/`index`/`search` are real (ROADMAP.md 1.3/1.4/1.5). `read`
-(Phase 1) and `write` (Phase 2) are still stubs.
+`init`/`index`/`search`/`read` are real (ROADMAP.md 1.3-1.6). `write`
+(Phase 2) is still a stub.
 """
 from __future__ import annotations
 
@@ -11,9 +11,10 @@ import sys
 from pathlib import Path
 
 from mf import __version__, db, indexer
+from mf import read as read_mod
 from mf import search as search_mod
 
-STUB_COMMANDS = ("read", "write")
+STUB_COMMANDS = ("write",)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -36,6 +37,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     search_parser.add_argument("--budget", type=int, default=None, help="token cap on the result set")
     search_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    read_parser = subparsers.add_parser("read", help="read a page's L1/L2 slice or a #section")
+    read_parser.add_argument("refs", nargs="+", help="uuid or uuid#section, one or more")
+    read_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    read_parser.add_argument("--tier", choices=read_mod.TIERS, default=None)
+    read_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     for name in STUB_COMMANDS:
         subparsers.add_parser(name)
@@ -115,6 +122,39 @@ def _cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def _render_read_text(results: list[read_mod.ReadResult]) -> str:
+    lines = []
+    for r in results:
+        ref = f"{r.uuid}#{r.section}" if r.section else f"{r.uuid} ({r.tier})"
+        lines.append(f"[{ref}] {r.title}")
+        lines.append(r.body)
+        if r is not results[-1]:
+            lines.append("")
+    return "\n".join(lines)
+
+
+def _cmd_read(args: argparse.Namespace) -> int:
+    field_dir = Path(args.field).resolve()
+    try:
+        conn = db.open_field(field_dir)
+    except db.FieldNotFoundError as e:
+        sys.stderr.write(f"mf read: {e}\n")
+        return 1
+    try:
+        results = read_mod.read(conn, args.refs, tier=args.tier)
+    except (read_mod.PageNotFoundError, read_mod.SectionNotFoundError) as e:
+        sys.stderr.write(f"mf read: not found: {e}\n")
+        return 1
+    finally:
+        conn.close()
+
+    if args.json:
+        print(json.dumps([r.as_dict() for r in results], indent=2))
+    else:
+        print(_render_read_text(results))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -127,6 +167,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_index(args)
     if args.command == "search":
         return _cmd_search(args)
+    if args.command == "read":
+        return _cmd_read(args)
     sys.stderr.write(
         f"mf {args.command}: not implemented yet — see ROADMAP.md Phase 1/2.\n"
     )

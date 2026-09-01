@@ -62,6 +62,14 @@ CREATE TABLE IF NOT EXISTS claims (
     claimed_by TEXT NOT NULL,
     claimed_at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS reads (
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    uuid    TEXT NOT NULL,
+    section TEXT,
+    tier    TEXT,
+    read_at TEXT NOT NULL
+);
 """
 
 _VEC_DDL_TEMPLATE = """

@@ -6,10 +6,10 @@ Memoryfield eval harness. Context for the next agent, human or model.
 
 The `mf` memoryfield tool described in PLAN.md, plus its eval harness.
 `mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`).
-`init`/`index` are real (ROADMAP.md 1.3); `search`/`read`/`write` are
-still stubs. `eval/` (formerly `harness/`) is the eval and corpus rig
-from M0/M0.5; it's complete and unrelated to whether `mf/` itself has
-search or read yet.
+`init`/`index`/`search`/`read` are real (ROADMAP.md 1.3-1.6); `write`
+is still a stub. `eval/` (formerly `harness/`) is the eval and corpus
+rig from M0/M0.5; it's complete and unrelated to whether `mf/` itself
+has a write path yet.
 
 For the schema and retrieval design as currently decided (not the
 eval narrative), see [docs/architecture.md](docs/architecture.md).
@@ -253,15 +253,17 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
 - [x] M0: eval harness, labeled corpus, 6 baselines.
 - [x] M0.5: real dense baselines, 458-query set, per-axis breakdown.
       See "Where things stand" for the corrected headline.
-- [ ] M1, read path (`init`, `index`, `search`, `read`). 1.1 through 1.5
-      are done: `mf init`/`mf index`/`mf search` all work end to end
-      against real sqlite-vec + fastembed and a real 157-page corpus,
-      80/80 tests passing. `search` now runs dense on every query (not
-      only as a fallback) so the calibrated confidence gate's
-      FTS/dense-agreement signal is always available -- a real design
-      change from the plan's original "dense as fallback only," forced
-      by 1.4's calibration result (gotcha 15). `mf read`/`mf write` are
-      still stubs.
+- [ ] M1, read path (`init`, `index`, `search`, `read`). 1.1 through 1.6
+      are done: `mf init`/`mf index`/`mf search`/`mf read` all work end
+      to end against real sqlite-vec + fastembed and a real 157-page
+      corpus, 99/99 tests passing. `search` now runs dense on every
+      query (not only as a fallback) so the calibrated confidence
+      gate's FTS/dense-agreement signal is always available -- a real
+      design change from the plan's original "dense as fallback only,"
+      forced by 1.4's calibration result (gotcha 15). `mf read` adds a
+      `reads` log table and is the only path that populates `co_read`
+      weight in `links` (multi-ref calls bump every pair). `mf write`
+      is still a stub.
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
       `pack`/`unpack`). `lint` is load-bearing now (gotcha 16), not
       optional.

@@ -42,6 +42,7 @@ vec     -- sqlite-vec, embedding of title+summary+L1 only, model-tagged
 links   (src, dst, kind, weight)      -- kind: supersedes|contradicts|depends_on|co_read
 claims  (slug, claimed_by, claimed_at) -- for multi-writer create/update resolution
 config  (key, value)                  -- model_code, embedding_dim, schema_version
+reads   (id, uuid, section, tier, read_at) -- append-only log written by `mf read`
 ```
 
 Dense covers L0+L1 (what a page is *for*), FTS covers the full body
@@ -115,10 +116,23 @@ blind query set is meant to re-test.
 
 ### 4. Read
 
-`read uuid[#section] --tier L1|L2` returns exactly that slice, logs
-the read, and increments `co_read` for pages read in the same call.
-`co_read` only sees reads that go through this path: an agent that
-`cat`s a page bypasses it (accepted risk, PLAN.md section 10).
+**Built (ROADMAP.md 1.6).** `mf/read.py`, wired into `mf/cli.py`:
+`read uuid[#section] --tier L1|L2` (one or more refs per call) returns
+exactly that slice, logs the read to the `reads` table, and for a
+multi-ref call increments `co_read` weight in `links` for every pair
+of uuids in that call (canonical `src < dst` ordering, so weight
+accumulates on one row across calls rather than splitting across both
+directions). `co_read` only sees reads that go through this path: an
+agent that `cat`s a page bypasses it (accepted risk, PLAN.md section
+10). Content is never cached in the index -- each call re-parses the
+page fresh off disk via `mf.page.load_page()`, keyed by the `filename`
+column in `pages`. A bare uuid with no `--tier` defaults to L1
+(answer-first, matching the intended stub -> L1 -> L2 escalation
+order). L2 is everything after the first section, concatenated,
+possibly empty on a single-section page. Verified end to end against
+the real 157-page corpus: L1/L2 tiers, named-section refs, the
+not-found error path, and co_read weight accumulation across repeated
+calls.
 
 ### 5. Write (M2, not yet built)
 

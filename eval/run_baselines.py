@@ -81,16 +81,24 @@ else:
     )
 
 DOMAINS = {
-    "codebase": ("codebase", "code"),
-    "papers": ("papers", "papers"),
+    "codebase": ("codebase", "code", "queries.jsonl"),
+    "papers": ("papers", "papers", "queries.jsonl"),
+    # ROADMAP.md 1.8: same corpus, a query set authored blind (query text
+    # phrased by a party that never saw the corpus, only a neutral task
+    # description -- see eval/queries/{codebase,papers}/queries_blind.jsonl
+    # and their generation notes). Separate domain keys, separate result
+    # files (`{baseline}_{domain}.json`), so this never touches the M0.5
+    # `queries.jsonl`/results/summary.json the committed report reads from.
+    "codebase_blind": ("codebase", "code_blind", "queries_blind.jsonl"),
+    "papers_blind": ("papers", "papers_blind", "queries_blind.jsonl"),
 }
 
 
 def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
-    corpus_path, query_domain = DOMAINS[domain_name]
+    corpus_path, query_domain, queries_filename = DOMAINS[domain_name]
     corpus = load_corpus(CORPUS_DIR / corpus_path)
     queries = load_queries(
-        QUERIES_DIR / corpus_path / "queries.jsonl", query_domain
+        QUERIES_DIR / corpus_path / queries_filename, query_domain
     )
 
     print(f"  {baseline_name:>8} on {domain_name:>8}: "

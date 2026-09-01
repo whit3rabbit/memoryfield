@@ -246,6 +246,29 @@ Organized by where they will bite next.
     session's legitimate concurrent work, not corruption; investigate
     before overwriting it.
 
+### M1 calibration gotchas (surfaced by ROADMAP.md 1.8)
+
+25. **The confidence gate's "0% false-high-confidence" claim (gotcha
+    15/18) was calibrated against a no-answer set drawn from the same
+    vocabulary as the corpus (gotcha 7's ceiling effect again) -- it
+    does not hold under vocabulary mismatch.** The 1.8 blind query set
+    (queries authored without seeing the corpus) found one: `"GDPR
+    deletion request process for customer data"` -- a genuine no-answer
+    query, no page in the corpus covers this topic -- returned
+    `confidence: high` pointing at `code-dm-soft-delete`, a
+    topically-adjacent but wrong page. n=1/8 blind no-answer queries,
+    so this is a real, reproduced instance, not yet a rate to
+    recalibrate against (that needs a larger blind no-answer sample,
+    unclaimed follow-up work). More broadly on that same blind set: the
+    dense fallback (`mf/search.py`'s FTS-empty branch) essentially
+    never fires even under intentionally mismatched phrasing (0% on
+    both domains, same as the 0-1% baseline rate) because
+    `fts_query()`'s OR-joined tokenization almost always finds *some*
+    lexical overlap; the bm25-floor gate is what actually absorbs the
+    degradation instead, with correct-hit demotion to `confidence:
+    none` roughly doubling versus the 19.8% M0.5 baseline. See
+    ROADMAP.md 1.8 for the full numbers and methodology.
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md) section 9 for the full milestone list.
@@ -265,7 +288,12 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       populates `co_read` weight in `links` (multi-ref calls bump
       every pair). `.claude/skills/mf/SKILL.md` (1.7) documents only
       what's built -- `mf write` is still a stub, and the skill says so
-      rather than describing the aspirational full command set.
+      rather than describing the aspirational full command set. 1.8's
+      blind (vocabulary-mismatch) query set found the M0.5 headline
+      numbers hold up (real embedding models flat to slightly up,
+      lexical/TF-IDF methods degrade) but also found a real gap in the
+      calibrated confidence gate under mismatch (gotcha 25) -- 1.9
+      (real-agent trial) is the only item left before Phase 1 exits.
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
       `pack`/`unpack`). `lint` is load-bearing now (gotcha 16), not
       optional.

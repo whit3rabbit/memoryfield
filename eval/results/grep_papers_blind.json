@@ -1,0 +1,588 @@
+{
+  "baseline": "grep",
+  "domain": "papers_blind",
+  "n_pages": 82,
+  "n_queries": 24,
+  "n_no_answer": 4,
+  "no_answer_correct": 0,
+  "no_answer_rate": 0.0,
+  "stub_end_given_hit_rate": 0.8421052631578947,
+  "n_given_hit": 19,
+  "p_at_3_95ci": [
+    0.95,
+    0.85,
+    1.0
+  ],
+  "p_at_5_95ci": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "elapsed_seconds": 0.0183,
+  "metrics": {
+    "baseline": "grep",
+    "domain": "papers_blind",
+    "n_queries": 24,
+    "p_at_3": 0.95,
+    "p_at_5": 1.0,
+    "r_at_5": 1.0,
+    "mrr": 0.8791666666666667,
+    "stub_end_rate": 0.6666666666666666,
+    "stub_end_given_hit_rate": 0.8421052631578947,
+    "tokens_stub_median": 299.5,
+    "tokens_stub_p95": 319.95,
+    "tokens_l1_median": 456.5,
+    "tokens_full_median": 462.0,
+    "p_at_3_ci_low": 0.85,
+    "p_at_3_ci_high": 1.0,
+    "p_at_5_ci_low": 1.0,
+    "p_at_5_ci_high": 1.0,
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/grep_papers_blind.json"
+  },
+  "per_query": [
+    {
+      "qid": "blind-paper-001",
+      "text": "adamw vs adam l2 regularization difference",
+      "answer_uuids": [
+        "paper-adam-adamw"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-adam-adamw",
+        "paper-adam-default-lr",
+        "paper-adam-epsilon",
+        "paper-adam-moments",
+        "paper-auc-roc"
+      ],
+      "stub_tokens": 302,
+      "l1_tokens": 475,
+      "full_tokens": 477,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-002",
+      "text": "good default learning rate for adam vs sgd",
+      "answer_uuids": [
+        "paper-adam-default-lr"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-lr-importance",
+        "paper-auc-roc",
+        "paper-adam-adamw",
+        "paper-adam-epsilon"
+      ],
+      "stub_tokens": 304,
+      "l1_tokens": 433,
+      "full_tokens": 435,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-003",
+      "text": "how does bert pretraining work without labels masked language model",
+      "answer_uuids": [
+        "paper-bert-mlm"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-bert-mlm",
+        "paper-tok-special",
+        "paper-ln-vs-bn",
+        "paper-bert-nsp",
+        "paper-bert-pretraining-data"
+      ],
+      "stub_tokens": 265,
+      "l1_tokens": 378,
+      "full_tokens": 381,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-004",
+      "text": "resnet skip connections why deep networks degrade",
+      "answer_uuids": [
+        "paper-resnet-skip"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-resnet-skip",
+        "paper-dqn-tricks",
+        "paper-resnet-shortcuts",
+        "paper-ce-definition",
+        "paper-dist-dark-knowledge"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 443,
+      "full_tokens": 446,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-005",
+      "text": "linear attention alternative to transformers long sequences",
+      "answer_uuids": [
+        "paper-mamba-arch"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "paper-alibi-definition",
+        "paper-mamba-arch",
+        "paper-flashattn-tiling",
+        "paper-gelu-definition",
+        "paper-init-xavier-he"
+      ],
+      "stub_tokens": 292,
+      "l1_tokens": 436,
+      "full_tokens": 439,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-006",
+      "text": "LoRA low rank adaptation fine-tuning explained",
+      "answer_uuids": [
+        "paper-lora-decomposition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 3,
+      "topk": [
+        "paper-lora-rank",
+        "paper-lora-merge",
+        "paper-lora-decomposition",
+        "paper-lr-importance",
+        "paper-moe-routing"
+      ],
+      "stub_tokens": 284,
+      "l1_tokens": 385,
+      "full_tokens": 411,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-007",
+      "text": "how does mixture of experts routing work",
+      "answer_uuids": [
+        "paper-moe-routing"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-moe-routing",
+        "paper-moe-load-balancing",
+        "paper-adam-default-lr",
+        "paper-dqn-reward-clipping",
+        "paper-lora-rank"
+      ],
+      "stub_tokens": 297,
+      "l1_tokens": 457,
+      "full_tokens": 460,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-008",
+      "text": "cross entropy loss formula multiclass classification",
+      "answer_uuids": [
+        "paper-ce-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 4,
+      "topk": [
+        "paper-dpo-loss",
+        "paper-auc-roc",
+        "paper-bert-nsp",
+        "paper-ce-definition",
+        "paper-dist-soft-labels"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 475,
+      "full_tokens": 478,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-009",
+      "text": "BLEU score machine translation evaluation metric",
+      "answer_uuids": [
+        "paper-bleu-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bleu-definition",
+        "paper-alibi-definition",
+        "paper-auc-roc",
+        "paper-dqn-atari-results",
+        "paper-dqn-reward-clipping"
+      ],
+      "stub_tokens": 301,
+      "l1_tokens": 469,
+      "full_tokens": 472,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-010",
+      "text": "perplexity language model evaluation metric explained",
+      "answer_uuids": [
+        "paper-perplexity-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-perplexity-definition",
+        "paper-bert-mlm",
+        "paper-mamba-arch",
+        "paper-tok-special",
+        "paper-alibi-definition"
+      ],
+      "stub_tokens": 298,
+      "l1_tokens": 457,
+      "full_tokens": 459,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-011",
+      "text": "what does batch norm actually calculate during training",
+      "answer_uuids": [
+        "paper-bn-formula"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "paper-bn-formula",
+        "paper-why-dropping-mean-centering-works",
+        "paper-adam-default-lr",
+        "paper-bn-lr-benefit",
+        "paper-dropout-definition"
+      ],
+      "stub_tokens": 322,
+      "l1_tokens": 456,
+      "full_tokens": 489,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-012",
+      "text": "transformer layer norm vs batch norm which one and why",
+      "answer_uuids": [
+        "paper-ln-vs-bn"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ln-vs-bn",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-rms-definition",
+        "paper-bn-formula",
+        "paper-gan-mode-collapse"
+      ],
+      "stub_tokens": 303,
+      "l1_tokens": 434,
+      "full_tokens": 472,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-013",
+      "text": "what fixed instability in deep Q-learning training",
+      "answer_uuids": [
+        "paper-dqn-tricks"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dqn-tricks",
+        "paper-mamba-selective",
+        "paper-adam-default-lr",
+        "paper-alibi-definition",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 313,
+      "l1_tokens": 472,
+      "full_tokens": 475,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-014",
+      "text": "why does PPO clip the objective function",
+      "answer_uuids": [
+        "paper-ppo-clipped-objective"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-ppo-clipped-objective",
+        "paper-ppo-epsilon",
+        "paper-adam-default-lr",
+        "paper-ce-definition",
+        "paper-dist-dark-knowledge"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 461,
+      "full_tokens": 463,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-015",
+      "text": "RLHF without reward model or PPO alternative",
+      "answer_uuids": [
+        "paper-dpo-loss"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dpo-loss",
+        "paper-ln-vs-bn",
+        "paper-dqn-reward-clipping",
+        "paper-lr-importance",
+        "paper-mamba-selective"
+      ],
+      "stub_tokens": 305,
+      "l1_tokens": 487,
+      "full_tokens": 490,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-016",
+      "text": "nucleus sampling vs top-k for text generation",
+      "answer_uuids": [
+        "paper-nucleus-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-nucleus-sampling",
+        "paper-auc-roc",
+        "paper-beam-search",
+        "paper-moe-routing",
+        "paper-parameter-equivalent-vs-parameter-matched"
+      ],
+      "stub_tokens": 321,
+      "l1_tokens": 467,
+      "full_tokens": 470,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-017",
+      "text": "beam search explained sequence generation",
+      "answer_uuids": [
+        "paper-beam-search"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-beam-search",
+        "paper-alibi-definition",
+        "paper-rope-relative",
+        "paper-tok-special",
+        "paper-tx-positional"
+      ],
+      "stub_tokens": 288,
+      "l1_tokens": 427,
+      "full_tokens": 430,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-018",
+      "text": "how does llama do rotary position embeddings instead of learned position",
+      "answer_uuids": [
+        "paper-rope-definition"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-rope-definition",
+        "paper-alibi-definition",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-adam-default-lr",
+        "paper-cosine-similarity"
+      ],
+      "stub_tokens": 314,
+      "l1_tokens": 465,
+      "full_tokens": 467,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-019",
+      "text": "knowledge distillation train small model from large model",
+      "answer_uuids": [
+        "paper-dist-soft-labels"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "paper-dist-soft-labels",
+        "paper-dist-dark-knowledge",
+        "paper-ln-vs-bn",
+        "paper-w2v-skipgram",
+        "paper-bert-mlm"
+      ],
+      "stub_tokens": 282,
+      "l1_tokens": 435,
+      "full_tokens": 437,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-020",
+      "text": "when to use BM25 keyword search vs vector embedding search",
+      "answer_uuids": [
+        "paper-sparse-vs-dense"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "paper-ln-vs-bn",
+        "paper-sparse-vs-dense",
+        "paper-cosine-similarity",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-auc-roc"
+      ],
+      "stub_tokens": 293,
+      "l1_tokens": 424,
+      "full_tokens": 462,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-paper-na-001",
+      "text": "gradient clipping explained exploding gradients",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "paper-dqn-reward-clipping",
+        "paper-gan-mode-collapse",
+        "paper-gan-wgan",
+        "paper-vae-reparameterization",
+        "paper-adam-moments"
+      ],
+      "stub_tokens": 309,
+      "l1_tokens": 460,
+      "full_tokens": 462,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "blind-paper-na-002",
+      "text": "why use learning rate warmup schedule",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "paper-lr-importance",
+        "paper-adam-default-lr",
+        "paper-alibi-definition",
+        "paper-auc-roc",
+        "paper-bert-mlm"
+      ],
+      "stub_tokens": 295,
+      "l1_tokens": 441,
+      "full_tokens": 444,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "blind-paper-na-003",
+      "text": "how does fp16 mixed precision training work tradeoffs",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "paper-adam-default-lr",
+        "paper-bert-nsp",
+        "paper-bleu-definition",
+        "paper-bn-formula",
+        "paper-bn-lr-benefit"
+      ],
+      "stub_tokens": 301,
+      "l1_tokens": 430,
+      "full_tokens": 432,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "blind-paper-na-004",
+      "text": "precision recall f1 score formula explained",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "paper-bleu-definition",
+        "paper-alibi-definition",
+        "paper-dqn-atari-results",
+        "paper-dqn-reward-clipping",
+        "paper-rope-relative"
+      ],
+      "stub_tokens": 301,
+      "l1_tokens": 469,
+      "full_tokens": 472,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    }
+  ]
+}

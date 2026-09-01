@@ -1,0 +1,588 @@
+{
+  "baseline": "grep",
+  "domain": "codebase_blind",
+  "n_pages": 75,
+  "n_queries": 24,
+  "n_no_answer": 4,
+  "no_answer_correct": 0,
+  "no_answer_rate": 0.0,
+  "stub_end_given_hit_rate": 0.7692307692307693,
+  "n_given_hit": 13,
+  "p_at_3_95ci": [
+    0.65,
+    0.45,
+    0.85
+  ],
+  "p_at_5_95ci": [
+    0.75,
+    0.55,
+    0.95
+  ],
+  "elapsed_seconds": 0.0159,
+  "metrics": {
+    "baseline": "grep",
+    "domain": "codebase_blind",
+    "n_queries": 24,
+    "p_at_3": 0.65,
+    "p_at_5": 0.75,
+    "r_at_5": 0.75,
+    "mrr": 0.5866666666666667,
+    "stub_end_rate": 0.4166666666666667,
+    "stub_end_given_hit_rate": 0.7692307692307693,
+    "tokens_stub_median": 235.5,
+    "tokens_stub_p95": 257.79999999999995,
+    "tokens_l1_median": 350.5,
+    "tokens_full_median": 359.0,
+    "p_at_3_ci_low": 0.45,
+    "p_at_3_ci_high": 0.85,
+    "p_at_5_ci_low": 0.55,
+    "p_at_5_ci_high": 0.95,
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/grep_codebase_blind.json"
+  },
+  "per_query": [
+    {
+      "qid": "blind-code-001",
+      "text": "why does our API return 401 vs 403",
+      "answer_uuids": [
+        "code-api-401-vs-403"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 3,
+      "topk": [
+        "code-api-problem-details",
+        "code-auth-rotate-jwt-key",
+        "code-api-401-vs-403",
+        "code-api-pagination",
+        "code-auth-ed25519-vs-rsa"
+      ],
+      "stub_tokens": 243,
+      "l1_tokens": 380,
+      "full_tokens": 382,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-002",
+      "text": "how do we prevent duplicate writes on retried API requests",
+      "answer_uuids": [
+        "code-api-idempotency"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-api-versioning",
+        "code-api-graceful-shutdown",
+        "code-api-pagination",
+        "code-auth-oauth-state",
+        "code-testing-db-transactions"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 306,
+      "full_tokens": 336,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-003",
+      "text": "API rate limit requests per minute",
+      "answer_uuids": [
+        "code-api-rate-limit"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-api-rate-limit",
+        "code-api-bulk",
+        "code-api-graceful-shutdown",
+        "code-auth-public-keys",
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_tokens": 229,
+      "l1_tokens": 306,
+      "full_tokens": 332,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-004",
+      "text": "how to rotate JWT signing key without downtime",
+      "answer_uuids": [
+        "code-auth-rotate-jwt-key"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-rotate-jwt-key",
+        "code-auth-public-keys",
+        "code-auth-s2s-tokens",
+        "code-auth-leaked-token",
+        "code-auth-no-sessions"
+      ],
+      "stub_tokens": 228,
+      "l1_tokens": 342,
+      "full_tokens": 483,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-005",
+      "text": "leaked signing token in public github repo what to do",
+      "answer_uuids": [
+        "code-auth-leaked-token"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-auth-leaked-token",
+        "code-api-expand",
+        "code-auth-aud-meaning",
+        "code-auth-kid-meaning",
+        "code-auth-public-keys"
+      ],
+      "stub_tokens": 229,
+      "l1_tokens": 366,
+      "full_tokens": 402,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-006",
+      "text": "why don't we use server-side sessions for auth",
+      "answer_uuids": [
+        "code-auth-no-sessions"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-auth-no-sessions",
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-oauth-state",
+        "code-auth-rotate-jwt-key",
+        "code-dm-no-fk"
+      ],
+      "stub_tokens": 222,
+      "l1_tokens": 367,
+      "full_tokens": 370,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-007",
+      "text": "what happens after repeated failed card charges",
+      "answer_uuids": [
+        "code-billing-dunning"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 5,
+      "topk": [
+        "code-api-expand",
+        "code-auth-aud-meaning",
+        "code-auth-kid-meaning",
+        "code-auth-user-vs-service-jwt",
+        "code-billing-dunning"
+      ],
+      "stub_tokens": 244,
+      "l1_tokens": 357,
+      "full_tokens": 359,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-008",
+      "text": "how are refunds modeled relative to the original charge",
+      "answer_uuids": [
+        "code-billing-refunds"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 1,
+      "topk": [
+        "code-billing-refunds",
+        "code-billing-idempotency",
+        "code-billing-no-fx-storage",
+        "code-billing-trial",
+        "code-deploy-stuck-rollout"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 351,
+      "full_tokens": 354,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-009",
+      "text": "how do we handle tax-inclusive vs tax-exclusive prices on invoices",
+      "answer_uuids": [
+        "code-billing-tax-inclusive"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-api-versioning",
+        "code-auth-oauth-state",
+        "code-billing-idempotency",
+        "code-testing-db-transactions",
+        "code-api-pagination"
+      ],
+      "stub_tokens": 236,
+      "l1_tokens": 307,
+      "full_tokens": 337,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-010",
+      "text": "command to rollback a bad production deploy",
+      "answer_uuids": [
+        "code-deploy-rollback-cmd"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 2,
+      "topk": [
+        "code-deploy-pre-checklist",
+        "code-deploy-rollback-cmd",
+        "code-deploy-canary-window",
+        "code-auth-rotate-jwt-key",
+        "code-billing-stripe-webhook"
+      ],
+      "stub_tokens": 226,
+      "l1_tokens": 329,
+      "full_tokens": 332,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-011",
+      "text": "canary rollout percentage and bake time before full deploy",
+      "answer_uuids": [
+        "code-deploy-canary-window"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-deploy-rollback-cmd",
+        "code-deploy-feature-flags",
+        "code-deploy-immutable-tags",
+        "code-deploy-stuck-rollout",
+        "code-deploy-vs-release"
+      ],
+      "stub_tokens": 235,
+      "l1_tokens": 339,
+      "full_tokens": 342,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-012",
+      "text": "do we have a deploy freeze window",
+      "answer_uuids": [
+        "code-deploy-freeze-calendar"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-deploy-immutable-tags",
+        "code-api-versioning",
+        "code-auth-rotate-jwt-key",
+        "code-billing-proration-edge",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 231,
+      "l1_tokens": 361,
+      "full_tokens": 364,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-013",
+      "text": "why UUIDv7 instead of random UUID for primary keys",
+      "answer_uuids": [
+        "code-dm-uuidv7"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 2,
+      "topk": [
+        "code-billing-idempotency",
+        "code-dm-uuidv7",
+        "code-auth-rotate-jwt-key",
+        "code-auth-public-keys",
+        "code-api-expand"
+      ],
+      "stub_tokens": 232,
+      "l1_tokens": 356,
+      "full_tokens": 359,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-014",
+      "text": "soft delete vs hard delete in our db",
+      "answer_uuids": [
+        "code-dm-soft-delete"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": 5,
+      "topk": [
+        "code-auth-ed25519-vs-rsa",
+        "code-auth-oauth-state",
+        "code-auth-rotate-jwt-key",
+        "code-deploy-stuck-rollout",
+        "code-dm-soft-delete"
+      ],
+      "stub_tokens": 224,
+      "l1_tokens": 352,
+      "full_tokens": 398,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-015",
+      "text": "how to add a NOT NULL column to a table that already has rows",
+      "answer_uuids": [
+        "code-migrations-add-not-null"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-migrations-add-not-null",
+        "code-dm-soft-delete",
+        "code-migrations-online-offline",
+        "code-api-versioning",
+        "code-migrations-never-drop-same-release"
+      ],
+      "stub_tokens": 247,
+      "l1_tokens": 376,
+      "full_tokens": 405,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-016",
+      "text": "migration lock timeout setting",
+      "answer_uuids": [
+        "code-migrations-lock-timeout"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-migrations-lock-timeout",
+        "code-api-graceful-shutdown",
+        "code-dm-no-fk",
+        "code-migrations-add-not-null",
+        "code-migrations-audit-log"
+      ],
+      "stub_tokens": 259,
+      "l1_tokens": 381,
+      "full_tokens": 384,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-017",
+      "text": "how do we decide if an alert pages on-call or just logs",
+      "answer_uuids": [
+        "code-obs-alert-severity"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": null,
+      "topk": [
+        "code-obs-oncall-rotation",
+        "code-api-versioning",
+        "code-testing-flaky",
+        "code-auth-no-sessions",
+        "code-migrations-never-drop-same-release"
+      ],
+      "stub_tokens": 238,
+      "l1_tokens": 344,
+      "full_tokens": 346,
+      "ended_at_stub": false,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-018",
+      "text": "trace sampling rate production",
+      "answer_uuids": [
+        "code-obs-trace-sampling"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-obs-trace-sampling",
+        "code-api-bulk",
+        "code-api-rate-limit",
+        "code-billing-no-fx-storage",
+        "code-deploy-canary-window"
+      ],
+      "stub_tokens": 237,
+      "l1_tokens": 350,
+      "full_tokens": 352,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-019",
+      "text": "flaky test policy CI",
+      "answer_uuids": [
+        "code-testing-flaky"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-flaky",
+        "code-deploy-pre-checklist",
+        "code-testing-ci-parallel",
+        "code-testing-coverage-gate",
+        "code-testing-db-transactions"
+      ],
+      "stub_tokens": 241,
+      "l1_tokens": 340,
+      "full_tokens": 367,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-020",
+      "text": "how to mock external API calls in tests",
+      "answer_uuids": [
+        "code-testing-mock-http"
+      ],
+      "stub_sufficient": true,
+      "query_kind": "blind",
+      "query_type": "entity",
+      "rank": 1,
+      "topk": [
+        "code-testing-mock-http",
+        "code-api-versioning",
+        "code-auth-aud-meaning",
+        "code-dm-money-bigint",
+        "code-testing-ci-parallel"
+      ],
+      "stub_tokens": 230,
+      "l1_tokens": 317,
+      "full_tokens": 347,
+      "ended_at_stub": true,
+      "is_no_answer": false
+    },
+    {
+      "qid": "blind-code-na-001",
+      "text": "cache invalidation strategy when data changes",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-auth-public-keys",
+        "code-migrations-online-offline",
+        "code-migrations-rollback",
+        "code-obs-error-budget",
+        "code-api-idempotency"
+      ],
+      "stub_tokens": 261,
+      "l1_tokens": 388,
+      "full_tokens": 443,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "blind-code-na-002",
+      "text": "CORS policy for API cross origin requests",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-api-graceful-shutdown",
+        "code-api-401-vs-403",
+        "code-api-bulk",
+        "code-api-versioning",
+        "code-auth-aud-meaning"
+      ],
+      "stub_tokens": 239,
+      "l1_tokens": 323,
+      "full_tokens": 355,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "blind-code-na-003",
+      "text": "how is db connection pool size configured per service",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-auth-rotate-jwt-key",
+        "code-auth-s2s-tokens",
+        "code-deploy-pdb",
+        "code-deploy-rollback-cmd",
+        "code-obs-trace-sampling"
+      ],
+      "stub_tokens": 251,
+      "l1_tokens": 365,
+      "full_tokens": 506,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    },
+    {
+      "qid": "blind-code-na-004",
+      "text": "GDPR deletion request process for customer data",
+      "answer_uuids": [],
+      "stub_sufficient": false,
+      "query_kind": "blind",
+      "query_type": "topical",
+      "rank": null,
+      "topk": [
+        "code-dm-soft-delete",
+        "code-api-expand",
+        "code-auth-aud-meaning",
+        "code-billing-idempotency",
+        "code-billing-trial"
+      ],
+      "stub_tokens": 233,
+      "l1_tokens": 344,
+      "full_tokens": 347,
+      "ended_at_stub": false,
+      "is_no_answer": true
+    }
+  ]
+}

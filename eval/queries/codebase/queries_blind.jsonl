@@ -1,0 +1,24 @@
+{"qid": "blind-code-001", "text": "why does our API return 401 vs 403", "answer_uuids": ["code-api-401-vs-403"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-002", "text": "how do we prevent duplicate writes on retried API requests", "answer_uuids": ["code-api-idempotency"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-003", "text": "API rate limit requests per minute", "answer_uuids": ["code-api-rate-limit"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-004", "text": "how to rotate JWT signing key without downtime", "answer_uuids": ["code-auth-rotate-jwt-key"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-005", "text": "leaked signing token in public github repo what to do", "answer_uuids": ["code-auth-leaked-token"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-006", "text": "why don't we use server-side sessions for auth", "answer_uuids": ["code-auth-no-sessions"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-007", "text": "what happens after repeated failed card charges", "answer_uuids": ["code-billing-dunning"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-008", "text": "how are refunds modeled relative to the original charge", "answer_uuids": ["code-billing-refunds"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-009", "text": "how do we handle tax-inclusive vs tax-exclusive prices on invoices", "answer_uuids": ["code-billing-tax-inclusive"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-010", "text": "command to rollback a bad production deploy", "answer_uuids": ["code-deploy-rollback-cmd"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-011", "text": "canary rollout percentage and bake time before full deploy", "answer_uuids": ["code-deploy-canary-window"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-012", "text": "do we have a deploy freeze window", "answer_uuids": ["code-deploy-freeze-calendar"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-013", "text": "why UUIDv7 instead of random UUID for primary keys", "answer_uuids": ["code-dm-uuidv7"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-014", "text": "soft delete vs hard delete in our db", "answer_uuids": ["code-dm-soft-delete"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-015", "text": "how to add a NOT NULL column to a table that already has rows", "answer_uuids": ["code-migrations-add-not-null"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-016", "text": "migration lock timeout setting", "answer_uuids": ["code-migrations-lock-timeout"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-017", "text": "how do we decide if an alert pages on-call or just logs", "answer_uuids": ["code-obs-alert-severity"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-018", "text": "trace sampling rate production", "answer_uuids": ["code-obs-trace-sampling"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-019", "text": "flaky test policy CI", "answer_uuids": ["code-testing-flaky"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-020", "text": "how to mock external API calls in tests", "answer_uuids": ["code-testing-mock-http"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-code-na-001", "text": "cache invalidation strategy when data changes", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-na-002", "text": "CORS policy for API cross origin requests", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-na-003", "text": "how is db connection pool size configured per service", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-code-na-004", "text": "GDPR deletion request process for customer data", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}

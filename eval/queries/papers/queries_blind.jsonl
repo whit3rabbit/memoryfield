@@ -1,0 +1,24 @@
+{"qid": "blind-paper-001", "text": "adamw vs adam l2 regularization difference", "answer_uuids": ["paper-adam-adamw"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-002", "text": "good default learning rate for adam vs sgd", "answer_uuids": ["paper-adam-default-lr"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-paper-003", "text": "how does bert pretraining work without labels masked language model", "answer_uuids": ["paper-bert-mlm"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-004", "text": "resnet skip connections why deep networks degrade", "answer_uuids": ["paper-resnet-skip"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-005", "text": "linear attention alternative to transformers long sequences", "answer_uuids": ["paper-mamba-arch"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-006", "text": "LoRA low rank adaptation fine-tuning explained", "answer_uuids": ["paper-lora-decomposition"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-007", "text": "how does mixture of experts routing work", "answer_uuids": ["paper-moe-routing"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-008", "text": "cross entropy loss formula multiclass classification", "answer_uuids": ["paper-ce-definition"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-paper-009", "text": "BLEU score machine translation evaluation metric", "answer_uuids": ["paper-bleu-definition"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-paper-010", "text": "perplexity language model evaluation metric explained", "answer_uuids": ["paper-perplexity-definition"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-paper-011", "text": "what does batch norm actually calculate during training", "answer_uuids": ["paper-bn-formula"], "stub_sufficient": true, "query_kind": "blind", "query_type": "entity"}
+{"qid": "blind-paper-012", "text": "transformer layer norm vs batch norm which one and why", "answer_uuids": ["paper-ln-vs-bn"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-013", "text": "what fixed instability in deep Q-learning training", "answer_uuids": ["paper-dqn-tricks"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-014", "text": "why does PPO clip the objective function", "answer_uuids": ["paper-ppo-clipped-objective"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-015", "text": "RLHF without reward model or PPO alternative", "answer_uuids": ["paper-dpo-loss"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-016", "text": "nucleus sampling vs top-k for text generation", "answer_uuids": ["paper-nucleus-sampling"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-017", "text": "beam search explained sequence generation", "answer_uuids": ["paper-beam-search"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-018", "text": "how does llama do rotary position embeddings instead of learned position", "answer_uuids": ["paper-rope-definition"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-019", "text": "knowledge distillation train small model from large model", "answer_uuids": ["paper-dist-soft-labels"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-020", "text": "when to use BM25 keyword search vs vector embedding search", "answer_uuids": ["paper-sparse-vs-dense"], "stub_sufficient": true, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-na-001", "text": "gradient clipping explained exploding gradients", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-na-002", "text": "why use learning rate warmup schedule", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-na-003", "text": "how does fp16 mixed precision training work tradeoffs", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}
+{"qid": "blind-paper-na-004", "text": "precision recall f1 score formula explained", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind", "query_type": "topical"}

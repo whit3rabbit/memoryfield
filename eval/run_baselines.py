@@ -4,11 +4,11 @@ For each (baseline, domain) pair:
   - load the corpus and queries
   - run the baseline on each query
   - compute P@3, P@5, R@5, MRR, stub-end rate, token counts
-  - write a JSON results file under harness/results/
+  - write a JSON results file under eval/results/
 
 Usage:
-    python3 harness/run_baselines.py
-    python3 harness/run_baselines.py --baseline fts --domain code  # filter
+    python3 -m eval.run_baselines
+    python3 -m eval.run_baselines --baseline fts --domain code  # filter
 """
 from __future__ import annotations
 
@@ -22,25 +22,25 @@ from pathlib import Path
 # Make sure we have the deps the dense baselines need. We deliberately
 # don't `pip install` at import time; instead the runner expects to be
 # invoked from an environment where fastembed is already available
-# (e.g. `~/.hermes/hermes-agent/venv/bin/python3 -m harness.run_baselines`).
+# (e.g. `uv run --extra eval python3 -m eval.run_baselines`).
 try:
     import fastembed  # noqa: F401
 except ImportError:
     sys.stderr.write(
         "fastembed not found in current Python environment.\n"
-        "The runner needs the hermes-agent venv (or any venv with fastembed installed).\n"
-        "Try: ~/.hermes/hermes-agent/venv/bin/python3 -m harness.run_baselines\n"
+        "The runner needs the `eval` extra installed (or any venv with fastembed).\n"
+        "Try: uv sync --extra eval && uv run python3 -m eval.run_baselines\n"
     )
     raise
 
-from harness.baselines import (
+from eval.baselines import (
     dense_baseline,
     dense_real_baseline,
     fts_baseline,
     grep_baseline,
     hybrid_baseline,
 )
-from harness.mf_harness import (
+from eval.mf_harness import (
     BaselineMetrics,
     LookupTrace,
     bootstrap_ci,

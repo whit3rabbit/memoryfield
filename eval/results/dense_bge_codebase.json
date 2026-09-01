@@ -37,7 +37,7 @@
     "p_at_3_ci_high": 1.0,
     "p_at_5_ci_low": 0.9712643678160919,
     "p_at_5_ci_high": 1.0,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_bge_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_bge_codebase.json"
   },
   "per_query": [
     {

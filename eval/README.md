@@ -24,7 +24,7 @@ The harness answers four questions:
 ## What's in M0
 
 ```
-harness/
+eval/
   README.md              # this file
   corpus/                # generated/curated labeled corpus
     codebase/            # ~75 pages: code-knowledge memory
@@ -44,7 +44,7 @@ harness/
   report.py              # produces M0_REPORT.md from results JSON
 ```
 
-The corpus and queries live under `harness/corpus/` and `harness/queries/`
+The corpus and queries live under `eval/corpus/` and `eval/queries/`
 (not the top-level `corpus/` and `queries/` directories, which are placeholders
 for the eventual CLI to read from). Top-level `corpus/` and `queries/` will
 get populated by M1 and beyond.
@@ -92,14 +92,16 @@ The full numbers land in `M0_REPORT.md` at the end of M0.
 ## How to run
 
 ```bash
-# from the repo root, using the hermes-agent venv (fastembed lives there)
-~/.hermes/hermes-agent/venv/bin/python3 -m harness.build_corpus   # writes harness/corpus/{codebase,papers}/
-~/.hermes/hermes-agent/venv/bin/python3 -m harness.run_baselines  # writes harness/results/*.json
-~/.hermes/hermes-agent/venv/bin/python3 -m harness.report         # writes M0_REPORT.md
+# from the repo root
+uv sync --extra eval
+uv run python3 -m eval.build_corpus   # writes eval/corpus/{codebase,papers}/
+uv run python3 -m eval.run_baselines  # writes eval/results/*.json
+uv run python3 -m eval.report         # writes M0_REPORT.md
 ```
 
 grep/fts/dense_tfidf need stdlib only. dense_nomic/dense_bge/hybrid need
-fastembed, which is why every command above goes through the venv.
+fastembed, which is why every command above goes through `uv run` with
+the `eval` extra synced.
 
 ## What M0 is *not*
 

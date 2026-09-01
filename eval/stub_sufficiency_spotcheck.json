@@ -1,0 +1,222 @@
+[
+  {
+    "qid": "api-page-001",
+    "query": "cursor based pagination",
+    "page_title": "API: why GET /users returns paginated cursors",
+    "stub_text": "- [code-api-pagination] API: why GET /users returns paginated cursors\n    Cursor-based pagination on `created_at + id`; `next_cursor` is opaque, don't parse it; offsets would be O(n) on large tables.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub explains cursor key, opaqueness, and offset-vs-cursor tradeoff.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub states pagination is cursor-based on created_at+id with an opaque next_cursor, directly explaining what cursor-based pagination is here.",
+    "agree": true
+  },
+  {
+    "qid": "auth-s2s-001",
+    "query": "service to service authentication",
+    "page_title": "Auth: how service-to-service tokens work",
+    "stub_text": "- [code-auth-s2s-tokens] Auth: how service-to-service tokens work\n    Services exchange their workload identity for a 5-minute bearer token via the `auth-tokens` endpoint; the token's `aud` field is the calling service's name.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub explains workload identity \u2192 auth-tokens endpoint, 5-min lifetime, `aud` field semantics.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub explains the mechanism directly: services exchange workload identity for a short-lived bearer token via an endpoint, which is how S2S auth works.",
+    "agree": true
+  },
+  {
+    "qid": "auth-s2s-002",
+    "query": "how does auth-tokens endpoint work",
+    "page_title": "Auth: how service-to-service tokens work",
+    "stub_text": "- [code-auth-s2s-tokens] Auth: how service-to-service tokens work\n    Services exchange their workload identity for a 5-minute bearer token via the `auth-tokens` endpoint; the token's `aud` field is the calling service's name.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Same content; directly describes endpoint mechanics.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub describes the endpoint's input (workload identity) and output (5-minute bearer token with aud set to the calling service), which answers how the endpoint works.",
+    "agree": true
+  },
+  {
+    "qid": "auth-s2s-003",
+    "query": "workload identity for k8s services",
+    "page_title": "Auth: how service-to-service tokens work",
+    "stub_text": "- [code-auth-s2s-tokens] Auth: how service-to-service tokens work\n    Services exchange their workload identity for a 5-minute bearer token via the `auth-tokens` endpoint; the token's `aud` field is the calling service's name.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Workload identity concept + auth-tokens endpoint + `aud` field covers the k8s workload identity question.",
+    "spotcheck_judgment": "insufficient",
+    "spotcheck_reasoning": "The stub mentions 'workload identity' only in passing as an input to token exchange but never explains what workload identity is or how it applies specifically to k8s services.",
+    "agree": false
+  },
+  {
+    "qid": "bill-dunning-001",
+    "query": "dunning retry schedule",
+    "page_title": "Billing: how dunning works",
+    "stub_text": "- [code-billing-dunning] Billing: how dunning works\n    Failed payments trigger `dunning_level` increments (1\u20134); each level fires an email and may pause the subscription at level 4.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives the 4-level ladder and pause-at-level-4 rule.",
+    "spotcheck_judgment": "insufficient",
+    "spotcheck_reasoning": "The stub describes dunning levels 1-4 and their effects (email, pause) but gives no retry schedule or timing/cadence, which is what the query asks for.",
+    "agree": false
+  },
+  {
+    "qid": "bill-refund-002",
+    "query": "negative invoice lines",
+    "page_title": "Billing: handling refunds",
+    "stub_text": "- [code-billing-refunds] Billing: handling refunds\n    Refunds are negative invoice lines with a `refund_of` reference to the original line; they don't modify the original line.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Same content directly answers 'negative invoice lines'.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub states directly that refunds are negative invoice lines with a refund_of reference to the original, matching the query exactly.",
+    "agree": true
+  },
+  {
+    "qid": "bill-stripe-001",
+    "query": "stripe webhook signature verification",
+    "page_title": "Billing: stripe webhook signature verification",
+    "stub_text": "- [code-billing-stripe-webhook] Billing: stripe webhook signature verification\n    Verify with `stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)`; never trust the raw payload.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub names exact function `stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)` with caveat.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub gives the exact verification method call (stripe.Webhook.construct_event) and the key caution, directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "bill-tax-001",
+    "query": "tax inclusive prices",
+    "page_title": "Billing: what `tax_mode: inclusive` means",
+    "stub_text": "- [code-billing-tax-inclusive] Billing: what `tax_mode: inclusive` means\n    Prices already include tax; the invoice's `tax` field is computed as `total - subtotal / (1 + tax_rate)`.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives formula `tax = total - subtotal/(1+tax_rate)` \u2014 actionable.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub explains that inclusive tax_mode means prices already include tax and gives the tax computation formula, directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "bn-def-001",
+    "query": "batch normalization",
+    "page_title": "BatchNorm: normalize activations per mini-batch during training",
+    "stub_text": "- [paper-bn-formula] BatchNorm: normalize activations per mini-batch during training\n    x_hat = (x - mu_B) / sqrt(sigma^2_B + eps); scale and shift: y = gamma * x_hat + beta; mu_B and sigma^2_B are batch statistics; running averages maintained for inference.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives BN normalization, scale+shift, and running averages for inference.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub gives the batch normalization formula and describes normalizing activations using batch statistics, defining the concept asked about.",
+    "agree": true
+  },
+  {
+    "qid": "dist-temp-001",
+    "query": "distillation temperature",
+    "page_title": "Distillation: temperature T controls softness of probability distribution",
+    "stub_text": "- [paper-dist-temperature] Distillation: temperature T controls softness of probability distribution\n    Softmax(x/T) with T=1 is the standard softmax; T>1 flattens the distribution, exposing dark knowledge; T<1 sharpens it.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub explains softmax(x/T) for sharpening/flattening.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub explains what temperature T does to the softmax distribution (flattening/sharpening), directly answering the query about distillation temperature.",
+    "agree": true
+  },
+  {
+    "qid": "dqn-res-001",
+    "query": "DQN Atari results",
+    "page_title": "DQN: outperformed a professional human player on 49 Atari games",
+    "stub_text": "- [paper-dqn-atari-results] DQN: outperformed a professional human player on 49 Atari games\n    Out of 49 Atari games tested, DQN exceeded expert human performance on 43; same architecture, same hyperparameters, raw pixels as input.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives 43/49 games and architecture/hyperparameter claim.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub gives the concrete result (43 of 49 Atari games exceeding human performance) with setup details, directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "ln-bn-001",
+    "query": "LayerNorm vs BatchNorm",
+    "page_title": "LayerNorm vs BatchNorm: which to use when",
+    "stub_text": "- [paper-ln-vs-bn] LayerNorm vs BatchNorm: which to use when\n    BatchNorm: CNNs, fixed batch sizes, faster training. LayerNorm: transformers, RNNs, variable batch sizes, distributed training.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives a clear LN-vs-BN table with use cases.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub gives a direct decision rule for when to use each normalization type, answering the comparison query.",
+    "agree": true
+  },
+  {
+    "qid": "mig-test-001",
+    "query": "testing destructive migration",
+    "page_title": "Migrations: testing a destructive change",
+    "stub_text": "- [code-migrations-test-destructive] Migrations: testing a destructive change\n    Restore prod snapshot to staging, run the migration, run the full integration suite, then run a sampling query to confirm row counts match.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives the 4-step testing recipe.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub lists the concrete procedure (restore snapshot, run migration, run integration suite, sample row counts) for testing a destructive migration, directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "nuc-def-001",
+    "query": "nucleus sampling top-p",
+    "page_title": "Top-p (nucleus) sampling: sample from smallest set whose probabilities sum to p",
+    "stub_text": "- [paper-nucleus-sampling] Top-p (nucleus) sampling: sample from smallest set whose probabilities sum to p\n    Sort tokens by probability; take the smallest prefix whose cumulative mass >= p; sample uniformly from that set; better than top-k at adapting to distribution shape.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub explains cumulative-prob prefix and adaptive nature.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub explains the nucleus sampling algorithm (sort, take smallest prefix summing to p, sample) directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "nuc-def-002",
+    "query": "top-p sampling",
+    "page_title": "Top-p (nucleus) sampling: sample from smallest set whose probabilities sum to p",
+    "stub_text": "- [paper-nucleus-sampling] Top-p (nucleus) sampling: sample from smallest set whose probabilities sum to p\n    Sort tokens by probability; take the smallest prefix whose cumulative mass >= p; sample uniformly from that set; better than top-k at adapting to distribution shape.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Same content; full top-p explanation.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "Same stub as nuc-def-001, which explains the top-p sampling mechanism directly, answering this shorter phrasing of the same query.",
+    "agree": true
+  },
+  {
+    "qid": "obs-budget-001",
+    "query": "error budget policy",
+    "page_title": "Observability: what the error budget is for",
+    "stub_text": "- [code-obs-error-budget] Observability: what the error budget is for\n    The error budget is for *risk-taking* (deploys, experiments); when 50% remains, freeze non-critical deploys and shift work to reliability.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub reframes budget as risk-taking and gives 50% threshold rule.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub states the error budget's purpose (enabling risk-taking) and the concrete policy trigger (freeze deploys at 50% remaining), directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "obs-log-001",
+    "query": "log levels in production",
+    "page_title": "Observability: log levels in production",
+    "stub_text": "- [code-obs-log-levels] Observability: log levels in production\n    Default INFO; DEBUG only when actively debugging, scoped to one service for \u226430 minutes, never in a steady-state service.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives default level, DEBUG constraints, and time scope.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub gives concrete guidance on default level and constraints for DEBUG use in production, directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "obs-req-001",
+    "query": "request ID propagation",
+    "page_title": "Observability: how request IDs work",
+    "stub_text": "- [code-obs-request-id] Observability: how request IDs work\n    Generated at the edge (UUIDv7), propagated via `X-Request-Id` header, included in every log line and trace span for that request.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub names UUIDv7, `X-Request-Id` header, and log/span propagation.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub explains where request IDs are generated, the propagation header, and where they appear downstream, directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "rn-imnet-001",
+    "query": "ResNet ImageNet error rate",
+    "page_title": "ResNet: 3.57% error on ImageNet (ILSVRC 2015 classification)",
+    "stub_text": "- [paper-resnet-imagenet] ResNet: 3.57% error on ImageNet (ILSVRC 2015 classification)\n    ResNet-152 ensemble: 3.57% top-5 error on ImageNet test set; won ILSVRC 2015 classification.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub gives 3.57% top-5 error on ensemble, ILSVRC 2015 winner.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub gives the exact error rate (3.57% top-5) and context (ResNet-152 ensemble, ILSVRC 2015), directly answering the query.",
+    "agree": true
+  },
+  {
+    "qid": "test-mock-001",
+    "query": "mocking HTTP calls",
+    "page_title": "Testing: how to mock external HTTP calls",
+    "stub_text": "- [code-testing-mock-http] Testing: how to mock external HTTP calls\n    Use `responses` (requests) or `httpx_mock` (httpx); never use `unittest.mock.patch` on `requests.get` directly.",
+    "original_judgment": "sufficient",
+    "original_reasoning": "Stub names the libraries (`responses`, `httpx_mock`) and forbids `unittest.mock.patch` on `requests.get`.",
+    "spotcheck_judgment": "sufficient",
+    "spotcheck_reasoning": "The stub names the specific libraries to use for mocking HTTP calls and what to avoid, directly answering the query.",
+    "agree": true
+  }
+]

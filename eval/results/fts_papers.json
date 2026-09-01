@@ -37,7 +37,7 @@
     "p_at_3_ci_high": 0.984251968503937,
     "p_at_5_ci_low": 0.9645669291338582,
     "p_at_5_ci_high": 0.9960629921259843,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/fts_papers.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/fts_papers.json"
   },
   "per_query": [
     {

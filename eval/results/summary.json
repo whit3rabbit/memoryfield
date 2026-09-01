@@ -17,7 +17,7 @@
     "p_at_3_ci_high": 0.8390804597701149,
     "p_at_5_ci_low": 0.7873563218390804,
     "p_at_5_ci_high": 0.8908045977011494,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/grep_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/grep_codebase.json"
   },
   {
     "baseline": "grep",
@@ -37,7 +37,7 @@
     "p_at_3_ci_high": 0.9173228346456693,
     "p_at_5_ci_low": 0.8700787401574803,
     "p_at_5_ci_high": 0.9409448818897638,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/grep_papers.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/grep_papers.json"
   },
   {
     "baseline": "fts",
@@ -57,7 +57,7 @@
     "p_at_3_ci_high": 0.9770114942528736,
     "p_at_5_ci_low": 0.9367816091954023,
     "p_at_5_ci_high": 0.9885057471264368,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/fts_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/fts_codebase.json"
   },
   {
     "baseline": "fts",
@@ -77,7 +77,7 @@
     "p_at_3_ci_high": 0.984251968503937,
     "p_at_5_ci_low": 0.9645669291338582,
     "p_at_5_ci_high": 0.9960629921259843,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/fts_papers.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/fts_papers.json"
   },
   {
     "baseline": "dense_tfidf",
@@ -97,7 +97,7 @@
     "p_at_3_ci_high": 0.9310344827586207,
     "p_at_5_ci_low": 0.867816091954023,
     "p_at_5_ci_high": 0.9540229885057471,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_tfidf_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_tfidf_codebase.json"
   },
   {
     "baseline": "dense_tfidf",
@@ -117,7 +117,7 @@
     "p_at_3_ci_high": 0.937007874015748,
     "p_at_5_ci_low": 0.9251968503937008,
     "p_at_5_ci_high": 0.9763779527559056,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_tfidf_papers.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_tfidf_papers.json"
   },
   {
     "baseline": "dense_nomic",
@@ -137,7 +137,7 @@
     "p_at_3_ci_high": 0.9885057471264368,
     "p_at_5_ci_low": 0.9540229885057471,
     "p_at_5_ci_high": 0.9942528735632183,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_nomic_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_nomic_codebase.json"
   },
   {
     "baseline": "dense_nomic",
@@ -157,7 +157,7 @@
     "p_at_3_ci_high": 1.0,
     "p_at_5_ci_low": 1.0,
     "p_at_5_ci_high": 1.0,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_nomic_papers.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_nomic_papers.json"
   },
   {
     "baseline": "dense_bge",
@@ -177,7 +177,7 @@
     "p_at_3_ci_high": 1.0,
     "p_at_5_ci_low": 0.9712643678160919,
     "p_at_5_ci_high": 1.0,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_bge_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_bge_codebase.json"
   },
   {
     "baseline": "dense_bge",
@@ -197,7 +197,7 @@
     "p_at_3_ci_high": 0.9960629921259843,
     "p_at_5_ci_low": 0.9803149606299213,
     "p_at_5_ci_high": 1.0,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_bge_papers.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_bge_papers.json"
   },
   {
     "baseline": "hybrid",
@@ -217,7 +217,7 @@
     "p_at_3_ci_high": 0.9942528735632183,
     "p_at_5_ci_low": 0.9770114942528736,
     "p_at_5_ci_high": 1.0,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/hybrid_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/hybrid_codebase.json"
   },
   {
     "baseline": "hybrid",
@@ -237,6 +237,6 @@
     "p_at_3_ci_high": 1.0,
     "p_at_5_ci_low": 1.0,
     "p_at_5_ci_high": 1.0,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/hybrid_papers.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/hybrid_papers.json"
   }
 ]

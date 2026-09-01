@@ -1,12 +1,12 @@
 """Build merged per-domain query files for the M0.5 eval.
 
 Inputs:
-  - harness/queries/<domain>/queries.jsonl (original lexical queries)
-  - harness/paraphrased_queries.jsonl (paraphrases + no-answer queries)
-  - harness/query_type_tags.jsonl (qid -> topical/entity)
+  - eval/queries/<domain>/queries.jsonl (original lexical queries)
+  - eval/paraphrased_queries.jsonl (paraphrases + no-answer queries)
+  - eval/query_type_tags.jsonl (qid -> topical/entity)
 
 Output:
-  - harness/queries/<domain>/queries.jsonl (overwritten with merged set,
+  - eval/queries/<domain>/queries.jsonl (overwritten with merged set,
     including paraphrases and no-answer queries; query_kind + query_type
     fields populated; answer_uuids resolved to real page UUIDs)
 

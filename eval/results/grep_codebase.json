@@ -37,7 +37,7 @@
     "p_at_3_ci_high": 0.8390804597701149,
     "p_at_5_ci_low": 0.7873563218390804,
     "p_at_5_ci_high": 0.8908045977011494,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/grep_codebase.json"
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/grep_codebase.json"
   },
   "per_query": [
     {

@@ -1,43 +1,43 @@
 {
-  "baseline": "hybrid",
+  "baseline": "dense_tfidf",
   "domain": "papers",
   "n_pages": 82,
   "n_queries": 267,
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 0.8645418326693227,
-  "n_given_hit": 251,
+  "stub_end_given_hit_rate": 0.7729257641921398,
+  "n_given_hit": 229,
   "p_at_3_95ci": [
-    0.9881889763779528,
-    0.9724409448818898,
-    1.0
+    0.9015748031496063,
+    0.8661417322834646,
+    0.937007874015748
   ],
   "p_at_5_95ci": [
-    1.0,
-    1.0,
-    1.0
+    0.952755905511811,
+    0.9251968503937008,
+    0.9763779527559056
   ],
-  "elapsed_seconds": 738.4845,
+  "elapsed_seconds": 0.5255,
   "metrics": {
-    "baseline": "hybrid",
+    "baseline": "dense_tfidf",
     "domain": "papers",
     "n_queries": 267,
-    "p_at_3": 0.9881889763779528,
-    "p_at_5": 1.0,
-    "r_at_5": 1.0,
-    "mrr": 0.953740157480315,
-    "stub_end_rate": 0.8127340823970037,
-    "stub_end_given_hit_rate": 0.8645418326693227,
-    "tokens_stub_median": 295,
-    "tokens_stub_p95": 316.7,
-    "tokens_l1_median": 444,
-    "tokens_full_median": 449,
-    "p_at_3_ci_low": 0.9724409448818898,
-    "p_at_3_ci_high": 1.0,
-    "p_at_5_ci_low": 1.0,
-    "p_at_5_ci_high": 1.0,
-    "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/hybrid_papers.json"
+    "p_at_3": 0.9015748031496063,
+    "p_at_5": 0.952755905511811,
+    "r_at_5": 0.952755905511811,
+    "mrr": 0.8307086614173228,
+    "stub_end_rate": 0.6629213483146067,
+    "stub_end_given_hit_rate": 0.7729257641921398,
+    "tokens_stub_median": 292,
+    "tokens_stub_p95": 311.0,
+    "tokens_l1_median": 430,
+    "tokens_full_median": 434,
+    "p_at_3_ci_low": 0.8661417322834646,
+    "p_at_3_ci_high": 0.937007874015748,
+    "p_at_5_ci_low": 0.9251968503937008,
+    "p_at_5_ci_high": 0.9763779527559056,
+    "details": "/Users/whit3rabbit/Documents/GitHub/MF/eval/results/dense_tfidf_papers.json"
   },
   "per_query": [
     {
@@ -49,18 +49,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 3,
       "topk": [
-        "paper-tx-scaled-dot-product",
         "paper-tx-multi-head",
         "paper-flashattn-tiling",
+        "paper-tx-scaled-dot-product",
         "paper-alibi-definition",
-        "paper-gelu-definition"
+        "paper-mamba-arch"
       ],
-      "stub_tokens": 280,
-      "l1_tokens": 376,
-      "full_tokens": 379,
-      "ended_at_stub": true,
+      "stub_tokens": 296,
+      "l1_tokens": 403,
+      "full_tokens": 406,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -72,18 +72,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 3,
       "topk": [
-        "paper-tx-scaled-dot-product",
         "paper-flashattn-tiling",
         "paper-rope-relative",
+        "paper-tx-scaled-dot-product",
         "paper-tx-multi-head",
-        "paper-adam-default-lr"
+        "paper-cosine-similarity"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 388,
-      "full_tokens": 391,
-      "ended_at_stub": true,
+      "stub_tokens": 286,
+      "l1_tokens": 445,
+      "full_tokens": 447,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -99,9 +99,9 @@
       "topk": [
         "paper-tx-scaled-dot-product",
         "paper-flashattn-tiling",
-        "paper-flashattn-online-softmax",
         "paper-dist-temperature",
-        "paper-softmax-definition"
+        "paper-tx-multi-head",
+        "paper-flashattn-online-softmax"
       ],
       "stub_tokens": 288,
       "l1_tokens": 384,
@@ -144,14 +144,14 @@
       "rank": 1,
       "topk": [
         "paper-tx-multi-head",
-        "paper-bert-size",
         "paper-tx-training-compute",
-        "paper-moe-routing",
-        "paper-rms-definition"
+        "paper-lora-merge",
+        "paper-bert-size",
+        "paper-ppo-epsilon"
       ],
-      "stub_tokens": 270,
-      "l1_tokens": 377,
-      "full_tokens": 380,
+      "stub_tokens": 261,
+      "l1_tokens": 368,
+      "full_tokens": 371,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -167,14 +167,13 @@
       "rank": 1,
       "topk": [
         "paper-tx-positional",
-        "paper-rope-definition",
         "paper-rope-relative",
-        "paper-vae-arch",
-        "paper-init-xavier-he"
+        "paper-rope-definition",
+        "paper-tok-bpe"
       ],
-      "stub_tokens": 287,
-      "l1_tokens": 406,
-      "full_tokens": 409,
+      "stub_tokens": 238,
+      "l1_tokens": 357,
+      "full_tokens": 360,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -190,10 +189,10 @@
       "rank": 1,
       "topk": [
         "paper-tx-training-compute",
-        "paper-lora-merge",
         "paper-tx-multi-head",
-        "paper-moe-routing",
-        "paper-rms-definition"
+        "paper-lora-merge",
+        "paper-rms-definition",
+        "paper-moe-routing"
       ],
       "stub_tokens": 280,
       "l1_tokens": 397,
@@ -210,18 +209,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-tx-training-compute",
-        "paper-adam-adamw",
-        "paper-tx-positional",
-        "paper-gelu-definition",
-        "paper-resnet-skip"
+        "paper-w2v-skipgram",
+        "paper-ppo-epsilon",
+        "paper-resnet-skip",
+        "paper-flashattn-tiling",
+        "paper-rms-definition"
       ],
-      "stub_tokens": 286,
-      "l1_tokens": 403,
-      "full_tokens": 405,
-      "ended_at_stub": true,
+      "stub_tokens": 282,
+      "l1_tokens": 436,
+      "full_tokens": 439,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -237,13 +236,13 @@
       "topk": [
         "paper-tx-bleu-results",
         "paper-bleu-definition",
-        "paper-swiglu-ffn",
-        "paper-gelu-definition",
-        "paper-rms-definition"
+        "paper-rms-definition",
+        "paper-tx-training-compute",
+        "paper-swiglu-ffn"
       ],
-      "stub_tokens": 279,
-      "l1_tokens": 382,
-      "full_tokens": 385,
+      "stub_tokens": 278,
+      "l1_tokens": 381,
+      "full_tokens": 384,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -259,14 +258,14 @@
       "rank": 1,
       "topk": [
         "paper-tx-bleu-results",
-        "paper-bleu-definition",
-        "paper-adam-epsilon",
-        "paper-gelu-definition",
-        "paper-init-xavier-he"
+        "paper-rms-definition",
+        "paper-mamba-selective",
+        "paper-swiglu-ffn",
+        "paper-tx-multi-head"
       ],
-      "stub_tokens": 268,
-      "l1_tokens": 371,
-      "full_tokens": 374,
+      "stub_tokens": 287,
+      "l1_tokens": 390,
+      "full_tokens": 393,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -283,13 +282,13 @@
       "topk": [
         "paper-bert-mlm",
         "paper-tok-special",
-        "paper-bert-size",
-        "paper-tok-bpe",
-        "paper-mamba-arch"
+        "paper-mamba-arch",
+        "paper-bert-nsp",
+        "paper-bert-size"
       ],
-      "stub_tokens": 280,
-      "l1_tokens": 393,
-      "full_tokens": 396,
+      "stub_tokens": 272,
+      "l1_tokens": 385,
+      "full_tokens": 388,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -306,13 +305,13 @@
       "topk": [
         "paper-bert-mlm",
         "paper-tok-special",
+        "paper-moe-load-balancing",
         "paper-bert-pretraining-data",
-        "paper-w2v-dim",
-        "paper-moe-routing"
+        "paper-mamba-selective"
       ],
-      "stub_tokens": 282,
-      "l1_tokens": 395,
-      "full_tokens": 398,
+      "stub_tokens": 284,
+      "l1_tokens": 397,
+      "full_tokens": 400,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -328,14 +327,14 @@
       "rank": 1,
       "topk": [
         "paper-bert-mlm",
-        "paper-tok-special",
-        "paper-gelu-stochastic",
-        "paper-moe-routing",
-        "paper-moe-load-balancing"
+        "paper-auc-roc",
+        "paper-bert-pretraining-data",
+        "paper-temperature-sampling",
+        "paper-tok-special"
       ],
-      "stub_tokens": 285,
-      "l1_tokens": 398,
-      "full_tokens": 401,
+      "stub_tokens": 283,
+      "l1_tokens": 396,
+      "full_tokens": 399,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -351,14 +350,14 @@
       "rank": 1,
       "topk": [
         "paper-bert-nsp",
-        "paper-bert-mlm",
-        "paper-w2v-skipgram",
-        "paper-bert-size",
-        "paper-yolo-grid"
+        "paper-beam-search",
+        "paper-cosine-similarity",
+        "paper-yolo-grid",
+        "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 262,
-      "l1_tokens": 384,
-      "full_tokens": 406,
+      "stub_tokens": 296,
+      "l1_tokens": 418,
+      "full_tokens": 440,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -374,14 +373,14 @@
       "rank": 1,
       "topk": [
         "paper-bert-nsp",
-        "paper-ln-vs-bn",
-        "paper-resnet-shortcuts",
-        "paper-w2v-skipgram",
-        "paper-tx-positional"
+        "paper-tx-training-compute",
+        "paper-adam-default-lr",
+        "paper-temperature-sampling",
+        "paper-w2v-dim"
       ],
-      "stub_tokens": 271,
-      "l1_tokens": 393,
-      "full_tokens": 415,
+      "stub_tokens": 287,
+      "l1_tokens": 409,
+      "full_tokens": 431,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -394,18 +393,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 4,
       "topk": [
+        "paper-tx-training-compute",
+        "paper-tx-multi-head",
+        "paper-lora-merge",
         "paper-bert-size",
-        "paper-bert-pretraining-data",
-        "paper-bert-mlm",
-        "paper-adam-default-lr",
-        "paper-lora-merge"
+        "paper-mamba-selective"
       ],
-      "stub_tokens": 268,
-      "l1_tokens": 371,
-      "full_tokens": 373,
-      "ended_at_stub": true,
+      "stub_tokens": 270,
+      "l1_tokens": 387,
+      "full_tokens": 389,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -417,18 +416,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-bert-size",
-        "paper-sparse-vs-dense",
-        "paper-bert-pretraining-data",
-        "paper-bert-mlm",
-        "paper-softmax-definition"
+        "paper-tx-training-compute",
+        "paper-tx-multi-head",
+        "paper-lora-merge",
+        "paper-ln-vs-bn",
+        "paper-sparse-vs-dense"
       ],
-      "stub_tokens": 265,
-      "l1_tokens": 368,
-      "full_tokens": 370,
-      "ended_at_stub": true,
+      "stub_tokens": 268,
+      "l1_tokens": 385,
+      "full_tokens": 387,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -444,13 +443,13 @@
       "topk": [
         "paper-bert-pretraining-data",
         "paper-bert-mlm",
-        "paper-bert-size",
         "paper-bert-nsp",
-        "paper-tok-special"
+        "paper-w2v-dim",
+        "paper-bert-size"
       ],
-      "stub_tokens": 259,
-      "l1_tokens": 368,
-      "full_tokens": 370,
+      "stub_tokens": 260,
+      "l1_tokens": 369,
+      "full_tokens": 371,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -465,15 +464,11 @@
       "query_type": "entity",
       "rank": 1,
       "topk": [
-        "paper-resnet-skip",
-        "paper-resnet-shortcuts",
-        "paper-init-xavier-he",
-        "paper-why-dropping-mean-centering-works",
-        "paper-rope-relative"
+        "paper-resnet-skip"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 437,
-      "full_tokens": 440,
+      "stub_tokens": 58,
+      "l1_tokens": 203,
+      "full_tokens": 206,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -489,14 +484,14 @@
       "rank": 1,
       "topk": [
         "paper-resnet-skip",
-        "paper-w2v-skipgram",
-        "paper-why-dropping-mean-centering-works",
+        "paper-dist-dark-knowledge",
         "paper-dropout-definition",
-        "paper-gd-basics"
+        "paper-lora-rank",
+        "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 301,
-      "l1_tokens": 446,
-      "full_tokens": 449,
+      "stub_tokens": 302,
+      "l1_tokens": 447,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -509,17 +504,17 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 2,
+      "rank": 4,
       "topk": [
         "paper-dqn-tricks",
-        "paper-resnet-skip",
-        "paper-gan-arch",
         "paper-dropout-ensemble",
-        "paper-gan-mode-collapse"
+        "paper-yolo-realtime",
+        "paper-resnet-skip",
+        "paper-dropout-definition"
       ],
-      "stub_tokens": 310,
-      "l1_tokens": 469,
-      "full_tokens": 472,
+      "stub_tokens": 313,
+      "l1_tokens": 472,
+      "full_tokens": 475,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -535,14 +530,14 @@
       "rank": 1,
       "topk": [
         "paper-resnet-imagenet",
+        "paper-per-td-error",
         "paper-resnet-skip",
-        "paper-resnet-bottleneck",
-        "paper-resnet-shortcuts",
+        "paper-rank-based-vs-proportional-prioritization",
         "paper-auc-roc"
       ],
-      "stub_tokens": 281,
-      "l1_tokens": 374,
-      "full_tokens": 377,
+      "stub_tokens": 300,
+      "l1_tokens": 393,
+      "full_tokens": 396,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -557,15 +552,11 @@
       "query_type": "entity",
       "rank": 1,
       "topk": [
-        "paper-resnet-imagenet",
-        "paper-adam-default-lr",
-        "paper-init-xavier-he",
-        "paper-auc-roc",
-        "paper-bert-mlm"
+        "paper-resnet-imagenet"
       ],
-      "stub_tokens": 273,
-      "l1_tokens": 366,
-      "full_tokens": 369,
+      "stub_tokens": 46,
+      "l1_tokens": 139,
+      "full_tokens": 142,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -581,14 +572,14 @@
       "rank": 1,
       "topk": [
         "paper-resnet-shortcuts",
+        "paper-sparse-vs-dense",
+        "paper-parameter-equivalent-vs-parameter-matched",
         "paper-resnet-skip",
-        "paper-dqn-reward-clipping",
-        "paper-ppo-clipped-objective",
-        "paper-tx-multi-head"
+        "paper-tx-bleu-results"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 455,
-      "full_tokens": 457,
+      "stub_tokens": 291,
+      "l1_tokens": 446,
+      "full_tokens": 448,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -606,12 +597,12 @@
         "paper-resnet-bottleneck",
         "paper-resnet-skip",
         "paper-resnet-imagenet",
-        "paper-flashattn-online-softmax",
+        "paper-vae-reparameterization",
         "paper-resnet-shortcuts"
       ],
-      "stub_tokens": 286,
-      "l1_tokens": 413,
-      "full_tokens": 416,
+      "stub_tokens": 276,
+      "l1_tokens": 403,
+      "full_tokens": 406,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -624,17 +615,17 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 4,
       "topk": [
         "paper-adam-default-lr",
         "paper-adam-adamw",
-        "paper-adam-moments",
         "paper-lr-importance",
-        "paper-adam-epsilon"
+        "paper-adam-moments",
+        "paper-ln-vs-bn"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 432,
-      "full_tokens": 434,
+      "stub_tokens": 298,
+      "l1_tokens": 427,
+      "full_tokens": 429,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -647,18 +638,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
+        "paper-adam-default-lr",
         "paper-adam-moments",
         "paper-adam-adamw",
-        "paper-adam-default-lr",
-        "paper-lr-importance",
-        "paper-adam-epsilon"
+        "paper-mamba-selective",
+        "paper-gan-arch"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 454,
-      "full_tokens": 457,
-      "ended_at_stub": true,
+      "stub_tokens": 312,
+      "l1_tokens": 441,
+      "full_tokens": 443,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -675,12 +666,12 @@
         "paper-adam-default-lr",
         "paper-lr-importance",
         "paper-adam-adamw",
-        "paper-bn-lr-benefit",
-        "paper-adam-moments"
+        "paper-adam-epsilon",
+        "paper-bn-lr-benefit"
       ],
-      "stub_tokens": 309,
-      "l1_tokens": 438,
-      "full_tokens": 440,
+      "stub_tokens": 303,
+      "l1_tokens": 432,
+      "full_tokens": 434,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -699,11 +690,11 @@
         "paper-lr-importance",
         "paper-adam-adamw",
         "paper-gd-basics",
-        "paper-bn-lr-benefit"
+        "paper-auc-roc"
       ],
-      "stub_tokens": 302,
-      "l1_tokens": 431,
-      "full_tokens": 433,
+      "stub_tokens": 303,
+      "l1_tokens": 432,
+      "full_tokens": 434,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -716,18 +707,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-adam-epsilon",
-        "paper-adam-adamw",
-        "paper-adam-default-lr",
         "paper-ppo-epsilon",
-        "paper-adam-moments"
+        "paper-adam-epsilon",
+        "paper-adam-default-lr",
+        "paper-adam-adamw",
+        "paper-lr-importance"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 407,
-      "full_tokens": 410,
-      "ended_at_stub": true,
+      "stub_tokens": 299,
+      "l1_tokens": 421,
+      "full_tokens": 424,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -742,14 +733,14 @@
       "rank": 1,
       "topk": [
         "paper-adam-adamw",
-        "paper-lr-importance",
         "paper-lora-decomposition",
-        "paper-init-xavier-he",
-        "paper-gan-wgan"
+        "paper-lr-importance",
+        "paper-bn-lr-benefit",
+        "paper-per-td-error"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 473,
-      "full_tokens": 475,
+      "stub_tokens": 312,
+      "l1_tokens": 485,
+      "full_tokens": 487,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -766,13 +757,13 @@
       "topk": [
         "paper-adam-adamw",
         "paper-lora-decomposition",
-        "paper-dropout-definition",
         "paper-lr-importance",
-        "paper-init-xavier-he"
+        "paper-bn-lr-benefit",
+        "paper-per-td-error"
       ],
-      "stub_tokens": 306,
-      "l1_tokens": 479,
-      "full_tokens": 481,
+      "stub_tokens": 312,
+      "l1_tokens": 485,
+      "full_tokens": 487,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -788,14 +779,12 @@
       "rank": 1,
       "topk": [
         "paper-flashattn-tiling",
-        "paper-flashattn-online-softmax",
         "paper-flashattn-hardware",
-        "paper-yolo-grid",
-        "paper-ppo-default"
+        "paper-flashattn-online-softmax"
       ],
-      "stub_tokens": 294,
-      "l1_tokens": 453,
-      "full_tokens": 455,
+      "stub_tokens": 178,
+      "l1_tokens": 337,
+      "full_tokens": 339,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -814,11 +803,11 @@
         "paper-flashattn-online-softmax",
         "paper-flashattn-tiling",
         "paper-ppo-epsilon",
-        "paper-yolo-realtime"
+        "paper-dist-dark-knowledge"
       ],
-      "stub_tokens": 294,
-      "l1_tokens": 416,
-      "full_tokens": 418,
+      "stub_tokens": 296,
+      "l1_tokens": 418,
+      "full_tokens": 420,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -834,14 +823,14 @@
       "rank": 1,
       "topk": [
         "paper-flashattn-online-softmax",
-        "paper-flashattn-tiling",
         "paper-flashattn-hardware",
-        "paper-softmax-definition",
-        "paper-tx-scaled-dot-product"
+        "paper-flashattn-tiling",
+        "paper-tx-scaled-dot-product",
+        "paper-dist-temperature"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 454,
-      "full_tokens": 456,
+      "stub_tokens": 286,
+      "l1_tokens": 452,
+      "full_tokens": 454,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -854,17 +843,17 @@
       "stub_sufficient": false,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-flashattn-online-softmax",
         "paper-softmax-definition",
-        "paper-dist-temperature",
+        "paper-flashattn-online-softmax",
         "paper-tx-scaled-dot-product",
-        "paper-gan-mode-collapse"
+        "paper-dist-temperature",
+        "paper-ce-definition"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 464,
-      "full_tokens": 466,
+      "stub_tokens": 283,
+      "l1_tokens": 441,
+      "full_tokens": 444,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -881,13 +870,11 @@
       "topk": [
         "paper-flashattn-hardware",
         "paper-flashattn-online-softmax",
-        "paper-flashattn-tiling",
-        "paper-adam-default-lr",
-        "paper-mamba-arch"
+        "paper-flashattn-tiling"
       ],
-      "stub_tokens": 314,
-      "l1_tokens": 436,
-      "full_tokens": 438,
+      "stub_tokens": 178,
+      "l1_tokens": 300,
+      "full_tokens": 302,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -900,18 +887,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-lora-decomposition",
         "paper-lora-rank",
-        "paper-lora-merge",
+        "paper-lora-decomposition",
         "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-merge",
         "paper-spearman-definition"
       ],
       "stub_tokens": 298,
-      "l1_tokens": 450,
-      "full_tokens": 453,
-      "ended_at_stub": true,
+      "l1_tokens": 399,
+      "full_tokens": 425,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -923,18 +910,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-lora-decomposition",
         "paper-lora-rank",
         "paper-rank-based-vs-proportional-prioritization",
         "paper-lr-importance",
-        "paper-lora-merge"
+        "paper-lora-merge",
+        "paper-moe-routing"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 444,
-      "full_tokens": 447,
-      "ended_at_stub": true,
+      "stub_tokens": 293,
+      "l1_tokens": 394,
+      "full_tokens": 420,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -949,14 +936,14 @@
       "rank": 1,
       "topk": [
         "paper-lora-rank",
-        "paper-lora-decomposition",
         "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-decomposition",
         "paper-lora-merge",
-        "paper-spearman-definition"
+        "paper-adam-adamw"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 399,
-      "full_tokens": 425,
+      "stub_tokens": 296,
+      "l1_tokens": 397,
+      "full_tokens": 423,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -972,14 +959,14 @@
       "rank": 1,
       "topk": [
         "paper-lora-rank",
-        "paper-lora-decomposition",
         "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-decomposition",
         "paper-lora-merge",
-        "paper-spearman-definition"
+        "paper-temperature-sampling"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 399,
-      "full_tokens": 425,
+      "stub_tokens": 290,
+      "l1_tokens": 391,
+      "full_tokens": 417,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -995,14 +982,14 @@
       "rank": 1,
       "topk": [
         "paper-lora-merge",
+        "paper-tx-training-compute",
+        "paper-tx-multi-head",
         "paper-lora-decomposition",
-        "paper-bert-size",
-        "paper-lora-rank",
-        "paper-tx-training-compute"
+        "paper-tok-bpe"
       ],
-      "stub_tokens": 257,
-      "l1_tokens": 353,
-      "full_tokens": 385,
+      "stub_tokens": 286,
+      "l1_tokens": 382,
+      "full_tokens": 414,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1019,13 +1006,13 @@
       "topk": [
         "paper-lora-merge",
         "paper-lora-decomposition",
+        "paper-mamba-arch",
         "paper-lora-rank",
-        "paper-dropout-definition",
-        "paper-mamba-arch"
+        "paper-dist-temperature"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 396,
-      "full_tokens": 428,
+      "stub_tokens": 288,
+      "l1_tokens": 384,
+      "full_tokens": 416,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1042,13 +1029,13 @@
       "topk": [
         "paper-dropout-definition",
         "paper-dropout-ensemble",
-        "paper-gelu-stochastic",
         "paper-adam-adamw",
-        "paper-bn-lr-benefit"
+        "paper-gelu-stochastic",
+        "paper-gd-basics"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 474,
-      "full_tokens": 476,
+      "stub_tokens": 305,
+      "l1_tokens": 467,
+      "full_tokens": 469,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1065,13 +1052,13 @@
       "topk": [
         "paper-dropout-definition",
         "paper-dropout-ensemble",
-        "paper-gelu-stochastic",
         "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-dqn-atari-results"
+        "paper-mamba-selective",
+        "paper-auc-roc"
       ],
-      "stub_tokens": 315,
-      "l1_tokens": 477,
-      "full_tokens": 479,
+      "stub_tokens": 320,
+      "l1_tokens": 482,
+      "full_tokens": 484,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1089,12 +1076,12 @@
         "paper-dropout-ensemble",
         "paper-dropout-definition",
         "paper-resnet-imagenet",
-        "paper-gelu-stochastic",
-        "paper-vae-reparameterization"
+        "paper-bn-lr-benefit",
+        "paper-tx-bleu-results"
       ],
-      "stub_tokens": 289,
-      "l1_tokens": 426,
-      "full_tokens": 429,
+      "stub_tokens": 282,
+      "l1_tokens": 419,
+      "full_tokens": 422,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1110,14 +1097,14 @@
       "rank": 1,
       "topk": [
         "paper-w2v-skipgram",
-        "paper-per-td-error",
         "paper-vae-reparameterization",
-        "paper-nucleus-sampling",
-        "paper-temperature-sampling"
+        "paper-temperature-sampling",
+        "paper-per-td-error",
+        "paper-auc-roc"
       ],
-      "stub_tokens": 307,
-      "l1_tokens": 461,
-      "full_tokens": 464,
+      "stub_tokens": 298,
+      "l1_tokens": 452,
+      "full_tokens": 455,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1130,18 +1117,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-w2v-skipgram",
-        "paper-w2v-dim",
-        "paper-w2v-analogy",
         "paper-gan-arch",
-        "paper-dropout-definition"
+        "paper-ppo-clipped-objective",
+        "paper-gan-wgan",
+        "paper-dropout-definition",
+        "paper-w2v-dim"
       ],
-      "stub_tokens": 299,
-      "l1_tokens": 453,
-      "full_tokens": 456,
-      "ended_at_stub": true,
+      "stub_tokens": 305,
+      "l1_tokens": 451,
+      "full_tokens": 454,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1155,15 +1142,11 @@
       "query_type": "entity",
       "rank": 1,
       "topk": [
-        "paper-w2v-analogy",
-        "paper-dqn-reward-clipping",
-        "paper-dqn-tricks",
-        "paper-rms-definition",
-        "paper-rope-definition"
+        "paper-w2v-analogy"
       ],
-      "stub_tokens": 308,
-      "l1_tokens": 432,
-      "full_tokens": 434,
+      "stub_tokens": 58,
+      "l1_tokens": 182,
+      "full_tokens": 184,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1179,14 +1162,13 @@
       "rank": 1,
       "topk": [
         "paper-w2v-dim",
+        "paper-ln-definition",
         "paper-w2v-analogy",
-        "paper-resnet-shortcuts",
-        "paper-rope-definition",
         "paper-w2v-skipgram"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 397,
-      "full_tokens": 425,
+      "stub_tokens": 232,
+      "l1_tokens": 336,
+      "full_tokens": 364,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1202,14 +1184,13 @@
       "rank": 1,
       "topk": [
         "paper-dqn-tricks",
-        "paper-dqn-atari-results",
         "paper-per-td-error",
-        "paper-dqn-reward-clipping",
-        "paper-yolo-realtime"
+        "paper-dqn-atari-results",
+        "paper-dqn-reward-clipping"
       ],
-      "stub_tokens": 318,
-      "l1_tokens": 477,
-      "full_tokens": 480,
+      "stub_tokens": 257,
+      "l1_tokens": 416,
+      "full_tokens": 419,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1226,9 +1207,9 @@
       "topk": [
         "paper-dqn-tricks",
         "paper-dqn-atari-results",
-        "paper-resnet-skip",
+        "paper-dropout-ensemble",
         "paper-dqn-reward-clipping",
-        "paper-gan-arch"
+        "paper-resnet-skip"
       ],
       "stub_tokens": 308,
       "l1_tokens": 467,
@@ -1248,14 +1229,14 @@
       "rank": 1,
       "topk": [
         "paper-dqn-atari-results",
+        "paper-bert-nsp",
         "paper-per-td-error",
-        "paper-dqn-reward-clipping",
-        "paper-dqn-tricks",
-        "paper-rank-based-vs-proportional-prioritization"
+        "paper-adam-adamw",
+        "paper-dqn-reward-clipping"
       ],
-      "stub_tokens": 327,
-      "l1_tokens": 477,
-      "full_tokens": 479,
+      "stub_tokens": 308,
+      "l1_tokens": 458,
+      "full_tokens": 460,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1273,12 +1254,12 @@
         "paper-dqn-atari-results",
         "paper-dqn-reward-clipping",
         "paper-per-td-error",
-        "paper-rank-based-vs-proportional-prioritization",
-        "paper-dqn-tricks"
+        "paper-ppo-epsilon",
+        "paper-lr-importance"
       ],
-      "stub_tokens": 327,
-      "l1_tokens": 477,
-      "full_tokens": 479,
+      "stub_tokens": 306,
+      "l1_tokens": 456,
+      "full_tokens": 458,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1294,14 +1275,14 @@
       "rank": 1,
       "topk": [
         "paper-dqn-reward-clipping",
-        "paper-dqn-atari-results",
         "paper-dpo-loss",
-        "paper-dqn-tricks",
-        "paper-ppo-clipped-objective"
+        "paper-dqn-atari-results",
+        "paper-ppo-epsilon",
+        "paper-gan-wgan"
       ],
-      "stub_tokens": 317,
-      "l1_tokens": 468,
-      "full_tokens": 470,
+      "stub_tokens": 307,
+      "l1_tokens": 458,
+      "full_tokens": 460,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1317,14 +1298,14 @@
       "rank": 1,
       "topk": [
         "paper-ppo-clipped-objective",
-        "paper-ppo-epsilon",
+        "paper-gan-arch",
         "paper-dpo-loss",
-        "paper-dqn-reward-clipping",
+        "paper-ppo-epsilon",
         "paper-ppo-default"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 471,
-      "full_tokens": 473,
+      "stub_tokens": 298,
+      "l1_tokens": 464,
+      "full_tokens": 466,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1337,18 +1318,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 3,
       "topk": [
-        "paper-ppo-clipped-objective",
         "paper-dpo-loss",
-        "paper-ppo-default",
+        "paper-lr-importance",
+        "paper-ppo-clipped-objective",
         "paper-ppo-epsilon",
-        "paper-moe-load-balancing"
+        "paper-ppo-default"
       ],
-      "stub_tokens": 295,
-      "l1_tokens": 461,
-      "full_tokens": 463,
-      "ended_at_stub": true,
+      "stub_tokens": 300,
+      "l1_tokens": 482,
+      "full_tokens": 485,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1363,14 +1344,14 @@
       "rank": 1,
       "topk": [
         "paper-ppo-default",
+        "paper-yolo-grid",
+        "paper-adam-epsilon",
         "paper-adam-default-lr",
-        "paper-lr-importance",
-        "paper-init-xavier-he",
-        "paper-ppo-clipped-objective"
+        "paper-temperature-sampling"
       ],
-      "stub_tokens": 295,
-      "l1_tokens": 439,
-      "full_tokens": 442,
+      "stub_tokens": 293,
+      "l1_tokens": 437,
+      "full_tokens": 440,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1389,11 +1370,11 @@
         "paper-dpo-loss",
         "paper-ppo-clipped-objective",
         "paper-ppo-epsilon",
-        "paper-rank-based-vs-proportional-prioritization"
+        "paper-sparse-vs-dense"
       ],
-      "stub_tokens": 309,
-      "l1_tokens": 453,
-      "full_tokens": 456,
+      "stub_tokens": 295,
+      "l1_tokens": 439,
+      "full_tokens": 442,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1409,14 +1390,14 @@
       "rank": 1,
       "topk": [
         "paper-ppo-epsilon",
-        "paper-ppo-clipped-objective",
         "paper-adam-epsilon",
-        "paper-ppo-default",
-        "paper-dpo-loss"
+        "paper-dpo-loss",
+        "paper-dqn-reward-clipping",
+        "paper-ppo-default"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 414,
-      "full_tokens": 417,
+      "stub_tokens": 298,
+      "l1_tokens": 420,
+      "full_tokens": 423,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1434,12 +1415,12 @@
         "paper-ppo-epsilon",
         "paper-adam-epsilon",
         "paper-dpo-loss",
-        "paper-ppo-clipped-objective",
-        "paper-ppo-default"
+        "paper-ppo-default",
+        "paper-gelu-stochastic"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 414,
-      "full_tokens": 417,
+      "stub_tokens": 293,
+      "l1_tokens": 415,
+      "full_tokens": 418,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1455,14 +1436,12 @@
       "rank": 1,
       "topk": [
         "paper-vae-arch",
-        "paper-vae-reparameterization",
-        "paper-tx-positional",
         "paper-vae-elbo",
-        "paper-tok-bpe"
+        "paper-vae-reparameterization"
       ],
-      "stub_tokens": 286,
-      "l1_tokens": 452,
-      "full_tokens": 455,
+      "stub_tokens": 171,
+      "l1_tokens": 337,
+      "full_tokens": 340,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1478,14 +1457,12 @@
       "rank": 1,
       "topk": [
         "paper-vae-reparameterization",
-        "paper-dqn-reward-clipping",
-        "paper-flashattn-online-softmax",
-        "paper-dqn-tricks",
-        "paper-vae-arch"
+        "paper-vae-arch",
+        "paper-flashattn-online-softmax"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 452,
-      "full_tokens": 454,
+      "stub_tokens": 179,
+      "l1_tokens": 319,
+      "full_tokens": 321,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1502,13 +1479,11 @@
       "topk": [
         "paper-vae-elbo",
         "paper-vae-arch",
-        "paper-vae-reparameterization",
-        "paper-adam-epsilon",
-        "paper-tok-bpe"
+        "paper-vae-reparameterization"
       ],
-      "stub_tokens": 285,
-      "l1_tokens": 401,
-      "full_tokens": 403,
+      "stub_tokens": 171,
+      "l1_tokens": 287,
+      "full_tokens": 289,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1521,18 +1496,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 4,
       "topk": [
-        "paper-bn-formula",
         "paper-ln-definition",
-        "paper-gd-basics",
         "paper-ln-vs-bn",
-        "paper-bn-lr-benefit"
+        "paper-gd-basics",
+        "paper-bn-formula",
+        "paper-gan-mode-collapse"
       ],
-      "stub_tokens": 284,
-      "l1_tokens": 418,
-      "full_tokens": 451,
-      "ended_at_stub": true,
+      "stub_tokens": 292,
+      "l1_tokens": 453,
+      "full_tokens": 455,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1547,14 +1522,14 @@
       "rank": 1,
       "topk": [
         "paper-bn-formula",
-        "paper-ln-definition",
-        "paper-ln-vs-bn",
         "paper-gd-basics",
-        "paper-bn-lr-benefit"
+        "paper-ln-vs-bn",
+        "paper-bn-lr-benefit",
+        "paper-alibi-definition"
       ],
-      "stub_tokens": 284,
-      "l1_tokens": 418,
-      "full_tokens": 451,
+      "stub_tokens": 282,
+      "l1_tokens": 416,
+      "full_tokens": 449,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1571,13 +1546,13 @@
       "topk": [
         "paper-bn-lr-benefit",
         "paper-ln-vs-bn",
+        "paper-auc-roc",
         "paper-adam-default-lr",
-        "paper-bn-formula",
-        "paper-ln-definition"
+        "paper-ppo-epsilon"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 418,
-      "full_tokens": 420,
+      "stub_tokens": 287,
+      "l1_tokens": 408,
+      "full_tokens": 410,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1595,12 +1570,12 @@
         "paper-gelu-definition",
         "paper-gelu-stochastic",
         "paper-swiglu-ffn",
-        "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-init-xavier-he"
+        "paper-ce-definition",
+        "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 436,
-      "full_tokens": 439,
+      "stub_tokens": 294,
+      "l1_tokens": 433,
+      "full_tokens": 436,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1617,13 +1592,13 @@
       "topk": [
         "paper-gelu-definition",
         "paper-gelu-stochastic",
+        "paper-rms-definition",
         "paper-swiglu-ffn",
-        "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-init-xavier-he"
+        "paper-tx-multi-head"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 436,
-      "full_tokens": 439,
+      "stub_tokens": 289,
+      "l1_tokens": 428,
+      "full_tokens": 431,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1640,13 +1615,12 @@
       "topk": [
         "paper-gelu-stochastic",
         "paper-gelu-definition",
-        "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-swiglu-ffn",
+        "paper-auc-roc",
         "paper-perplexity-definition"
       ],
-      "stub_tokens": 309,
-      "l1_tokens": 425,
-      "full_tokens": 428,
+      "stub_tokens": 239,
+      "l1_tokens": 355,
+      "full_tokens": 358,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1662,14 +1636,11 @@
       "rank": 1,
       "topk": [
         "paper-yolo-realtime",
-        "paper-yolo-grid",
-        "paper-flashattn-tiling",
-        "paper-ppo-default",
-        "paper-alibi-definition"
+        "paper-yolo-grid"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 417,
-      "full_tokens": 454,
+      "stub_tokens": 119,
+      "l1_tokens": 244,
+      "full_tokens": 281,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1685,14 +1656,11 @@
       "rank": 1,
       "topk": [
         "paper-yolo-grid",
-        "paper-yolo-realtime",
-        "paper-flashattn-tiling",
-        "paper-vae-elbo",
-        "paper-parameter-equivalent-vs-parameter-matched"
+        "paper-yolo-realtime"
       ],
-      "stub_tokens": 302,
-      "l1_tokens": 443,
-      "full_tokens": 445,
+      "stub_tokens": 119,
+      "l1_tokens": 260,
+      "full_tokens": 262,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1705,18 +1673,15 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-per-td-error",
         "paper-dqn-tricks",
-        "paper-rank-based-vs-proportional-prioritization",
-        "paper-dqn-atari-results",
-        "paper-dpo-loss"
+        "paper-per-td-error"
       ],
-      "stub_tokens": 327,
-      "l1_tokens": 492,
-      "full_tokens": 495,
-      "ended_at_stub": true,
+      "stub_tokens": 133,
+      "l1_tokens": 292,
+      "full_tokens": 295,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1732,13 +1697,13 @@
       "topk": [
         "paper-per-td-error",
         "paper-rank-based-vs-proportional-prioritization",
-        "paper-adam-default-lr",
         "paper-resnet-imagenet",
-        "paper-gd-basics"
+        "paper-gd-basics",
+        "paper-alibi-definition"
       ],
-      "stub_tokens": 299,
-      "l1_tokens": 464,
-      "full_tokens": 467,
+      "stub_tokens": 292,
+      "l1_tokens": 457,
+      "full_tokens": 460,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1751,18 +1716,16 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-dist-soft-labels",
         "paper-dist-temperature",
-        "paper-dist-dark-knowledge",
-        "paper-perplexity-definition",
-        "paper-moe-routing"
+        "paper-dist-soft-labels",
+        "paper-dist-dark-knowledge"
       ],
-      "stub_tokens": 306,
-      "l1_tokens": 459,
-      "full_tokens": 461,
-      "ended_at_stub": true,
+      "stub_tokens": 181,
+      "l1_tokens": 301,
+      "full_tokens": 303,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1779,12 +1742,11 @@
         "paper-dist-dark-knowledge",
         "paper-dist-soft-labels",
         "paper-dist-temperature",
-        "paper-ce-definition",
-        "paper-flashattn-online-softmax"
+        "paper-ce-definition"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 470,
-      "full_tokens": 472,
+      "stub_tokens": 233,
+      "l1_tokens": 405,
+      "full_tokens": 407,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1801,13 +1763,12 @@
       "topk": [
         "paper-dist-temperature",
         "paper-dist-soft-labels",
-        "paper-dist-dark-knowledge",
         "paper-temperature-sampling",
-        "paper-perplexity-definition"
+        "paper-dist-dark-knowledge"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 423,
-      "full_tokens": 425,
+      "stub_tokens": 240,
+      "l1_tokens": 360,
+      "full_tokens": 362,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1824,13 +1785,11 @@
       "topk": [
         "paper-dist-temperature",
         "paper-dist-soft-labels",
-        "paper-dist-dark-knowledge",
-        "paper-perplexity-definition",
-        "paper-dqn-atari-results"
+        "paper-dist-dark-knowledge"
       ],
-      "stub_tokens": 302,
-      "l1_tokens": 422,
-      "full_tokens": 424,
+      "stub_tokens": 181,
+      "l1_tokens": 301,
+      "full_tokens": 303,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1847,13 +1806,11 @@
       "topk": [
         "paper-gan-arch",
         "paper-gan-wgan",
-        "paper-gan-mode-collapse",
-        "paper-dqn-atari-results",
-        "paper-gelu-stochastic"
+        "paper-gan-mode-collapse"
       ],
-      "stub_tokens": 307,
-      "l1_tokens": 453,
-      "full_tokens": 456,
+      "stub_tokens": 188,
+      "l1_tokens": 334,
+      "full_tokens": 337,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1866,18 +1823,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-gan-arch",
         "paper-dqn-tricks",
+        "paper-dropout-ensemble",
         "paper-resnet-skip",
-        "paper-moe-routing",
-        "paper-dropout-ensemble"
+        "paper-yolo-realtime",
+        "paper-moe-routing"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 451,
-      "full_tokens": 454,
-      "ended_at_stub": true,
+      "stub_tokens": 307,
+      "l1_tokens": 466,
+      "full_tokens": 469,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -1893,13 +1850,12 @@
       "topk": [
         "paper-gan-mode-collapse",
         "paper-gan-wgan",
-        "paper-gan-arch",
         "paper-moe-load-balancing",
-        "paper-init-xavier-he"
+        "paper-gan-arch"
       ],
-      "stub_tokens": 295,
-      "l1_tokens": 473,
-      "full_tokens": 475,
+      "stub_tokens": 244,
+      "l1_tokens": 422,
+      "full_tokens": 424,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1912,17 +1868,17 @@
       "stub_sufficient": false,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-gan-mode-collapse",
         "paper-gan-wgan",
-        "paper-dqn-tricks",
-        "paper-gan-arch",
-        "paper-dropout-definition"
+        "paper-gan-mode-collapse",
+        "paper-dropout-definition",
+        "paper-adam-epsilon",
+        "paper-gan-arch"
       ],
-      "stub_tokens": 323,
-      "l1_tokens": 501,
-      "full_tokens": 503,
+      "stub_tokens": 309,
+      "l1_tokens": 475,
+      "full_tokens": 477,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1939,13 +1895,11 @@
       "topk": [
         "paper-gan-wgan",
         "paper-gan-mode-collapse",
-        "paper-gan-arch",
-        "paper-init-xavier-he",
-        "paper-swiglu-ffn"
+        "paper-gan-arch"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 466,
-      "full_tokens": 468,
+      "stub_tokens": 188,
+      "l1_tokens": 354,
+      "full_tokens": 356,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -1961,14 +1915,14 @@
       "rank": 1,
       "topk": [
         "paper-gan-wgan",
+        "paper-ce-definition",
         "paper-gan-mode-collapse",
-        "paper-alibi-definition",
-        "paper-vae-reparameterization",
-        "paper-ce-definition"
+        "paper-gelu-definition",
+        "paper-bleu-definition"
       ],
-      "stub_tokens": 294,
-      "l1_tokens": 460,
-      "full_tokens": 462,
+      "stub_tokens": 295,
+      "l1_tokens": 461,
+      "full_tokens": 463,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -1981,18 +1935,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-ln-definition",
         "paper-ln-vs-bn",
+        "paper-ln-definition",
         "paper-rms-definition",
-        "paper-why-dropping-mean-centering-works",
-        "paper-bn-formula"
+        "paper-gan-mode-collapse",
+        "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 453,
-      "full_tokens": 455,
-      "ended_at_stub": true,
+      "stub_tokens": 294,
+      "l1_tokens": 425,
+      "full_tokens": 463,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2004,18 +1958,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-ln-definition",
+        "paper-gd-basics",
         "paper-rms-definition",
         "paper-bn-formula",
         "paper-w2v-analogy",
         "paper-resnet-skip"
       ],
-      "stub_tokens": 295,
-      "l1_tokens": 456,
-      "full_tokens": 458,
-      "ended_at_stub": true,
+      "stub_tokens": 287,
+      "l1_tokens": 429,
+      "full_tokens": 432,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2050,18 +2004,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "paper-ln-definition",
         "paper-ln-vs-bn",
+        "paper-ln-definition",
         "paper-rms-definition",
-        "paper-init-xavier-he",
-        "paper-why-dropping-mean-centering-works"
+        "paper-temperature-sampling",
+        "paper-resnet-bottleneck"
       ],
-      "stub_tokens": 278,
-      "l1_tokens": 439,
-      "full_tokens": 441,
-      "ended_at_stub": false,
+      "stub_tokens": 280,
+      "l1_tokens": 411,
+      "full_tokens": 449,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -2076,10 +2030,10 @@
       "rank": 1,
       "topk": [
         "paper-rms-definition",
-        "paper-why-dropping-mean-centering-works",
         "paper-adam-default-lr",
-        "paper-tx-scaled-dot-product",
-        "paper-bn-formula"
+        "paper-lora-decomposition",
+        "paper-why-dropping-mean-centering-works",
+        "paper-dist-temperature"
       ],
       "stub_tokens": 301,
       "l1_tokens": 421,
@@ -2099,14 +2053,14 @@
       "rank": 1,
       "topk": [
         "paper-moe-routing",
-        "paper-sparse-vs-dense",
         "paper-moe-load-balancing",
-        "paper-dist-soft-labels",
-        "paper-dist-temperature"
+        "paper-sparse-vs-dense",
+        "paper-dropout-ensemble",
+        "paper-bert-mlm"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 452,
-      "full_tokens": 455,
+      "stub_tokens": 284,
+      "l1_tokens": 444,
+      "full_tokens": 447,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2119,18 +2073,17 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-moe-routing",
         "paper-moe-load-balancing",
+        "paper-moe-routing",
         "paper-beam-search",
-        "paper-nucleus-sampling",
-        "paper-resnet-skip"
+        "paper-nucleus-sampling"
       ],
-      "stub_tokens": 306,
-      "l1_tokens": 466,
-      "full_tokens": 469,
-      "ended_at_stub": true,
+      "stub_tokens": 248,
+      "l1_tokens": 407,
+      "full_tokens": 409,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2145,14 +2098,11 @@
       "rank": 1,
       "topk": [
         "paper-moe-load-balancing",
-        "paper-moe-routing",
-        "paper-why-dropping-mean-centering-works",
-        "paper-bert-nsp",
-        "paper-init-xavier-he"
+        "paper-moe-routing"
       ],
-      "stub_tokens": 287,
-      "l1_tokens": 446,
-      "full_tokens": 448,
+      "stub_tokens": 118,
+      "l1_tokens": 277,
+      "full_tokens": 279,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2168,14 +2118,13 @@
       "rank": 1,
       "topk": [
         "paper-moe-load-balancing",
-        "paper-moe-routing",
         "paper-gan-mode-collapse",
-        "paper-dqn-atari-results",
-        "paper-dist-soft-labels"
+        "paper-moe-routing",
+        "paper-dqn-atari-results"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 464,
-      "full_tokens": 466,
+      "stub_tokens": 243,
+      "l1_tokens": 402,
+      "full_tokens": 404,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2192,13 +2141,13 @@
       "topk": [
         "paper-swiglu-ffn",
         "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-ce-definition",
         "paper-gelu-definition",
-        "paper-init-xavier-he",
         "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 301,
-      "l1_tokens": 447,
-      "full_tokens": 449,
+      "stub_tokens": 302,
+      "l1_tokens": 448,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2214,14 +2163,14 @@
       "rank": 1,
       "topk": [
         "paper-swiglu-ffn",
-        "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-gelu-definition",
         "paper-dropout-definition",
-        "paper-moe-routing"
+        "paper-gelu-definition",
+        "paper-alibi-definition",
+        "paper-w2v-analogy"
       ],
-      "stub_tokens": 315,
-      "l1_tokens": 461,
-      "full_tokens": 463,
+      "stub_tokens": 300,
+      "l1_tokens": 446,
+      "full_tokens": 448,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2234,13 +2183,13 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 5,
       "topk": [
         "paper-flashattn-online-softmax",
-        "paper-softmax-definition",
-        "paper-dist-temperature",
         "paper-tx-scaled-dot-product",
-        "paper-ce-definition"
+        "paper-dist-temperature",
+        "paper-ce-definition",
+        "paper-softmax-definition"
       ],
       "stub_tokens": 283,
       "l1_tokens": 449,
@@ -2257,18 +2206,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-softmax-definition",
         "paper-dist-temperature",
+        "paper-softmax-definition",
         "paper-flashattn-online-softmax",
-        "paper-dist-soft-labels",
+        "paper-tx-scaled-dot-product",
         "paper-ce-definition"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 451,
-      "full_tokens": 454,
-      "ended_at_stub": true,
+      "stub_tokens": 283,
+      "l1_tokens": 403,
+      "full_tokens": 405,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2280,18 +2229,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 3,
       "topk": [
-        "paper-ce-definition",
-        "paper-perplexity-definition",
-        "paper-moe-load-balancing",
         "paper-lr-importance",
-        "paper-dqn-reward-clipping"
+        "paper-moe-load-balancing",
+        "paper-ce-definition",
+        "paper-vae-elbo",
+        "paper-dpo-loss"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 427,
-      "full_tokens": 430,
-      "ended_at_stub": true,
+      "stub_tokens": 292,
+      "l1_tokens": 438,
+      "full_tokens": 441,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2303,18 +2252,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 4,
       "topk": [
-        "paper-ce-definition",
-        "paper-perplexity-definition",
         "paper-flashattn-online-softmax",
-        "paper-softmax-definition",
-        "paper-tx-scaled-dot-product"
+        "paper-tx-scaled-dot-product",
+        "paper-dist-temperature",
+        "paper-ce-definition",
+        "paper-softmax-definition"
       ],
-      "stub_tokens": 290,
-      "l1_tokens": 419,
-      "full_tokens": 422,
-      "ended_at_stub": true,
+      "stub_tokens": 283,
+      "l1_tokens": 449,
+      "full_tokens": 451,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2329,14 +2278,14 @@
       "rank": 1,
       "topk": [
         "paper-temperature-sampling",
-        "paper-dist-temperature",
-        "paper-per-td-error",
         "paper-vae-reparameterization",
+        "paper-dist-temperature",
+        "paper-w2v-skipgram",
         "paper-dist-soft-labels"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 444,
-      "full_tokens": 446,
+      "stub_tokens": 290,
+      "l1_tokens": 436,
+      "full_tokens": 438,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2355,11 +2304,11 @@
         "paper-dist-soft-labels",
         "paper-bert-mlm",
         "paper-dist-temperature",
-        "paper-vae-arch"
+        "paper-tx-training-compute"
       ],
-      "stub_tokens": 287,
-      "l1_tokens": 433,
-      "full_tokens": 435,
+      "stub_tokens": 282,
+      "l1_tokens": 428,
+      "full_tokens": 430,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2375,10 +2324,10 @@
       "rank": 1,
       "topk": [
         "paper-nucleus-sampling",
-        "paper-per-td-error",
         "paper-vae-reparameterization",
         "paper-w2v-skipgram",
-        "paper-temperature-sampling"
+        "paper-temperature-sampling",
+        "paper-per-td-error"
       ],
       "stub_tokens": 307,
       "l1_tokens": 453,
@@ -2398,10 +2347,10 @@
       "rank": 1,
       "topk": [
         "paper-nucleus-sampling",
-        "paper-per-td-error",
         "paper-vae-reparameterization",
         "paper-w2v-skipgram",
-        "paper-temperature-sampling"
+        "paper-temperature-sampling",
+        "paper-per-td-error"
       ],
       "stub_tokens": 307,
       "l1_tokens": 453,
@@ -2421,14 +2370,11 @@
       "rank": 1,
       "topk": [
         "paper-beam-search",
-        "paper-vae-arch",
-        "paper-flashattn-tiling",
-        "paper-resnet-bottleneck",
         "paper-temperature-sampling"
       ],
-      "stub_tokens": 295,
-      "l1_tokens": 434,
-      "full_tokens": 437,
+      "stub_tokens": 120,
+      "l1_tokens": 259,
+      "full_tokens": 262,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2444,14 +2390,14 @@
       "rank": 1,
       "topk": [
         "paper-gd-basics",
-        "paper-vae-reparameterization",
+        "paper-ce-definition",
+        "paper-gelu-definition",
         "paper-gan-wgan",
-        "paper-bn-lr-benefit",
-        "paper-gan-mode-collapse"
+        "paper-vae-reparameterization"
       ],
-      "stub_tokens": 295,
-      "l1_tokens": 437,
-      "full_tokens": 440,
+      "stub_tokens": 276,
+      "l1_tokens": 418,
+      "full_tokens": 421,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2464,18 +2410,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-gd-basics",
-        "paper-bn-formula",
-        "paper-adam-default-lr",
         "paper-ln-definition",
-        "paper-swiglu-ffn"
+        "paper-gd-basics",
+        "paper-ln-vs-bn",
+        "paper-adam-default-lr",
+        "paper-lr-importance"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 445,
-      "full_tokens": 448,
-      "ended_at_stub": true,
+      "stub_tokens": 286,
+      "l1_tokens": 447,
+      "full_tokens": 449,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2491,13 +2437,13 @@
       "topk": [
         "paper-adam-default-lr",
         "paper-lr-importance",
-        "paper-bn-lr-benefit",
         "paper-adam-adamw",
-        "paper-adam-moments"
+        "paper-bn-lr-benefit",
+        "paper-auc-roc"
       ],
-      "stub_tokens": 309,
-      "l1_tokens": 438,
-      "full_tokens": 440,
+      "stub_tokens": 310,
+      "l1_tokens": 439,
+      "full_tokens": 441,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2515,12 +2461,12 @@
         "paper-adam-default-lr",
         "paper-lr-importance",
         "paper-adam-adamw",
-        "paper-bn-lr-benefit",
-        "paper-adam-moments"
+        "paper-adam-epsilon",
+        "paper-bn-lr-benefit"
       ],
-      "stub_tokens": 309,
-      "l1_tokens": 438,
-      "full_tokens": 440,
+      "stub_tokens": 303,
+      "l1_tokens": 432,
+      "full_tokens": 434,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2536,14 +2482,11 @@
       "rank": 1,
       "topk": [
         "paper-init-xavier-he",
-        "paper-bn-lr-benefit",
-        "paper-adam-default-lr",
-        "paper-flashattn-hardware",
-        "paper-resnet-shortcuts"
+        "paper-bn-lr-benefit"
       ],
-      "stub_tokens": 289,
-      "l1_tokens": 421,
-      "full_tokens": 424,
+      "stub_tokens": 110,
+      "l1_tokens": 242,
+      "full_tokens": 245,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2558,15 +2501,11 @@
       "query_type": "entity",
       "rank": 1,
       "topk": [
-        "paper-init-xavier-he",
-        "paper-flashattn-tiling",
-        "paper-bert-mlm",
-        "paper-bn-lr-benefit",
-        "paper-tok-special"
+        "paper-init-xavier-he"
       ],
-      "stub_tokens": 273,
-      "l1_tokens": 405,
-      "full_tokens": 408,
+      "stub_tokens": 51,
+      "l1_tokens": 183,
+      "full_tokens": 186,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2582,14 +2521,11 @@
       "rank": 1,
       "topk": [
         "paper-tok-bpe",
-        "paper-tok-special",
-        "paper-bert-mlm",
-        "paper-bert-pretraining-data",
-        "paper-moe-routing"
+        "paper-tok-special"
       ],
-      "stub_tokens": 287,
-      "l1_tokens": 457,
-      "full_tokens": 459,
+      "stub_tokens": 116,
+      "l1_tokens": 286,
+      "full_tokens": 288,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2605,14 +2541,11 @@
       "rank": 1,
       "topk": [
         "paper-tok-bpe",
-        "paper-tok-special",
-        "paper-bert-mlm",
-        "paper-bert-pretraining-data",
-        "paper-moe-routing"
+        "paper-tok-special"
       ],
-      "stub_tokens": 287,
-      "l1_tokens": 457,
-      "full_tokens": 459,
+      "stub_tokens": 116,
+      "l1_tokens": 286,
+      "full_tokens": 288,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2628,14 +2561,14 @@
       "rank": 1,
       "topk": [
         "paper-tok-special",
-        "paper-bert-mlm",
-        "paper-tok-bpe",
         "paper-bert-pretraining-data",
-        "paper-moe-routing"
+        "paper-bert-mlm",
+        "paper-moe-load-balancing",
+        "paper-alibi-definition"
       ],
-      "stub_tokens": 287,
-      "l1_tokens": 440,
-      "full_tokens": 443,
+      "stub_tokens": 278,
+      "l1_tokens": 431,
+      "full_tokens": 434,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2648,18 +2581,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-bleu-definition",
         "paper-tx-bleu-results",
+        "paper-bleu-definition",
         "paper-alibi-definition",
-        "paper-dqn-reward-clipping",
-        "paper-dqn-atari-results"
+        "paper-rope-relative",
+        "paper-dqn-reward-clipping"
       ],
-      "stub_tokens": 291,
-      "l1_tokens": 459,
-      "full_tokens": 462,
-      "ended_at_stub": true,
+      "stub_tokens": 293,
+      "l1_tokens": 396,
+      "full_tokens": 399,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2674,14 +2607,11 @@
       "rank": 1,
       "topk": [
         "paper-bleu-definition",
-        "paper-tx-bleu-results",
-        "paper-alibi-definition",
-        "paper-gelu-stochastic",
-        "paper-parameter-equivalent-vs-parameter-matched"
+        "paper-tx-bleu-results"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 465,
-      "full_tokens": 468,
+      "stub_tokens": 109,
+      "l1_tokens": 277,
+      "full_tokens": 280,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2698,13 +2628,13 @@
       "topk": [
         "paper-perplexity-definition",
         "paper-bert-mlm",
-        "paper-tok-special",
+        "paper-tx-training-compute",
         "paper-mamba-arch",
         "paper-lora-merge"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 451,
-      "full_tokens": 453,
+      "stub_tokens": 291,
+      "l1_tokens": 450,
+      "full_tokens": 452,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2719,15 +2649,11 @@
       "query_type": "entity",
       "rank": 1,
       "topk": [
-        "paper-perplexity-definition",
-        "paper-alibi-definition",
-        "paper-per-td-error",
-        "paper-gan-wgan",
-        "paper-bleu-definition"
+        "paper-perplexity-definition"
       ],
-      "stub_tokens": 308,
-      "l1_tokens": 467,
-      "full_tokens": 469,
+      "stub_tokens": 63,
+      "l1_tokens": 222,
+      "full_tokens": 224,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2743,14 +2669,11 @@
       "rank": 1,
       "topk": [
         "paper-spearman-definition",
-        "paper-gan-wgan",
-        "paper-dqn-tricks",
-        "paper-lr-importance",
-        "paper-adam-moments"
+        "paper-dqn-tricks"
       ],
-      "stub_tokens": 316,
-      "l1_tokens": 463,
-      "full_tokens": 466,
+      "stub_tokens": 134,
+      "l1_tokens": 281,
+      "full_tokens": 284,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2766,14 +2689,13 @@
       "rank": 1,
       "topk": [
         "paper-spearman-definition",
-        "paper-rank-based-vs-proportional-prioritization",
         "paper-lora-rank",
-        "paper-auc-roc",
+        "paper-rank-based-vs-proportional-prioritization",
         "paper-dqn-tricks"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 459,
-      "full_tokens": 462,
+      "stub_tokens": 252,
+      "l1_tokens": 399,
+      "full_tokens": 402,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2788,15 +2710,11 @@
       "query_type": "entity",
       "rank": 1,
       "topk": [
-        "paper-auc-roc",
-        "paper-adam-epsilon",
-        "paper-lr-importance",
-        "paper-resnet-imagenet",
-        "paper-init-xavier-he"
+        "paper-auc-roc"
       ],
-      "stub_tokens": 271,
-      "l1_tokens": 431,
-      "full_tokens": 433,
+      "stub_tokens": 60,
+      "l1_tokens": 220,
+      "full_tokens": 222,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2811,15 +2729,11 @@
       "query_type": "entity",
       "rank": 1,
       "topk": [
-        "paper-auc-roc",
-        "paper-resnet-imagenet",
-        "paper-resnet-skip",
-        "paper-ppo-epsilon",
-        "paper-nucleus-sampling"
+        "paper-auc-roc"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 448,
-      "full_tokens": 450,
+      "stub_tokens": 60,
+      "l1_tokens": 220,
+      "full_tokens": 222,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2832,18 +2746,18 @@
       "stub_sufficient": true,
       "query_kind": "lexical",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-tfidf-definition",
         "paper-sparse-vs-dense",
+        "paper-tfidf-definition",
+        "paper-dist-soft-labels",
         "paper-swiglu-ffn",
-        "paper-beam-search",
-        "paper-dist-soft-labels"
+        "paper-spearman-definition"
       ],
-      "stub_tokens": 302,
-      "l1_tokens": 470,
-      "full_tokens": 472,
-      "ended_at_stub": true,
+      "stub_tokens": 308,
+      "l1_tokens": 459,
+      "full_tokens": 462,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -2858,14 +2772,13 @@
       "rank": 1,
       "topk": [
         "paper-tfidf-definition",
+        "paper-vae-arch",
         "paper-sparse-vs-dense",
-        "paper-perplexity-definition",
-        "paper-rms-definition",
-        "paper-vae-arch"
+        "paper-ppo-clipped-objective"
       ],
-      "stub_tokens": 294,
-      "l1_tokens": 462,
-      "full_tokens": 464,
+      "stub_tokens": 237,
+      "l1_tokens": 405,
+      "full_tokens": 407,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2881,14 +2794,14 @@
       "rank": 1,
       "topk": [
         "paper-cosine-similarity",
-        "paper-w2v-dim",
-        "paper-w2v-analogy",
+        "paper-sparse-vs-dense",
         "paper-lr-importance",
-        "paper-dist-dark-knowledge"
+        "paper-alibi-definition",
+        "paper-w2v-analogy"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 456,
-      "full_tokens": 458,
+      "stub_tokens": 292,
+      "l1_tokens": 451,
+      "full_tokens": 453,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2905,13 +2818,12 @@
       "topk": [
         "paper-cosine-similarity",
         "paper-lr-importance",
-        "paper-dist-dark-knowledge",
-        "paper-tx-positional",
-        "paper-sparse-vs-dense"
+        "paper-sparse-vs-dense",
+        "paper-dist-dark-knowledge"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 452,
-      "full_tokens": 454,
+      "stub_tokens": 239,
+      "l1_tokens": 398,
+      "full_tokens": 400,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2927,14 +2839,14 @@
       "rank": 1,
       "topk": [
         "paper-sparse-vs-dense",
-        "paper-moe-routing",
         "paper-tfidf-definition",
-        "paper-spearman-definition",
-        "paper-rank-based-vs-proportional-prioritization"
+        "paper-moe-routing",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-tx-bleu-results"
       ],
-      "stub_tokens": 317,
-      "l1_tokens": 468,
-      "full_tokens": 471,
+      "stub_tokens": 299,
+      "l1_tokens": 450,
+      "full_tokens": 453,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2950,14 +2862,14 @@
       "rank": 1,
       "topk": [
         "paper-sparse-vs-dense",
-        "paper-tx-bleu-results",
-        "paper-moe-routing",
         "paper-tfidf-definition",
-        "paper-parameter-equivalent-vs-parameter-matched"
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-tx-bleu-results",
+        "paper-spearman-definition"
       ],
-      "stub_tokens": 299,
-      "l1_tokens": 450,
-      "full_tokens": 453,
+      "stub_tokens": 304,
+      "l1_tokens": 455,
+      "full_tokens": 458,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -2970,17 +2882,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 4,
+      "rank": 5,
       "topk": [
+        "paper-adam-epsilon",
         "paper-adam-default-lr",
         "paper-adam-adamw",
-        "paper-adam-epsilon",
-        "paper-adam-moments",
-        "paper-ppo-epsilon"
+        "paper-ln-vs-bn",
+        "paper-adam-moments"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 426,
-      "full_tokens": 428,
+      "stub_tokens": 290,
+      "l1_tokens": 400,
+      "full_tokens": 403,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -2996,9 +2908,9 @@
       "rank": 1,
       "topk": [
         "paper-adam-moments",
-        "paper-adam-adamw",
-        "paper-adam-default-lr",
         "paper-bn-formula",
+        "paper-adam-default-lr",
+        "paper-adam-adamw",
         "paper-lr-importance"
       ],
       "stub_tokens": 315,
@@ -3019,14 +2931,14 @@
       "rank": 1,
       "topk": [
         "paper-adam-epsilon",
-        "paper-adam-adamw",
-        "paper-adam-default-lr",
         "paper-ppo-epsilon",
-        "paper-vae-reparameterization"
+        "paper-adam-default-lr",
+        "paper-adam-adamw",
+        "paper-mamba-selective"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 403,
-      "full_tokens": 406,
+      "stub_tokens": 302,
+      "l1_tokens": 412,
+      "full_tokens": 415,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3043,13 +2955,13 @@
       "topk": [
         "paper-adam-adamw",
         "paper-adam-default-lr",
-        "paper-lr-importance",
-        "paper-w2v-dim",
-        "paper-adam-epsilon"
+        "paper-lora-rank",
+        "paper-mamba-selective",
+        "paper-rms-definition"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 473,
-      "full_tokens": 475,
+      "stub_tokens": 296,
+      "l1_tokens": 469,
+      "full_tokens": 471,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3065,14 +2977,14 @@
       "rank": 1,
       "topk": [
         "paper-adam-default-lr",
+        "paper-bn-lr-benefit",
         "paper-lr-importance",
         "paper-adam-adamw",
-        "paper-gd-basics",
-        "paper-adam-moments"
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 302,
-      "l1_tokens": 431,
-      "full_tokens": 433,
+      "stub_tokens": 303,
+      "l1_tokens": 432,
+      "full_tokens": 434,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3088,14 +3000,14 @@
       "rank": 1,
       "topk": [
         "paper-adam-adamw",
-        "paper-vae-reparameterization",
+        "paper-gan-arch",
         "paper-ce-definition",
-        "paper-adam-moments",
-        "paper-gan-arch"
+        "paper-gelu-definition",
+        "paper-vae-reparameterization"
       ],
-      "stub_tokens": 290,
-      "l1_tokens": 463,
-      "full_tokens": 465,
+      "stub_tokens": 286,
+      "l1_tokens": 459,
+      "full_tokens": 461,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3111,14 +3023,14 @@
       "rank": 1,
       "topk": [
         "paper-adam-adamw",
-        "paper-gd-basics",
-        "paper-why-dropping-mean-centering-works",
+        "paper-ce-definition",
+        "paper-mamba-selective",
         "paper-gan-wgan",
         "paper-lora-decomposition"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 478,
-      "full_tokens": 480,
+      "stub_tokens": 304,
+      "l1_tokens": 477,
+      "full_tokens": 479,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3134,14 +3046,14 @@
       "rank": 1,
       "topk": [
         "paper-auc-roc",
-        "paper-bleu-definition",
-        "paper-w2v-skipgram",
+        "paper-bert-nsp",
+        "paper-resnet-skip",
         "paper-lora-merge",
-        "paper-ce-definition"
+        "paper-dropout-ensemble"
       ],
-      "stub_tokens": 281,
-      "l1_tokens": 441,
-      "full_tokens": 443,
+      "stub_tokens": 282,
+      "l1_tokens": 442,
+      "full_tokens": 444,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3157,14 +3069,14 @@
       "rank": 1,
       "topk": [
         "paper-auc-roc",
-        "paper-bn-formula",
-        "paper-resnet-bottleneck",
-        "paper-adam-epsilon",
-        "paper-moe-routing"
+        "paper-resnet-skip",
+        "paper-mamba-selective",
+        "paper-why-dropping-mean-centering-works",
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 299,
-      "l1_tokens": 459,
-      "full_tokens": 461,
+      "stub_tokens": 300,
+      "l1_tokens": 460,
+      "full_tokens": 462,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3180,14 +3092,14 @@
       "rank": 1,
       "topk": [
         "paper-beam-search",
-        "paper-vae-arch",
-        "paper-tx-positional",
-        "paper-flashattn-online-softmax",
-        "paper-mamba-selective"
+        "paper-dropout-ensemble",
+        "paper-dropout-definition",
+        "paper-yolo-grid",
+        "paper-flashattn-online-softmax"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 442,
-      "full_tokens": 445,
+      "stub_tokens": 311,
+      "l1_tokens": 450,
+      "full_tokens": 453,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3200,18 +3112,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 3,
       "topk": [
-        "paper-bert-pretraining-data",
-        "paper-bert-mlm",
-        "paper-bert-size",
         "paper-bert-nsp",
-        "paper-lora-merge"
+        "paper-tx-training-compute",
+        "paper-bert-pretraining-data",
+        "paper-tx-bleu-results",
+        "paper-lora-decomposition"
       ],
-      "stub_tokens": 256,
-      "l1_tokens": 365,
-      "full_tokens": 367,
-      "ended_at_stub": true,
+      "stub_tokens": 276,
+      "l1_tokens": 398,
+      "full_tokens": 420,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -3223,18 +3135,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-bert-mlm",
-        "paper-tok-special",
         "paper-bert-pretraining-data",
-        "paper-bert-size",
-        "paper-tok-bpe"
+        "paper-bert-mlm",
+        "paper-gan-arch",
+        "paper-ppo-clipped-objective",
+        "paper-tok-special"
       ],
-      "stub_tokens": 267,
-      "l1_tokens": 380,
-      "full_tokens": 383,
-      "ended_at_stub": true,
+      "stub_tokens": 283,
+      "l1_tokens": 392,
+      "full_tokens": 394,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -3251,12 +3163,12 @@
         "paper-bert-mlm",
         "paper-tok-special",
         "paper-bert-pretraining-data",
-        "paper-bert-size",
-        "paper-moe-routing"
+        "paper-moe-load-balancing",
+        "paper-alibi-definition"
       ],
-      "stub_tokens": 268,
-      "l1_tokens": 381,
-      "full_tokens": 384,
+      "stub_tokens": 278,
+      "l1_tokens": 391,
+      "full_tokens": 394,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3274,12 +3186,12 @@
         "paper-bert-mlm",
         "paper-vae-reparameterization",
         "paper-tok-special",
-        "paper-bert-size",
-        "paper-dqn-tricks"
+        "paper-gelu-stochastic",
+        "paper-bert-nsp"
       ],
-      "stub_tokens": 270,
-      "l1_tokens": 383,
-      "full_tokens": 386,
+      "stub_tokens": 275,
+      "l1_tokens": 388,
+      "full_tokens": 391,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3295,14 +3207,14 @@
       "rank": 1,
       "topk": [
         "paper-bert-nsp",
-        "paper-bert-mlm",
-        "paper-bert-size",
-        "paper-w2v-skipgram",
-        "paper-bert-pretraining-data"
+        "paper-cosine-similarity",
+        "paper-gelu-definition",
+        "paper-gan-arch",
+        "paper-tfidf-definition"
       ],
-      "stub_tokens": 262,
-      "l1_tokens": 384,
-      "full_tokens": 406,
+      "stub_tokens": 288,
+      "l1_tokens": 410,
+      "full_tokens": 432,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3318,14 +3230,14 @@
       "rank": 1,
       "topk": [
         "paper-bert-nsp",
+        "paper-w2v-dim",
+        "paper-lora-rank",
         "paper-why-dropping-mean-centering-works",
-        "paper-dropout-definition",
-        "paper-tx-positional",
-        "paper-dpo-loss"
+        "paper-gelu-definition"
       ],
-      "stub_tokens": 306,
-      "l1_tokens": 428,
-      "full_tokens": 450,
+      "stub_tokens": 277,
+      "l1_tokens": 399,
+      "full_tokens": 421,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3342,13 +3254,13 @@
       "topk": [
         "paper-bert-size",
         "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-lora-rank",
-        "paper-bleu-definition",
-        "paper-adam-default-lr"
+        "paper-swiglu-ffn",
+        "paper-moe-routing",
+        "paper-lora-rank"
       ],
-      "stub_tokens": 283,
-      "l1_tokens": 386,
-      "full_tokens": 388,
+      "stub_tokens": 282,
+      "l1_tokens": 385,
+      "full_tokens": 387,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3364,14 +3276,14 @@
       "rank": 1,
       "topk": [
         "paper-bert-size",
-        "paper-adam-default-lr",
         "paper-parameter-equivalent-vs-parameter-matched",
         "paper-sparse-vs-dense",
-        "paper-ln-vs-bn"
+        "paper-tx-bleu-results",
+        "paper-lora-rank"
       ],
-      "stub_tokens": 280,
-      "l1_tokens": 383,
-      "full_tokens": 385,
+      "stub_tokens": 265,
+      "l1_tokens": 368,
+      "full_tokens": 370,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3387,14 +3299,14 @@
       "rank": 1,
       "topk": [
         "paper-bleu-definition",
+        "paper-auc-roc",
+        "paper-resnet-skip",
         "paper-perplexity-definition",
-        "paper-alibi-definition",
-        "paper-spearman-definition",
-        "paper-w2v-skipgram"
+        "paper-flashattn-tiling"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 473,
-      "full_tokens": 476,
+      "stub_tokens": 297,
+      "l1_tokens": 465,
+      "full_tokens": 468,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3411,9 +3323,9 @@
       "topk": [
         "paper-bleu-definition",
         "paper-tx-bleu-results",
-        "paper-alibi-definition",
-        "paper-gelu-stochastic",
-        "paper-gelu-definition"
+        "paper-dropout-ensemble",
+        "paper-mamba-selective",
+        "paper-bert-mlm"
       ],
       "stub_tokens": 283,
       "l1_tokens": 451,
@@ -3430,18 +3342,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 4,
       "topk": [
-        "paper-bn-formula",
-        "paper-bn-lr-benefit",
         "paper-ln-definition",
-        "paper-gd-basics",
-        "paper-dropout-definition"
+        "paper-dropout-definition",
+        "paper-ln-vs-bn",
+        "paper-bn-formula",
+        "paper-gan-mode-collapse"
       ],
-      "stub_tokens": 304,
-      "l1_tokens": 438,
+      "stub_tokens": 308,
+      "l1_tokens": 469,
       "full_tokens": 471,
-      "ended_at_stub": true,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -3453,18 +3365,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
+        "paper-dropout-definition",
         "paper-bn-formula",
         "paper-ln-definition",
         "paper-gd-basics",
-        "paper-bn-lr-benefit",
-        "paper-gelu-definition"
+        "paper-yolo-grid"
       ],
-      "stub_tokens": 291,
-      "l1_tokens": 425,
-      "full_tokens": 458,
-      "ended_at_stub": true,
+      "stub_tokens": 303,
+      "l1_tokens": 465,
+      "full_tokens": 467,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -3480,13 +3392,13 @@
       "topk": [
         "paper-bn-lr-benefit",
         "paper-ln-vs-bn",
-        "paper-adam-default-lr",
-        "paper-bn-formula",
-        "paper-dist-dark-knowledge"
+        "paper-tx-multi-head",
+        "paper-ppo-epsilon",
+        "paper-mamba-selective"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 421,
-      "full_tokens": 423,
+      "stub_tokens": 284,
+      "l1_tokens": 405,
+      "full_tokens": 407,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3499,18 +3411,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-ce-definition",
         "paper-gan-arch",
-        "paper-yolo-realtime",
+        "paper-ppo-clipped-objective",
         "paper-w2v-skipgram",
-        "paper-softmax-definition"
+        "paper-gan-wgan",
+        "paper-auc-roc"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 417,
-      "full_tokens": 420,
-      "ended_at_stub": true,
+      "stub_tokens": 299,
+      "l1_tokens": 445,
+      "full_tokens": 448,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -3525,14 +3437,14 @@
       "rank": 1,
       "topk": [
         "paper-ce-definition",
-        "paper-softmax-definition",
         "paper-flashattn-online-softmax",
-        "paper-tx-multi-head",
-        "paper-w2v-skipgram"
+        "paper-dist-temperature",
+        "paper-tx-scaled-dot-product",
+        "paper-alibi-definition"
       ],
-      "stub_tokens": 291,
-      "l1_tokens": 420,
-      "full_tokens": 423,
+      "stub_tokens": 283,
+      "l1_tokens": 412,
+      "full_tokens": 415,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3548,14 +3460,14 @@
       "rank": 1,
       "topk": [
         "paper-cosine-similarity",
-        "paper-rope-definition",
         "paper-w2v-dim",
-        "paper-w2v-analogy",
+        "paper-lr-importance",
+        "paper-rope-definition",
         "paper-rope-relative"
       ],
-      "stub_tokens": 296,
-      "l1_tokens": 455,
-      "full_tokens": 457,
+      "stub_tokens": 299,
+      "l1_tokens": 458,
+      "full_tokens": 460,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3572,13 +3484,13 @@
       "topk": [
         "paper-cosine-similarity",
         "paper-lr-importance",
-        "paper-spearman-definition",
-        "paper-rope-relative",
-        "paper-rope-definition"
+        "paper-rope-definition",
+        "paper-dqn-tricks",
+        "paper-spearman-definition"
       ],
-      "stub_tokens": 310,
-      "l1_tokens": 469,
-      "full_tokens": 471,
+      "stub_tokens": 317,
+      "l1_tokens": 476,
+      "full_tokens": 478,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3597,11 +3509,11 @@
         "paper-dist-soft-labels",
         "paper-dist-temperature",
         "paper-ce-definition",
-        "paper-lora-rank"
+        "paper-tok-bpe"
       ],
-      "stub_tokens": 281,
-      "l1_tokens": 453,
-      "full_tokens": 455,
+      "stub_tokens": 294,
+      "l1_tokens": 466,
+      "full_tokens": 468,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3618,13 +3530,13 @@
       "topk": [
         "paper-dist-soft-labels",
         "paper-dist-dark-knowledge",
-        "paper-gan-arch",
-        "paper-tx-multi-head",
-        "paper-bert-mlm"
+        "paper-perplexity-definition",
+        "paper-w2v-dim",
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 446,
-      "full_tokens": 448,
+      "stub_tokens": 297,
+      "l1_tokens": 450,
+      "full_tokens": 452,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3641,9 +3553,9 @@
       "topk": [
         "paper-dist-soft-labels",
         "paper-dist-temperature",
-        "paper-softmax-definition",
-        "paper-dist-dark-knowledge",
-        "paper-temperature-sampling"
+        "paper-moe-routing",
+        "paper-tx-training-compute",
+        "paper-mamba-selective"
       ],
       "stub_tokens": 298,
       "l1_tokens": 451,
@@ -3666,11 +3578,11 @@
         "paper-dist-soft-labels",
         "paper-temperature-sampling",
         "paper-dist-dark-knowledge",
-        "paper-adam-epsilon"
+        "paper-moe-routing"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 413,
-      "full_tokens": 415,
+      "stub_tokens": 302,
+      "l1_tokens": 422,
+      "full_tokens": 424,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3683,18 +3595,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-dqn-reward-clipping",
         "paper-dqn-atari-results",
-        "paper-dpo-loss",
-        "paper-dqn-tricks",
-        "paper-ppo-epsilon"
+        "paper-dqn-reward-clipping",
+        "paper-ppo-epsilon",
+        "paper-tfidf-definition",
+        "paper-gan-arch"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 463,
-      "full_tokens": 465,
-      "ended_at_stub": true,
+      "stub_tokens": 300,
+      "l1_tokens": 450,
+      "full_tokens": 452,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -3710,13 +3622,13 @@
       "topk": [
         "paper-dqn-atari-results",
         "paper-rank-based-vs-proportional-prioritization",
-        "paper-per-td-error",
-        "paper-dqn-tricks",
-        "paper-dqn-reward-clipping"
+        "paper-ppo-epsilon",
+        "paper-why-dropping-mean-centering-works",
+        "paper-w2v-dim"
       ],
-      "stub_tokens": 327,
-      "l1_tokens": 477,
-      "full_tokens": 479,
+      "stub_tokens": 304,
+      "l1_tokens": 454,
+      "full_tokens": 456,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3733,13 +3645,13 @@
       "topk": [
         "paper-dqn-atari-results",
         "paper-dqn-reward-clipping",
-        "paper-rank-based-vs-proportional-prioritization",
         "paper-per-td-error",
-        "paper-dqn-tricks"
+        "paper-yolo-grid",
+        "paper-rank-based-vs-proportional-prioritization"
       ],
-      "stub_tokens": 327,
-      "l1_tokens": 477,
-      "full_tokens": 479,
+      "stub_tokens": 318,
+      "l1_tokens": 468,
+      "full_tokens": 470,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3752,18 +3664,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 5,
       "topk": [
-        "paper-dqn-tricks",
-        "paper-per-td-error",
-        "paper-dqn-atari-results",
         "paper-w2v-skipgram",
-        "paper-dqn-reward-clipping"
+        "paper-per-td-error",
+        "paper-vae-reparameterization",
+        "paper-dqn-atari-results",
+        "paper-dqn-tricks"
       ],
-      "stub_tokens": 315,
-      "l1_tokens": 474,
-      "full_tokens": 477,
-      "ended_at_stub": true,
+      "stub_tokens": 304,
+      "l1_tokens": 458,
+      "full_tokens": 461,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -3778,14 +3690,14 @@
       "rank": 1,
       "topk": [
         "paper-dqn-tricks",
-        "paper-resnet-skip",
         "paper-dqn-atari-results",
-        "paper-moe-routing",
-        "paper-dropout-ensemble"
+        "paper-dropout-ensemble",
+        "paper-ce-definition",
+        "paper-lora-merge"
       ],
-      "stub_tokens": 304,
-      "l1_tokens": 463,
-      "full_tokens": 466,
+      "stub_tokens": 288,
+      "l1_tokens": 447,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3801,14 +3713,14 @@
       "rank": 1,
       "topk": [
         "paper-dropout-definition",
+        "paper-auc-roc",
         "paper-why-dropping-mean-centering-works",
-        "paper-bn-formula",
-        "paper-bn-lr-benefit",
-        "paper-lora-merge"
+        "paper-resnet-skip",
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 309,
-      "l1_tokens": 471,
-      "full_tokens": 473,
+      "stub_tokens": 304,
+      "l1_tokens": 466,
+      "full_tokens": 468,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3824,14 +3736,14 @@
       "rank": 1,
       "topk": [
         "paper-dropout-definition",
+        "paper-bn-lr-benefit",
         "paper-dropout-ensemble",
         "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-bn-lr-benefit",
-        "paper-gelu-stochastic"
+        "paper-bert-size"
       ],
-      "stub_tokens": 316,
-      "l1_tokens": 478,
-      "full_tokens": 480,
+      "stub_tokens": 297,
+      "l1_tokens": 459,
+      "full_tokens": 461,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3847,14 +3759,14 @@
       "rank": 1,
       "topk": [
         "paper-dropout-ensemble",
-        "paper-nucleus-sampling",
         "paper-dropout-definition",
         "paper-w2v-skipgram",
-        "paper-gelu-stochastic"
+        "paper-vae-reparameterization",
+        "paper-nucleus-sampling"
       ],
-      "stub_tokens": 315,
-      "l1_tokens": 452,
-      "full_tokens": 455,
+      "stub_tokens": 309,
+      "l1_tokens": 446,
+      "full_tokens": 449,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3870,10 +3782,10 @@
       "rank": 1,
       "topk": [
         "paper-flashattn-hardware",
-        "paper-flashattn-tiling",
         "paper-flashattn-online-softmax",
-        "paper-ppo-clipped-objective",
-        "paper-per-td-error"
+        "paper-flashattn-tiling",
+        "paper-tok-bpe",
+        "paper-why-dropping-mean-centering-works"
       ],
       "stub_tokens": 304,
       "l1_tokens": 426,
@@ -3895,12 +3807,12 @@
         "paper-flashattn-online-softmax",
         "paper-flashattn-tiling",
         "paper-flashattn-hardware",
-        "paper-softmax-definition",
-        "paper-dist-temperature"
+        "paper-vae-reparameterization",
+        "paper-ce-definition"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 458,
-      "full_tokens": 460,
+      "stub_tokens": 285,
+      "l1_tokens": 451,
+      "full_tokens": 453,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3917,13 +3829,13 @@
       "topk": [
         "paper-flashattn-online-softmax",
         "paper-softmax-definition",
-        "paper-dist-temperature",
+        "paper-moe-routing",
         "paper-ppo-epsilon",
         "paper-tx-scaled-dot-product"
       ],
-      "stub_tokens": 286,
-      "l1_tokens": 452,
-      "full_tokens": 454,
+      "stub_tokens": 292,
+      "l1_tokens": 458,
+      "full_tokens": 460,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -3939,8 +3851,8 @@
       "rank": 1,
       "topk": [
         "paper-flashattn-tiling",
-        "paper-flashattn-online-softmax",
         "paper-flashattn-hardware",
+        "paper-flashattn-online-softmax",
         "paper-ppo-epsilon",
         "paper-yolo-realtime"
       ],
@@ -3963,13 +3875,13 @@
       "topk": [
         "paper-flashattn-tiling",
         "paper-flashattn-hardware",
-        "paper-tx-scaled-dot-product",
-        "paper-flashattn-online-softmax",
-        "paper-alibi-definition"
+        "paper-why-dropping-mean-centering-works",
+        "paper-tx-multi-head",
+        "paper-parameter-equivalent-vs-parameter-matched"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 447,
-      "full_tokens": 449,
+      "stub_tokens": 305,
+      "l1_tokens": 464,
+      "full_tokens": 466,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -3982,18 +3894,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 4,
       "topk": [
-        "paper-gan-arch",
-        "paper-gan-wgan",
-        "paper-gan-mode-collapse",
         "paper-dqn-reward-clipping",
-        "paper-dqn-atari-results"
+        "paper-flashattn-tiling",
+        "paper-adam-epsilon",
+        "paper-gan-arch",
+        "paper-tfidf-definition"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 458,
-      "full_tokens": 461,
-      "ended_at_stub": true,
+      "stub_tokens": 297,
+      "l1_tokens": 448,
+      "full_tokens": 450,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -4005,18 +3917,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": null,
       "topk": [
-        "paper-gan-arch",
-        "paper-dqn-atari-results",
-        "paper-ppo-default",
-        "paper-vae-arch",
-        "paper-dqn-reward-clipping"
+        "paper-dqn-reward-clipping",
+        "paper-resnet-skip",
+        "paper-auc-roc",
+        "paper-flashattn-tiling",
+        "paper-lora-rank"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 446,
-      "full_tokens": 449,
-      "ended_at_stub": true,
+      "stub_tokens": 289,
+      "l1_tokens": 440,
+      "full_tokens": 442,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -4028,18 +3940,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 3,
       "topk": [
+        "paper-moe-load-balancing",
+        "paper-gan-wgan",
         "paper-gan-mode-collapse",
         "paper-gan-arch",
-        "paper-gan-wgan",
-        "paper-adam-default-lr",
-        "paper-resnet-skip"
+        "paper-dist-dark-knowledge"
       ],
-      "stub_tokens": 311,
-      "l1_tokens": 489,
-      "full_tokens": 491,
-      "ended_at_stub": true,
+      "stub_tokens": 307,
+      "l1_tokens": 466,
+      "full_tokens": 468,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -4054,14 +3966,14 @@
       "rank": 1,
       "topk": [
         "paper-gan-mode-collapse",
-        "paper-gan-arch",
         "paper-gan-wgan",
-        "paper-why-dropping-mean-centering-works",
-        "paper-dropout-definition"
+        "paper-gan-arch",
+        "paper-dist-dark-knowledge",
+        "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 321,
-      "l1_tokens": 499,
-      "full_tokens": 501,
+      "stub_tokens": 316,
+      "l1_tokens": 494,
+      "full_tokens": 496,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4077,14 +3989,14 @@
       "rank": 1,
       "topk": [
         "paper-gan-wgan",
-        "paper-gan-mode-collapse",
-        "paper-parameter-equivalent-vs-parameter-matched",
         "paper-rope-relative",
-        "paper-init-xavier-he"
+        "paper-tfidf-definition",
+        "paper-resnet-skip",
+        "paper-mamba-selective"
       ],
-      "stub_tokens": 309,
-      "l1_tokens": 475,
-      "full_tokens": 477,
+      "stub_tokens": 306,
+      "l1_tokens": 472,
+      "full_tokens": 474,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4097,17 +4009,17 @@
       "stub_sufficient": false,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-gan-wgan",
-        "paper-gan-mode-collapse",
-        "paper-gan-arch",
         "paper-adam-adamw",
-        "paper-bn-lr-benefit"
+        "paper-gan-wgan",
+        "paper-gelu-stochastic",
+        "paper-gd-basics",
+        "paper-flashattn-tiling"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 478,
-      "full_tokens": 480,
+      "stub_tokens": 297,
+      "l1_tokens": 470,
+      "full_tokens": 472,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4120,18 +4032,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-gd-basics",
-        "paper-lora-decomposition",
         "paper-gelu-stochastic",
-        "paper-adam-moments",
-        "paper-ppo-epsilon"
+        "paper-gd-basics",
+        "paper-adam-epsilon",
+        "paper-ce-definition",
+        "paper-resnet-bottleneck"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 430,
-      "full_tokens": 433,
-      "ended_at_stub": true,
+      "stub_tokens": 277,
+      "l1_tokens": 393,
+      "full_tokens": 396,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -4146,14 +4058,14 @@
       "rank": 1,
       "topk": [
         "paper-gd-basics",
+        "paper-gelu-stochastic",
+        "paper-ce-definition",
         "paper-bn-formula",
-        "paper-vae-reparameterization",
-        "paper-bn-lr-benefit",
-        "paper-gelu-stochastic"
+        "paper-gelu-definition"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 434,
-      "full_tokens": 437,
+      "stub_tokens": 285,
+      "l1_tokens": 427,
+      "full_tokens": 430,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4166,18 +4078,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-gelu-definition",
         "paper-swiglu-ffn",
+        "paper-gelu-definition",
+        "paper-why-dropping-mean-centering-works",
         "paper-dropout-definition",
-        "paper-init-xavier-he",
-        "paper-alibi-definition"
+        "paper-w2v-analogy"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 432,
-      "full_tokens": 435,
-      "ended_at_stub": true,
+      "stub_tokens": 307,
+      "l1_tokens": 453,
+      "full_tokens": 455,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -4193,13 +4105,13 @@
       "topk": [
         "paper-gelu-definition",
         "paper-gelu-stochastic",
-        "paper-swiglu-ffn",
-        "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-init-xavier-he"
+        "paper-mamba-arch",
+        "paper-ln-vs-bn",
+        "paper-w2v-dim"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 436,
-      "full_tokens": 439,
+      "stub_tokens": 291,
+      "l1_tokens": 430,
+      "full_tokens": 433,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4218,11 +4130,11 @@
         "paper-dropout-definition",
         "paper-gelu-definition",
         "paper-dropout-ensemble",
-        "paper-swiglu-ffn"
+        "paper-mamba-selective"
       ],
-      "stub_tokens": 304,
-      "l1_tokens": 420,
-      "full_tokens": 423,
+      "stub_tokens": 307,
+      "l1_tokens": 423,
+      "full_tokens": 426,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4238,14 +4150,14 @@
       "rank": 1,
       "topk": [
         "paper-init-xavier-he",
-        "paper-bn-lr-benefit",
         "paper-adam-adamw",
-        "paper-per-td-error",
-        "paper-lora-decomposition"
+        "paper-bn-lr-benefit",
+        "paper-lora-decomposition",
+        "paper-gan-wgan"
       ],
-      "stub_tokens": 302,
-      "l1_tokens": 434,
-      "full_tokens": 437,
+      "stub_tokens": 298,
+      "l1_tokens": 430,
+      "full_tokens": 433,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4261,14 +4173,11 @@
       "rank": 1,
       "topk": [
         "paper-init-xavier-he",
-        "paper-bn-lr-benefit",
-        "paper-flashattn-tiling",
-        "paper-flashattn-hardware",
-        "paper-adam-default-lr"
+        "paper-bn-lr-benefit"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 420,
-      "full_tokens": 423,
+      "stub_tokens": 110,
+      "l1_tokens": 242,
+      "full_tokens": 245,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4281,17 +4190,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 3,
+      "rank": 2,
       "topk": [
         "paper-ln-definition",
-        "paper-rms-definition",
         "paper-ln-vs-bn",
+        "paper-rms-definition",
         "paper-bn-formula",
-        "paper-gd-basics"
+        "paper-gan-mode-collapse"
       ],
-      "stub_tokens": 279,
-      "l1_tokens": 440,
-      "full_tokens": 442,
+      "stub_tokens": 294,
+      "l1_tokens": 455,
+      "full_tokens": 457,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4327,17 +4236,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 4,
+      "rank": null,
       "topk": [
         "paper-why-dropping-mean-centering-works",
-        "paper-bn-formula",
-        "paper-bn-lr-benefit",
-        "paper-ln-definition",
-        "paper-adam-default-lr"
+        "paper-mamba-selective",
+        "paper-adam-default-lr",
+        "paper-resnet-skip",
+        "paper-gan-mode-collapse"
       ],
-      "stub_tokens": 314,
-      "l1_tokens": 482,
-      "full_tokens": 484,
+      "stub_tokens": 319,
+      "l1_tokens": 487,
+      "full_tokens": 489,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4350,18 +4259,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "paper-bn-formula",
         "paper-ln-definition",
-        "paper-w2v-skipgram",
-        "paper-vae-reparameterization",
-        "paper-gd-basics"
+        "paper-ln-vs-bn",
+        "paper-yolo-realtime",
+        "paper-dist-soft-labels",
+        "paper-nucleus-sampling"
       ],
-      "stub_tokens": 290,
-      "l1_tokens": 424,
-      "full_tokens": 457,
-      "ended_at_stub": false,
+      "stub_tokens": 300,
+      "l1_tokens": 461,
+      "full_tokens": 463,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -4376,14 +4285,14 @@
       "rank": 1,
       "topk": [
         "paper-lora-decomposition",
-        "paper-lora-merge",
+        "paper-parameter-equivalent-vs-parameter-matched",
         "paper-ppo-epsilon",
-        "paper-lora-rank",
-        "paper-adam-adamw"
+        "paper-adam-adamw",
+        "paper-lora-merge"
       ],
-      "stub_tokens": 281,
-      "l1_tokens": 433,
-      "full_tokens": 436,
+      "stub_tokens": 302,
+      "l1_tokens": 454,
+      "full_tokens": 457,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4399,14 +4308,14 @@
       "rank": 1,
       "topk": [
         "paper-lora-decomposition",
+        "paper-adam-epsilon",
         "paper-lora-merge",
         "paper-lora-rank",
-        "paper-ppo-epsilon",
-        "paper-adam-epsilon"
+        "paper-flashattn-tiling"
       ],
-      "stub_tokens": 269,
-      "l1_tokens": 421,
-      "full_tokens": 424,
+      "stub_tokens": 271,
+      "l1_tokens": 423,
+      "full_tokens": 426,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4422,14 +4331,14 @@
       "rank": 1,
       "topk": [
         "paper-lora-merge",
+        "paper-tx-training-compute",
         "paper-lora-decomposition",
-        "paper-dropout-definition",
-        "paper-lora-rank",
-        "paper-bert-size"
+        "paper-tx-multi-head",
+        "paper-mamba-arch"
       ],
-      "stub_tokens": 271,
-      "l1_tokens": 367,
-      "full_tokens": 399,
+      "stub_tokens": 296,
+      "l1_tokens": 392,
+      "full_tokens": 424,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4447,12 +4356,12 @@
         "paper-lora-merge",
         "paper-lora-decomposition",
         "paper-lora-rank",
-        "paper-adam-default-lr",
-        "paper-moe-load-balancing"
+        "paper-bn-lr-benefit",
+        "paper-dropout-ensemble"
       ],
-      "stub_tokens": 282,
-      "l1_tokens": 378,
-      "full_tokens": 410,
+      "stub_tokens": 279,
+      "l1_tokens": 375,
+      "full_tokens": 407,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4468,14 +4377,14 @@
       "rank": 1,
       "topk": [
         "paper-lora-rank",
-        "paper-lora-decomposition",
         "paper-rank-based-vs-proportional-prioritization",
-        "paper-spearman-definition",
-        "paper-lora-merge"
+        "paper-lora-decomposition",
+        "paper-lora-merge",
+        "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 399,
-      "full_tokens": 425,
+      "stub_tokens": 296,
+      "l1_tokens": 397,
+      "full_tokens": 423,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4488,18 +4397,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 2,
+      "rank": 1,
       "topk": [
-        "paper-lora-decomposition",
         "paper-lora-rank",
-        "paper-spearman-definition",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-lora-decomposition",
         "paper-lora-merge",
-        "paper-rank-based-vs-proportional-prioritization"
+        "paper-spearman-definition"
       ],
       "stub_tokens": 298,
-      "l1_tokens": 450,
-      "full_tokens": 453,
-      "ended_at_stub": false,
+      "l1_tokens": 399,
+      "full_tokens": 425,
+      "ended_at_stub": true,
       "is_no_answer": false
     },
     {
@@ -4511,17 +4420,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 3,
+      "rank": null,
       "topk": [
-        "paper-w2v-dim",
         "paper-ppo-epsilon",
-        "paper-lr-importance",
-        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-dist-dark-knowledge",
+        "paper-adam-adamw",
+        "paper-beam-search",
         "paper-why-dropping-mean-centering-works"
       ],
-      "stub_tokens": 306,
-      "l1_tokens": 410,
-      "full_tokens": 438,
+      "stub_tokens": 309,
+      "l1_tokens": 431,
+      "full_tokens": 434,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4534,17 +4443,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 4,
+      "rank": null,
       "topk": [
         "paper-adam-adamw",
         "paper-adam-default-lr",
-        "paper-adam-epsilon",
-        "paper-lr-importance",
-        "paper-adam-moments"
+        "paper-beam-search",
+        "paper-mamba-selective",
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 476,
-      "full_tokens": 478,
+      "stub_tokens": 308,
+      "l1_tokens": 481,
+      "full_tokens": 483,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4560,14 +4469,14 @@
       "rank": 1,
       "topk": [
         "paper-moe-routing",
-        "paper-dropout-ensemble",
+        "paper-tx-training-compute",
         "paper-moe-load-balancing",
-        "paper-sparse-vs-dense",
-        "paper-dqn-atari-results"
+        "paper-dqn-atari-results",
+        "paper-dpo-loss"
       ],
-      "stub_tokens": 291,
-      "l1_tokens": 451,
-      "full_tokens": 454,
+      "stub_tokens": 296,
+      "l1_tokens": 456,
+      "full_tokens": 459,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4583,14 +4492,14 @@
       "rank": 1,
       "topk": [
         "paper-moe-routing",
-        "paper-nucleus-sampling",
+        "paper-moe-load-balancing",
+        "paper-w2v-dim",
         "paper-beam-search",
-        "paper-alibi-definition",
-        "paper-moe-load-balancing"
+        "paper-nucleus-sampling"
       ],
-      "stub_tokens": 306,
-      "l1_tokens": 466,
-      "full_tokens": 469,
+      "stub_tokens": 304,
+      "l1_tokens": 464,
+      "full_tokens": 467,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4606,14 +4515,14 @@
       "rank": 1,
       "topk": [
         "paper-moe-load-balancing",
-        "paper-lr-importance",
         "paper-moe-routing",
+        "paper-lr-importance",
         "paper-ce-definition",
-        "paper-vae-elbo"
+        "paper-resnet-skip"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 447,
-      "full_tokens": 449,
+      "stub_tokens": 289,
+      "l1_tokens": 448,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4626,17 +4535,17 @@
       "stub_sufficient": false,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-moe-load-balancing",
         "paper-moe-routing",
+        "paper-moe-load-balancing",
+        "paper-dqn-atari-results",
         "paper-bert-mlm",
-        "paper-tok-special",
-        "paper-tok-bpe"
+        "paper-resnet-shortcuts"
       ],
       "stub_tokens": 285,
-      "l1_tokens": 444,
-      "full_tokens": 446,
+      "l1_tokens": 445,
+      "full_tokens": 448,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -4653,13 +4562,13 @@
       "topk": [
         "paper-nucleus-sampling",
         "paper-w2v-skipgram",
-        "paper-per-td-error",
+        "paper-vae-reparameterization",
         "paper-auc-roc",
-        "paper-vae-reparameterization"
+        "paper-vae-arch"
       ],
-      "stub_tokens": 308,
-      "l1_tokens": 454,
-      "full_tokens": 457,
+      "stub_tokens": 301,
+      "l1_tokens": 447,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4675,14 +4584,14 @@
       "rank": 1,
       "topk": [
         "paper-nucleus-sampling",
-        "paper-per-td-error",
+        "paper-vae-arch",
         "paper-w2v-skipgram",
         "paper-vae-reparameterization",
         "paper-temperature-sampling"
       ],
-      "stub_tokens": 307,
-      "l1_tokens": 453,
-      "full_tokens": 456,
+      "stub_tokens": 300,
+      "l1_tokens": 446,
+      "full_tokens": 449,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4695,18 +4604,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-per-td-error",
         "paper-dqn-tricks",
-        "paper-rank-based-vs-proportional-prioritization",
-        "paper-bn-lr-benefit",
-        "paper-lr-importance"
+        "paper-per-td-error",
+        "paper-lr-importance",
+        "paper-flashattn-tiling",
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 323,
-      "l1_tokens": 488,
-      "full_tokens": 491,
-      "ended_at_stub": true,
+      "stub_tokens": 304,
+      "l1_tokens": 463,
+      "full_tokens": 466,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -4722,13 +4631,13 @@
       "topk": [
         "paper-per-td-error",
         "paper-rank-based-vs-proportional-prioritization",
-        "paper-adam-default-lr",
-        "paper-dqn-reward-clipping",
-        "paper-ppo-epsilon"
+        "paper-resnet-imagenet",
+        "paper-moe-routing",
+        "paper-gd-basics"
       ],
-      "stub_tokens": 322,
-      "l1_tokens": 487,
-      "full_tokens": 490,
+      "stub_tokens": 296,
+      "l1_tokens": 461,
+      "full_tokens": 464,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4745,13 +4654,13 @@
       "topk": [
         "paper-perplexity-definition",
         "paper-bert-mlm",
-        "paper-tok-special",
-        "paper-mamba-arch",
-        "paper-mamba-selective"
+        "paper-mamba-selective",
+        "paper-why-dropping-mean-centering-works",
+        "paper-bert-size"
       ],
-      "stub_tokens": 304,
-      "l1_tokens": 463,
-      "full_tokens": 465,
+      "stub_tokens": 285,
+      "l1_tokens": 444,
+      "full_tokens": 446,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4767,14 +4676,14 @@
       "rank": 1,
       "topk": [
         "paper-perplexity-definition",
-        "paper-bleu-definition",
+        "paper-dropout-ensemble",
         "paper-auc-roc",
-        "paper-alibi-definition",
-        "paper-dqn-atari-results"
+        "paper-bleu-definition",
+        "paper-bn-lr-benefit"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 457,
-      "full_tokens": 459,
+      "stub_tokens": 300,
+      "l1_tokens": 459,
+      "full_tokens": 461,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4790,14 +4699,14 @@
       "rank": 1,
       "topk": [
         "paper-ppo-clipped-objective",
+        "paper-gan-arch",
         "paper-ppo-epsilon",
         "paper-dpo-loss",
-        "paper-dqn-reward-clipping",
         "paper-ppo-default"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 471,
-      "full_tokens": 473,
+      "stub_tokens": 298,
+      "l1_tokens": 464,
+      "full_tokens": 466,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4810,18 +4719,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 5,
       "topk": [
-        "paper-ppo-clipped-objective",
-        "paper-dpo-loss",
         "paper-ppo-epsilon",
-        "paper-ppo-default",
-        "paper-moe-load-balancing"
+        "paper-dpo-loss",
+        "paper-vae-elbo",
+        "paper-lr-importance",
+        "paper-ppo-clipped-objective"
       ],
-      "stub_tokens": 295,
-      "l1_tokens": 461,
-      "full_tokens": 463,
-      "ended_at_stub": true,
+      "stub_tokens": 299,
+      "l1_tokens": 421,
+      "full_tokens": 424,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -4837,13 +4746,13 @@
       "topk": [
         "paper-ppo-default",
         "paper-lora-rank",
-        "paper-rank-based-vs-proportional-prioritization",
-        "paper-lr-importance",
-        "paper-per-td-error"
+        "paper-rms-definition",
+        "paper-adam-moments",
+        "paper-swiglu-ffn"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 447,
-      "full_tokens": 450,
+      "stub_tokens": 280,
+      "l1_tokens": 424,
+      "full_tokens": 427,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4859,14 +4768,14 @@
       "rank": 1,
       "topk": [
         "paper-ppo-default",
-        "paper-ppo-clipped-objective",
         "paper-dpo-loss",
+        "paper-ppo-clipped-objective",
         "paper-ppo-epsilon",
-        "paper-tx-bleu-results"
+        "paper-mamba-selective"
       ],
-      "stub_tokens": 289,
-      "l1_tokens": 433,
-      "full_tokens": 436,
+      "stub_tokens": 303,
+      "l1_tokens": 447,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4882,14 +4791,14 @@
       "rank": 1,
       "topk": [
         "paper-ppo-epsilon",
-        "paper-ppo-clipped-objective",
         "paper-adam-epsilon",
-        "paper-vae-elbo",
+        "paper-ppo-clipped-objective",
+        "paper-dpo-loss",
         "paper-ppo-default"
       ],
-      "stub_tokens": 283,
-      "l1_tokens": 405,
-      "full_tokens": 408,
+      "stub_tokens": 292,
+      "l1_tokens": 414,
+      "full_tokens": 417,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4905,14 +4814,14 @@
       "rank": 1,
       "topk": [
         "paper-ppo-epsilon",
-        "paper-ppo-clipped-objective",
         "paper-adam-epsilon",
-        "paper-ppo-default",
-        "paper-dpo-loss"
+        "paper-dqn-reward-clipping",
+        "paper-dpo-loss",
+        "paper-gelu-stochastic"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 414,
-      "full_tokens": 417,
+      "stub_tokens": 301,
+      "l1_tokens": 423,
+      "full_tokens": 426,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4929,9 +4838,9 @@
       "topk": [
         "paper-rms-definition",
         "paper-why-dropping-mean-centering-works",
-        "paper-ln-definition",
-        "paper-softmax-definition",
-        "paper-dropout-ensemble"
+        "paper-resnet-skip",
+        "paper-dropout-ensemble",
+        "paper-auc-roc"
       ],
       "stub_tokens": 296,
       "l1_tokens": 416,
@@ -4952,13 +4861,13 @@
       "topk": [
         "paper-resnet-bottleneck",
         "paper-resnet-skip",
-        "paper-flashattn-online-softmax",
-        "paper-resnet-imagenet",
-        "paper-resnet-shortcuts"
+        "paper-gelu-definition",
+        "paper-tok-bpe",
+        "paper-vae-reparameterization"
       ],
-      "stub_tokens": 286,
-      "l1_tokens": 413,
-      "full_tokens": 416,
+      "stub_tokens": 288,
+      "l1_tokens": 415,
+      "full_tokens": 418,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4974,14 +4883,14 @@
       "rank": 1,
       "topk": [
         "paper-resnet-imagenet",
+        "paper-per-td-error",
+        "paper-rank-based-vs-proportional-prioritization",
         "paper-resnet-skip",
-        "paper-resnet-bottleneck",
-        "paper-resnet-shortcuts",
-        "paper-auc-roc"
+        "paper-sparse-vs-dense"
       ],
-      "stub_tokens": 281,
-      "l1_tokens": 374,
-      "full_tokens": 377,
+      "stub_tokens": 296,
+      "l1_tokens": 389,
+      "full_tokens": 392,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -4998,13 +4907,13 @@
       "topk": [
         "paper-resnet-imagenet",
         "paper-resnet-skip",
-        "paper-bert-mlm",
-        "paper-dpo-loss",
-        "paper-tx-training-compute"
+        "paper-auc-roc",
+        "paper-tx-training-compute",
+        "paper-lora-merge"
       ],
-      "stub_tokens": 275,
-      "l1_tokens": 368,
-      "full_tokens": 371,
+      "stub_tokens": 270,
+      "l1_tokens": 363,
+      "full_tokens": 366,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5021,13 +4930,13 @@
       "topk": [
         "paper-resnet-shortcuts",
         "paper-resnet-skip",
-        "paper-vae-reparameterization",
-        "paper-adam-default-lr",
-        "paper-alibi-definition"
+        "paper-sparse-vs-dense",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-vae-reparameterization"
       ],
-      "stub_tokens": 294,
-      "l1_tokens": 449,
-      "full_tokens": 451,
+      "stub_tokens": 296,
+      "l1_tokens": 451,
+      "full_tokens": 453,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5044,13 +4953,13 @@
       "topk": [
         "paper-resnet-skip",
         "paper-resnet-bottleneck",
+        "paper-flashattn-tiling",
         "paper-resnet-shortcuts",
-        "paper-resnet-imagenet",
-        "paper-dqn-tricks"
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 288,
-      "l1_tokens": 433,
-      "full_tokens": 436,
+      "stub_tokens": 285,
+      "l1_tokens": 430,
+      "full_tokens": 433,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5066,14 +4975,14 @@
       "rank": 1,
       "topk": [
         "paper-resnet-skip",
-        "paper-w2v-skipgram",
-        "paper-gan-arch",
-        "paper-resnet-bottleneck",
-        "paper-dropout-ensemble"
+        "paper-dropout-ensemble",
+        "paper-dropout-definition",
+        "paper-moe-routing",
+        "paper-ppo-epsilon"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 438,
-      "full_tokens": 441,
+      "stub_tokens": 302,
+      "l1_tokens": 447,
+      "full_tokens": 450,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5088,15 +4997,15 @@
       "query_type": "topical",
       "rank": 2,
       "topk": [
-        "paper-dqn-tricks",
+        "paper-dropout-ensemble",
         "paper-resnet-skip",
         "paper-gan-arch",
-        "paper-dropout-ensemble",
-        "paper-moe-routing"
+        "paper-dqn-tricks",
+        "paper-bn-formula"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 464,
-      "full_tokens": 467,
+      "stub_tokens": 308,
+      "l1_tokens": 445,
+      "full_tokens": 448,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -5112,14 +5021,14 @@
       "rank": 1,
       "topk": [
         "paper-sparse-vs-dense",
+        "paper-spearman-definition",
         "paper-beam-search",
-        "paper-tfidf-definition",
-        "paper-yolo-realtime",
-        "paper-dqn-tricks"
+        "paper-mamba-selective",
+        "paper-yolo-grid"
       ],
-      "stub_tokens": 307,
-      "l1_tokens": 458,
-      "full_tokens": 461,
+      "stub_tokens": 306,
+      "l1_tokens": 457,
+      "full_tokens": 460,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5135,14 +5044,14 @@
       "rank": 1,
       "topk": [
         "paper-sparse-vs-dense",
-        "paper-moe-routing",
         "paper-w2v-dim",
         "paper-tfidf-definition",
-        "paper-w2v-analogy"
+        "paper-ppo-epsilon",
+        "paper-moe-routing"
       ],
-      "stub_tokens": 294,
-      "l1_tokens": 445,
-      "full_tokens": 448,
+      "stub_tokens": 291,
+      "l1_tokens": 442,
+      "full_tokens": 445,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5155,18 +5064,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
+        "paper-dist-temperature",
         "paper-softmax-definition",
         "paper-temperature-sampling",
-        "paper-moe-routing",
-        "paper-bn-formula",
-        "paper-bn-lr-benefit"
+        "paper-cosine-similarity",
+        "paper-moe-routing"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 461,
-      "full_tokens": 464,
-      "ended_at_stub": true,
+      "stub_tokens": 294,
+      "l1_tokens": 414,
+      "full_tokens": 416,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -5178,13 +5087,13 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 3,
+      "rank": 5,
       "topk": [
         "paper-flashattn-online-softmax",
-        "paper-tx-scaled-dot-product",
-        "paper-softmax-definition",
+        "paper-ce-definition",
         "paper-dist-temperature",
-        "paper-ce-definition"
+        "paper-tx-scaled-dot-product",
+        "paper-softmax-definition"
       ],
       "stub_tokens": 283,
       "l1_tokens": 449,
@@ -5205,13 +5114,13 @@
       "topk": [
         "paper-spearman-definition",
         "paper-rank-based-vs-proportional-prioritization",
-        "paper-lora-rank",
-        "paper-adam-moments",
-        "paper-auc-roc"
+        "paper-dropout-ensemble",
+        "paper-mamba-selective",
+        "paper-bert-mlm"
       ],
-      "stub_tokens": 304,
-      "l1_tokens": 451,
-      "full_tokens": 454,
+      "stub_tokens": 311,
+      "l1_tokens": 458,
+      "full_tokens": 461,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5224,18 +5133,16 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 2,
       "topk": [
-        "paper-spearman-definition",
         "paper-rank-based-vs-proportional-prioritization",
-        "paper-dqn-tricks",
-        "paper-lora-rank",
-        "paper-auc-roc"
+        "paper-spearman-definition",
+        "paper-dqn-tricks"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 459,
-      "full_tokens": 462,
-      "ended_at_stub": true,
+      "stub_tokens": 204,
+      "l1_tokens": 349,
+      "full_tokens": 352,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -5250,14 +5157,14 @@
       "rank": 1,
       "topk": [
         "paper-tok-special",
-        "paper-bert-mlm",
         "paper-tok-bpe",
-        "paper-moe-load-balancing",
-        "paper-moe-routing"
+        "paper-bert-mlm",
+        "paper-bert-pretraining-data",
+        "paper-moe-load-balancing"
       ],
-      "stub_tokens": 285,
-      "l1_tokens": 438,
-      "full_tokens": 441,
+      "stub_tokens": 281,
+      "l1_tokens": 434,
+      "full_tokens": 437,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5274,13 +5181,13 @@
       "topk": [
         "paper-swiglu-ffn",
         "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-init-xavier-he",
-        "paper-gelu-definition",
-        "paper-rms-definition"
+        "paper-mamba-arch",
+        "paper-ln-vs-bn",
+        "paper-gelu-definition"
       ],
-      "stub_tokens": 290,
-      "l1_tokens": 436,
-      "full_tokens": 438,
+      "stub_tokens": 304,
+      "l1_tokens": 450,
+      "full_tokens": 452,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5296,14 +5203,14 @@
       "rank": 1,
       "topk": [
         "paper-swiglu-ffn",
-        "paper-gelu-definition",
-        "paper-parameter-equivalent-vs-parameter-matched",
-        "paper-resnet-bottleneck",
-        "paper-dropout-definition"
+        "paper-dropout-definition",
+        "paper-flashattn-tiling",
+        "paper-rms-definition",
+        "paper-adam-epsilon"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 458,
-      "full_tokens": 460,
+      "stub_tokens": 293,
+      "l1_tokens": 439,
+      "full_tokens": 441,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5320,13 +5227,13 @@
       "topk": [
         "paper-temperature-sampling",
         "paper-dist-temperature",
-        "paper-dist-soft-labels",
-        "paper-nucleus-sampling",
-        "paper-per-td-error"
+        "paper-vae-reparameterization",
+        "paper-w2v-skipgram",
+        "paper-dist-soft-labels"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 458,
-      "full_tokens": 460,
+      "stub_tokens": 290,
+      "l1_tokens": 436,
+      "full_tokens": 438,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5342,14 +5249,14 @@
       "rank": 1,
       "topk": [
         "paper-temperature-sampling",
+        "paper-vae-reparameterization",
         "paper-dist-temperature",
-        "paper-nucleus-sampling",
-        "paper-per-td-error",
+        "paper-w2v-skipgram",
         "paper-dist-soft-labels"
       ],
-      "stub_tokens": 312,
-      "l1_tokens": 458,
-      "full_tokens": 460,
+      "stub_tokens": 290,
+      "l1_tokens": 436,
+      "full_tokens": 438,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5366,13 +5273,13 @@
       "topk": [
         "paper-tfidf-definition",
         "paper-sparse-vs-dense",
-        "paper-dropout-definition",
+        "paper-bert-mlm",
         "paper-why-dropping-mean-centering-works",
-        "paper-bert-mlm"
+        "paper-flashattn-tiling"
       ],
-      "stub_tokens": 302,
-      "l1_tokens": 470,
-      "full_tokens": 472,
+      "stub_tokens": 291,
+      "l1_tokens": 459,
+      "full_tokens": 461,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5388,14 +5295,14 @@
       "rank": 1,
       "topk": [
         "paper-tfidf-definition",
-        "paper-sparse-vs-dense",
-        "paper-alibi-definition",
         "paper-beam-search",
-        "paper-bleu-definition"
+        "paper-sparse-vs-dense",
+        "paper-gelu-definition",
+        "paper-tok-bpe"
       ],
-      "stub_tokens": 296,
-      "l1_tokens": 464,
-      "full_tokens": 466,
+      "stub_tokens": 295,
+      "l1_tokens": 463,
+      "full_tokens": 465,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5412,13 +5319,13 @@
       "topk": [
         "paper-tok-bpe",
         "paper-tok-special",
-        "paper-init-xavier-he",
-        "paper-tx-positional",
-        "paper-bert-mlm"
+        "paper-rope-relative",
+        "paper-rope-definition",
+        "paper-bn-lr-benefit"
       ],
-      "stub_tokens": 272,
-      "l1_tokens": 442,
-      "full_tokens": 444,
+      "stub_tokens": 298,
+      "l1_tokens": 468,
+      "full_tokens": 470,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5435,13 +5342,12 @@
       "topk": [
         "paper-tok-bpe",
         "paper-tok-special",
-        "paper-bert-mlm",
         "paper-init-xavier-he",
-        "paper-moe-routing"
+        "paper-rank-based-vs-proportional-prioritization"
       ],
-      "stub_tokens": 280,
-      "l1_tokens": 450,
-      "full_tokens": 452,
+      "stub_tokens": 237,
+      "l1_tokens": 407,
+      "full_tokens": 409,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5454,18 +5360,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 4,
       "topk": [
-        "paper-tx-bleu-results",
-        "paper-bleu-definition",
-        "paper-rms-definition",
+        "paper-dqn-atari-results",
         "paper-lora-rank",
-        "paper-adam-adamw"
+        "paper-rms-definition",
+        "paper-tx-bleu-results",
+        "paper-nucleus-sampling"
       ],
-      "stub_tokens": 276,
-      "l1_tokens": 379,
-      "full_tokens": 382,
-      "ended_at_stub": true,
+      "stub_tokens": 279,
+      "l1_tokens": 429,
+      "full_tokens": 431,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -5481,13 +5387,13 @@
       "topk": [
         "paper-tx-bleu-results",
         "paper-bleu-definition",
-        "paper-gelu-definition",
-        "paper-swiglu-ffn",
-        "paper-init-xavier-he"
+        "paper-mamba-selective",
+        "paper-rms-definition",
+        "paper-moe-load-balancing"
       ],
-      "stub_tokens": 276,
-      "l1_tokens": 379,
-      "full_tokens": 382,
+      "stub_tokens": 283,
+      "l1_tokens": 386,
+      "full_tokens": 389,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5500,17 +5406,17 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 2,
+      "rank": null,
       "topk": [
-        "paper-tx-multi-head",
-        "paper-tx-scaled-dot-product",
-        "paper-mamba-arch",
         "paper-flashattn-tiling",
+        "paper-mamba-arch",
+        "paper-tx-multi-head",
+        "paper-alibi-definition",
         "paper-gelu-definition"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 400,
-      "full_tokens": 403,
+      "stub_tokens": 299,
+      "l1_tokens": 458,
+      "full_tokens": 460,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -5523,18 +5429,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "entity",
-      "rank": 1,
+      "rank": 3,
       "topk": [
-        "paper-tx-scaled-dot-product",
-        "paper-rope-relative",
         "paper-flashattn-tiling",
+        "paper-tx-multi-head",
+        "paper-tx-scaled-dot-product",
         "paper-alibi-definition",
-        "paper-tx-multi-head"
+        "paper-rope-relative"
       ],
       "stub_tokens": 285,
-      "l1_tokens": 381,
-      "full_tokens": 384,
-      "ended_at_stub": true,
+      "l1_tokens": 444,
+      "full_tokens": 446,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -5549,10 +5455,10 @@
       "rank": 1,
       "topk": [
         "paper-tx-scaled-dot-product",
-        "paper-flashattn-tiling",
         "paper-adam-epsilon",
-        "paper-why-dropping-mean-centering-works",
-        "paper-alibi-definition"
+        "paper-flashattn-tiling",
+        "paper-tx-multi-head",
+        "paper-why-dropping-mean-centering-works"
       ],
       "stub_tokens": 285,
       "l1_tokens": 381,
@@ -5572,14 +5478,14 @@
       "rank": 1,
       "topk": [
         "paper-tx-multi-head",
-        "paper-alibi-definition",
-        "paper-tx-scaled-dot-product",
         "paper-flashattn-tiling",
-        "paper-dqn-reward-clipping"
+        "paper-tx-scaled-dot-product",
+        "paper-alibi-definition",
+        "paper-mamba-arch"
       ],
-      "stub_tokens": 291,
-      "l1_tokens": 398,
-      "full_tokens": 401,
+      "stub_tokens": 296,
+      "l1_tokens": 403,
+      "full_tokens": 406,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5596,13 +5502,13 @@
       "topk": [
         "paper-tx-multi-head",
         "paper-tx-training-compute",
-        "paper-bert-size",
-        "paper-swiglu-ffn",
-        "paper-gelu-definition"
+        "paper-alibi-definition",
+        "paper-lora-merge",
+        "paper-swiglu-ffn"
       ],
-      "stub_tokens": 270,
-      "l1_tokens": 377,
-      "full_tokens": 380,
+      "stub_tokens": 283,
+      "l1_tokens": 390,
+      "full_tokens": 393,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5618,14 +5524,14 @@
       "rank": 1,
       "topk": [
         "paper-tx-positional",
-        "paper-rope-definition",
-        "paper-rope-relative",
-        "paper-alibi-definition",
-        "paper-w2v-skipgram"
+        "paper-ppo-epsilon",
+        "paper-w2v-dim",
+        "paper-rank-based-vs-proportional-prioritization",
+        "paper-dropout-ensemble"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 412,
-      "full_tokens": 415,
+      "stub_tokens": 294,
+      "l1_tokens": 413,
+      "full_tokens": 416,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5643,8 +5549,8 @@
         "paper-tx-training-compute",
         "paper-tx-multi-head",
         "paper-lora-merge",
-        "paper-tx-positional",
-        "paper-resnet-skip"
+        "paper-w2v-skipgram",
+        "paper-rms-definition"
       ],
       "stub_tokens": 276,
       "l1_tokens": 393,
@@ -5664,14 +5570,14 @@
       "rank": 1,
       "topk": [
         "paper-tx-training-compute",
-        "paper-adam-adamw",
         "paper-lora-merge",
-        "paper-tx-positional",
-        "paper-gan-mode-collapse"
+        "paper-tx-multi-head",
+        "paper-ppo-epsilon",
+        "paper-dropout-ensemble"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 409,
-      "full_tokens": 411,
+      "stub_tokens": 278,
+      "l1_tokens": 395,
+      "full_tokens": 397,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5684,18 +5590,18 @@
       "stub_sufficient": true,
       "query_kind": "paraphrased",
       "query_type": "topical",
-      "rank": 1,
+      "rank": 2,
       "topk": [
+        "paper-dist-temperature",
         "paper-vae-arch",
-        "paper-tok-bpe",
-        "paper-vae-reparameterization",
-        "paper-vae-elbo",
-        "paper-ce-definition"
+        "paper-temperature-sampling",
+        "paper-w2v-skipgram",
+        "paper-flashattn-tiling"
       ],
-      "stub_tokens": 284,
-      "l1_tokens": 450,
-      "full_tokens": 453,
-      "ended_at_stub": true,
+      "stub_tokens": 289,
+      "l1_tokens": 409,
+      "full_tokens": 411,
+      "ended_at_stub": false,
       "is_no_answer": false
     },
     {
@@ -5712,12 +5618,12 @@
         "paper-vae-elbo",
         "paper-gan-arch",
         "paper-ppo-clipped-objective",
-        "paper-vae-arch",
-        "paper-vae-reparameterization"
+        "paper-resnet-skip",
+        "paper-auc-roc"
       ],
-      "stub_tokens": 290,
-      "l1_tokens": 406,
-      "full_tokens": 408,
+      "stub_tokens": 294,
+      "l1_tokens": 410,
+      "full_tokens": 412,
       "ended_at_stub": false,
       "is_no_answer": false
     },
@@ -5734,13 +5640,13 @@
       "topk": [
         "paper-vae-reparameterization",
         "paper-vae-arch",
-        "paper-vae-elbo",
-        "paper-dqn-reward-clipping",
+        "paper-gelu-definition",
+        "paper-tok-bpe",
         "paper-w2v-dim"
       ],
-      "stub_tokens": 293,
-      "l1_tokens": 433,
-      "full_tokens": 435,
+      "stub_tokens": 286,
+      "l1_tokens": 426,
+      "full_tokens": 428,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5757,13 +5663,13 @@
       "topk": [
         "paper-w2v-analogy",
         "paper-w2v-skipgram",
-        "paper-w2v-dim",
-        "paper-bert-pretraining-data",
-        "paper-rope-relative"
+        "paper-dqn-atari-results",
+        "paper-nucleus-sampling",
+        "paper-w2v-dim"
       ],
-      "stub_tokens": 290,
-      "l1_tokens": 414,
-      "full_tokens": 416,
+      "stub_tokens": 299,
+      "l1_tokens": 423,
+      "full_tokens": 425,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5781,12 +5687,12 @@
         "paper-w2v-dim",
         "paper-w2v-analogy",
         "paper-w2v-skipgram",
-        "paper-sparse-vs-dense",
-        "paper-rope-definition"
+        "paper-lora-decomposition",
+        "paper-cosine-similarity"
       ],
-      "stub_tokens": 291,
-      "l1_tokens": 395,
-      "full_tokens": 423,
+      "stub_tokens": 292,
+      "l1_tokens": 396,
+      "full_tokens": 424,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5802,14 +5708,14 @@
       "rank": 1,
       "topk": [
         "paper-w2v-skipgram",
-        "paper-temperature-sampling",
-        "paper-per-td-error",
-        "paper-vae-reparameterization",
-        "paper-gan-arch"
+        "paper-gan-arch",
+        "paper-mamba-arch",
+        "paper-dist-soft-labels",
+        "paper-tx-training-compute"
       ],
-      "stub_tokens": 297,
-      "l1_tokens": 451,
-      "full_tokens": 454,
+      "stub_tokens": 304,
+      "l1_tokens": 458,
+      "full_tokens": 461,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5826,13 +5732,13 @@
       "topk": [
         "paper-w2v-skipgram",
         "paper-w2v-dim",
+        "paper-tok-bpe",
         "paper-lr-importance",
-        "paper-w2v-analogy",
-        "paper-moe-load-balancing"
+        "paper-tx-training-compute"
       ],
-      "stub_tokens": 289,
-      "l1_tokens": 443,
-      "full_tokens": 446,
+      "stub_tokens": 290,
+      "l1_tokens": 444,
+      "full_tokens": 447,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5849,13 +5755,13 @@
       "topk": [
         "paper-yolo-realtime",
         "paper-yolo-grid",
-        "paper-w2v-skipgram",
-        "paper-gan-mode-collapse",
-        "paper-gelu-stochastic"
+        "paper-tok-bpe",
+        "paper-w2v-dim",
+        "paper-bn-lr-benefit"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 430,
-      "full_tokens": 467,
+      "stub_tokens": 295,
+      "l1_tokens": 420,
+      "full_tokens": 457,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5874,11 +5780,11 @@
         "paper-yolo-realtime",
         "paper-ppo-epsilon",
         "paper-gan-mode-collapse",
-        "paper-flashattn-tiling"
+        "paper-tok-bpe"
       ],
-      "stub_tokens": 298,
-      "l1_tokens": 439,
-      "full_tokens": 441,
+      "stub_tokens": 302,
+      "l1_tokens": 443,
+      "full_tokens": 445,
       "ended_at_stub": true,
       "is_no_answer": false
     },
@@ -5891,15 +5797,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-init-xavier-he",
         "paper-gan-arch",
-        "paper-bert-mlm",
-        "paper-yolo-realtime",
-        "paper-gd-basics"
+        "paper-ppo-clipped-objective",
+        "paper-tok-bpe",
+        "paper-bert-pretraining-data",
+        "paper-bert-mlm"
       ],
-      "stub_tokens": 274,
-      "l1_tokens": 406,
-      "full_tokens": 409,
+      "stub_tokens": 289,
+      "l1_tokens": 435,
+      "full_tokens": 438,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -5912,15 +5818,13 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-bert-mlm",
         "paper-bert-pretraining-data",
-        "paper-dropout-definition",
-        "paper-temperature-sampling",
-        "paper-init-xavier-he"
+        "paper-bert-nsp",
+        "paper-bert-mlm"
       ],
-      "stub_tokens": 287,
-      "l1_tokens": 400,
-      "full_tokens": 403,
+      "stub_tokens": 162,
+      "l1_tokens": 271,
+      "full_tokens": 273,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -5935,13 +5839,13 @@
       "topk": [
         "paper-dqn-atari-results",
         "paper-ppo-default",
-        "paper-dqn-tricks",
-        "paper-dqn-reward-clipping",
-        "paper-gan-arch"
+        "paper-bert-nsp",
+        "paper-rope-relative",
+        "paper-tx-training-compute"
       ],
-      "stub_tokens": 308,
-      "l1_tokens": 458,
-      "full_tokens": 460,
+      "stub_tokens": 283,
+      "l1_tokens": 433,
+      "full_tokens": 435,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -5954,15 +5858,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-swiglu-ffn",
-        "paper-init-xavier-he",
         "paper-gelu-definition",
-        "paper-bn-formula",
-        "paper-bn-lr-benefit"
+        "paper-swiglu-ffn",
+        "paper-why-dropping-mean-centering-works",
+        "paper-w2v-dim",
+        "paper-ce-definition"
       ],
-      "stub_tokens": 291,
-      "l1_tokens": 437,
-      "full_tokens": 439,
+      "stub_tokens": 289,
+      "l1_tokens": 428,
+      "full_tokens": 431,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -5975,15 +5879,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-yolo-realtime",
+        "paper-tx-bleu-results",
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-gelu-definition",
         "paper-nucleus-sampling",
-        "paper-per-td-error",
-        "paper-dropout-definition",
-        "paper-auc-roc"
+        "paper-tok-bpe"
       ],
-      "stub_tokens": 324,
-      "l1_tokens": 449,
-      "full_tokens": 486,
+      "stub_tokens": 304,
+      "l1_tokens": 407,
+      "full_tokens": 410,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -5996,15 +5900,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-swiglu-ffn",
-        "paper-adam-adamw",
-        "paper-w2v-dim",
+        "paper-tok-bpe",
         "paper-yolo-grid",
-        "paper-ln-definition"
+        "paper-swiglu-ffn",
+        "paper-dropout-definition",
+        "paper-adam-adamw"
       ],
-      "stub_tokens": 300,
-      "l1_tokens": 446,
-      "full_tokens": 448,
+      "stub_tokens": 313,
+      "l1_tokens": 483,
+      "full_tokens": 485,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -6019,13 +5923,13 @@
       "topk": [
         "paper-dqn-reward-clipping",
         "paper-dpo-loss",
-        "paper-dropout-definition",
-        "paper-vae-reparameterization",
-        "paper-adam-epsilon"
+        "paper-adam-epsilon",
+        "paper-gan-mode-collapse",
+        "paper-dqn-tricks"
       ],
-      "stub_tokens": 308,
-      "l1_tokens": 459,
-      "full_tokens": 461,
+      "stub_tokens": 319,
+      "l1_tokens": 470,
+      "full_tokens": 472,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -6038,15 +5942,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-dropout-definition",
-        "paper-parameter-equivalent-vs-parameter-matched",
         "paper-bert-size",
-        "paper-resnet-skip",
+        "paper-dropout-definition",
+        "paper-flashattn-hardware",
+        "paper-lora-rank",
         "paper-ppo-epsilon"
       ],
-      "stub_tokens": 292,
-      "l1_tokens": 454,
-      "full_tokens": 456,
+      "stub_tokens": 269,
+      "l1_tokens": 372,
+      "full_tokens": 374,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -6061,13 +5965,13 @@
       "topk": [
         "paper-ppo-default",
         "paper-gan-mode-collapse",
-        "paper-gan-wgan",
         "paper-dist-dark-knowledge",
-        "paper-vae-reparameterization"
+        "paper-dropout-ensemble",
+        "paper-lr-importance"
       ],
-      "stub_tokens": 305,
-      "l1_tokens": 449,
-      "full_tokens": 452,
+      "stub_tokens": 308,
+      "l1_tokens": 452,
+      "full_tokens": 455,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -6081,14 +5985,14 @@
       "rank": null,
       "topk": [
         "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-flashattn-tiling",
+        "paper-lora-decomposition",
         "paper-rope-definition",
-        "paper-dropout-definition",
-        "paper-flashattn-online-softmax",
-        "paper-flashattn-tiling"
+        "paper-gan-arch"
       ],
-      "stub_tokens": 322,
-      "l1_tokens": 486,
-      "full_tokens": 489,
+      "stub_tokens": 309,
+      "l1_tokens": 473,
+      "full_tokens": 476,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -6101,15 +6005,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-vae-reparameterization",
-        "paper-w2v-skipgram",
+        "paper-ppo-epsilon",
         "paper-nucleus-sampling",
+        "paper-bert-pretraining-data",
         "paper-moe-routing",
-        "paper-per-td-error"
+        "paper-gan-arch"
       ],
-      "stub_tokens": 310,
-      "l1_tokens": 450,
-      "full_tokens": 452,
+      "stub_tokens": 303,
+      "l1_tokens": 425,
+      "full_tokens": 428,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -6123,14 +6027,14 @@
       "rank": null,
       "topk": [
         "paper-adam-moments",
-        "paper-w2v-analogy",
         "paper-dist-dark-knowledge",
-        "paper-vae-reparameterization",
-        "paper-tx-positional"
+        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-gan-arch",
+        "paper-spearman-definition"
       ],
-      "stub_tokens": 289,
-      "l1_tokens": 440,
-      "full_tokens": 443,
+      "stub_tokens": 317,
+      "l1_tokens": 468,
+      "full_tokens": 471,
       "ended_at_stub": false,
       "is_no_answer": true
     },
@@ -6143,15 +6047,15 @@
       "query_type": "entity",
       "rank": null,
       "topk": [
-        "paper-dqn-reward-clipping",
-        "paper-parameter-equivalent-vs-parameter-matched",
+        "paper-resnet-skip",
+        "paper-mamba-selective",
+        "paper-why-dropping-mean-centering-works",
         "paper-adam-epsilon",
-        "paper-ce-definition",
-        "paper-perplexity-definition"
+        "paper-lora-merge"
       ],
-      "stub_tokens": 303,
-      "l1_tokens": 454,
-      "full_tokens": 456,
+      "stub_tokens": 292,
+      "l1_tokens": 437,
+      "full_tokens": 440,
       "ended_at_stub": false,
       "is_no_answer": true
     }

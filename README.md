@@ -1,4 +1,4 @@
-# MF — Memoryfields eval harness
+# MF — Memoryfields
 
 Start here:
 
@@ -10,21 +10,29 @@ Start here:
 - **M0 + M0.5 eval harness complete.** 157-page labeled corpus, 458-query
   set (lexical + blind paraphrases + no-answer queries), six baselines
   (grep, FTS5, TF-IDF, nomic, BGE-large, hybrid).
-- **No tool implementation yet.** `mf init` / `mf index` / `mf search` /
-  `mf read` / `mf write` land in M1.
+- **`mf` CLI is a stub.** `mf init` / `mf index` / `mf search` / `mf read` /
+  `mf write` all exist as subcommands but aren't implemented yet — that
+  lands starting M1 (ROADMAP.md Phase 1).
 
 ## Quick start
 
 ```bash
+# Install the mf CLI (stub commands only until M1 lands)
+uv tool install .
+mf --help
+
+# Install eval's dependencies (fastembed) into a local venv
+uv sync --extra eval
+
 # Run all baselines on the current query set (45+ minutes wall time)
-~/.hermes/hermes-agent/venv/bin/python3 -m harness.run_baselines
+uv run python3 -m eval.run_baselines
 
 # Per-axis breakdown
-~/.hermes/hermes-agent/venv/bin/python3 -m harness.axis_breakdown
+uv run python3 -m eval.axis_breakdown
 
 # Render reports
-~/.hermes/hermes-agent/venv/bin/python3 -m harness.report
+uv run python3 -m eval.report
 ```
 
-Results land in `harness/results/*.json`. Reports in `M0_REPORT.md` and
+Results land in `eval/results/*.json`. Reports in `M0_REPORT.md` and
 `M0.5_REPORT.md` at the repo root.

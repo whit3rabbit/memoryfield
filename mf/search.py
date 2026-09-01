@@ -9,13 +9,22 @@ runs on every query: its top score and top-1 are two of the three
 gate signals (mf/confidence.py), and its ranked list is the result set
 only when dense has nothing (an empty `vec` table).
 
-A superseded page never appears as a full stub in results -- it folds
-into a compact `{uuid, superseded_by}` pointer (docs/architecture.md
-"Retrieval", point 3).
+A superseded page never occupies a result slot: it resolves to the page
+that supersedes it (following the chain), and that stub carries a
+`supersedes: [...]` list naming what it replaced (ROADMAP.md 2.8; the
+1.5 design returned a `{uuid, superseded_by}` pointer in the slot, which
+under `--limit 1` meant no answer at all).
+
+Stale check (PLAN.md section 3, ROADMAP.md 2.8): when a `field_dir` is
+given, every stub about to be shown has its file's sha256 compared to
+the index. A mismatch or missing file raises StaleIndexError unless
+`stale_ok`, in which case the stub is marked `stale`.
 """
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass, field
+from pathlib import Path
 from sqlite3 import Connection
 
 from .confidence import Confidence, confidence
@@ -37,6 +46,18 @@ DEFAULT_NEIGHBOR_LIMIT = 1
 _LINK_KINDS = ("supersedes", "contradicts", "depends_on")
 
 
+class StaleIndexError(RuntimeError):
+    """A page about to be returned has changed on disk (or vanished)
+    since `mf index` last saw it."""
+
+    def __init__(self, stale: list[tuple[str, str]]):
+        self.stale = stale
+        listing = ", ".join(f"{uuid} ({filename})" for uuid, filename in stale)
+        super().__init__(
+            f"index is stale for {listing}; run `mf index` or pass --stale-ok"
+        )
+
+
 @dataclass
 class Stub:
     uuid: str
@@ -44,16 +65,21 @@ class Stub:
     summary: str = ""
     status: str = "active"
     tokens: int = 0
-    superseded_by: str | None = None
+    filename: str = ""
+    sha256: str = ""
+    supersedes: list[str] = field(default_factory=list)
+    stale: bool = False
     neighbors: list[Stub] = field(default_factory=list)
 
     def as_dict(self) -> dict:
-        if self.superseded_by:
-            return {"uuid": self.uuid, "superseded_by": self.superseded_by}
         d: dict = {
             "uuid": self.uuid, "title": self.title, "summary": self.summary,
             "status": self.status, "tokens": self.tokens,
         }
+        if self.supersedes:
+            d["supersedes"] = list(self.supersedes)
+        if self.stale:
+            d["stale"] = True
         if self.neighbors:
             d["neighbors"] = [n.as_dict() for n in self.neighbors]
         return d
@@ -118,18 +144,33 @@ def _superseded_by(conn: Connection, uuid: str) -> str | None:
 
 def _load_stub(conn: Connection, uuid: str) -> Stub | None:
     row = conn.execute(
-        "SELECT uuid, title, summary, status, tokens FROM pages WHERE uuid = ?", (uuid,)
+        "SELECT uuid, title, summary, status, tokens, filename, sha256 "
+        "FROM pages WHERE uuid = ?", (uuid,)
     ).fetchone()
     if row is None:
         return None
-    return Stub(uuid=row[0], title=row[1], summary=row[2], status=row[3], tokens=row[4])
+    return Stub(uuid=row[0], title=row[1], summary=row[2], status=row[3],
+                tokens=row[4], filename=row[5], sha256=row[6])
 
 
 def _resolve_stub(conn: Connection, uuid: str) -> Stub | None:
-    superseder = _superseded_by(conn, uuid)
-    if superseder:
-        return Stub(uuid=uuid, superseded_by=superseder)
-    return _load_stub(conn, uuid)
+    """The stub to show for `uuid`: itself, or whatever supersedes it
+    (chain followed, cycle-guarded), annotated with what it replaced.
+    A superseder that isn't indexed leaves the original in place."""
+    chain: list[str] = []
+    current = uuid
+    while True:
+        superseder = _superseded_by(conn, current)
+        if not superseder or superseder in chain or superseder == uuid:
+            break
+        if _load_stub(conn, superseder) is None:
+            break
+        chain.append(current)
+        current = superseder
+    stub = _load_stub(conn, current)
+    if stub is not None:
+        stub.supersedes = chain
+    return stub
 
 
 def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
@@ -138,6 +179,16 @@ def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
     neighbors: list[Stub] = []
     seen = {uuid}
 
+    def _add(candidate: str) -> None:
+        # `seen` tracks resolved uuids: a superseded candidate resolves to
+        # its superseder, which may be the parent page itself or already
+        # listed.
+        stub = _resolve_stub(conn, candidate)
+        if stub is None or stub.uuid in seen:
+            return
+        neighbors.append(stub)
+        seen.add(stub.uuid)
+
     placeholders = ",".join("?" for _ in _LINK_KINDS)
     for row in conn.execute(
         f"SELECT dst FROM links WHERE src = ? AND kind IN ({placeholders})",
@@ -145,12 +196,7 @@ def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
     ).fetchall():
         if len(neighbors) >= limit:
             break
-        if row[0] in seen:
-            continue
-        stub = _resolve_stub(conn, row[0])
-        if stub:
-            neighbors.append(stub)
-            seen.add(row[0])
+        _add(row[0])
 
     if len(neighbors) < limit:
         vec_row = conn.execute(
@@ -166,12 +212,7 @@ def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
             ).fetchall():
                 if len(neighbors) >= limit:
                     break
-                if candidate[0] in seen:
-                    continue
-                stub = _resolve_stub(conn, candidate[0])
-                if stub:
-                    neighbors.append(stub)
-                    seen.add(candidate[0])
+                _add(candidate[0])
 
     # co_read rows exist (mf read populates them, ROADMAP.md 1.6) but
     # aren't consulted for neighbor ranking yet -- that's ROADMAP.md 4.4,
@@ -206,13 +247,35 @@ def _apply_budget(result: SearchResult, budget: int) -> None:
     result.results = kept
 
 
+def _mark_stale(field_dir: Path, stubs: list[Stub]) -> list[tuple[str, str]]:
+    stale: list[tuple[str, str]] = []
+    for stub in stubs:
+        path = Path(stub.filename)
+        if not path.is_absolute():
+            path = field_dir / path
+        try:
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        except OSError:
+            digest = ""
+        if digest != stub.sha256:
+            stub.stale = True
+            stale.append((stub.uuid, stub.filename))
+        stale.extend(_mark_stale(field_dir, stub.neighbors))
+    return stale
+
+
 def search(
     conn: Connection,
     query: str,
     limit: int = DEFAULT_LIMIT,
     neighbor_limit: int = DEFAULT_NEIGHBOR_LIMIT,
     budget: int | None = None,
+    field_dir: Path | None = None,
+    stale_ok: bool = False,
 ) -> SearchResult:
+    """`field_dir` enables the stale check (compare each shown page's
+    on-disk sha256 to the index); without it no check runs. `stale_ok`
+    downgrades a stale hit from an error to a `stale: true` flag."""
     model_code = get_config(conn, "model_code") or DEFAULT_MODEL_CODE
     if model_code not in MODEL_REGISTRY:
         raise UnknownModelCodeError(
@@ -237,15 +300,20 @@ def search(
         primary_uuids = [uuid for uuid, _ in fts_ranked]
 
     results: list[Stub] = []
+    shown: set[str] = set()
     for uuid in primary_uuids:
         stub = _resolve_stub(conn, uuid)
-        if stub is None:
-            continue
-        if stub.superseded_by is None:
-            stub.neighbors = _neighbors(conn, uuid, neighbor_limit)
+        if stub is None or stub.uuid in shown:
+            continue  # two superseded hits can resolve to one superseder
+        shown.add(stub.uuid)
+        stub.neighbors = _neighbors(conn, stub.uuid, neighbor_limit)
         results.append(stub)
 
     result = SearchResult(confidence=conf, results=results)
     if budget is not None:
         _apply_budget(result, budget)
+    if field_dir is not None:
+        stale = _mark_stale(field_dir, result.results)
+        if stale and not stale_ok:
+            raise StaleIndexError(stale)
     return result

@@ -77,3 +77,19 @@ def test_search_truly_empty_field_returns_no_results(tmp_path, capsys, monkeypat
     exit_code = cli.main(["search", "anything at all", "--field", str(tmp_path)])
     assert exit_code == 0
     assert "(no results)" in capsys.readouterr().out
+
+
+def test_search_refuses_stale_index_with_exit_3(tmp_path, capsys, monkeypatch):
+    _build_field(tmp_path, monkeypatch, capsys)
+    (tmp_path / "page1.md").write_text(PAGE_1 + "\nEdited.\n")
+    exit_code = cli.main(["search", "rotate", "--field", str(tmp_path)])
+    assert exit_code == 3
+    assert "stale" in capsys.readouterr().err
+
+
+def test_search_stale_ok_marks_results(tmp_path, capsys, monkeypatch):
+    _build_field(tmp_path, monkeypatch, capsys)
+    (tmp_path / "page1.md").write_text(PAGE_1 + "\nEdited.\n")
+    exit_code = cli.main(["search", "rotate", "--field", str(tmp_path), "--stale-ok"])
+    assert exit_code == 0
+    assert "(stale)" in capsys.readouterr().out

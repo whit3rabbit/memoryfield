@@ -1,5 +1,7 @@
 import functools
 
+import pytest
+
 from mf import confidence as confidence_mod
 from mf import db, indexer, search
 from mf.schema import EMBEDDING_DIM
@@ -44,6 +46,7 @@ uuid: page-rotate-new
 title: "How to rotate the signing key (current)"
 summary: "Current process, supersedes the old one"
 supersedes: [page-rotate-old]
+depends_on: [page-billing]
 ---
 
 ## Steps
@@ -175,25 +178,55 @@ def test_ranking_is_dense_first(tmp_path, monkeypatch):
     conn.close()
 
 
-def test_superseded_page_folds_to_pointer(tmp_path, monkeypatch):
+def test_superseded_hit_resolves_to_its_superseder(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
-    monkeypatch.setattr(search, "_embed_query", _agree_with("page-rotate-new"))
+    # Dense's top hit is the superseded page. The slot goes to the
+    # superseder, annotated with what it replaced (ROADMAP.md 2.8).
+    monkeypatch.setattr(search, "_embed_query", _agree_with("page-rotate-old"))
 
     result = search.search(conn, "rotate keys old process", limit=5)
-    old_stub = next(r for r in result.results if r.uuid == "page-rotate-old")
-    assert old_stub.superseded_by == "page-rotate-new"
-    assert old_stub.title == ""  # folded, not a full stub
+    uuids = [r.uuid for r in result.results]
+    assert uuids[0] == "page-rotate-new"
+    assert result.results[0].supersedes == ["page-rotate-old"]
+    assert "page-rotate-old" not in uuids
+    assert uuids.count("page-rotate-new") == 1  # old and new both hit; one slot
+    assert result.results[0].as_dict()["supersedes"] == ["page-rotate-old"]
     conn.close()
 
 
-def test_neighbors_include_typed_links(tmp_path, monkeypatch):
+def test_neighbors_include_typed_links_but_not_superseded_ones(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
     monkeypatch.setattr(search, "_embed_query", _agree_with("page-rotate-new"))
 
-    result = search.search(conn, "rotate signing key current", limit=5)
+    result = search.search(conn, "rotate signing key current", limit=5, neighbor_limit=3)
     new_stub = next(r for r in result.results if r.uuid == "page-rotate-new")
     neighbor_uuids = [n.uuid for n in new_stub.neighbors]
-    assert "page-rotate-old" in neighbor_uuids
+    assert "page-billing" in neighbor_uuids       # depends_on
+    assert "page-rotate-old" not in neighbor_uuids  # resolves to the parent itself
+    conn.close()
+
+
+def test_stale_index_raises_without_stale_ok(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    monkeypatch.setattr(search, "_embed_query", _agree_with("page-billing"))
+    (tmp_path / "billing.md").write_text(PAGE_BILLING + "\nEdited after indexing.\n")
+
+    with pytest.raises(search.StaleIndexError, match="page-billing"):
+        search.search(conn, "billing retries", limit=1, field_dir=tmp_path)
+    # Without field_dir no check runs (library callers opt in).
+    assert search.search(conn, "billing retries", limit=1).results
+    conn.close()
+
+
+def test_stale_ok_marks_the_stub(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    monkeypatch.setattr(search, "_embed_query", _agree_with("page-billing"))
+    (tmp_path / "billing.md").unlink()  # missing counts as stale too
+
+    result = search.search(conn, "billing retries", limit=1, field_dir=tmp_path, stale_ok=True)
+    assert result.results[0].uuid == "page-billing"
+    assert result.results[0].stale is True
+    assert result.results[0].as_dict()["stale"] is True
     conn.close()
 
 

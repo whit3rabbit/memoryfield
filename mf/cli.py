@@ -40,6 +40,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--neighbor-limit", type=int, default=search_mod.DEFAULT_NEIGHBOR_LIMIT
     )
     search_parser.add_argument("--budget", type=int, default=None, help="token cap on the result set")
+    search_parser.add_argument(
+        "--stale-ok", action="store_true",
+        help="return results whose page changed on disk since `mf index` (marked stale) instead of refusing",
+    )
     search_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     read_parser = subparsers.add_parser("read", help="read a page's L1/L2 slice or a #section")
@@ -49,8 +53,16 @@ def build_parser() -> argparse.ArgumentParser:
     read_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     write_parser = subparsers.add_parser("write", help="validate, dedup-check, and index a page")
-    write_parser.add_argument("path", help="path to the markdown page file (must be inside --field)")
+    write_parser.add_argument(
+        "path",
+        help="draft page: a path outside the field (copied in on a pass), a path "
+             "inside it (indexed in place), or '-' for stdin (needs --dest)",
+    )
     write_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    write_parser.add_argument(
+        "--dest", metavar="NAME", default=None,
+        help="filename inside the field to write the draft to (default: the draft's own name)",
+    )
     write_parser.add_argument(
         "--update", metavar="UUID", default=None,
         help="uuid this write intentionally updates (skips the dedup gate)",
@@ -102,13 +114,16 @@ def _cmd_index(args: argparse.Namespace) -> int:
 
 
 def _render_stub_text(stub: search_mod.Stub, indent: str = "") -> str:
-    if stub.superseded_by:
-        return f"{indent}- [{stub.uuid}] -> superseded_by {stub.superseded_by}"
-    lines = [f"{indent}- [{stub.uuid}] {stub.title}"]
+    head = f"{indent}- [{stub.uuid}] {stub.title}"
+    if stub.stale:
+        head += " (stale)"
+    lines = [head]
     if stub.summary:
         lines.append(f"{indent}    {stub.summary}")
     if stub.status != "active":
         lines.append(f"{indent}    status: {stub.status}")
+    if stub.supersedes:
+        lines.append(f"{indent}    supersedes: {', '.join(stub.supersedes)}")
     for neighbor in stub.neighbors:
         lines.append(_render_stub_text(neighbor, indent + "    "))
     return "\n".join(lines)
@@ -134,7 +149,11 @@ def _cmd_search(args: argparse.Namespace) -> int:
         result = search_mod.search(
             conn, args.query, limit=args.limit,
             neighbor_limit=args.neighbor_limit, budget=args.budget,
+            field_dir=field_dir, stale_ok=args.stale_ok,
         )
+    except search_mod.StaleIndexError as e:
+        sys.stderr.write(f"mf search: {e}\n")
+        return 3
     finally:
         conn.close()
 
@@ -180,14 +199,16 @@ def _cmd_read(args: argparse.Namespace) -> int:
 
 def _render_write_text(result: write_mod.WriteResult) -> str:
     if result.written:
-        return f"Wrote {result.uuid}"
+        return f"Wrote {result.uuid} to {result.path}"
     lines = [
         f"mf write: {len(result.duplicates)} possible near-duplicate(s) found; not written.",
     ]
     for d in result.duplicates:
-        lines.append(f"  - [{d.uuid}] {d.title} (distance {d.distance:.2f})")
+        lines.append(f"  - [{d.uuid}] {d.title} (distance {d.distance:.3f})")
         lines.append(f"      {d.summary}")
     lines.append("Use --update <uuid> to update an existing page, or --force to write anyway.")
+    if result.warning:
+        lines.append(f"warning: {result.warning}")
     return "\n".join(lines)
 
 
@@ -199,10 +220,19 @@ def _cmd_write(args: argparse.Namespace) -> int:
         sys.stderr.write(f"mf write: {e}\n")
         return 1
     try:
-        result = write_mod.write_page(
-            field_dir, conn, Path(args.path),
-            update_uuid=args.update, force=args.force,
-        )
+        if args.path == "-":
+            if not args.dest:
+                sys.stderr.write("mf write: reading from stdin needs --dest NAME\n")
+                return 1
+            result = write_mod.write_text(
+                field_dir, conn, sys.stdin.read(), args.dest,
+                update_uuid=args.update, force=args.force,
+            )
+        else:
+            result = write_mod.write_page(
+                field_dir, conn, Path(args.path),
+                update_uuid=args.update, force=args.force, dest_name=args.dest,
+            )
     except (write_mod.WriteValidationError, PageParseError) as e:
         sys.stderr.write(f"mf write: {e}\n")
         return 1

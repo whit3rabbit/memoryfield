@@ -66,20 +66,26 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   signal for future neighbor ranking (ROADMAP.md 4.4). Only batch refs
   you're actually reading for the same task, not everything a search
   turned up.
-- **Write a page with `mf write <path> --field <dir>`, not by hand-editing
-  and re-running `mf index`.** `mf write` validates frontmatter and runs
-  the dedup gate: it embeds the page and checks it against every other
-  page's embedding (the `vec` table's second job, docs/architecture.md).
-  If a near-duplicate is found, it refuses (exit code 2) and lists the
+- **Write a page with `mf write <draft> --field <dir>`, drafting
+  outside the field.** Write the draft anywhere except inside the field
+  (a temp dir, `/tmp`, the repo root) and pass its path; `mf write`
+  validates frontmatter, runs the dedup gate, and only on a pass copies
+  it into the field (as its own filename, or `--dest NAME`) and indexes
+  it. `mf write - --dest NAME` reads the draft from stdin. Why outside:
+  a draft that already sits in the field is a valid page file, and the
+  next `mf index` will index it whether or not the gate blocked it. The
+  gate embeds the page and checks it against every other page's
+  embedding (the `vec` table's second job, docs/architecture.md). If a
+  near-duplicate is found, it refuses (exit code 2) and lists the
   candidates instead of silently creating a second page that says the
-  same thing. Genuinely updating an existing page: pass `--update
-  <uuid>` (must match the page's own frontmatter `uuid`) to skip the
-  gate. Intentionally writing something that looks similar but isn't
-  (e.g. a `contradicts` page): pass `--force`. `mf write` indexes the
-  page itself on success -- no separate `mf index` call needed
-  afterward. `lint` doesn't exist yet, so `mf write` is the only check
-  a page gets; still write it following the spec `mf write`/`mf search`
-  expect:
+  same thing. Genuinely updating an existing page: edit its file in
+  place inside the field and pass `--update <uuid>` (must match the
+  page's own frontmatter `uuid`) to skip the gate. Intentionally writing
+  something that looks similar but isn't (e.g. a `contradicts` page):
+  pass `--force`. `mf write` indexes only the page it wrote; no separate
+  `mf index` call needed afterward. `lint` doesn't exist yet, so `mf
+  write` is the only check a page gets; still write it following the
+  spec `mf write`/`mf search` expect:
   - `summary` is the answer, not the topic: `"Integration tests: make
     test-integration; needs DATABASE_URL"`, not `"Notes on testing."`
   - The first `##` section answers the question; rationale and history
@@ -100,12 +106,16 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   - Required frontmatter: `uuid`, `title`. Optional but load-bearing:
     `summary`, `status` (`active`/`superseded`/`contested`), `supersedes`/
     `contradicts`/`depends_on` (lists of uuids), `tags`, `source`, `writer`.
-  - Write the file with your normal file-editing tool, then run `mf
-    write <path> --field <dir>` to validate, dedup-check, and index it
-    in one step. If `mf write` blocks it as a near-duplicate and you
-    disagree after checking the listed candidates, that's the judgment
-    call `--update`/`--force` exist for (PLAN.md section 10: the gate
-    can only inform, the agent decides).
+  - Write the draft with your normal file-editing tool outside the
+    field, then run `mf write <draft> --field <dir>` to validate,
+    dedup-check, copy in, and index it in one step. If `mf write` blocks
+    it as a near-duplicate and you disagree after checking the listed
+    candidates, that's the judgment call `--update`/`--force` exist for
+    (PLAN.md section 10: the gate can only inform, the agent decides).
+  - To retire a page, don't delete it: write the replacement with
+    `supersedes: [old-uuid]` in its frontmatter. `mf search` then shows
+    the replacement (annotated `supersedes: old-uuid`) wherever the old
+    page would have matched.
 
 ## Don't
 
@@ -117,10 +127,14 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   simple point lookup -- see the lean-call note above. Wide calls are
   for genuinely broad questions, not the common case.
 - Don't hand-edit a page file and stop there. Run `mf write` (new page)
-  or `mf write --update <uuid>` (existing page) so it's actually
-  validated, dedup-checked, and indexed -- a page that's only on disk
-  won't show up in `mf search` results, and one written straight into
-  the index bypasses the dedup gate entirely.
+  or `mf write <path-in-field> --update <uuid>` (existing page) so it's
+  actually validated, dedup-checked, and indexed. A page edited on disk
+  without reindexing makes `mf search` refuse with exit code 3 ("index
+  is stale") until `mf index` runs; `--stale-ok` shows the results with
+  the changed pages marked `(stale)` if you need them now.
+- Don't drop a new page file straight into the field and run `mf index`
+  to pick it up: that path has no dedup gate. It exists for bulk
+  imports and hand edits, not for adding a page.
 - Don't reach for `mf lint`, it doesn't exist yet. Don't use `mf raw add`
   during a lookup: it only appends freeform text to `raw/`, which nothing
   indexes or consumes yet (ROADMAP.md 4.2). It's for a session-end
@@ -133,15 +147,17 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
 ## Command reference (current, not aspirational)
 
 ```
-mf search "<query>" [--field DIR] [--limit N] [--neighbor-limit N] [--budget N] [--json]
+mf search "<query>" [--field DIR] [--limit N] [--neighbor-limit N] [--budget N] [--stale-ok] [--json]
 mf read <uuid>[#section] [<uuid2>[#section] ...] [--tier L1|L2] [--field DIR] [--json]
-mf write <path> [--field DIR] [--update UUID] [--force] [--json]
-mf index [DIR]     # only needed for a page written outside mf write, e.g. a bulk import
+mf write <draft-path | -> [--field DIR] [--dest NAME] [--update UUID] [--force] [--json]
+mf index [DIR]     # un-gated bulk path: imports, hand edits, or after a stale refusal
 ```
 
 `--json` on `search`/`read`/`write` gives the machine-readable form if
 you're parsing the output yourself rather than reading the rendered
-text. `mf write`'s exit code is meaningful: 0 written, 1 invalid input
-(bad frontmatter, path outside the field, `--update` uuid mismatch), 2
+text. Exit codes are meaningful. `mf write`: 0 written, 1 invalid input
+(bad frontmatter, `--update` uuid mismatch, destination clash), 2
 blocked by the dedup gate (see the `duplicates` list in `--json` output
-or the printed candidates).
+or the printed candidates). `mf search`: 0 ok, 1 no field, 3 index is
+stale for a page it would have shown (run `mf index`, or re-run with
+`--stale-ok`).

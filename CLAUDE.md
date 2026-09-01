@@ -484,7 +484,13 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       for high), recalibrated on 48 blind no-answer queries and a
       corpus-size sweep. Usable blind answers went from 0.55 to
       0.90/0.85; a 10-page field from 0.19 to 0.89. Search defaults are
-      now `--limit 3 --neighbor-limit 1`. Gotcha 36. 2.8-2.11 open.
+      now `--limit 3 --neighbor-limit 1`. Gotcha 36. 2.8 is done: `mf
+      write` takes a draft from outside the field and copies it in
+      only on a gate pass, indexing just that page (the in-field flow
+      made the gate advisory: `mf index` picked up blocked drafts);
+      superseded hits resolve inline to their superseder; `mf search`
+      refuses a stale index (exit 3) unless `--stale-ok`. 148/148
+      tests. 2.9-2.11 open.
       Only 0.5's unsent upstream email remains open from Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).

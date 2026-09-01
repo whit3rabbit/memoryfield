@@ -123,3 +123,25 @@ def test_write_update_uuid_mismatch_fails(tmp_path, capsys, monkeypatch):
     ])
     assert exit_code == 1
     assert "doesn't match" in capsys.readouterr().err
+
+
+def test_write_from_stdin_needs_dest(tmp_path, capsys, monkeypatch):
+    import io
+
+    _build_field(tmp_path, monkeypatch, capsys)
+    monkeypatch.setattr("sys.stdin", io.StringIO(NEW_PAGE))
+    exit_code = cli.main(["write", "-", "--field", str(tmp_path)])
+    assert exit_code == 1
+    assert "--dest" in capsys.readouterr().err
+
+
+def test_write_from_stdin_with_dest(tmp_path, capsys, monkeypatch):
+    import io
+
+    _build_field(tmp_path, monkeypatch, capsys)
+    monkeypatch.setattr(write, "_embed_page", lambda page, model_code: _far_vec())
+    monkeypatch.setattr("sys.stdin", io.StringIO(NEW_PAGE))
+    exit_code = cli.main(["write", "-", "--field", str(tmp_path), "--dest", "billing.md"])
+    assert exit_code == 0
+    assert "Wrote cli-write-billing to billing.md" in capsys.readouterr().out
+    assert (tmp_path / "billing.md").exists()

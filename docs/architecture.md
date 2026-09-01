@@ -130,11 +130,19 @@ under dense moved MRR by under 0.01 either way and was not adopted.
 2. FTS's ranked list is the result set only when dense has nothing (an
    empty `vec` table). A stopword-only query (empty FTS expression) is
    still ranked by dense.
-3. Superseded pages, as built, return as a `{uuid, superseded_by}`
-   pointer that **occupies a result slot**. PLAN.md section 2 put the
-   pointer on the winner instead. Under a lean call (`--limit 1`) a
-   superseded top hit yields one pointer and no answer. ROADMAP.md 2.8
-   resolves the superseder inline.
+3. A superseded page never occupies a result slot (ROADMAP.md 2.8). A
+   hit on it resolves to the page that supersedes it, following the
+   chain, and that stub carries `supersedes: [old, ...]`. Two hits that
+   resolve to one superseder share one slot. The same resolution runs
+   for neighbors, so a superseded page never shows as a neighbor of its
+   own replacement. The 1.5 design returned a `{uuid, superseded_by}`
+   pointer in the slot, which under `--limit 1` meant no answer.
+5. Stale check (PLAN.md section 3). `mf search` compares each shown
+   page's on-disk sha256 to the index (a missing file counts as stale).
+   Any mismatch is refused with exit code 3 and a "run `mf index`"
+   message, unless `--stale-ok`, which returns the results with the
+   affected stubs marked `stale`. Library callers opt in by passing
+   `field_dir`.
 4. Reranker (cross-encoder over the top 20): the tool's own blind top-1
    is now 0.95 / 0.90 through the real pipeline, above the ~0.8 trigger
    in ROADMAP.md 4.1. Cut, not deferred, unless a later blind set says
@@ -200,25 +208,31 @@ moving the field directory.
 
 ### 5. Write
 
-**Built (ROADMAP.md 2.1).** `mf/write.py`, wired into `mf/cli.py`:
-`write <path> [--field DIR] [--update UUID] [--force] [--json]`. The
-page must already exist as a Markdown file inside the field directory.
-It parses via `mf.page.load_page()` (raises on missing `uuid`/`title`,
-same as `index`), then runs the dedup gate: embeds the page
-(`document_text()`, the same function `index` uses) and kNN-queries
+**Built (ROADMAP.md 2.1, reshaped by 2.8).** `mf/write.py`, wired into
+`mf/cli.py`: `write <path> [--field DIR] [--dest NAME] [--update UUID]
+[--force] [--json]`. The draft can be a path outside the field, a path
+inside it, or `-` for stdin (which needs `--dest`). It parses via the
+same parser `index` uses (raises on missing `uuid`/`title`), checks the
+destination (an existing file there must carry the same uuid, and the
+uuid must not already be indexed under another filename), then runs
+the dedup gate: embeds the page (`document_text()`) and kNN-queries
 `vec` for existing pages within `DEDUP_THRESHOLD` (0.08 cosine
-distance, see section 2), excluding the page's own uuid. A hit returns the candidates
-and exit code 2 without writing anything. `--update UUID` (must match
-the page's own frontmatter `uuid`) or `--force` skip the gate. On a
-pass, `write` calls the same `indexer.index_field()` `mf index` uses.
+distance, section 2), excluding the page's own uuid. A hit returns the
+candidates and exit code 2. `--update UUID` (must match the page's own
+`uuid`) or `--force` skip the gate. On a pass, a draft from outside the
+field is copied to `field/<dest>` (default: the draft's own filename)
+and **only that page** is indexed (`indexer.index_page()`); the draft
+itself is left where it was.
 
-**Known limitation: the gate gates the index, not the file.** A blocked
-page is still on disk. The next `mf index`, or a `mf write` of any
-*other* page (which reindexes the whole field), indexes it with no
-dedup check at all. The gate is therefore advisory in practice, which
-is not what PLAN.md section 2 describes. ROADMAP.md 2.8 changes `write`
-to take a draft from outside the field, copy it in only on a pass, and
-index only that page.
+Why the draft belongs outside the field: the gate can only refuse to
+index. A blocked draft that already sits inside the field is still a
+`.md` with valid frontmatter, so the next `mf index` indexes it with no
+check at all. That was how 2.1 shipped, and it made the gate advisory.
+An in-field path still works (validated and indexed in place), but a
+block on one returns a warning saying exactly that. `mf index` remains
+the deliberately un-gated bulk path (imports, hand edits). Verified on
+the real corpus: a paraphrase draft outside the field was blocked at
+distance 0.049 with nothing copied in.
 
 `DEDUP_THRESHOLD` was re-derived on the real corpus when the metric
 changed, but is still an estimate, not calibrated like
@@ -296,10 +310,7 @@ with the roadmap item that closes it:
   This is exactly the single-source-of-truth drift the roadmap checklist's
   item 1 warns about. ROADMAP.md 2.9.
 - `mf write` loads the model twice per call (once for the gate, once
-  inside `index_field`). Same fix.
-- `search` never checks a page's on-disk sha256 against the index before
-  returning it, so PLAN.md section 3's "refuse on mismatch unless
-  `--stale-ok`" is unbuilt. Flagged in ROADMAP.md 1.3, now 2.8.
+  inside `index_page`). Same fix.
 - `bge-large-en-v1.5` is evaluated but not a selectable `mf init` model
   (`MODEL_REGISTRY` only wires nomic). ROADMAP.md 2.9.
 - `claims.slug` has no definition: pages have no slug. ROADMAP.md 4.3.

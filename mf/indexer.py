@@ -179,6 +179,21 @@ def _vec_literal(vector: list[float]) -> str:
     return "[" + ",".join(repr(v) for v in vector) + "]"
 
 
+def index_page(field_dir: Path, conn: sqlite3.Connection, page_path: Path) -> str:
+    """Upsert exactly one page (ROADMAP.md 2.8). `mf write` uses this so a
+    write only ever indexes the page it validated and gated -- never a
+    second, hand-edited page that happens to be sitting in the field
+    (that one waits for `mf index`, which is the un-gated path on
+    purpose). Returns the page's uuid.
+    """
+    model_code = schema.get_config(conn, "model_code") or schema.DEFAULT_MODEL_CODE
+    page = load_page(page_path, filename=page_path.relative_to(field_dir).as_posix())
+    embeddings = _embed_pages([page], model_code)
+    _write_page(conn, page, embeddings.get(page.uuid))
+    conn.commit()
+    return page.uuid
+
+
 def index_field(field_dir: Path, conn: sqlite3.Connection) -> IndexResult:
     model_code = schema.get_config(conn, "model_code") or schema.DEFAULT_MODEL_CODE
 

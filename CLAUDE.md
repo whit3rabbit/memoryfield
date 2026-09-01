@@ -123,7 +123,11 @@ Organized by where they will bite next.
 
 11. **Don't run the full baseline suite in the foreground.** Six
     baselines times two domains times 191 to 267 queries runs about 15
-    minutes for the fast baselines, 45 for BGE plus papers. Background it.
+    minutes for the fast baselines, 45 for BGE plus papers. Background
+    it with the Bash tool's `run_in_background: true`, not manual
+    `nohup ... &` -- a manually-backgrounded process isn't tracked, so
+    there's no completion notification and you have to notice and
+    relaunch it correctly.
 
 12. **`ruff` and `pyright` are the only correctness net until a test
     suite exists.** `ruff check eval/` caught a real bug:
@@ -327,6 +331,29 @@ Organized by where they will bite next.
     `mf index` reports `0 upserted`. Same silent-failure shape as
     gotchas 17 and 19: a spec requirement with no code enforcing it and
     no test exercising the path where it would matter.
+
+### Tooling patterns worth reusing
+
+29. **Quick real-corpus smoke test, cheaper than writing new fixtures:**
+    `tmpdir=$(mktemp -d) && cp eval/corpus/codebase/*.md "$tmpdir"/ &&
+    uv run python3 -m mf.cli init "$tmpdir" && uv run python3 -m mf.cli
+    index "$tmpdir"` -- catches gotcha-19-style parser/behavior bugs
+    synthetic fixtures miss. Used to verify 1.6, 1.8, 2.1, and 2.2
+    end to end; clean up the tmpdir when done.
+
+30. **New `mf` subcommand pattern**, established by `read`, `write`,
+    and `raw add`: one module `mf/<verb>.py` with a dataclass result
+    type exposing `.as_dict()`, wired into `mf/cli.py` via
+    `_cmd_<verb>()` + `_render_<verb>_text()` + an argparse subparser.
+    Follow `mf/read.py` or `mf/write.py` as the template for the next
+    one (`lint`, `pack`/`unpack`).
+
+31. **sqlite-vec's `vec0` KNN queries expose a `distance` column**
+    (`SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND
+    k = ?`), L2 by default. `mf/search.py` never selects it (ranking
+    only needs the uuid order); `mf/write.py`'s dedup gate does (it
+    needs the actual distance to compare against `DEDUP_THRESHOLD`).
+    Worth knowing before assuming it's unavailable.
 
 ## Roadmap
 

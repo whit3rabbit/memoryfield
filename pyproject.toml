@@ -4,10 +4,15 @@ version = "0.1.0"
 description = "Memoryfield: a search-first, tiered-read memory tool for coding agents"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "fastembed>=0.8",
+    "sqlite-vec>=0.1",
+    "pyyaml>=6",
+]
 
 [project.optional-dependencies]
 eval = ["fastembed>=0.8"]
+mlx = ["mlx-embedding-models>=0.0.11; sys_platform == 'darwin' and platform_machine == 'arm64'"]
 
 [project.scripts]
 mf = "mf.cli:main"

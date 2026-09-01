@@ -24,6 +24,11 @@ mf --help
 # Install eval's dependencies (fastembed) into a local venv
 uv sync --extra eval
 
+# Optional, Apple Silicon only: adds MLX (Metal GPU) versions of the
+# nomic/bge dense baselines alongside the fastembed ones. Falls back
+# to fastembed automatically on any other platform.
+uv sync --extra eval --extra mlx
+
 # Run all baselines on the current query set (45+ minutes wall time)
 uv run python3 -m eval.run_baselines
 

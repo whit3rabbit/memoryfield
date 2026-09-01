@@ -48,6 +48,7 @@ from eval.mf_harness import (
     load_queries,
     percentile,
 )
+from mf.embed_backend import mlx_available
 
 ROOT = Path(__file__).parent
 CORPUS_DIR = ROOT / "corpus"
@@ -62,6 +63,22 @@ BASELINES = {
     "dense_bge": dense_real_baseline.run_bge,
     "hybrid": hybrid_baseline.run,
 }
+
+# MLX (Metal GPU) versions of the dense baselines, Apple Silicon only.
+# Same models as dense_nomic/dense_bge; see eval/baselines/dense_mlx_baseline.py.
+# Skipped (not a hard failure) when unavailable: `uv sync --extra eval` alone
+# never pulls in mlx-embedding-models, and it can't run on non-Apple-Silicon
+# hardware regardless, so the fastembed dense_nomic/dense_bge baselines above
+# are the fallback everywhere else.
+if mlx_available():
+    from eval.baselines import dense_mlx_baseline
+    BASELINES["dense_mlx_nomic"] = dense_mlx_baseline.run_nomic
+    BASELINES["dense_mlx_bge"] = dense_mlx_baseline.run_bge
+else:
+    sys.stderr.write(
+        "dense_mlx_nomic/dense_mlx_bge skipped: mlx backend unavailable "
+        "(needs Apple Silicon macOS + `uv sync --extra mlx`).\n"
+    )
 
 DOMAINS = {
     "codebase": ("codebase", "code"),

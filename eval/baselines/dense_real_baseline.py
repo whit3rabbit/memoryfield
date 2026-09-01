@@ -22,6 +22,8 @@ import os
 # Suppress fastembed's progress bars; clean output matters for the runner.
 os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
 
+from mf.embedding import document_text, query_text
+
 from ..mf_harness import (
     LookupTrace,
     Page,
@@ -56,17 +58,13 @@ class DenseIndex:
         self._page_text_for_query: list[str] = []
 
     def add_corpus(self, corpus: dict[str, Page]) -> None:
-        # Embed title + summary + first body section (L0+L1 per plan).
-        # Symmetric text on both sides; prefix is model-specific.
+        # embedding_text() (title + summary + L1) plus the model's
+        # document-side task prefix; see mf/embedding.py.
         texts = []
         ids = []
         for uuid, page in corpus.items():
             l1 = page.body_l1 if page.body_sections else ""
-            piece = f"{page.title}. {page.summary} {l1}".strip()
-            if not piece:
-                piece = page.title
-            prefix = "search_document: " if self.kind == "nomic" else ""
-            texts.append(prefix + piece)
+            texts.append(document_text(page.title, page.summary, l1, self.kind))
             ids.append(uuid)
         if not texts:
             return
@@ -79,17 +77,7 @@ class DenseIndex:
     def query(self, q: str, k: int = 5) -> list[tuple[str, float]]:
         """Return top-k (uuid, score) pairs."""
         import numpy as np
-        # Prefix conventions:
-        #   nomic: "search_query: " (asymmetric; the doc side has "search_document: ")
-        #   bge-en-v1.5: "Represent this sentence for searching relevant passages: "
-        #     (per BGE-en-v1.5 README; fastembed does not add this automatically.)
-        if self.kind == "nomic":
-            prefix = "search_query: "
-        elif self.kind == "bge":
-            prefix = "Represent this sentence for searching relevant passages: "
-        else:
-            prefix = ""
-        qv = list(self.model.embed([prefix + q]))
+        qv = list(self.model.embed([query_text(q, self.kind)]))
         qv = _normalize(qv)[0]
         page_mat = np.asarray(self._page_vecs, dtype="float32")
         scores = page_mat @ np.asarray(qv, dtype="float32")

@@ -1,4 +1,4 @@
 {
-  "include": ["eval", "mf"],
+  "include": ["eval", "mf", "tests"],
   "reportMissingImports": "none"
 }

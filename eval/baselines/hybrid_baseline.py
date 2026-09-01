@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import sqlite3
 
+from mf.query_prep import fts_query
+
 from ..mf_harness import (
     LookupTrace,
     Page,
@@ -20,7 +22,7 @@ from ..mf_harness import (
     l1_tokens,
     stub_tokens,
 )
-from . import dense_real_baseline, fts_baseline
+from . import dense_real_baseline
 
 RRF_K = 60
 
@@ -38,7 +40,7 @@ def _rank(corpus: dict[str, Page], query: Query) -> list[str]:
             "INSERT INTO pages VALUES (?, ?, ?, ?)",
             [(p.uuid, p.title, p.summary, p.body) for p in corpus.values()],
         )
-        fts_q = fts_baseline._query_to_fts(query.text)
+        fts_q = fts_query(query.text).expr
         if fts_q:
             cur = fts_conn.execute(
                 "SELECT uuid FROM pages WHERE pages MATCH ? ORDER BY bm25(pages) LIMIT 20",

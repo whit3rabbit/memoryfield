@@ -176,8 +176,12 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
 - [x] M0.5: real dense baselines, 458-query set, per-axis breakdown.
       See "Where things stand" for the corrected headline.
 - [ ] M1, read path (`init`, `index`, `search`, `read`). Repo restructure
-      (ROADMAP.md 1.1) done: `mf/` is packaged and installable via
-      `uv tool install .`, but every subcommand is still a stub. Open
+      (ROADMAP.md 1.1) and `embedding_text()`/`fts_query()` single source
+      of truth (1.2) both done. `mf/embedding.py` and `mf/query_prep.py`
+      exist and are imported by the eval baselines (verified
+      behavior-preserving by rerunning fts/hybrid/dense_nomic and diffing
+      against pre-refactor results); `mf/` is packaged and installable via
+      `uv tool install .`, but every CLI subcommand is still a stub. Open
       before the real commands can land: decide hybrid design (gotcha
       13), add the confidence signal (gotcha 15).
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,

@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import sqlite3
 
+from mf.query_prep import fts_query
+
 from ..mf_harness import (
     LookupTrace,
     Page,
@@ -35,30 +37,8 @@ def _build_index(corpus: dict[str, Page]) -> sqlite3.Connection:
     return conn
 
 
-def _query_to_fts(q: str) -> str:
-    """Convert a natural-language query to a forgiving FTS5 MATCH expression.
-
-    Strategy: tokenize, drop very short / stopword-ish tokens, OR-join the
-    rest. This catches the common case where the user's wording doesn't
-    exactly match the page's wording but shares enough vocabulary to be a
-    hit. Pure prefix match (no quoting, no operators) is the safest mode.
-    """
-    import re as _re
-    tokens = _re.findall(r"[A-Za-z][A-Za-z0-9_-]+", q.lower())
-    # Drop ultra-short tokens (often punctuation artefacts) and a small
-    # stopword list -- keeping them would just create noise.
-    stop = {"a", "an", "the", "is", "of", "to", "in", "on", "for", "with",
-            "and", "or", "do", "i", "you", "we", "it", "this", "that"}
-    keep = [t for t in tokens if len(t) >= 2 and t not in stop]
-    if not keep:
-        return ""
-    # Escape FTS5-special chars inside tokens (defensive), then OR-join.
-    safe = [t.replace('"', '""') for t in keep]
-    return " OR ".join(f'"{t}"' for t in safe)
-
-
 def _rank(conn: sqlite3.Connection, query: Query) -> list[str]:
-    fts_q = _query_to_fts(query.text)
+    fts_q = fts_query(query.text).expr
     if not fts_q:
         return []
     try:

@@ -36,3 +36,17 @@ uv run python3 -m eval.report
 
 Results land in `eval/results/*.json`. Reports in `M0_REPORT.md` and
 `M0.5_REPORT.md` at the repo root.
+
+## Tests
+
+`mf/`'s unit tests (`tests/`) need only the `dev` group; some import
+code that also needs the `eval` extra (fastembed), so sync both:
+
+```bash
+uv sync --extra eval --group dev
+uv run pytest tests/
+```
+
+`uv sync --extra eval` and `uv sync --group dev` don't compose across
+separate invocations — each `uv sync` call resets the venv to exactly
+what that invocation specifies, so pass both flags together.

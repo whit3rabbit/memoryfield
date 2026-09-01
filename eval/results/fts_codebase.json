@@ -18,7 +18,7 @@
     0.9367816091954023,
     0.9885057471264368
   ],
-  "elapsed_seconds": 0.2595,
+  "elapsed_seconds": 0.2574,
   "metrics": {
     "baseline": "fts",
     "domain": "codebase",

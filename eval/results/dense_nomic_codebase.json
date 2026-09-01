@@ -18,7 +18,7 @@
     0.9540229885057471,
     0.9942528735632183
   ],
-  "elapsed_seconds": 357.7482,
+  "elapsed_seconds": 341.3111,
   "metrics": {
     "baseline": "dense_nomic",
     "domain": "codebase",

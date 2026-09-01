@@ -30,15 +30,19 @@ from .embedder import vec_literal
 from .page import Page, load_page, parse_page
 from .schema import DEFAULT_MODEL_CODE, get_config
 
-# Cosine distance (1 - cos). Measured on the real 157-page corpus after
-# the vec table moved to cosine (ROADMAP.md 2.5, eval/dedup_cosine_probe.py):
-# two hand-written paraphrases of real pages landed at 0.038 and 0.063
-# from their originals, while the closest pair of genuinely different
-# pages sat at 0.096 (papers, where sibling claim pages about one paper
-# are near each other by design) and 0.131 (codebase). 0.08 splits that
-# gap; the papers-side margin is thin, which is what ROADMAP.md 2.10's
-# labeled set is for.
-DEDUP_THRESHOLD = 0.08
+# Cosine distance (1 - cos), calibrated on a labeled set (ROADMAP.md
+# 2.10, eval/calibrate_dedup.py, eval/results/calibration_dedup_2_10.txt):
+# 32 subagent-written paraphrases of real pages (median 0.054 from their
+# original, p90 0.114, max 0.147) against the 157 corpus pages' nearest
+# genuinely-different neighbors (min 0.096, p5 0.127). The two
+# distributions overlap: no threshold catches every rewrite without
+# blocking real sibling pages. At 0.10, 4/32 paraphrases pass (12.5%)
+# and 2/157 pages would have been blocked on write (both one-claim-per-
+# paper siblings, visible and overridable with --force). 0.08 missed
+# 7/32 with no false blocks; 0.12 misses 2/32 and blocks 5/157. A miss
+# is a silent duplicate, a block costs one look at the candidates, so
+# the threshold errs toward blocking.
+DEDUP_THRESHOLD = 0.10
 DEDUP_CANDIDATES = 5
 
 IN_FIELD_WARNING = (

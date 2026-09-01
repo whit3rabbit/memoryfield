@@ -1,0 +1,45 @@
+paraphrases: n=32  siblings: n=32  corpus pages: n=157
+paraphrase->anchor distance: min=0.026 median=0.054 p90=0.114 max=0.147
+  anchor was the nearest page for 31/32 paraphrases
+sibling->nearest distance:   min=0.043 p10=0.070 median=0.162 max=0.260
+corpus nearest-distinct:     min=0.096 p5=0.127 median=0.207
+
+    T  para miss  sib block  corpus block  errors
+ 0.02   32/32       0/32         0/157        32
+ 0.04   25/32       0/32         0/157        25
+ 0.06   12/32       2/32         0/157        14
+ 0.08    7/32       5/32         0/157        12
+ 0.10    4/32       7/32         2/157        13
+ 0.12    2/32       9/32         5/157        16
+ 0.14    1/32      13/32        19/157        33
+ 0.16    0/32      15/32        38/157        53
+ 0.18    0/32      21/32        51/157        72
+ 0.20    0/32      25/32        70/157        95
+ 0.22    0/32      29/32        91/157       120
+ 0.24    0/32      30/32       107/157       137
+
+lowest total error at T=0.08 (12 errors)
+
+paraphrases farthest from their anchor (hardest to catch):
+  0.147 para-paper-tx-positional anchor_nearest=True
+  0.126 para-paper-resnet-shortcuts anchor_nearest=False
+  0.116 para-code-obs-request-id anchor_nearest=True
+  0.114 para-code-obs-alert-severity anchor_nearest=True
+  0.087 para-paper-nucleus-sampling anchor_nearest=True
+siblings closest to an existing page (hardest to let through):
+  0.043 sib-paper-dqn-atari-results nearest=paper-dqn-tricks
+  0.050 sib-paper-flashattn-hardware nearest=paper-flashattn-tiling
+  0.066 sib-code-obs-request-id nearest=code-obs-trace-sampling
+  0.070 sib-code-testing-ci-parallel nearest=code-testing-flaky
+  0.072 sib-paper-ppo-default nearest=paper-ppo-clipped-objective
+closest genuinely-different corpus pairs (what a higher T would block on write):
+  0.096 paper-rope-definition <-> paper-rope-relative
+  0.104 paper-dist-soft-labels <-> paper-dist-temperature
+  0.104 paper-dist-dark-knowledge <-> paper-dist-soft-labels
+  0.124 paper-mamba-arch <-> paper-mamba-selective
+  0.127 paper-adam-default-lr <-> paper-lr-importance
+  0.130 paper-ln-definition <-> paper-ln-vs-bn
+  0.130 paper-dropout-definition <-> paper-dropout-ensemble
+  0.131 paper-temperature-sampling <-> paper-dist-temperature
+
+current DEDUP_THRESHOLD = 0.1

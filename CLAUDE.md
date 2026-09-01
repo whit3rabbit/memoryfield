@@ -303,11 +303,15 @@ Organized by where they will bite next.
 
 ### M2 write-path gotchas
 
-27. **`mf write`'s dedup gate (`mf/write.py`'s `DEDUP_THRESHOLD`, now
-    0.08 cosine after ROADMAP.md 2.5, re-derived by
-    `eval/dedup_cosine_probe.py`) is still an estimate from two
-    paraphrases and a nearest-neighbor floor, not a calibrated
-    constant.** The rest of this entry is the 2.1 record in L2 units. Unlike `mf/confidence.py`'s `FLOOR`
+27. **Calibrated by ROADMAP.md 2.10 (`DEDUP_THRESHOLD` = 0.10 cosine,
+    `eval/calibrate_dedup.py`); kept as the 2.1 record in L2 units.**
+    What the calibration found is the lasting lesson: paraphrase and
+    genuinely-different distributions overlap, so the gate catches
+    copies and light rewordings, not thorough rewrites (about one in
+    eight pass at 0.10), and a "sibling page" written by someone who
+    hasn't seen the corpus is as likely to duplicate some *other*
+    existing page as to be a clean negative. Labeled negatives need
+    checking against the whole corpus, not just their anchor. Unlike `mf/confidence.py`'s `FLOOR`
     (calibrated against a real 30-query labeled no-answer set, gotcha
     18), there's no labeled near-duplicate set to calibrate dedup
     against yet. The one data point: a paraphrased near-duplicate of a
@@ -492,8 +496,14 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       refuses a stale index (exit 3) unless `--stale-ok`. 2.9 is done:
       `mf/embedder.py` is the one embedding entry point (registry,
       per-process model cache, `vec_literal`), and `mf init --model
-      bge-large-en-v1.5` builds a 1024-d field. 156/156 tests.
-      2.10-2.11 open.
+      bge-large-en-v1.5` builds a 1024-d field. 156/156 tests. 2.11 is
+      done: the skill body is split into a ~730-token core and an
+      on-demand `reference.md`; the session-start cost (the description
+      alone, ~100 tokens) was already inside PLAN.md's target. 2.10 is
+      done: a 32-paraphrase labeled set moved `DEDUP_THRESHOLD` to
+      0.10 and showed the gate misses thorough rewrites one time in
+      eight at any threshold that spares real sibling pages. Phase 2.5
+      is closed; 2.3 (`lint`) and 2.4 (`pack`) are next.
       Only 0.5's unsent upstream email remains open from Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).

@@ -216,7 +216,7 @@ same parser `index` uses (raises on missing `uuid`/`title`), checks the
 destination (an existing file there must carry the same uuid, and the
 uuid must not already be indexed under another filename), then runs
 the dedup gate: embeds the page (`document_text()`) and kNN-queries
-`vec` for existing pages within `DEDUP_THRESHOLD` (0.08 cosine
+`vec` for existing pages within `DEDUP_THRESHOLD` (0.10 cosine
 distance, section 2), excluding the page's own uuid. A hit returns the
 candidates and exit code 2. `--update UUID` (must match the page's own
 `uuid`) or `--force` skip the gate. On a pass, a draft from outside the
@@ -234,21 +234,38 @@ the deliberately un-gated bulk path (imports, hand edits). Verified on
 the real corpus: a paraphrase draft outside the field was blocked at
 distance 0.049 with nothing copied in.
 
-`DEDUP_THRESHOLD` was re-derived on the real corpus when the metric
-changed, but is still an estimate, not calibrated like
-`mf/confidence.py`'s `FLOOR` (CLAUDE.md gotcha 27). Measured after 2.5:
+`DEDUP_THRESHOLD` (0.10) is calibrated on a labeled set (ROADMAP.md
+2.10, `eval/calibrate_dedup.py`, `eval/dedup_set/`): 32 paraphrases of
+real pages written by subagents given only the anchor (same facts, new
+wording, restructured), 32 "sibling" pages on the same topic, and the
+157 corpus pages' own nearest genuinely-different neighbors.
 
-| Cosine distance | Value |
-|---|---|
-| Hand-written paraphrase of `code-deploy-rollback-cmd` to its original | 0.038 |
-| Hand-written paraphrase of `code-api-401-vs-403` to its original | 0.063 |
-| Closest pair of genuinely different pages, papers (sibling claim pages about one paper) | 0.096 |
-| Closest pair of genuinely different pages, codebase | 0.131 |
-| `DEDUP_THRESHOLD` | 0.08 |
+| Cosine distance | min | median | p90 | max |
+|---|---|---|---|---|
+| Paraphrase to its original (n=32) | 0.026 | 0.054 | 0.114 | 0.147 |
+| Corpus page to nearest different page (n=157) | 0.096 | 0.207 | | |
 
-Two paraphrases and a nearest-neighbor floor from 157 pages is not a
-labeled set. The papers-side margin (0.063 to 0.096) is thin.
-ROADMAP.md 2.10 builds the labeled near-duplicate set.
+| Threshold | Paraphrases missed | Corpus pages blocked on write |
+|---|---|---|
+| 0.08 | 7/32 | 0/157 |
+| **0.10** | **4/32** | **2/157** |
+| 0.12 | 2/32 | 5/157 |
+
+The distributions overlap, so no threshold catches every rewrite
+without blocking real pages. The blocked corpus pairs are one-claim-
+per-paper siblings (RoPE definition vs its relative-position property,
+three distillation pages), the page style PLAN.md section 7 prescribes.
+A miss is a silent duplicate; a block is one look at the listed
+candidates and `--force`. So the threshold errs toward blocking, at
+0.10 rather than 0.12 because the papers style would pay for 0.12 on
+3% of its pages. The sibling pages turned out not to be usable
+negatives: the five closest all duplicated a *different* existing page
+(the authors picked questions the corpus already answered), which the
+gate correctly blocked. What this says about the gate: cosine on title
++ summary + L1 catches copies and light rewordings, not thorough
+rewrites, one in eight of which pass. A second signal (title/summary
+lexical overlap, or the host agent's judgment on the candidates) is
+what would close that, and is not scheduled.
 
 Dedup is deliberately a gate, not just an FYI (PLAN.md section 10):
 `--force`/`--update` are how the calling agent overrides the tool's
@@ -294,7 +311,7 @@ measured (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`):
 
 | Target | Measured | Caveat |
 |---|---|---|
-| Session-start injection under 200 tokens | not measured | `.claude/skills/mf/SKILL.md` is ~8.3 KB, roughly 2,000 tokens per session that triggers it. At the lean call's ~118 tokens/lookup saving over raw, break-even is ~17 lookups per session. ROADMAP.md 2.11. |
+| Session-start injection under 200 tokens | ~100 (skill description) | Only the skill's frontmatter description loads at session start. The body loads when the skill triggers: ~2,400 tokens before 2.11, ~730 after, with ~1,300 more in `reference.md` read only when writing a page. Estimated with `mf.tokens.default_tokenize`. |
 | Under 1,200 tokens per lookup, most ending at the stub | 55 (lean call) / 1,014 (old default flags) | In-vocabulary tasks. The 2.7 gate cuts blind `none` from 45% to 10%; the new default (3 / 1) hasn't been re-measured with the 1.9 method (ROADMAP.md 2.11). |
 | 2 tool calls per lookup | 1 (stub-end 20/20) | Same in-vocabulary caveat. |
 

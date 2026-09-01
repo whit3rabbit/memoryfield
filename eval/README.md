@@ -8,6 +8,7 @@ where its output is recorded:
 | Script | Roadmap | Output |
 |---|---|---|
 | `calibrate_confidence_blind.py` | 2.6, 2.7 | `results/calibration_2_7.txt`: gate designs over a parameter grid, FTS-first vs RRF vs dense-first, corpus-size sweep, all through the real `mf search` pipeline |
+| `calibrate_dedup.py` | 2.10 | `results/calibration_dedup_2_10.txt`: threshold sweep over `dedup_set/` (32 paraphrases, 32 siblings) and the corpus's nearest-distinct pairs |
 | `dedup_cosine_probe.py` | 2.5 | `results/dedup_cosine_probe.txt`: nearest-neighbor floor and paraphrase distances that bound `DEDUP_THRESHOLD` |
 | `blind_fallback_check.py` | 1.8 | stdout: did the FTS-empty fallback ever fire (moot since 2.6) |
 | `agent_trial_token_costs.py` | 1.9 | `agent_trial_1_9.md`: content tokens per lookup, default vs lean call vs raw read |

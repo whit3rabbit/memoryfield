@@ -4,10 +4,12 @@ Single source of truth for:
   - corpus loading (memoryfield-spec pages)
   - query loading
   - metrics: P@3, R@5, MRR, stub-end rate
-  - token accounting (char/4 approximation, plus a real tokenizer stub)
 
-Stdlib only — no numpy, no fastembed, no yaml. The whole point of M0 is
-the harness works on a clean checkout. Deps come in M1.
+Token accounting is mf/tokens.py's job (single source of truth shared
+with mf index/search); this module just imports it.
+
+Stdlib only, aside from the mf package itself — no numpy, no fastembed,
+no yaml. The whole point of M0 is the harness works on a clean checkout.
 """
 from __future__ import annotations
 
@@ -20,6 +22,8 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from mf.tokens import default_tokenize
+
 # ---------------------------------------------------------------------------
 # Token accounting
 # ---------------------------------------------------------------------------
@@ -28,26 +32,8 @@ from pathlib import Path
 #   - session start: < 200 tokens
 #   - per lookup: < 1,200 tokens
 #
-# We use a char/4 approximation as the default. It's within ~15% of tiktoken
-# cl100k for English prose, which is more than precise enough for budget
-# decisions at this scale. Callers that want exact counts can pass a custom
-# `tokenize` callable (e.g. loaded with tiktoken) — but the harness should
-# not require it.
-
-
-def default_tokenize(text: str) -> int:
-    """Approximate tokens as max(len/4, word_count/0.75).
-
-    The word-count term catches short-symbol-heavy content (commands, paths)
-    that char/4 alone undercounts. We take the max of the two.
-    """
-    if not text:
-        return 0
-    char_estimate = max(1, math.ceil(len(text) / 4))
-    word_count = len(text.split())
-    word_estimate = max(1, math.ceil(word_count / 0.75))
-    return max(char_estimate, word_estimate)
-
+# default_tokenize() lives in mf/tokens.py (single source of truth shared
+# with mf index/search) and is re-imported above.
 
 # ---------------------------------------------------------------------------
 # Memoryfield-spec page loading

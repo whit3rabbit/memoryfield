@@ -5,11 +5,11 @@ Memoryfield eval harness. Context for the next agent, human or model.
 ## What this repo is
 
 The `mf` memoryfield tool described in PLAN.md, plus its eval harness.
-`mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`) whose
-subcommands (`init`, `index`, `search`, `read`, `write`) are still stubs —
-M1 (Phase 1 of ROADMAP.md) is the first real implementation. `eval/`
-(formerly `harness/`) is the eval and corpus rig from M0/M0.5; it's
-complete and unrelated to whether `mf/` itself has any commands yet.
+`mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`).
+`init`/`index` are real (ROADMAP.md 1.3); `search`/`read`/`write` are
+still stubs. `eval/` (formerly `harness/`) is the eval and corpus rig
+from M0/M0.5; it's complete and unrelated to whether `mf/` itself has
+search or read yet.
 
 For the schema and retrieval design as currently decided (not the
 eval narrative), see [docs/architecture.md](docs/architecture.md).
@@ -175,15 +175,14 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
 - [x] M0: eval harness, labeled corpus, 6 baselines.
 - [x] M0.5: real dense baselines, 458-query set, per-axis breakdown.
       See "Where things stand" for the corrected headline.
-- [ ] M1, read path (`init`, `index`, `search`, `read`). Repo restructure
-      (ROADMAP.md 1.1) and `embedding_text()`/`fts_query()` single source
-      of truth (1.2) both done. `mf/embedding.py` and `mf/query_prep.py`
-      exist and are imported by the eval baselines (verified
-      behavior-preserving by rerunning fts/hybrid/dense_nomic and diffing
-      against pre-refactor results); `mf/` is packaged and installable via
-      `uv tool install .`, but every CLI subcommand is still a stub. Open
-      before the real commands can land: decide hybrid design (gotcha
-      13), add the confidence signal (gotcha 15).
+- [ ] M1, read path (`init`, `index`, `search`, `read`). 1.1 (repo
+      restructure), 1.2 (`embedding_text()`/`fts_query()` single source
+      of truth), and 1.3 (schema + real `mf init`/`mf index`) are done.
+      `mf init`/`mf index` work end to end against real sqlite-vec +
+      fastembed (nomic), incremental on sha256, 53/53 tests passing.
+      `mf search`/`mf read`/`mf write` are still stubs. Open before
+      those can land: decide hybrid design (gotcha 13), add the
+      confidence signal (gotcha 15).
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
       `pack`/`unpack`). `lint` is load-bearing now (gotcha 16), not
       optional.

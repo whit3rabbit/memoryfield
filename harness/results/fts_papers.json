@@ -6,7 +6,7 @@
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.8565573770491803,
   "n_given_hit": 244,
   "p_at_3_95ci": [
     0.9606299212598425,
@@ -18,7 +18,7 @@
     0.9645669291338582,
     0.9960629921259843
   ],
-  "elapsed_seconds": 0.1331,
+  "elapsed_seconds": 0.1523,
   "metrics": {
     "baseline": "fts",
     "domain": "papers",
@@ -28,10 +28,15 @@
     "r_at_5": 0.9803149606299213,
     "mrr": 0.9208005249343832,
     "stub_end_rate": 0.7827715355805244,
+    "stub_end_given_hit_rate": 0.8565573770491803,
     "tokens_stub_median": 295,
     "tokens_stub_p95": 317.0,
     "tokens_l1_median": 433,
     "tokens_full_median": 437,
+    "p_at_3_ci_low": 0.937007874015748,
+    "p_at_3_ci_high": 0.984251968503937,
+    "p_at_5_ci_low": 0.9645669291338582,
+    "p_at_5_ci_high": 0.9960629921259843,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/fts_papers.json"
   },
   "per_query": [

@@ -6,7 +6,7 @@
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.7713004484304933,
   "n_given_hit": 223,
   "p_at_3_95ci": [
     0.8779527559055118,
@@ -18,7 +18,7 @@
     0.8700787401574803,
     0.9409448818897638
   ],
-  "elapsed_seconds": 0.1823,
+  "elapsed_seconds": 0.1905,
   "metrics": {
     "baseline": "grep",
     "domain": "papers",
@@ -28,10 +28,15 @@
     "r_at_5": 0.905511811023622,
     "mrr": 0.8035433070866141,
     "stub_end_rate": 0.6441947565543071,
+    "stub_end_given_hit_rate": 0.7713004484304933,
     "tokens_stub_median": 294,
     "tokens_stub_p95": 314.0,
     "tokens_l1_median": 436,
     "tokens_full_median": 442,
+    "p_at_3_ci_low": 0.8385826771653543,
+    "p_at_3_ci_high": 0.9173228346456693,
+    "p_at_5_ci_low": 0.8700787401574803,
+    "p_at_5_ci_high": 0.9409448818897638,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/grep_papers.json"
   },
   "per_query": [

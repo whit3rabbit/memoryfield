@@ -77,15 +77,24 @@ def load_debiased() -> dict[str, dict]:
 
 def render_table(summary: list[dict], columns: list[str] | None = None) -> str:
     columns = columns or [
-        "baseline", "domain", "n_queries", "p_at_3", "p_at_5",
-        "r_at_5", "mrr", "stub_end_rate",
+        "baseline", "domain", "n_queries", "p_at_3", "p_at_3_ci",
+        "r_at_5", "mrr", "stub_end_given_hit_rate",
         "tokens_stub_median", "tokens_stub_p95",
     ]
-    rows = ["| " + " | ".join(columns) + " |"]
+    header = [c if c not in ("p_at_3_ci",) else "p_at_3 (95% CI)" for c in columns]
+    header = [
+        "stub_end_given_hit" if c == "stub_end_given_hit_rate" else c
+        for c in header
+    ]
+    rows = ["| " + " | ".join(header) + " |"]
     rows.append("|" + "|".join(["---"] * len(columns)) + "|")
     for m in summary:
         cells = []
         for c in columns:
+            if c == "p_at_3_ci":
+                lo, hi = m.get("p_at_3_ci_low"), m.get("p_at_3_ci_high")
+                cells.append(f"[{lo:.3f}, {hi:.3f}]" if lo is not None else "n/a")
+                continue
             v = m.get(c)
             if isinstance(v, float):
                 cells.append(f"{v:.3f}")
@@ -228,13 +237,13 @@ def stub_end_debias(summary: list[dict], debiased: dict) -> str:
     pct_unc = uncertain / n if n else 0
 
     if summary:
-        avg_stub = sum(m["stub_end_rate"] for m in summary) / len(summary)
+        avg_stub = sum(m["stub_end_given_hit_rate"] for m in summary) / len(summary)
     else:
         avg_stub = 0
 
     out.append("| Source | Sufficient | Insufficient | Uncertain |")
     out.append("|---|---|---|---|")
-    out.append(f"| Original author labels (avg across baselines) | {avg_stub:.3f} | n/a | n/a |")
+    out.append(f"| Original author labels, given hit (avg across baselines) | {avg_stub:.3f} | n/a | n/a |")
     out.append(f"| De-biased labels (judgment on stub alone) | {pct_suf:.3f} | {pct_unsuf:.3f} | {pct_unc:.3f} |")
     out.append("")
     out.append(
@@ -261,6 +270,12 @@ def substantive_findings(summary: list[dict]) -> str:
             if m["domain"] == domain:
                 return m[metric]
         return 0.0
+
+    stub_given_hit_vals = [m["stub_end_given_hit_rate"] for m in summary]
+    stub_given_hit_range = (
+        f"{min(stub_given_hit_vals):.2f}-{max(stub_given_hit_vals):.2f}"
+        if stub_given_hit_vals else "n/a"
+    )
 
     out = ["", "## Substantive findings", ""]
     out.append(
@@ -338,11 +353,12 @@ def substantive_findings(summary: list[dict]) -> str:
         "Stub summaries continue to anchor retrieval."
     )
     out.append(
-        "- **Stub-end rate remains high.** 0.52-0.82 across baselines on "
-        "real-answer queries. The de-biased label rate (~0.99) is higher "
-        "because it uses a different bar (\"stub has the answer\") than "
-        "the original (\"agent wouldn't need the body\"). Both numbers are "
-        "valid; they answer different questions."
+        f"- **Stub-end rate remains high, given a hit.** {stub_given_hit_range} "
+        "across baselines on real-answer queries where retrieval succeeded. "
+        "The de-biased label rate (~0.99) is higher because it uses a "
+        "different bar (\"stub has the answer\") than the original (\"agent "
+        "wouldn't need the body\"). Both numbers are valid; they answer "
+        "different questions."
     )
     out.append(
         "- **FTS5 is still the right default, for operational reasons.** "
@@ -412,8 +428,9 @@ def substantive_findings(summary: list[dict]) -> str:
         "uses."
     )
     out.append(
-        "4. **Stub-first reads confirmed.** Stub-end rate holds at 52-82% "
-        "across baselines. The architecture is the right shape."
+        f"4. **Stub-first reads confirmed.** Stub-end rate, given a hit, "
+        f"holds at {stub_given_hit_range} across baselines. The "
+        "architecture is the right shape."
     )
     out.append(
         "5. **Watch list for M1 follow-on:**"

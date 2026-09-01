@@ -6,7 +6,7 @@
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.8685258964143426,
   "n_given_hit": 251,
   "p_at_3_95ci": [
     0.9881889763779528,
@@ -18,7 +18,7 @@
     1.0,
     1.0
   ],
-  "elapsed_seconds": 779.3308,
+  "elapsed_seconds": 669.8449,
   "metrics": {
     "baseline": "dense_nomic",
     "domain": "papers",
@@ -28,10 +28,15 @@
     "r_at_5": 1.0,
     "mrr": 0.9546587926509186,
     "stub_end_rate": 0.8164794007490637,
+    "stub_end_given_hit_rate": 0.8685258964143426,
     "tokens_stub_median": 294,
     "tokens_stub_p95": 316.0,
     "tokens_l1_median": 443,
     "tokens_full_median": 448,
+    "p_at_3_ci_low": 0.9724409448818898,
+    "p_at_3_ci_high": 1.0,
+    "p_at_5_ci_low": 1.0,
+    "p_at_5_ci_high": 1.0,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_nomic_papers.json"
   },
   "per_query": [

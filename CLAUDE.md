@@ -136,6 +136,19 @@ Organized by where they will bite next.
     `lint` (PLAN.md section 5) isn't enforced, retrieval quality drifts,
     and the M1 design verdict changes with it.
 
+17. **A metric that's computed but never read hides its own bugs.**
+    `stub_end_given_hit_rate` in `run_baselines.py` incremented its hit
+    counter and its denominator together on every retrieval hit,
+    independent of `ended_at_stub`, so it silently evaluated to exactly
+    `1.0` across all 12 result files. It went unnoticed because
+    `report.py` never consumed the field: it reported the ungated
+    `stub_end_rate` instead, so the bug never touched a published
+    number. Same for the bootstrap CIs: computed and written to the
+    per-baseline JSON, never rendered in `M0.5_REPORT.md`'s tables. If a
+    computed field isn't wired into the report, verify it directly
+    (don't assume "it's in the JSON" means "it's correct" or "it's
+    used").
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md) section 9 for the full milestone list.

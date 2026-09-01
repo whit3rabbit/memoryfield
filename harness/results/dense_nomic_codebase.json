@@ -6,7 +6,7 @@
   "n_no_answer": 17,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.8511904761904762,
   "n_given_hit": 168,
   "p_at_3_95ci": [
     0.9655172413793104,
@@ -18,7 +18,7 @@
     0.9540229885057471,
     0.9942528735632183
   ],
-  "elapsed_seconds": 402.1664,
+  "elapsed_seconds": 357.7482,
   "metrics": {
     "baseline": "dense_nomic",
     "domain": "codebase",
@@ -28,10 +28,15 @@
     "r_at_5": 0.9741379310344828,
     "mrr": 0.9457854406130268,
     "stub_end_rate": 0.7486910994764397,
+    "stub_end_given_hit_rate": 0.8511904761904762,
     "tokens_stub_median": 244,
     "tokens_stub_p95": 262.5,
     "tokens_l1_median": 361,
     "tokens_full_median": 370,
+    "p_at_3_ci_low": 0.9367816091954023,
+    "p_at_3_ci_high": 0.9885057471264368,
+    "p_at_5_ci_low": 0.9540229885057471,
+    "p_at_5_ci_high": 0.9942528735632183,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_nomic_codebase.json"
   },
   "per_query": [

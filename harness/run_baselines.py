@@ -142,8 +142,9 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         full_tokens.append(t.full_tokens)
         # Conditional on hit: agent only reaches stub if retrieval succeeded.
         if not is_no_answer and t.rank is not None and t.rank <= 3:
-            stub_ends_given_hit += 1
             n_given_hit += 1
+            if t.ended_at_stub:
+                stub_ends_given_hit += 1
         per_query.append({
             "qid": q.qid,
             "text": q.text,
@@ -161,6 +162,13 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         })
 
     n = len(traces)
+
+    # Bootstrap 95% CIs for P@3 and R@5 over real-answer queries only.
+    real_hits = [1 if (t["rank"] is not None and t["rank"] <= 3) else 0 for t in per_query if not t["is_no_answer"]]
+    p_at_3_ci = bootstrap_ci(real_hits, stat="mean", n_resamples=2000, alpha=0.05)
+    real_hits_5 = [1 if (t["rank"] is not None and t["rank"] <= 5) else 0 for t in per_query if not t["is_no_answer"]]
+    p_at_5_ci = bootstrap_ci(real_hits_5, stat="mean", n_resamples=2000, alpha=0.05)
+
     metrics = BaselineMetrics(
         baseline=baseline_name,
         domain=domain_name,
@@ -170,18 +178,17 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         r_at_5=r_at_5_sum / r_at_5_n if r_at_5_n else 0,
         mrr=mrr_sum / r_at_5_n if r_at_5_n else 0,
         stub_end_rate=stub_ends / n if n else 0,
+        stub_end_given_hit_rate=(
+            stub_ends_given_hit / n_given_hit if n_given_hit else 0
+        ),
         tokens_stub_median=statistics.median(stub_tokens) if stub_tokens else 0,
         tokens_stub_p95=percentile(stub_tokens, 95) if stub_tokens else 0,
         tokens_l1_median=statistics.median(l1_tokens) if l1_tokens else 0,
         tokens_full_median=statistics.median(full_tokens) if full_tokens else 0,
         details_path=RESULTS_DIR / f"{baseline_name}_{domain_name}.json",
+        p_at_3_ci=p_at_3_ci,
+        p_at_5_ci=p_at_5_ci,
     )
-
-    # Bootstrap 95% CIs for P@3 and R@5 over real-answer queries only.
-    real_hits = [1 if (t["rank"] is not None and t["rank"] <= 3) else 0 for t in per_query if not t["is_no_answer"]]
-    p_at_3_ci = bootstrap_ci(real_hits, stat="mean", n_resamples=2000, alpha=0.05)
-    real_hits_5 = [1 if (t["rank"] is not None and t["rank"] <= 5) else 0 for t in per_query if not t["is_no_answer"]]
-    p_at_5_ci = bootstrap_ci(real_hits_5, stat="mean", n_resamples=2000, alpha=0.05)
 
     # Add no-answer correctness to metrics by attaching to details.
     no_answer_rate = (no_answer_correct / no_answer_n) if no_answer_n else 0.0

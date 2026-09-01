@@ -6,7 +6,7 @@
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.8674698795180723,
   "n_given_hit": 249,
   "p_at_3_95ci": [
     0.9803149606299213,
@@ -18,7 +18,7 @@
     0.9803149606299213,
     1.0
   ],
-  "elapsed_seconds": 1949.5193,
+  "elapsed_seconds": 1886.1603,
   "metrics": {
     "baseline": "dense_bge",
     "domain": "papers",
@@ -28,10 +28,15 @@
     "r_at_5": 0.9921259842519685,
     "mrr": 0.9471784776902886,
     "stub_end_rate": 0.8089887640449438,
+    "stub_end_given_hit_rate": 0.8674698795180723,
     "tokens_stub_median": 298,
     "tokens_stub_p95": 317.7,
     "tokens_l1_median": 445,
     "tokens_full_median": 449,
+    "p_at_3_ci_low": 0.9606299212598425,
+    "p_at_3_ci_high": 0.9960629921259843,
+    "p_at_5_ci_low": 0.9803149606299213,
+    "p_at_5_ci_high": 1.0,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_bge_papers.json"
   },
   "per_query": [

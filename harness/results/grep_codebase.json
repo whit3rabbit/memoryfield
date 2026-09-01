@@ -6,7 +6,7 @@
   "n_no_answer": 17,
   "no_answer_correct": 1,
   "no_answer_rate": 0.058823529411764705,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.7407407407407407,
   "n_given_hit": 135,
   "p_at_3_95ci": [
     0.7758620689655172,
@@ -18,7 +18,7 @@
     0.7873563218390804,
     0.8908045977011494
   ],
-  "elapsed_seconds": 0.1106,
+  "elapsed_seconds": 0.1155,
   "metrics": {
     "baseline": "grep",
     "domain": "codebase",
@@ -28,10 +28,15 @@
     "r_at_5": 0.8333333333333334,
     "mrr": 0.7177203065134098,
     "stub_end_rate": 0.5235602094240838,
+    "stub_end_given_hit_rate": 0.7407407407407407,
     "tokens_stub_median": 236,
     "tokens_stub_p95": 259.0,
     "tokens_l1_median": 350,
     "tokens_full_median": 361,
+    "p_at_3_ci_low": 0.7126436781609196,
+    "p_at_3_ci_high": 0.8390804597701149,
+    "p_at_5_ci_low": 0.7873563218390804,
+    "p_at_5_ci_high": 0.8908045977011494,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/grep_codebase.json"
   },
   "per_query": [

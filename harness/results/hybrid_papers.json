@@ -6,7 +6,7 @@
   "n_no_answer": 13,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.8645418326693227,
   "n_given_hit": 251,
   "p_at_3_95ci": [
     0.9881889763779528,
@@ -18,7 +18,7 @@
     1.0,
     1.0
   ],
-  "elapsed_seconds": 693.6007,
+  "elapsed_seconds": 738.4845,
   "metrics": {
     "baseline": "hybrid",
     "domain": "papers",
@@ -28,10 +28,15 @@
     "r_at_5": 1.0,
     "mrr": 0.953740157480315,
     "stub_end_rate": 0.8127340823970037,
+    "stub_end_given_hit_rate": 0.8645418326693227,
     "tokens_stub_median": 295,
     "tokens_stub_p95": 316.7,
     "tokens_l1_median": 444,
     "tokens_full_median": 449,
+    "p_at_3_ci_low": 0.9724409448818898,
+    "p_at_3_ci_high": 1.0,
+    "p_at_5_ci_low": 1.0,
+    "p_at_5_ci_high": 1.0,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/hybrid_papers.json"
   },
   "per_query": [

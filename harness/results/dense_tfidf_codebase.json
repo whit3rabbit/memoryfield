@@ -6,7 +6,7 @@
   "n_no_answer": 17,
   "no_answer_correct": 1,
   "no_answer_rate": 0.058823529411764705,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.6883116883116883,
   "n_given_hit": 154,
   "p_at_3_95ci": [
     0.8850574712643678,
@@ -18,7 +18,7 @@
     0.867816091954023,
     0.9540229885057471
   ],
-  "elapsed_seconds": 0.2967,
+  "elapsed_seconds": 0.3177,
   "metrics": {
     "baseline": "dense_tfidf",
     "domain": "codebase",
@@ -28,10 +28,15 @@
     "r_at_5": 0.9080459770114943,
     "mrr": 0.7805555555555556,
     "stub_end_rate": 0.5549738219895288,
+    "stub_end_given_hit_rate": 0.6883116883116883,
     "tokens_stub_median": 241,
     "tokens_stub_p95": 263.0,
     "tokens_l1_median": 356,
     "tokens_full_median": 364,
+    "p_at_3_ci_low": 0.8333333333333334,
+    "p_at_3_ci_high": 0.9310344827586207,
+    "p_at_5_ci_low": 0.867816091954023,
+    "p_at_5_ci_high": 0.9540229885057471,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/dense_tfidf_codebase.json"
   },
   "per_query": [

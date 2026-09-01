@@ -6,7 +6,7 @@
   "n_no_answer": 17,
   "no_answer_correct": 2,
   "no_answer_rate": 0.11764705882352941,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.7926829268292683,
   "n_given_hit": 164,
   "p_at_3_95ci": [
     0.9425287356321839,
@@ -18,7 +18,7 @@
     0.9367816091954023,
     0.9885057471264368
   ],
-  "elapsed_seconds": 0.0875,
+  "elapsed_seconds": 0.1025,
   "metrics": {
     "baseline": "fts",
     "domain": "codebase",
@@ -28,10 +28,15 @@
     "r_at_5": 0.9597701149425287,
     "mrr": 0.8869731800766283,
     "stub_end_rate": 0.680628272251309,
+    "stub_end_given_hit_rate": 0.7926829268292683,
     "tokens_stub_median": 242,
     "tokens_stub_p95": 263.0,
     "tokens_l1_median": 354,
     "tokens_full_median": 368,
+    "p_at_3_ci_low": 0.9080459770114943,
+    "p_at_3_ci_high": 0.9770114942528736,
+    "p_at_5_ci_low": 0.9367816091954023,
+    "p_at_5_ci_high": 0.9885057471264368,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/fts_codebase.json"
   },
   "per_query": [

@@ -6,7 +6,7 @@
   "n_no_answer": 17,
   "no_answer_correct": 0,
   "no_answer_rate": 0.0,
-  "stub_end_given_hit_rate": 1.0,
+  "stub_end_given_hit_rate": 0.8117647058823529,
   "n_given_hit": 170,
   "p_at_3_95ci": [
     0.9770114942528736,
@@ -18,7 +18,7 @@
     0.9770114942528736,
     1.0
   ],
-  "elapsed_seconds": 1136.1395,
+  "elapsed_seconds": 340.7878,
   "metrics": {
     "baseline": "hybrid",
     "domain": "codebase",
@@ -28,10 +28,15 @@
     "r_at_5": 0.9913793103448276,
     "mrr": 0.9299808429118773,
     "stub_end_rate": 0.7225130890052356,
+    "stub_end_given_hit_rate": 0.8117647058823529,
     "tokens_stub_median": 246,
     "tokens_stub_p95": 266.5,
     "tokens_l1_median": 359,
     "tokens_full_median": 371,
+    "p_at_3_ci_low": 0.9540229885057471,
+    "p_at_3_ci_high": 0.9942528735632183,
+    "p_at_5_ci_low": 0.9770114942528736,
+    "p_at_5_ci_high": 1.0,
     "details": "/Users/whit3rabbit/Documents/GitHub/MF/harness/results/hybrid_codebase.json"
   },
   "per_query": [

@@ -239,11 +239,14 @@ class BaselineMetrics:
     r_at_5: float
     mrr: float
     stub_end_rate: float
+    stub_end_given_hit_rate: float
     tokens_stub_median: float
     tokens_stub_p95: float
     tokens_l1_median: float
     tokens_full_median: float
     details_path: Path
+    p_at_3_ci: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    p_at_5_ci: tuple[float, float, float] = (0.0, 0.0, 0.0)
 
     def as_dict(self) -> dict:
         return {
@@ -255,10 +258,15 @@ class BaselineMetrics:
             "r_at_5": self.r_at_5,
             "mrr": self.mrr,
             "stub_end_rate": self.stub_end_rate,
+            "stub_end_given_hit_rate": self.stub_end_given_hit_rate,
             "tokens_stub_median": self.tokens_stub_median,
             "tokens_stub_p95": self.tokens_stub_p95,
             "tokens_l1_median": self.tokens_l1_median,
             "tokens_full_median": self.tokens_full_median,
+            "p_at_3_ci_low": self.p_at_3_ci[1],
+            "p_at_3_ci_high": self.p_at_3_ci[2],
+            "p_at_5_ci_low": self.p_at_5_ci[1],
+            "p_at_5_ci_high": self.p_at_5_ci[2],
             "details": str(self.details_path),
         }
 

@@ -91,8 +91,8 @@ magnitude into all three. That was a calibration/production mismatch of
 the same shape as CLAUDE.md gotcha 18 (see gotcha 32).
 
 The `vec` table backs three separate features, not one (CLAUDE.md
-gotcha 14): kNN neighbor stubs, write-time dedup of near-duplicate
-pages, and fallback ranking when FTS returns nothing.
+gotcha 14): the result ranking itself (dense-first since 2.6), kNN
+neighbor stubs, and write-time dedup of near-duplicate pages.
 
 ### 3. Retrieval
 
@@ -119,14 +119,17 @@ because it averages in FTS's noise. Inserting FTS's top-1 at rank 2
 under dense moved MRR by under 0.01 either way and was not adopted.
 
 1. Results return as the top-k stubs (uuid, title, summary, status,
-   tokens; `k=3` by default, `mf search --limit`) with up to n neighbor
-   stubs each (`n=1` by default, `--neighbor-limit`, typed links first,
-   then kNN). The old defaults (5 / 3) cost 1,014 tokens per point
-   lookup (ROADMAP.md 1.9). 3 / 1 is the compromise: three stubs recover
-   from a wrong top-1, one neighbor slot surfaces a typed
-   `supersedes`/`contradicts` link, which an agent must not miss.
-   `co_read` rows accumulate from `mf read` but are not consulted for
-   neighbor ranking yet (ROADMAP.md 4.4).
+   tokens; `k=2` by default, `mf search --limit`) with up to n neighbor
+   stubs each (`n=0` by default, `--neighbor-limit`, typed links first,
+   then kNN). Measured on the 1.9 tasks
+   (`eval/results/token_costs_2_11.txt`): each stub is ~50 tokens and
+   each neighbor slot roughly doubles the call. The original 5 / 3 cost
+   1,009 tokens per lookup (5.8x a raw read), 3 / 1 cost 304 (1.75x),
+   2 / 0 costs 104 (0.6x), 1 / 0 costs 55. The answer was on screen at
+   every setting, so neighbors bought nothing measurable; two stubs
+   keep one fallback for a wrong top-1. `co_read` rows accumulate from
+   `mf read` but are not consulted for neighbor ranking yet (ROADMAP.md
+   4.4).
 2. FTS's ranked list is the result set only when dense has nothing (an
    empty `vec` table). A stopword-only query (empty FTS expression) is
    still ranked by dense.
@@ -137,13 +140,13 @@ under dense moved MRR by under 0.01 either way and was not adopted.
    for neighbors, so a superseded page never shows as a neighbor of its
    own replacement. The 1.5 design returned a `{uuid, superseded_by}`
    pointer in the slot, which under `--limit 1` meant no answer.
-5. Stale check (PLAN.md section 3). `mf search` compares each shown
+4. Stale check (PLAN.md section 3). `mf search` compares each shown
    page's on-disk sha256 to the index (a missing file counts as stale).
    Any mismatch is refused with exit code 3 and a "run `mf index`"
    message, unless `--stale-ok`, which returns the results with the
    affected stubs marked `stale`. Library callers opt in by passing
    `field_dir`.
-4. Reranker (cross-encoder over the top 20): the tool's own blind top-1
+5. Reranker (cross-encoder over the top 20): the tool's own blind top-1
    is now 0.95 / 0.90 through the real pipeline, above the ~0.8 trigger
    in ROADMAP.md 4.1. Cut, not deferred, unless a later blind set says
    otherwise.
@@ -352,7 +355,7 @@ measured (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`):
 | Target | Measured | Caveat |
 |---|---|---|
 | Session-start injection under 200 tokens | ~100 (skill description) | Only the skill's frontmatter description loads at session start. The body loads when the skill triggers: ~2,400 tokens before 2.11, ~730 after, with ~1,300 more in `reference.md` read only when writing a page. Estimated with `mf.tokens.default_tokenize`. |
-| Under 1,200 tokens per lookup, most ending at the stub | 55 (lean call) / 1,014 (old default flags) | In-vocabulary tasks. The 2.7 gate cuts blind `none` from 45% to 10%; the new default (3 / 1) hasn't been re-measured with the 1.9 method (ROADMAP.md 2.11). |
+| Under 1,200 tokens per lookup, most ending at the stub | 104 (default, 2 / 0) / 55 (`--limit 1`) | In-vocabulary tasks, `eval/results/token_costs_2_11.txt`. The 2.7 gate cuts blind `none` from 45% to 10%. |
 | 2 tool calls per lookup | 1 (stub-end 20/20) | Same in-vocabulary caveat. |
 
 ## Known gaps
@@ -361,9 +364,6 @@ Things the code does that the docs used to describe differently, each
 with the roadmap item that closes it:
 
 - `claims.slug` has no definition: pages have no slug. ROADMAP.md 4.3.
-- `DEFAULT_LIMIT`/`DEFAULT_NEIGHBOR_LIMIT` moved from 5 / 3 to 3 / 1
-  with 2.7 (CLAUDE.md gotcha 26). The token cost of the new default
-  hasn't been re-measured with the 1.9 method. ROADMAP.md 2.11.
 
 ## Stack
 
@@ -390,7 +390,7 @@ with the roadmap item that closes it:
   distances; a bge field runs on those constants uncalibrated (bge's
   cosine distances sit in a different range). Recalibrate before
   trusting a bge field's `confidence`.
-- Reranker: none, see section 3 point 4.
+- Reranker: none, see section 3 point 5.
 - LLM: none. Extraction and consolidation are done by the host agent
   that's already running, the tool never calls an LLM itself.
 
@@ -401,6 +401,10 @@ with the roadmap item that closes it:
 - Numbered gotchas referenced above by number: [CLAUDE.md](../CLAUDE.md).
 - Eval evidence behind the retrieval design: [M0.5_REPORT.md](../M0.5_REPORT.md).
 - Confidence gate and ranking calibration, full parameter grid and
-  corpus-size sweep: `eval/calibrate_confidence_blind.py` (2.7). The
-  1.4 calibration (`eval/calibrate_confidence.py`) and 1.8 re-test
-  (`eval/blind_fallback_check.py`) are kept as the record.
+  corpus-size sweep: `eval/calibrate_confidence_blind.py` (2.7), output
+  in `eval/results/calibration_2_7.txt`. Dedup threshold:
+  `eval/calibrate_dedup.py` (2.10) over `eval/dedup_set/`, output in
+  `eval/results/calibration_dedup_2_10.txt`. The 1.4 calibration
+  (`eval/calibrate_confidence.py`) and 1.8 re-test
+  (`eval/blind_fallback_check.py`) are kept as the record. Every script
+  that loads the embedder ends with `os._exit(0)` (CLAUDE.md gotcha 36).

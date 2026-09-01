@@ -276,8 +276,9 @@ Organized by where they will bite next.
     none` roughly doubling versus the 19.8% M0.5 baseline. See
     ROADMAP.md 1.8 for the full numbers and methodology.
 
-26. **Defaults changed to `--limit 3 --neighbor-limit 1` in ROADMAP.md
-    2.7; the measurement stands.** `mf search`'s old default flags
+26. **Defaults now `--limit 2 --neighbor-limit 0` (ROADMAP.md 2.11
+    addendum, measured matrix in `eval/results/token_costs_2_11.txt`);
+    2.7's 3 / 1 pick was itself re-measured at 1.75x raw and dropped.** `mf search`'s old default flags
     (`--limit 5 --neighbor-limit 3`) cost more tokens than just reading
     the target page directly. A
     20-task real-agent trial (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`)
@@ -487,7 +488,8 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       for high), recalibrated on 48 blind no-answer queries and a
       corpus-size sweep. Usable blind answers went from 0.55 to
       0.90/0.85; a 10-page field from 0.19 to 0.89. Search defaults are
-      now `--limit 3 --neighbor-limit 1`. Gotcha 36. 2.8 is done: `mf
+      now `--limit 2 --neighbor-limit 0` (re-measured in the 2.11
+      addendum). Gotcha 36. 2.8 is done: `mf
       write` takes a draft from outside the field and copies it in
       only on a gate pass, indexing just that page (the in-field flow
       made the gate advisory: `mf index` picked up blocked drafts);

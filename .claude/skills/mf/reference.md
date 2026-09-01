@@ -11,14 +11,17 @@ measured content tokens per lookup:
 | Call | Tokens per lookup |
 |---|---|
 | raw file exploration, no index | ~173 |
-| `mf search` at the old defaults (`--limit 5 --neighbor-limit 3`) | ~1014 |
-| `mf search --limit 1 --neighbor-limit 0` | ~55 |
+| `mf search` at the original defaults (`--limit 5 --neighbor-limit 3`) | ~1009 |
+| `--limit 3 --neighbor-limit 1` | ~304 |
+| **`--limit 2 --neighbor-limit 0` (the default since 2.11)** | **~104** |
+| `--limit 1 --neighbor-limit 0` | ~55 |
 
-Every trial task was answered from the top stub alone. The defaults are
-now `--limit 3 --neighbor-limit 1` (ROADMAP.md 2.7): three stubs recover
-from a wrong top-1, and the one neighbor slot exists to surface a
-`supersedes` or `contradicts` link on the top hit. Drop it with
-`--neighbor-limit 0` when you only need the answer.
+Each stub is ~50 tokens and each neighbor slot roughly doubles the
+call. Every trial task was answered from the top stub alone, and the
+answer was on screen at every setting, so neighbors bought nothing
+there. Two stubs keep one fallback for a wrong top-1. `--neighbor-limit
+1` shows the top hit's linked pages (`depends_on`, `contradicts`, then
+nearest by embedding); `supersedes` is already resolved inline.
 
 ## What `confidence` means
 

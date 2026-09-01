@@ -14,10 +14,11 @@ before writing a page.
 
 ## Do
 
-- **Search before you explore.** `mf search "<question>" --field <dir>
-  --limit 1 --neighbor-limit 0` for a point lookup (about 55 tokens).
-  Widen to the defaults (`--limit 3 --neighbor-limit 1`) only when
-  `confidence` is `low`/`none` or the question is genuinely broad.
+- **Search before you explore.** `mf search "<question>" --field <dir>`
+  (defaults: 2 stubs, no neighbors, about 100 tokens). `--limit 1` for
+  a point lookup you're sure of (55 tokens). Widen (`--limit 3`,
+  `--neighbor-limit 1` to see linked pages) only when `confidence` is
+  `low`/`none` or the question is genuinely broad.
 - **Read `confidence` before the results.** `high`: cite the stub.
   `low`: a lead, not an answer; read L1 before citing, and be ready to
   explore instead. `none`: don't cite it.

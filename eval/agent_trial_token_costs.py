@@ -100,31 +100,57 @@ def main() -> int:
     field_dir = args.field or _build_field()
     conn = db.open_field(field_dir)
 
-    default_total = lean_total = raw_total = 0
-    print(f"{'uuid':<32} {'default':>8} {'lean':>6} {'raw':>6}")
+    # "old" = the 1.9-era defaults (5 / 3); "default" = whatever
+    # mf/search.py's DEFAULT_LIMIT / DEFAULT_NEIGHBOR_LIMIT are now
+    # (3 / 1 since ROADMAP.md 2.7); "lean" = the skill's point-lookup call.
+    old_total = default_total = lean_total = raw_total = 0
+    top1_ok = 0
+    print(f"{'uuid':<32} {'old5/3':>7} {'default':>8} {'lean':>6} {'raw':>6}")
     for uuid, question, extra in TASKS:
-        r_default = search(conn, question, limit=5, neighbor_limit=3)
+        r_old = search(conn, question, limit=5, neighbor_limit=3)
+        r_default = search(conn, question)
         r_lean = search(conn, question, limit=1, neighbor_limit=0)
+        old_t = default_tokenize(_render_text(r_old))
         default_t = default_tokenize(_render_text(r_default))
         lean_t = default_tokenize(_render_text(r_lean))
+        if r_lean.results and r_lean.results[0].uuid == uuid:
+            top1_ok += 1
 
         raw_t = 0
         for f in [uuid, *extra]:
             raw_t += default_tokenize((CORPUS_DIR / f"{f}.md").read_text(encoding="utf-8"))
 
+        old_total += old_t
         default_total += default_t
         lean_total += lean_t
         raw_total += raw_t
-        print(f"{uuid:<32} {default_t:>8} {lean_t:>6} {raw_t:>6}")
+        print(f"{uuid:<32} {old_t:>7} {default_t:>8} {lean_t:>6} {raw_t:>6}")
 
     n = len(TASKS)
     print()
-    print(f"{'TOTAL':<32} {default_total:>8} {lean_total:>6} {raw_total:>6}")
-    print(f"{'avg/task':<32} {default_total/n:>8.1f} {lean_total/n:>6.1f} {raw_total/n:>6.1f}")
-    print(f"\ndefault vs raw: {default_total/raw_total:.2f}x "
+    print(f"{'TOTAL':<32} {old_total:>7} {default_total:>8} {lean_total:>6} {raw_total:>6}")
+    print(f"{'avg/task':<32} {old_total/n:>7.1f} {default_total/n:>8.1f} {lean_total/n:>6.1f} {raw_total/n:>6.1f}")
+    print(f"\nold 5/3 vs raw:  {old_total/raw_total:.2f}x")
+    print(f"default vs raw:  {default_total/raw_total:.2f}x "
           f"({'mf costs more' if default_total > raw_total else 'mf costs less'})")
-    print(f"lean vs raw:    {lean_total/raw_total:.2f}x "
+    print(f"lean vs raw:     {lean_total/raw_total:.2f}x "
           f"({'mf costs more' if lean_total > raw_total else 'mf costs less'})")
+    print(f"lean top-1 correct: {top1_ok}/{n}")
+
+    # Matrix over (limit, neighbor_limit) so the default is chosen on
+    # numbers: avg tokens/task and how often the answer is on screen.
+    print(f"\n{'limit/neighbors':<16} {'avg tokens':>10} {'vs raw':>7} {'answer shown':>13}")
+    for limit in (1, 2, 3, 5):
+        for nb in (0, 1, 3):
+            total = shown = 0
+            for uuid, question, extra in TASKS:
+                r = search(conn, question, limit=limit, neighbor_limit=nb)
+                total += default_tokenize(_render_text(r))
+                on_screen = {st.uuid for st in r.results} | {
+                    nbr.uuid for st in r.results for nbr in st.neighbors
+                }
+                shown += uuid in on_screen
+            print(f"{limit}/{nb:<14} {total/n:>10.1f} {total/raw_total:>6.2f}x {shown:>10}/{n}")
 
     conn.close()
     if owns_field:

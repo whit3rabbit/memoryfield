@@ -234,11 +234,11 @@ def test_budget_drops_neighbors_before_dropping_stubs(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
     monkeypatch.setattr(search, "_embed_query", _agree_with("page-rotate"))
 
-    unbudgeted = search.search(conn, "rotate signing key", limit=5)
+    unbudgeted = search.search(conn, "rotate signing key", limit=5, neighbor_limit=3)
     assert any(r.neighbors for r in unbudgeted.results)
 
     stub_cost = search._stub_cost(unbudgeted.results[0])
-    budgeted = search.search(conn, "rotate signing key", limit=5, budget=stub_cost + 2)
+    budgeted = search.search(conn, "rotate signing key", limit=5, neighbor_limit=3, budget=stub_cost + 2)
     assert len(budgeted.results) >= 1
     assert all(not r.neighbors for r in budgeted.results)
     conn.close()

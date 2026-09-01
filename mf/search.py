@@ -34,15 +34,17 @@ from .query_prep import fts_query
 from .schema import DEFAULT_MODEL_CODE, get_config
 from .tokens import default_tokenize
 
-# ROADMAP.md 1.9 measured the old defaults (5 / 3) at 1014 tokens per
-# point lookup, 5.85x a raw file read; the skill's lean call (1 / 0) at
-# 55. 3 / 1 is the compromise chosen with the 2.7 recalibration: three
-# stubs recover from a wrong top-1 (dense top-1 is 0.90-0.95 on blind
-# queries), and one neighbor slot is enough to surface a typed
-# supersedes/contradicts link, which is the neighbor kind an agent must
-# not miss. Typed links rank before kNN in _neighbors().
-DEFAULT_LIMIT = 3
-DEFAULT_NEIGHBOR_LIMIT = 1
+# Measured on the 1.9 tasks (eval/agent_trial_token_costs.py, output in
+# eval/results/token_costs_2_11.txt): each stub is ~50 tokens and each
+# neighbor slot roughly doubles the call. Old 5 / 3: 1009 tokens per
+# lookup, 5.8x a raw file read. 3 / 1 (2.7's first pick): 304, still
+# 1.75x raw. 2 / 0: 104, 0.6x raw. 1 / 0: 55, 0.32x. The answer was on
+# screen at every setting, so neighbors bought nothing measurable there;
+# two stubs keep one fallback for a wrong top-1 (dense top-1 is
+# 0.90-0.95 on blind queries), and supersedes links already resolve
+# inline. Neighbors are on demand (--neighbor-limit).
+DEFAULT_LIMIT = 2
+DEFAULT_NEIGHBOR_LIMIT = 0
 _LINK_KINDS = ("supersedes", "contradicts", "depends_on")
 
 

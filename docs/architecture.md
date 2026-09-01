@@ -134,14 +134,38 @@ the real 157-page corpus: L1/L2 tiers, named-section refs, the
 not-found error path, and co_read weight accumulation across repeated
 calls.
 
-### 5. Write (M2, not yet built)
+### 5. Write
 
-`write` validates frontmatter and runs the dedup gate: dense
-similarity against existing stubs (the `vec` table's second job),
-returning near-duplicates with a nonzero exit code. `--update uuid` /
-`--force` are the escape hatches. Dedup is an LLM judgment the tool
-can only inform: the gate returns candidates, the agent decides
-(PLAN.md section 10).
+**Built (ROADMAP.md 2.1).** `mf/write.py`, wired into `mf/cli.py`:
+`write <path> [--field DIR] [--update UUID] [--force] [--json]`. The
+page must already exist as a Markdown file inside the field directory
+(same convention as `read`/`index` -- `write` doesn't create the file,
+it validates and commits one that's already there). It parses via
+`mf.page.load_page()` (raises on missing `uuid`/`title`, same as
+`index`), then runs the dedup gate: embeds the page (`document_text()`,
+the same function `index` uses) and kNN-queries `vec` for existing
+pages within `DEDUP_THRESHOLD` L2 distance, excluding the page's own
+uuid (so re-writing an existing page in place never dedup-blocks
+against itself). A hit returns the candidates and exit code 2 without
+writing anything. `--update UUID` (must match the page's own
+frontmatter `uuid`) or `--force` skip the gate. On a pass, `write`
+calls the same `indexer.index_field()` `mf index` uses, so a
+successful `write` needs no separate `index` call.
+
+`DEDUP_THRESHOLD` (7.0) is a first-cut estimate, not calibrated like
+`mf/confidence.py`'s `FLOOR` (CLAUDE.md gotcha 18): one synthetic
+probe put a paraphrased near-duplicate of a real corpus page at L2
+distance ~4.9 from the original, against ~10.2 for the nearest
+genuinely-different-but-related page -- a wide gap on that one
+example, not a calibrated boundary. Verified against the real corpus
+(not just the synthetic probe): a hand-written paraphrase of an actual
+page landed at distance 5.74, correctly blocked.
+
+Dedup is deliberately a gate, not just an FYI (PLAN.md section 10:
+"an LLM judgment the tool can only inform," but the tool still has to
+have an opinion to gate on) -- `--force`/`--update` are how the
+calling agent overrides that opinion once it's made the actual
+judgment call.
 
 `lint` enforces the writing conventions below and is load-bearing, not
 cosmetic (CLAUDE.md gotcha 16): every retrieval quality number this

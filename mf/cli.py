@@ -1,7 +1,7 @@
 """Command-line entry point for `mf`.
 
-`init`/`index`/`search`/`read` are real (ROADMAP.md 1.3-1.6). `write`
-(Phase 2) is still a stub.
+`init`/`index`/`search`/`read`/`write` are real (ROADMAP.md 1.3-1.6,
+2.1). `raw add`/`lint`/`pack`/`unpack` (rest of Phase 2) aren't built yet.
 """
 from __future__ import annotations
 
@@ -13,8 +13,10 @@ from pathlib import Path
 from mf import __version__, db, indexer
 from mf import read as read_mod
 from mf import search as search_mod
+from mf import write as write_mod
+from mf.page import PageParseError
 
-STUB_COMMANDS = ("write",)
+STUB_COMMANDS = ()
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -43,6 +45,16 @@ def build_parser() -> argparse.ArgumentParser:
     read_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
     read_parser.add_argument("--tier", choices=read_mod.TIERS, default=None)
     read_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    write_parser = subparsers.add_parser("write", help="validate, dedup-check, and index a page")
+    write_parser.add_argument("path", help="path to the markdown page file (must be inside --field)")
+    write_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    write_parser.add_argument(
+        "--update", metavar="UUID", default=None,
+        help="uuid this write intentionally updates (skips the dedup gate)",
+    )
+    write_parser.add_argument("--force", action="store_true", help="skip the dedup gate")
+    write_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     for name in STUB_COMMANDS:
         subparsers.add_parser(name)
@@ -155,6 +167,44 @@ def _cmd_read(args: argparse.Namespace) -> int:
     return 0
 
 
+def _render_write_text(result: write_mod.WriteResult) -> str:
+    if result.written:
+        return f"Wrote {result.uuid}"
+    lines = [
+        f"mf write: {len(result.duplicates)} possible near-duplicate(s) found; not written.",
+    ]
+    for d in result.duplicates:
+        lines.append(f"  - [{d.uuid}] {d.title} (distance {d.distance:.2f})")
+        lines.append(f"      {d.summary}")
+    lines.append("Use --update <uuid> to update an existing page, or --force to write anyway.")
+    return "\n".join(lines)
+
+
+def _cmd_write(args: argparse.Namespace) -> int:
+    field_dir = Path(args.field).resolve()
+    try:
+        conn = db.open_field(field_dir)
+    except db.FieldNotFoundError as e:
+        sys.stderr.write(f"mf write: {e}\n")
+        return 1
+    try:
+        result = write_mod.write_page(
+            field_dir, conn, Path(args.path),
+            update_uuid=args.update, force=args.force,
+        )
+    except (write_mod.WriteValidationError, PageParseError) as e:
+        sys.stderr.write(f"mf write: {e}\n")
+        return 1
+    finally:
+        conn.close()
+
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        print(_render_write_text(result))
+    return 0 if result.written else 2
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -169,6 +219,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_search(args)
     if args.command == "read":
         return _cmd_read(args)
+    if args.command == "write":
+        return _cmd_write(args)
     sys.stderr.write(
         f"mf {args.command}: not implemented yet — see ROADMAP.md Phase 1/2.\n"
     )

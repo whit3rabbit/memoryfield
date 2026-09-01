@@ -50,9 +50,3 @@ def test_index_reports_counts(tmp_path, capsys, monkeypatch):
     exit_code = cli.main(["index", str(tmp_path)])
     assert exit_code == 0
     assert "0 upserted, 1 unchanged, 0 deleted" in capsys.readouterr().out
-
-
-def test_stub_commands_still_exit_nonzero(capsys):
-    exit_code = cli.main(["write"])
-    assert exit_code == 1
-    assert "not implemented" in capsys.readouterr().err

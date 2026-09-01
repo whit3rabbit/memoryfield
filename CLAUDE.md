@@ -6,10 +6,11 @@ Memoryfield eval harness. Context for the next agent, human or model.
 
 The `mf` memoryfield tool described in PLAN.md, plus its eval harness.
 `mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`).
-`init`/`index`/`search`/`read` are real (ROADMAP.md 1.3-1.6); `write`
-is still a stub. `eval/` (formerly `harness/`) is the eval and corpus
-rig from M0/M0.5; it's complete and unrelated to whether `mf/` itself
-has a write path yet.
+`init`/`index`/`search`/`read`/`write` are real (ROADMAP.md 1.3-1.6,
+2.1); `raw add`/`lint`/`pack`/`unpack` (rest of Phase 2) aren't built
+yet. `eval/` (formerly `harness/`) is the eval and corpus rig from
+M0/M0.5; it's complete and unrelated to whether `mf/` itself has the
+rest of the write path yet.
 
 For the schema and retrieval design as currently decided (not the
 eval narrative), see [docs/architecture.md](docs/architecture.md).
@@ -291,6 +292,26 @@ Organized by where they will bite next.
     them is separate follow-up work, not a fix to bundle into a
     measurement task.
 
+### M2 write-path gotchas
+
+27. **`mf write`'s dedup gate (`mf/write.py`'s `DEDUP_THRESHOLD = 7.0`,
+    ROADMAP.md 2.1) is a first-cut estimate from one synthetic probe,
+    not a calibrated constant.** Unlike `mf/confidence.py`'s `FLOOR`
+    (calibrated against a real 30-query labeled no-answer set, gotcha
+    18), there's no labeled near-duplicate set to calibrate dedup
+    against yet. The one data point: a paraphrased near-duplicate of a
+    real corpus page landed at L2 distance ~4.9 from the original,
+    against ~10.2 for the nearest genuinely-different-but-related page
+    -- a wide gap, but a sample size of one. Confirmed against the real
+    corpus separately (a hand-written paraphrase of `code-deploy-
+    rollback-cmd` blocked at distance 5.74), so the mechanism works;
+    the exact threshold value hasn't been stress-tested the way
+    `FLOOR` was. Building a real labeled near-duplicate set (paraphrase
+    pairs vs. genuinely-different-but-topically-close pairs, the way
+    `eval/calibrate_confidence.py` did for no-answer queries) is
+    unclaimed follow-up work, same shape as gotcha 25's unclaimed
+    blind-no-answer recalibration.
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md) section 9 for the full milestone list.
@@ -308,22 +329,29 @@ See [PLAN.md](PLAN.md) section 9 for the full milestone list.
       fallback only," forced by 1.4's calibration result (gotcha 15).
       `mf read` adds a `reads` log table and is the only path that
       populates `co_read` weight in `links` (multi-ref calls bump
-      every pair). `.claude/skills/mf/SKILL.md` (1.7) documents only
-      what's built -- `mf write` is still a stub, and the skill says so
-      rather than describing the aspirational full command set. 1.8's
-      blind (vocabulary-mismatch) query set found the M0.5 headline
-      numbers hold up (real embedding models flat to slightly up,
-      lexical/TF-IDF methods degrade) but also found a real gap in the
-      calibrated confidence gate under mismatch (gotcha 25). 1.9's
-      real-agent trial (20 tasks x 2 conditions, real Claude subagents)
-      found the tool's default flags cost *more* tokens than raw
-      exploration for a point lookup, and only deliver PLAN.md section
-      6's modeled savings when called leanly (gotcha 26) -- the skill
-      now teaches that. Only 0.5's unsent upstream email remains open
-      from Phase 0/1.
+      every pair). `.claude/skills/mf/SKILL.md` (1.7) documented only
+      what was built at the time -- `mf write` was still a stub then,
+      and the skill said so; both the skill and this line are updated
+      as of M2/2.1 below. 1.8's blind (vocabulary-mismatch) query set
+      found the M0.5 headline numbers hold up (real embedding models
+      flat to slightly up, lexical/TF-IDF methods degrade) but also
+      found a real gap in the calibrated confidence gate under
+      mismatch (gotcha 25). 1.9's real-agent trial (20 tasks x 2
+      conditions, real Claude subagents) found the tool's default
+      flags cost *more* tokens than raw exploration for a point
+      lookup, and only deliver PLAN.md section 6's modeled savings
+      when called leanly (gotcha 26) -- the skill teaches that now.
 - [ ] M2, write path (`write` with dedup gate, `raw add`, `lint`,
-      `pack`/`unpack`). `lint` is load-bearing now (gotcha 16), not
-      optional.
+      `pack`/`unpack`). `lint` is load-bearing (gotcha 16), not
+      optional, once it exists. 2.1 (`mf write`) is done: frontmatter
+      validation plus a dense-similarity dedup gate (`vec` table's
+      second job) with `--update`/`--force` escape hatches, 112/112
+      tests passing, verified against the real corpus (gotcha 27 --
+      the dedup threshold is a first-cut estimate, not calibrated).
+      `.claude/skills/mf/SKILL.md` updated to teach `mf write` as the
+      write path. 2.2-2.4 (`raw add`, `lint`, `pack`/`unpack`) not
+      started. Only 0.5's unsent upstream email remains open from
+      Phase 0/1.
 - [ ] M3, hooks and imports (Claude Code SessionEnd hook, AGENTS.md
       integration, importers).
 - [ ] M4, reranker and eval gate, only if P@3 drops below 0.8, which

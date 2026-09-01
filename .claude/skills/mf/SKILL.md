@@ -1,15 +1,15 @@
 ---
 name: mf
-description: Use the mf memoryfield CLI (`mf search`, `mf read`) to check project memory before exploring a codebase cold, and follow its page conventions when authoring or updating a memoryfield page by hand. Use whenever the working directory (or one given to you) has an `mf.sqlite3` index, or when the user asks you to write, update, or check a memoryfield page.
+description: Use the mf memoryfield CLI (`mf search`, `mf read`, `mf write`) to check project memory before exploring a codebase cold, and to write or update memoryfield pages through the dedup gate rather than by hand. Use whenever the working directory (or one given to you) has an `mf.sqlite3` index, or when the user asks you to write, update, or check a memoryfield page.
 ---
 
 # mf: search-first project memory
 
-`mf` is a local memory index for a project: `search` and `read` are real
-today (ROADMAP.md 1.1-1.6); `write`/`raw add`/`lint` are not built yet
-(Phase 2/3). This skill covers the read path and the page conventions a
-hand-authored page still needs to follow so `mf index` and `mf search`
-treat it correctly. It does not cover `write`, which does not exist yet.
+`mf` is a local memory index for a project: `search`, `read`, and
+`write` are real today (ROADMAP.md 1.1-1.6, 2.1); `raw add`/`lint` are
+not built yet (rest of Phase 2). This skill covers the read and write
+paths and the page conventions a page still needs to follow so `mf
+write`/`mf index`/`mf search` treat it correctly.
 The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
 20-task real-agent trial (ROADMAP.md 1.9), not a guess.
 
@@ -60,10 +60,20 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   signal for future neighbor ranking (ROADMAP.md 4.4). Only batch refs
   you're actually reading for the same task, not everything a search
   turned up.
-- **Follow the page conventions when writing or editing a page by hand.**
-  Since `mf write`/`lint` don't exist yet, a hand-authored page only gets
-  indexed correctly if it already matches the spec `mf index` and `mf
-  search` expect:
+- **Write a page with `mf write <path> --field <dir>`, not by hand-editing
+  and re-running `mf index`.** `mf write` validates frontmatter and runs
+  the dedup gate: it embeds the page and checks it against every other
+  page's embedding (the `vec` table's second job, docs/architecture.md).
+  If a near-duplicate is found, it refuses (exit code 2) and lists the
+  candidates instead of silently creating a second page that says the
+  same thing. Genuinely updating an existing page: pass `--update
+  <uuid>` (must match the page's own frontmatter `uuid`) to skip the
+  gate. Intentionally writing something that looks similar but isn't
+  (e.g. a `contradicts` page): pass `--force`. `mf write` indexes the
+  page itself on success -- no separate `mf index` call needed
+  afterward. `lint` doesn't exist yet, so `mf write` is the only check
+  a page gets; still write it following the spec `mf write`/`mf search`
+  expect:
   - `summary` is the answer, not the topic: `"Integration tests: make
     test-integration; needs DATABASE_URL"`, not `"Notes on testing."`
   - The first `##` section answers the question; rationale and history
@@ -84,9 +94,12 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
   - Required frontmatter: `uuid`, `title`. Optional but load-bearing:
     `summary`, `status` (`active`/`superseded`/`contested`), `supersedes`/
     `contradicts`/`depends_on` (lists of uuids), `tags`, `source`, `writer`.
-  - After adding or editing a page, run `mf index [dir]` so it's actually
-    searchable — a page on disk that was never indexed won't show up in
-    `mf search` results.
+  - Write the file with your normal file-editing tool, then run `mf
+    write <path> --field <dir>` to validate, dedup-check, and index it
+    in one step. If `mf write` blocks it as a near-duplicate and you
+    disagree after checking the listed candidates, that's the judgment
+    call `--update`/`--force` exist for (PLAN.md section 10: the gate
+    can only inform, the agent decides).
 
 ## Don't
 
@@ -97,8 +110,12 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
 - Don't call `mf search` with the default `--limit`/`--neighbor-limit`
   for a simple point lookup -- see the lean-call note above. The
   default is for genuinely broad questions, not the common case.
-- Don't reach for `mf write`, `mf raw add`, or `mf lint` — none of them
-  exist yet. Author pages by hand following the conventions above.
+- Don't hand-edit a page file and stop there. Run `mf write` (new page)
+  or `mf write --update <uuid>` (existing page) so it's actually
+  validated, dedup-checked, and indexed -- a page that's only on disk
+  won't show up in `mf search` results, and one written straight into
+  the index bypasses the dedup gate entirely.
+- Don't reach for `mf raw add` or `mf lint` — neither exists yet.
 - Don't `cat`/`Read` a memoryfield page directly when `mf read` would do
   the same job: a direct file read never logs to `reads` or contributes
   to `co_read`, so the field's own retrieval quality never improves from
@@ -109,8 +126,13 @@ The lean-call guidance below (`--limit`/`--neighbor-limit`) comes from a
 ```
 mf search "<query>" [--field DIR] [--limit N] [--neighbor-limit N] [--budget N] [--json]
 mf read <uuid>[#section] [<uuid2>[#section] ...] [--tier L1|L2] [--field DIR] [--json]
-mf index [DIR]     # re-index after adding/editing a page by hand
+mf write <path> [--field DIR] [--update UUID] [--force] [--json]
+mf index [DIR]     # only needed for a page written outside mf write, e.g. a bulk import
 ```
 
-`--json` on `search`/`read` gives the machine-readable form if you're
-parsing the output yourself rather than reading the rendered text table.
+`--json` on `search`/`read`/`write` gives the machine-readable form if
+you're parsing the output yourself rather than reading the rendered
+text. `mf write`'s exit code is meaningful: 0 written, 1 invalid input
+(bad frontmatter, path outside the field, `--update` uuid mismatch), 2
+blocked by the dedup gate (see the `duplicates` list in `--json` output
+or the printed candidates).

@@ -20,7 +20,7 @@ TAGS_PATH = ROOT / "query_type_tags.jsonl"
 PARAPHRASED_PATH = ROOT / "paraphrased_queries.jsonl"
 DEBIASED_PATH = ROOT / "stub_sufficiency_debiased.jsonl"
 SPOTCHECK_PATH = ROOT / "stub_sufficiency_spotcheck.json"
-REPORT_PATH = ROOT.parent / "M0.5_REPORT.md"
+REPORT_PATH = ROOT.parent / "docs" / "M0.5_REPORT.md"
 
 
 def load_summary() -> list[dict]:

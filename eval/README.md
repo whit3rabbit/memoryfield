@@ -13,7 +13,7 @@ where its output is recorded:
 | `blind_fallback_check.py` | 1.8 | stdout: did the FTS-empty fallback ever fire (moot since 2.6) |
 | `agent_trial_token_costs.py` | 1.9 | `agent_trial_1_9.md`: content tokens per lookup, default vs lean call vs raw read |
 | `calibrate_confidence.py` | 1.4 | stdout: the original bm25-floor calibration (superseded by 2.7) |
-| `axis_breakdown.py`, `report.py` | 0.3 | `axis_breakdown.md`, `../M0.5_REPORT.md` |
+| `axis_breakdown.py`, `report.py` | 0.3 | `axis_breakdown.md`, `../docs/M0.5_REPORT.md` |
 
 Query sets under `queries/<domain>/`: `queries.jsonl` (in-vocabulary,
 includes 30 no-answer), `queries_blind.jsonl` (1.8, authored without

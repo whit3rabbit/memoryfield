@@ -3,7 +3,7 @@
 Standalone reference for the schema and retrieval design. Full rationale
 and the "why" behind each stack choice lives in [PLAN.md](../PLAN.md).
 The evidence behind each retrieval decision lives in
-[M0.5_REPORT.md](../M0.5_REPORT.md). This doc states what the design
+[M0.5_REPORT.md](M0.5_REPORT.md). This doc states what the design
 currently is, not why it got there. Where the built thing and the
 intended thing differ, both are stated and the roadmap item that closes
 the gap is named.
@@ -502,7 +502,7 @@ with the roadmap item that closes it:
 - Milestone list and scope per milestone: [PLAN.md](../PLAN.md) section 9.
 - Current phase status and the Phase 2.5 hardening items: [ROADMAP.md](../ROADMAP.md).
 - Numbered gotchas referenced above by number: [CLAUDE.md](../CLAUDE.md).
-- Eval evidence behind the retrieval design: [M0.5_REPORT.md](../M0.5_REPORT.md).
+- Eval evidence behind the retrieval design: [M0.5_REPORT.md](M0.5_REPORT.md).
 - Confidence gate and ranking calibration, full parameter grid and
   corpus-size sweep: `eval/calibrate_confidence_blind.py` (2.7), output
   in `eval/results/calibration_2_7.txt`. Dedup threshold:

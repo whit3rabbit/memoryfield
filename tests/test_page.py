@@ -52,6 +52,11 @@ def test_missing_frontmatter_is_not_a_page():
         parse_page("# Just a heading\n\nSome text.", filename="readme.md")
 
 
+def test_slug_is_filename_stem():
+    page = parse_page(VALID_PAGE, filename="backend/code-deploy-rollback-cmd.md")
+    assert page.slug == "code-deploy-rollback-cmd"
+
+
 def test_missing_uuid_is_rejected():
     text = "---\ntitle: No uuid here\n---\n\nBody.\n"
     with pytest.raises(PageParseError):

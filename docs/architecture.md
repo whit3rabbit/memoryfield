@@ -281,9 +281,29 @@ timestamped file under `raw/`, the staging area PLAN.md's spec
 requires implementations not index (`mf/indexer.py`'s `_SKIP_DIRS`
 includes `raw`). Guards against a session-end hook double-firing: if
 the new text is a prefix of the most recent `raw/` entry, or vice
-versa, the call is a no-op. Nothing consumes `raw/` until `consolidate
---plan` (ROADMAP.md 4.2). It is meant to be called by the session-end
-path (ROADMAP.md 3.1), not typed by an agent during a lookup.
+versa, the call is a no-op. It is meant to be called by the
+session-end path (ROADMAP.md 3.1), not typed by an agent during a
+lookup.
+
+**`consolidate --plan` built (ROADMAP.md 4.2, partial).** `mf/consolidate.py`,
+`mf consolidate --plan [--field DIR] [--threshold N] [--json]`
+(`--plan` is required; there's no other mode yet). Mechanical only --
+the tool never calls an LLM (PLAN.md section 2) -- so it can't itself
+decide update vs supersede. It embeds each `raw/` entry's text and
+kNN-searches `vec` the way `write`'s dedup gate does, reusing
+`write.DEDUP_THRESHOLD` as a first-cut boundary since it's the only
+calibrated distance number in this codebase (explicitly not
+recalibrated for this different use). A candidate inside the threshold
+returns `review` (candidates plus evidence, for the agent to read and
+decide `write --update` vs a new page with `supersedes:`); nothing
+inside returns `create`. A session-end pointer entry (`kind:
+session-pointer`, no prose) is reported as its own `pointer` action
+instead of searched. Read-only: never writes to `raw/` or the index.
+Not built: idempotency across repeated runs (nothing marks an entry as
+already planned) or pointer expansion (someone still has to read the
+transcript it names). The threshold is untuned against real data,
+since a labeled set the way `eval/calibrate_dedup.py` built for
+`DEDUP_THRESHOLD` (2.10) doesn't exist yet for this use.
 
 **`lint` built (ROADMAP.md 2.3).** `mf/lint.py`, `mf lint [DIR]
 [--check] [--all] [--json]`. It enforces the writing conventions below
@@ -298,11 +318,38 @@ a topic or shorter than five words, a table, a copied SHA or relative
 time, headed sections in a page under 300 tokens with `## Don't`
 excepted, `active` but superseded, `superseded` but unlinked, and index
 drift: stale, unindexed, or missing-file pages when `mf.sqlite3`
-exists), `info` (advice: missing `source`, no typed links, a negation
+exists, and two `active` pages sharing a slug -- see `claim` below),
+`info` (advice: missing `source`, no typed links, a negation
 in prose with no `## Don't` section, a page under 100 tokens). `--check`
 exits 1 on any error or warning; info prints only with `--all`.
 Baseline on the eval corpus: codebase 0 errors, 3 warnings (two
 relative-time phrases, one two-section short page); papers 0 and 0.
+
+**`claim` built (ROADMAP.md 4.3).** `mf/claim.py`, wired into
+`mf/cli.py`: `claim slug --by WRITER [--field DIR] [--json]`. Slug is
+the filename stem (`Page.slug`), decided here since nothing before
+this defined it: the stem is what two writers actually collide on when
+they title a new page for the same topic without seeing each other's
+draft (the uuid can't be that signal -- each writer mints their own).
+`claim` does the atomic conditional insert PLAN.md's write layer
+describes: `INSERT INTO claims ... ON CONFLICT(slug) DO NOTHING`, then
+reads back who holds the slug. SQLite serializes writers at the file
+level, so this is atomic across processes, not just within one
+connection -- a second process's insert blocks until the first commits,
+then sees the row already there. Exit 0 if the caller now holds the
+slug (it won, or already held it -- re-claiming your own slug is a
+no-op success), exit 2 if someone else does, with that writer's
+identity and timestamp in the result so the losing caller can look up
+the resulting page and `write --update` it instead of drafting a
+duplicate. `contested` needed no new plumbing: it was already a valid
+`status` value that `page.py`/`lint.py`/`search.py`/the CLI's text
+renderer treat generically. What `claim` adds operationally is a lint
+trigger: `mf lint` warns `contested-slug` when two `active` pages share
+a slug, since a hand-written page or a bypassed `claim` call can still
+collide -- lint is what catches that after the fact. `write` does not
+call `claim` automatically; that wiring, and the "consolidation dedup
+pass" PLAN.md's write layer mentions, are unclaimed follow-up (the
+latter is really 4.2's job, once `raw/` has real data).
 
 ### 6. Pack
 
@@ -343,14 +390,25 @@ in the temp dir, and by a transcript scan for a capture already done.
 The SessionEnd hook writes only a pointer (`raw/<timestamp>-session.md`
 with session id, transcript path, and end reason), deduped on session
 id, in about a quarter of a second against the 1.5-second budget
-SessionEnd hooks share. Neither hook is installed by this repo; the
-settings snippet lives in the skill's reference.
+SessionEnd hooks share. Neither hook is installed at this repo's own
+root (it isn't a field -- see `notes/` below); the settings snippet
+lives in the skill's reference and is installed for real at
+`notes/.claude/settings.json` (ROADMAP.md 4.2).
 
 What `raw/` now holds: agent-authored extracts (`mf raw add`) and
-session pointers (`*-session.md`). Nothing consumes either until
-`consolidate --plan` (ROADMAP.md 4.2). The cheaper path, when the
-lesson is already page-shaped, is `mf write` directly, and the Stop
-reminder says so first.
+session pointers (`*-session.md`). `consolidate --plan` (ROADMAP.md
+4.2, section 5 above) reads both. The cheaper path, when the lesson is
+already page-shaped, is `mf write` directly, and the Stop reminder
+says so first.
+
+`notes/` (ROADMAP.md 4.2) is this repo's own dogfooding field: a real
+`mf.sqlite3`, with the hooks above wired into `notes/.claude/settings.json`
+so a session opened there accumulates real `raw/` entries. It is not
+the repo root -- `mf/indexer.py`'s `_SKIP_DIRS` doesn't exclude `eval/`,
+and this repo's own `eval/corpus/{codebase,papers}` are 157 real
+frontmattered pages (the calibration fixtures) that a root-level `mf
+index` would silently sweep in, polluting the field with synthetic
+content. `eval/corpus` stays calibration fixtures, never memory.
 
 ### 8. Import
 
@@ -407,7 +465,8 @@ measured (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`):
 Things the code does that the docs used to describe differently, each
 with the roadmap item that closes it:
 
-- `claims.slug` has no definition: pages have no slug. ROADMAP.md 4.3.
+- None open. The last one (`claims.slug` had no definition) closed with
+  ROADMAP.md 4.3: slug is the filename stem, and `mf claim` exists.
 
 ## Stack
 

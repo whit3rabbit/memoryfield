@@ -1,0 +1,6 @@
+{
+  "hooks": {
+    "Stop": [{"hooks": [{"type": "command", "command": "mf hook stop"}]}],
+    "SessionEnd": [{"hooks": [{"type": "command", "command": "mf hook session-end"}]}]
+  }
+}

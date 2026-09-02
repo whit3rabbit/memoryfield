@@ -2,7 +2,8 @@
 
 Every Phase 1-3 command is real: `init`/`index`/`search`/`read`/
 `write`/`raw add`/`lint`/`pack`/`unpack`/`hook`/`import` (ROADMAP.md
-1.3-1.6, 2.1-2.4, 3.1-3.2).
+1.3-1.6, 2.1-2.4, 3.1-3.2). `claim` (ROADMAP.md 4.3) is the first
+Phase 4 command.
 """
 from __future__ import annotations
 
@@ -13,6 +14,8 @@ import zipfile
 from pathlib import Path
 
 from mf import __version__, db, embedder, importers, indexer
+from mf import claim as claim_mod
+from mf import consolidate as consolidate_mod
 from mf import hooks as hooks_mod
 from mf import lint as lint_mod
 from mf import pack as pack_mod
@@ -78,6 +81,28 @@ def build_parser() -> argparse.ArgumentParser:
     )
     write_parser.add_argument("--force", action="store_true", help="skip the dedup gate")
     write_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    claim_parser = subparsers.add_parser(
+        "claim", help="atomically claim a page slug before creating it (multi-writer)"
+    )
+    claim_parser.add_argument("slug", help="the slug to claim (a page's filename stem)")
+    claim_parser.add_argument("--by", required=True, metavar="WRITER", help="claimant identity")
+    claim_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    claim_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    consolidate_parser = subparsers.add_parser(
+        "consolidate", help="read raw/, propose create/review actions per entry (no writes)"
+    )
+    consolidate_parser.add_argument(
+        "--plan", action="store_true", required=True,
+        help="required: consolidate only plans so far, it doesn't execute",
+    )
+    consolidate_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    consolidate_parser.add_argument(
+        "--threshold", type=float, default=consolidate_mod.REVIEW_THRESHOLD,
+        help="cosine distance below which a candidate triggers review (default: %(default)s, untuned)",
+    )
+    consolidate_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     lint_parser = subparsers.add_parser("lint", help="check pages against the writing conventions")
     lint_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
@@ -293,6 +318,65 @@ def _cmd_write(args: argparse.Namespace) -> int:
     return 0 if result.written else 2
 
 
+def _render_claim_text(result: claim_mod.ClaimResult) -> str:
+    if result.claimed:
+        return f"Claimed {result.slug!r} for {result.claimed_by} at {result.claimed_at}"
+    return (
+        f"mf claim: {result.slug!r} already claimed by {result.claimed_by} "
+        f"at {result.claimed_at}; look up that page and use `write --update` instead"
+    )
+
+
+def _cmd_claim(args: argparse.Namespace) -> int:
+    field_dir = Path(args.field).resolve()
+    try:
+        conn = db.open_field(field_dir)
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
+        sys.stderr.write(f"mf claim: {e}\n")
+        return 1
+    try:
+        result = claim_mod.claim_slug(conn, args.slug, args.by)
+    finally:
+        conn.close()
+
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        print(_render_claim_text(result))
+    return 0 if result.claimed else 2
+
+
+def _render_consolidate_text(result: consolidate_mod.ConsolidatePlan) -> str:
+    if not result.actions:
+        return "(raw/ is empty; nothing to consolidate)"
+    lines = []
+    for a in result.actions:
+        preview = a.text.splitlines()[0][:80] if a.text else ""
+        lines.append(f"[{a.action}] {a.entry}: {preview}")
+        for c in a.candidates:
+            lines.append(f"    - [{c.uuid}] {c.title} (distance {c.distance:.3f})")
+    return "\n".join(lines)
+
+
+def _cmd_consolidate(args: argparse.Namespace) -> int:
+    field_dir = Path(args.field).resolve()
+    try:
+        conn = db.open_field(field_dir)
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
+        sys.stderr.write(f"mf consolidate: {e}\n")
+        return 1
+    try:
+        result = consolidate_mod.plan(field_dir, conn, threshold=args.threshold)
+    finally:
+        conn.close()
+
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        print(_render_consolidate_text(result))
+    return 0
+
+
 def _render_lint_text(result: lint_mod.LintResult, show_all: bool) -> str:
     lines = []
     for f in result.findings:
@@ -459,6 +543,10 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_read(args)
     if args.command == "write":
         return _cmd_write(args)
+    if args.command == "claim":
+        return _cmd_claim(args)
+    if args.command == "consolidate":
+        return _cmd_consolidate(args)
     if args.command == "lint":
         return _cmd_lint(args)
     if args.command == "pack":

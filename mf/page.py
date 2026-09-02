@@ -78,6 +78,16 @@ class Page:
         """First section body -- the answer-first portion (150-300 tokens)."""
         return self.sections[0].body if self.sections else self.body
 
+    @property
+    def slug(self) -> str:
+        """The page's slug for `claims`/multi-writer purposes (ROADMAP.md
+        4.3): the filename stem. Two writers collide on this, not on the
+        uuid (which each mints independently) -- e.g. `backend/foo.md`
+        and `frontend/foo.md` share slug `foo` even though they're
+        different pages.
+        """
+        return Path(self.filename).stem
+
 
 def _split_sections(body: str) -> list[Section]:
     matches = list(_SECTION_RE.finditer(body))

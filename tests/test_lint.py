@@ -109,6 +109,30 @@ def test_bad_status_is_an_error(tmp_path):
     assert "bad-status" in _codes(r, "error")
 
 
+def test_two_active_pages_sharing_a_slug_warn_contested(tmp_path):
+    # Same filename stem in different subdirectories: two writers naming
+    # a page after the same topic without seeing each other's draft.
+    (tmp_path / "backend").mkdir()
+    (tmp_path / "frontend").mkdir()
+    (tmp_path / "backend" / "rollback.md").write_text(GOOD.replace("uuid: good", "uuid: a"))
+    (tmp_path / "frontend" / "rollback.md").write_text(GOOD.replace("uuid: good", "uuid: b"))
+    r = lint.lint_field(tmp_path)
+    by_uuid = {(f.uuid, f.code) for f in r.findings}
+    assert ("a", "contested-slug") in by_uuid
+    assert ("b", "contested-slug") in by_uuid
+
+
+def test_contested_status_page_is_exempt_from_slug_collision(tmp_path):
+    (tmp_path / "backend").mkdir()
+    (tmp_path / "frontend").mkdir()
+    (tmp_path / "backend" / "rollback.md").write_text(GOOD.replace("uuid: good", "uuid: a"))
+    (tmp_path / "frontend" / "rollback.md").write_text(
+        GOOD.replace("uuid: good", "uuid: b\nstatus: contested")
+    )
+    r = lint.lint_field(tmp_path)
+    assert "contested-slug" not in _codes(r, "warning")
+
+
 def test_index_drift_checks(tmp_path, monkeypatch):
     monkeypatch.setattr(indexer, "_embed_pages", lambda pages, model_code: {p.uuid: [0.1] * EMBEDDING_DIM for p in pages})
     (tmp_path / "good.md").write_text(GOOD)

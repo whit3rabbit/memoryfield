@@ -195,6 +195,25 @@ def lint_field(field_dir: Path, conn: Connection | None = None) -> LintResult:
             pages[page.uuid] = (rel, page)
         _page_checks(rel, page, (field_dir / rel).stat().st_size, add)
 
+    # Slug collisions (ROADMAP.md 4.3): two active pages with the same
+    # filename stem are what `mf claim` exists to prevent going forward,
+    # but nothing stops a page written by hand or without claiming
+    # first. Superseded/contested pages are exempt -- that's the
+    # resolved state this check is nudging toward.
+    by_slug: dict[str, list[tuple[str, Page]]] = {}
+    for rel, page in pages.values():
+        by_slug.setdefault(page.slug, []).append((rel, page))
+    for slug, entries in by_slug.items():
+        active = [(rel, page) for rel, page in entries if page.status == "active"]
+        if len(active) < 2:
+            continue
+        for rel, page in active:
+            others = ", ".join(r for r, p in active if p.uuid != page.uuid)
+            add = adder(rel, page.uuid)
+            add("warning", "contested-slug",
+                f"slug {slug!r} shared with {others}; likely two writers on one topic -- "
+                "mark one `status: contested` (or supersede it) once you've compared them")
+
     # Link-level checks need every page.
     superseded_by: dict[str, str] = {}
     linked: set[str] = set()

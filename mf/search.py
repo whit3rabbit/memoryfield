@@ -47,6 +47,11 @@ DEFAULT_LIMIT = 2
 DEFAULT_NEIGHBOR_LIMIT = 0
 _LINK_KINDS = ("supersedes", "contradicts", "depends_on")
 
+MIN_CO_READ_WEIGHT = 2.0  # uncalibrated first cut: a pair must be read
+# together at least twice before it counts as neighbor signal, not on
+# the first incidental co-read. Same status as write.py's DEDUP_THRESHOLD
+# pre-2.10: explicit, documented, not yet backed by a labeled set.
+
 
 class StaleIndexError(RuntimeError):
     """A page about to be returned has changed on disk (or vanished)
@@ -196,6 +201,20 @@ def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
         _add(row[0])
 
     if len(neighbors) < limit:
+        for row in conn.execute(
+            "SELECT dst, weight FROM links WHERE src = ? AND kind = 'co_read' "
+            "UNION ALL "
+            "SELECT src, weight FROM links WHERE dst = ? AND kind = 'co_read' "
+            "ORDER BY weight DESC",
+            (uuid, uuid),
+        ).fetchall():
+            if len(neighbors) >= limit:
+                break
+            if row[1] < MIN_CO_READ_WEIGHT:
+                continue
+            _add(row[0])
+
+    if len(neighbors) < limit:
         vec_row = conn.execute(
             "SELECT embedding FROM vec WHERE page_uuid = ?", (uuid,)
         ).fetchone()
@@ -211,10 +230,6 @@ def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
                     break
                 _add(candidate[0])
 
-    # co_read rows exist (mf read populates them, ROADMAP.md 1.6) but
-    # aren't consulted for neighbor ranking yet -- that's ROADMAP.md 4.4,
-    # gated on enough signal accumulating. Documented no-op, not a
-    # missing feature masquerading as done.
     return neighbors
 
 

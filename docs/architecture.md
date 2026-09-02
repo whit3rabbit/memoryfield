@@ -120,16 +120,21 @@ under dense moved MRR by under 0.01 either way and was not adopted.
 
 1. Results return as the top-k stubs (uuid, title, summary, status,
    tokens; `k=2` by default, `mf search --limit`) with up to n neighbor
-   stubs each (`n=0` by default, `--neighbor-limit`, typed links first,
-   then kNN). Measured on the 1.9 tasks
+   stubs each (`n=0` by default, `--neighbor-limit`, three stages in
+   priority order: typed links, then `co_read` pairs at or above
+   `MIN_CO_READ_WEIGHT` (2.0, sorted weight-descending), then kNN fill
+   for any remaining slots). `co_read` rows accumulate from `mf read`
+   (a pair's weight increments on every call that reads both together);
+   `MIN_CO_READ_WEIGHT` requires at least one repeat before a pair
+   surfaces as a neighbor, an explicit uncalibrated first cut in the
+   same spirit as `write.py`'s `DEDUP_THRESHOLD` pre-2.10 (ROADMAP.md
+   4.4). Measured on the 1.9 tasks
    (`eval/results/token_costs_2_11.txt`): each stub is ~50 tokens and
    each neighbor slot roughly doubles the call. The original 5 / 3 cost
    1,009 tokens per lookup (5.8x a raw read), 3 / 1 cost 304 (1.75x),
    2 / 0 costs 104 (0.6x), 1 / 0 costs 55. The answer was on screen at
    every setting, so neighbors bought nothing measurable; two stubs
-   keep one fallback for a wrong top-1. `co_read` rows accumulate from
-   `mf read` but are not consulted for neighbor ranking yet (ROADMAP.md
-   4.4).
+   keep one fallback for a wrong top-1.
 2. FTS's ranked list is the result set only when dense has nothing (an
    empty `vec` table). A stopword-only query (empty FTS expression) is
    still ranked by dense.

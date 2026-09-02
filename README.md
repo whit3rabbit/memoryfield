@@ -1,29 +1,45 @@
-# memoryfields
+# mf
 
-mf is a search-first memory tool for coding agents. A field is a
-directory of Markdown pages with frontmatter, and mf indexes it into
-SQLite with full-text and vector search.
+Search-first memory for coding agents: plain Markdown pages, SQLite
+search, and no LLM in the loop.
 
-The page format is the [memoryfield](https://calpaterson.com/memoryfields.html)
-format, Cal Paterson's spec for memory as plain files ([vendored
-copy](docs/upstream/SPEC.md)). mf builds on that format rather than
-reimplementing his tool: any spec field loads unchanged, `mf pack
---spec` writes one back out, and everything mf adds on top (stub-first
-search, the confidence gate, the dedup gate, `raw/` and consolidation,
-typed links, claims) is its own measured design. Where the two differ,
-[docs/architecture.md](docs/architecture.md) section 6 says which side
-each decision fell on and why.
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 
-A lookup returns stubs, not pages. The agent reads a summary first and
-opens the body only when it needs it. The tool never calls an LLM, and
-the pages stay plain Markdown you can read, diff, and edit.
+[Install](#install) · [Quickstart](#quickstart) · [Design decisions](#design-decisions) · [Agents](#using-it-with-an-agent) · [Documentation](#documentation)
+
+A field is a directory of Markdown pages with frontmatter. mf indexes
+it into SQLite and answers a question with stubs, not pages: the agent
+reads a one-line summary first and opens the body only when it needs
+to.
+
+The page format is Cal Paterson's
+[memoryfield](https://calpaterson.com/memoryfields.html) spec
+([vendored copy](docs/upstream/SPEC.md)). Any spec field loads
+unchanged, `mf pack --spec` writes one back out, and everything mf adds
+on top is its own measured design.
 
 Session-injected memory costs the same on every task, whether or not it
 gets used. mf moves that cost to lookup time: about 100 tokens for a
-default search, about 55 for a point lookup (measured over 20 real
-agent tasks, ROADMAP.md 1.9).
-
+default search and 55 for a point lookup, measured over 20 real agent
+tasks ([Benchmarks, section 4](docs/BENCHMARKS.md#4-token-cost-benchmarks)).
 Most lookups end at the stub.
+
+## Why mf
+
+- **Stubs, not pages.** A search returns uuid, title, and a summary
+  written as the answer. Reads tier up only when the stub is not
+  enough.
+- **A confidence line you can act on.** `high`, `low`, or `none` before
+  every result, from a gate calibrated on blind phrasing to demote
+  rather than overclaim.
+- **A write path with a dedup gate.** `mf write` validates, checks for
+  near-duplicates, copies in, and indexes in one step.
+- **Plain files, spec-compatible.** Pages stay Markdown you can read,
+  diff, and edit, and any memoryfield reader can load them.
+- **Measured, not assumed.** Every ranking, gate, and default was run
+  through the real pipeline on queries written without seeing the
+  corpus before it was hardcoded.
 
 ## Install
 
@@ -34,10 +50,10 @@ uv tool install .                        # from a checkout
 uv tool install git+https://github.com/whit3rabbit/memoryfields
 ```
 
-The first search downloads the embedding model (default:
-snowflake-arctic-embed-xs, 384-d, ~170 MB). The model is pinned per
-field at `mf init` time. Pass `--model <name>` to `init` for other
-models (e.g. `bge-small-en-v1.5`, `nomic-embed-text-v1.5`, `bge-large-en-v1.5`).
+The first search downloads the embedding model (default
+`snowflake-arctic-embed-xs`, 384-d, about 170 MB). The model is pinned
+per field at `mf init`. Alternatives, and when to pick one:
+[docs/models.md](docs/models.md).
 
 ## Quickstart
 
@@ -67,43 +83,42 @@ Read the confidence line before the results:
 
 The gate errs toward demotion, not overclaiming.
 
-When the stub is not enough, reads tier up: `mf read <uuid>` returns
-the answer section (L1), and `--tier L2` or `<uuid>#section` returns
-more.
+When the stub is not enough, `mf read <uuid>` returns the page's answer
+section, and `--tier L2` or `<uuid>#section` returns more.
 
-Batch reads for one task into a single `mf read a b` call, since that
-is what records which pages get used together. Widen a search
-(`--limit 3`, `--neighbor-limit 1`) only when the confidence is low or
-the question is genuinely broad.
-
-New pages go in through `mf write <draft> --field <dir>`, drafting
-outside the field. It validates, dedup-checks against near-duplicates,
-copies the page in, and indexes it in one step.
-
-Exit 2 means a near-duplicate was flagged: update that page
-(`--update <uuid>`) or `--force` if the page really is new. Retire a
-page by writing its replacement with `supersedes: [old-uuid]`, not by
-deleting the file.
+New pages go
+in through `mf write <draft> --field <dir>`, drafted outside the field.
+Exit 2 means a near-duplicate was flagged. The calling contract an
+agent should follow is in [docs/agents.md](docs/agents.md), and every
+flag is in [docs/CLI.md](docs/CLI.md#mf-write).
 
 ## Design decisions
 
-Every retrieval and schema choice in `mf` is backed by empirical benchmarks across a 157-page corpus, 458 queries, and blind phrasing sets (details in [docs/architecture.md](docs/architecture.md) and [docs/M0.5_REPORT.md](docs/M0.5_REPORT.md)):
+Each choice below was measured on a 157-page corpus, blind phrasing
+sets, and one field this project did not write. The numbers live
+behind the links, not here, so they cannot drift.
 
-- **Dense-first ranking over RRF and FTS**: The original design planned symmetric RRF, and early versions used FTS-first. When benchmarked through the real pipeline on blind vocabulary-mismatch queries (`eval/calibrate_confidence_blind.py`), dense-first significantly outperformed both:
-  - Codebase blind top-1: **0.950** (dense-first) vs. 0.800 (RRF) vs. 0.700 (FTS-first).
-  - Papers blind top-1: **0.900** (dense-first) vs. 0.850 (RRF) vs. 0.800 (FTS-first).
-  - Soapstones blind top-1 (a 95-page field written by other people's agents, not by this project): **0.900** (dense-first) vs. 0.900 (RRF) vs. 0.700 (FTS-first).
-  RRF diluted ranking quality by averaging in FTS keyword noise. FTS is retained on every query as a confidence signal and fallback, not as the primary ranker.
-- **Calibrated multi-signal confidence gate**: Early confidence scoring relied solely on BM25 score floors. Blind testing revealed two major flaws: 45% of answerable blind queries returned `none`, and BM25's IDF term collapsed on small fields (an 80% `none` failure rate on 10-page fields). The gate was redesigned to combine dense floor distance (`<= 0.30`), BM25 score, and top-1 agreement:
-  - Usable answers jumped from **0.550 -> 0.900** on blind queries and **0.185 -> 0.889** on 10-page field subsamples.
-  - False-high citations remained near zero (0/17 original, 1/24 blind).
-- **Cosine distance over Euclidean L2 (`vec0`)**: Nomic embedding vectors are not unit-normalized (norm ~20). Using default Euclidean L2 mixed vector magnitude into distances. Declaring `distance_metric=cosine` in SQLite schema v2 aligned distance calculations (`1 - cos`) across kNN neighbors, dedup thresholds, and confidence calibration.
-- **Lean stubs by default (`--limit 2 --neighbor-limit 0`)**: Task-based token cost measurements across 20 real agent sessions (`eval/results/token_costs_2_11.txt`) showed the original 5 stubs / 3 neighbors cost 1,009 tokens per lookup (5.8x a raw read). Dropping to 2 stubs / 0 neighbors cut the cost to **104 tokens per lookup** (55 tokens for `--limit 1`), while keeping the target answer visible on screen in every trial. Two stubs preserve a single fallback slot for a wrong top-1.
-- **Write-time dedup gate (`DEDUP_THRESHOLD = 0.10`)**: Calibrated against 32 subagent-authored paraphrases and 157 corpus pages (`eval/calibrate_dedup.py`). A 0.10 cosine distance threshold on `title + summary + L1` catches 88% (28/32) of duplicate rewrites while blocking only 2/157 valid sibling pages (avoiding the 3% false-block rate of 0.12). Drafts are checked outside the field before copying to prevent un-gated indexing on subsequent runs.
-- **Ultra-lightweight default embedder (`snowflake-arctic-embed-xs`)**: Benchmarks across the 157-page corpus ([docs/BENCHMARKS.md](docs/BENCHMARKS.md)) show `snowflake-arctic-embed-xs` achieves **0.950 average blind Top-1** with **33 ms cached load time**, **0.9 ms query latency**, and 50% less vector storage than 768-d models (384-d vs 768-d). Alternative models like `bge-small-en-v1.5`, `nomic-embed-text-v1.5`, `bge-large-en-v1.5`, `all-MiniLM-L6-v2`, and `jina-embeddings-v2-small-en` are selectable via `mf init --model`.
-- **No in-tool LLM or cross-encoder reranker**: With blind top-1 retrieval accuracy reaching 0.90–0.95, a neural reranker was unnecessary. Page summarization and extraction are handled by the calling host agent already in context, keeping `mf` deterministic, local, and sub-second.
-- **In-flight session capture over post-hoc transcript parsing**: Parsing 50–200K token transcripts at session end without an LLM exceeded hook budgets. Instead, `mf hook stop` prompts the agent to capture findings while context is active, and `mf hook session-end` only stages a minimal metadata pointer (<0.25s execution).
-- **Spec compatibility verified on a real foreign field, not assumed**: The spec archive layout matched mf's own, so `mf unpack` reads Cal Paterson's soapstones export as-is and every page indexes and searches. The review also found that every one of this repo's own 157 corpus pages was unreadable by any plain-YAML consumer (unquoted `Topic: question` titles that only mf's lenient parser accepted). The corpus, the skill, and `mf lint` now enforce quoting, and `mf pack --spec` emits an archive in the spec's own shape.
+- **Dense-first ranking.** The vector index ranks. FTS runs on every
+  query as a gate signal and a fallback, never as the primary ranker,
+  because fusing the two averaged keyword noise into good semantic
+  rankings. [Benchmarks, section 2](docs/BENCHMARKS.md#2-ranking-architecture-benchmarks)
+- **A three-signal confidence gate.** A BM25 floor alone demoted nearly
+  half of the answerable blind queries and collapsed on small fields.
+  The gate now combines a dense distance floor, the BM25 score, and
+  top-1 agreement. [Benchmarks, section 3](docs/BENCHMARKS.md#3-confidence-gate-benchmarks)
+- **Lean stubs by default.** Two stubs and no neighbors, because the
+  original five stubs and three neighbors cost more tokens than
+  exploring raw files did. [Benchmarks, section 4](docs/BENCHMARKS.md#4-token-cost-benchmarks)
+- **A write-time dedup gate.** Cosine distance on title, summary, and
+  first section, with the threshold set on a labeled paraphrase set.
+  It catches copies and light rewordings, not thorough rewrites.
+  [Architecture, section 5](docs/architecture.md#5-write)
+- **A small default embedder, pinned per field.** A 384-d model that
+  matched the larger ones on blind accuracy at a fraction of the load
+  time and storage. [docs/models.md](docs/models.md)
+- **No LLM and no reranker inside the tool.** The host agent already in
+  context does extraction and judgment. mf stays deterministic, local,
+  and sub-second. [Architecture, "Stack"](docs/architecture.md#stack)
 
 ## Using it with an agent
 
@@ -112,19 +127,15 @@ contract, and the write path ships in
 [.claude/skills/mf](.claude/skills/mf). Copy it into your project's
 `.claude/skills/` to use mf there.
 
-Two hooks close the loop at session end. `mf hook stop` asks the agent
-to capture what it learned before it finishes, once per session. `mf
-hook session-end` writes a transcript pointer into the field's `raw/`
-staging area, ready for `mf consolidate --plan`.
-
-The settings snippet is in
-[.claude/skills/mf/reference.md](.claude/skills/mf/reference.md). Use
-the installed `mf` binary in the hook command: SessionEnd hooks get
-about 1.5 seconds in total.
+Two hooks, `mf hook stop` and `mf hook session-end`, ask the agent to
+capture what it learned before it finishes and stage a transcript
+pointer for later consolidation. Setup, the hooks snippet, and the
+calling contract: [docs/agents.md](docs/agents.md).
 
 ## Commands
 
-Full arguments, flags, exit codes, and JSON outputs are documented in [docs/CLI.md](docs/CLI.md).
+Full arguments, flags, exit codes, and JSON outputs are documented in
+[docs/CLI.md](docs/CLI.md).
 
 | Command | What it does |
 |---|---|
@@ -135,7 +146,7 @@ Full arguments, flags, exit codes, and JSON outputs are documented in [docs/CLI.
 | `mf write <draft>` | validate, dedup-check, copy in, and index a draft |
 | `mf raw add` | stage a freeform session extract under `raw/` |
 | `mf lint [DIR]` | check writing conventions and index drift, `--check` for CI |
-| `mf pack` / `mf unpack` | reproducible archive plus sha256 sidecar, verified extraction; `--spec` for other memoryfield readers |
+| `mf pack` / `mf unpack` | reproducible archive plus sha256 sidecar, verified extraction, `--spec` for other memoryfield readers |
 | `mf import claude-memory <dir>` | turn a Claude Code memory directory into pages |
 | `mf import wiki <dir>` | turn an index.md-style wiki into pages |
 | `mf hook stop` / `mf hook session-end` | Claude Code hook handlers |
@@ -144,93 +155,29 @@ Full arguments, flags, exit codes, and JSON outputs are documented in [docs/CLI.
 | `mf claim <slug> --by <writer>` | atomically claim a slug before creating a page (multi-writer) |
 | `mf consolidate --plan` | propose create/review actions from `raw/` entries |
 
-## Importing existing notes
+## Documentation
 
-`mf import claude-memory <dir>` turns a Claude Code auto-memory
-directory (`MEMORY.md` plus topic files) into pages under
-`<field>/claude-memory/`. `mf import wiki <dir>` does the same for an
-index.md-style wiki with pages in subdirectories, flattened into
-`<field>/wiki/`.
-
-Both are un-gated bulk imports: the dedup gate does not run. uuids
-derive from the source names, so a re-import updates in place, and
-`source` points back at the original file. `--dry-run` lists the plan
-before anything is written. Run `mf lint` after importing.
-
-## Working with other memoryfield tools
-
-Any spec-conformant field loads as-is:
-
-```bash
-mf unpack soapstones.memoryfield.zip ~/soap && mf init ~/soap && mf index ~/soap
-```
-
-A spec vector index inside the archive (`nomic-embed-text-v1.5.sqlite3`
-or similar) is noted and left alone; mf builds its own. Cal Paterson's
-soapstones export is the demo field: `uv run python3
-eval/fetch_soapstones.py` downloads it with a pinned checksum.
-
-Going the other way, `mf pack --spec ~/field` writes an archive a spec
-reader expects: root-level pages, a `<model>.sqlite3` index in the
-spec's schema, no `mf.sqlite3` or `raw/`. Pages in subdirectories are
-skipped and listed.
-
-Two rules keep pages readable outside mf. Quote `title`, `summary`,
-`created`, `updated`, and anything with `: ` or a leading backtick in
-it: mf's parser tolerates the unquoted form, plain YAML readers do
-not. Keep filenames to lowercase letters, digits, and hyphens at the
-field root. `mf lint` reports both as `spec-*` findings.
-
-## Keeping a field healthy
-
-Retrieval quality holds only while pages follow the writing
-conventions, so `lint` is part of the tool rather than a linter you
-might add later. `mf lint --check` exits 1 on any error or warning.
-`mf search` refuses a stale index (exit 3) until `mf index` runs, so
-refresh the index after commits.
-
-Git hooks (drop into `.git/hooks/`, `chmod +x`):
-
-```bash
-#!/bin/sh
-# .git/hooks/pre-commit
-mf lint --check . || exit 1
-```
-
-```bash
-#!/bin/sh
-# .git/hooks/post-commit
-mf index . >/dev/null
-```
-
-<details>
-<summary>GitHub Actions job (the index is derived, so CI only lints)</summary>
-
-```yaml
-lint-field:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - uses: astral-sh/setup-uv@v5
-    - run: uv tool install git+https://github.com/<you>/mf
-    - run: mf lint --check .
-```
-
-</details>
+| Guide | What you can do |
+|---|---|
+| [Agents](docs/agents.md) | Wire mf into Claude Code: the skill, the hooks, and the lean-call contract. |
+| [CLI reference](docs/CLI.md) | Look up every flag, exit code, and JSON shape. |
+| [Models](docs/models.md) | Pick, pin, and pre-download an embedding model. |
+| [Fields](docs/fields.md) | Write pages, lint, wire git hooks, import notes, and exchange fields with other memoryfield tools. |
+| [Architecture](docs/architecture.md) | See the schema, how a search is ranked and gated, and the record of each decision. |
+| [Benchmarks](docs/BENCHMARKS.md) | Read the numbers behind the design decisions. |
+| [Docs index](docs/README.md) | Start from a task and find the right guide. |
 
 ## Eval harness
 
-Every retrieval decision in mf was measured, not assumed. The repo
-ships a 157-page labeled corpus, a 458-query set plus blind
-vocabulary-mismatch sets, and six baselines (grep, FTS5, TF-IDF,
-nomic, BGE-large, and hybrid).
+The repo ships a 157-page labeled corpus, a 458-query set plus blind
+vocabulary-mismatch sets, and six baselines (grep, FTS5, TF-IDF, nomic,
+BGE-large, and hybrid).
 
-The query set shares an authoring process with the corpus, so scores
-sit near ceiling. Read the numbers with that in mind, in
-[docs/M0.5_REPORT.md](docs/M0.5_REPORT.md). A third domain built from
-the soapstones export, with blind queries authored from titles only,
-is the first corpus outside that process; its numbers are in
-[docs/BENCHMARKS.md](docs/BENCHMARKS.md) section 5.
+The in-vocabulary scores sit near ceiling
+because the queries share an authoring process with the corpus. Read
+[docs/M0.5_REPORT.md](docs/M0.5_REPORT.md) with that in mind, and
+[docs/BENCHMARKS.md](docs/BENCHMARKS.md) section 5 for the soapstones
+field, the first corpus outside that process.
 
 ```bash
 uv sync --extra eval              # fastembed into a local venv

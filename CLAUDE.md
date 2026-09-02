@@ -416,10 +416,11 @@ fixed bugs.
 M0 through M4 are closed (eval matrix, read path, write path,
 hooks/imports, reranker cut). M5, consolidation and multi-writer, is
 in progress: `consolidate --plan`, `claim`, `contested` status, and
-the `notes/` dogfooding field are built. Remaining: consolidate
-idempotency across runs, pointer-entry expansion, `write` auto-calling
-`claim`, and 4.4 (co_read weighting). M6 is the MCP server, then
-packaging. Full task detail, per-task decision records, and open debt
+the `notes/` dogfooding field are built, and 4.4 (co_read weighting
+in neighbor ranking, `MIN_CO_READ_WEIGHT` uncalibrated) landed
+2026-09-02. Remaining: consolidate idempotency across runs,
+pointer-entry expansion, and `write` auto-calling `claim`. M6 is the
+MCP server, then packaging. Full task detail, per-task decision records, and open debt
 (including 0.5's upstream frontmatter proposal, which now has a
 destination and still needs a human to send it) in
 [ROADMAP.md](ROADMAP.md).

@@ -1,5 +1,7 @@
 # Benchmarks & Evaluation
 
+[Docs](README.md) | [Agents](agents.md) | [CLI](CLI.md) | [Models](models.md) | [Fields](fields.md) | [Architecture](architecture.md) | [Benchmarks](BENCHMARKS.md)
+
 All retrieval, ranking, schema, and model decisions in `mf` are backed by empirical measurements over real datasets and agent tasks.
 
 ---
@@ -25,9 +27,9 @@ A comprehensive evaluation comparing the baseline embedder (`nomic-embed-text-v1
 | Model | Dim | In-Vocab Top-1 (Avg) | Codebase In-Vocab | Papers In-Vocab | Blind Top-1 (Avg) | Codebase Blind Top-1 | Papers Blind Top-1 | Codebase Blind MRR | Papers Blind MRR |
 |---|---|---|---|---|---|---|---|---|---|
 | **BGE-small-en-v1.5** | **384** | **0.919** | 0.937 | 0.902 | **0.950** | **0.950** | **0.950** | **0.950** | **0.975** |
-| **arctic-embed-xs** | **384** | **0.921** | 0.908 | 0.933 | **0.950** | **1.000** | **0.900** | **1.000** | **0.950** |
+| **arctic-embed-xs** *(Default)* | **384** | **0.921** | 0.908 | 0.933 | **0.950** | **1.000** | **0.900** | **1.000** | **0.950** |
 | **arctic-embed-s** | **384** | **0.905** | 0.897 | 0.913 | **0.975** | **1.000** | **0.950** | **1.000** | **0.975** |
-| **nomic-embed-text-v1.5** *(Default)* | 768 | **0.923** | 0.925 | 0.921 | **0.925** | **0.950** | **0.900** | **0.975** | **0.925** |
+| **nomic-embed-text-v1.5** | 768 | **0.923** | 0.925 | 0.921 | **0.925** | **0.950** | **0.900** | **0.975** | **0.925** |
 | **nomic-embed-text-v1.5-Q** *(Quantized)* | 768 | **0.913** | 0.925 | 0.902 | **0.925** | **1.000** | **0.850** | **1.000** | **0.900** |
 | **bge-large-en-v1.5** | 1024 | **0.934** | 0.954 | 0.913 | **0.950** | **0.950** | **0.950** | **0.967** | **0.975** |
 | **bge-base-en-v1.5** | 768 | **0.927** | 0.937 | 0.917 | **0.925** | **0.950** | **0.900** | **0.975** | **0.950** |

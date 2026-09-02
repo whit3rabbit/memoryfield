@@ -1,5 +1,7 @@
 # `mf` CLI Reference
 
+[Docs](README.md) | [Agents](agents.md) | [CLI](CLI.md) | [Models](models.md) | [Fields](fields.md) | [Architecture](architecture.md) | [Benchmarks](BENCHMARKS.md)
+
 Complete reference for all `mf` commands, flags, arguments, and JSON output structures.
 
 ---
@@ -247,30 +249,36 @@ $ mf lint --check ~/field
 
 ---
 
-### `mf pack` & `mf unpack`
+### `mf pack`
 
-Create and extract reproducible `.memoryfield.zip` archives with SHA256 sidecars.
+Create a reproducible `.memoryfield.zip` archive with a SHA256 sidecar.
 
 ```bash
 mf pack [DIR] [--out PATH] [--no-index] [--no-raw] [--spec] [--json]
+```
+
+- Archives field contents with normalized timestamps and POSIX paths for reproducible byte hashes.
+- Generates `<name>.memoryfield.zip.sha256`.
+- `--spec`: an archive for readers that are not mf, per the vendored
+  spec (`docs/upstream/SPEC.md`): root-level pages with `[a-z0-9-]`
+  filenames, root-level non-page files, and a `<model_code>.sqlite3`
+  vector index in the spec's schema (whole-file embedding). Leaves
+  out `mf.sqlite3`, `raw/`, and pages in subdirectories, and lists
+  the skipped pages.
+
+### `mf unpack`
+
+Verify and extract a `.memoryfield.zip` archive.
+
+```bash
 mf unpack <ZIP> [DEST] [--sha256 HEX] [--force] [--json]
 ```
 
-- **`mf pack`**:
-  - Archives field contents with normalized timestamps and POSIX paths for reproducible byte hashes.
-  - Generates `<name>.memoryfield.zip.sha256`.
-  - `--spec`: an archive for readers that are not mf, per the vendored
-    spec (`docs/upstream/SPEC.md`): root-level pages with `[a-z0-9-]`
-    filenames, root-level non-page files, and a `<model_code>.sqlite3`
-    vector index in the spec's schema (whole-file embedding). Leaves
-    out `mf.sqlite3`, `raw/`, and pages in subdirectories, and lists
-    the skipped pages.
-- **`mf unpack`**:
-  - Verifies SHA256 integrity before extraction.
-  - Resolves field-relative database paths automatically.
-  - Reads a spec archive (such as Cal Paterson's soapstones export)
-    as-is; a spec `<model>.sqlite3` index is noted, not read. Run
-    `mf init` then `mf index` afterwards.
+- Verifies SHA256 integrity before extraction.
+- Resolves field-relative database paths automatically.
+- Reads a spec archive (such as Cal Paterson's soapstones export)
+  as-is. A spec `<model>.sqlite3` index is noted, not read. Run
+  `mf init` then `mf index` afterwards.
 
 ---
 

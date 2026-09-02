@@ -1,5 +1,7 @@
 # mf: architecture reference
 
+[Docs](README.md) | [Agents](agents.md) | [CLI](CLI.md) | [Models](models.md) | [Fields](fields.md) | [Architecture](architecture.md) | [Benchmarks](BENCHMARKS.md)
+
 Standalone reference for the schema and retrieval design. Full rationale
 and the "why" behind each stack choice lives in [PLAN.md](../PLAN.md).
 The evidence behind each retrieval decision lives in

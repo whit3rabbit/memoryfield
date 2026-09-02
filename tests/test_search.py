@@ -206,6 +206,56 @@ def test_neighbors_include_typed_links_but_not_superseded_ones(tmp_path, monkeyp
     conn.close()
 
 
+def test_co_read_neighbor_surfaces_above_threshold(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    conn.execute(
+        "INSERT INTO links (src, dst, kind, weight) VALUES (?, ?, 'co_read', 2.0)",
+        ("page-billing", "page-rotate"),
+    )
+    conn.commit()
+    # Isolate from kNN: the fixture's one-hot vectors make untouched kNN
+    # ties ambiguous, so drop page-rotate's vec row entirely.
+    conn.execute("DELETE FROM vec WHERE page_uuid = ?", ("page-rotate",))
+    conn.commit()
+
+    neighbors = search._neighbors(conn, "page-rotate", limit=3)
+    assert "page-billing" in [n.uuid for n in neighbors]
+    conn.close()
+
+
+def test_co_read_neighbor_excluded_below_threshold(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    conn.execute(
+        "INSERT INTO links (src, dst, kind, weight) VALUES (?, ?, 'co_read', 1.0)",
+        ("page-billing", "page-rotate"),
+    )
+    conn.commit()
+    conn.execute("DELETE FROM vec WHERE page_uuid = ?", ("page-rotate",))
+    conn.commit()
+
+    neighbors = search._neighbors(conn, "page-rotate", limit=3)
+    assert "page-billing" not in [n.uuid for n in neighbors]
+    conn.close()
+
+
+def test_typed_link_wins_slot_over_co_read(tmp_path, monkeypatch):
+    conn = _build_field(tmp_path, monkeypatch)
+    # page-rotate-new already depends_on page-billing (typed link). Give
+    # a co_read pair a high weight and a tight limit=1 so only one slot
+    # is available -- the typed link must win it.
+    conn.execute(
+        "INSERT INTO links (src, dst, kind, weight) VALUES (?, ?, 'co_read', 5.0)",
+        ("page-rotate", "page-rotate-new"),
+    )
+    conn.commit()
+    monkeypatch.setattr(search, "_embed_query", _agree_with("page-rotate-new"))
+
+    result = search.search(conn, "rotate signing key current", limit=5, neighbor_limit=1)
+    new_stub = next(r for r in result.results if r.uuid == "page-rotate-new")
+    assert [n.uuid for n in new_stub.neighbors] == ["page-billing"]
+    conn.close()
+
+
 def test_stale_index_raises_without_stale_ok(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
     monkeypatch.setattr(search, "_embed_query", _agree_with("page-billing"))

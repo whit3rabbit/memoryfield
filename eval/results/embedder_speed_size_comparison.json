@@ -1,0 +1,80 @@
+{
+  "nomic-v1.5 (768d)": {
+    "load_ms": 209.6,
+    "query_latency_ms": 4.6,
+    "batch_75_docs_ms": 602.1,
+    "cache_size_mb": 0.0
+  },
+  "nomic-v1.5-Q (768d)": {
+    "load_ms": 147.3,
+    "query_latency_ms": 3.2,
+    "batch_75_docs_ms": 659.9,
+    "cache_size_mb": 0.0
+  },
+  "bge-large-v1.5 (1024d)": {
+    "load_ms": 422.6,
+    "query_latency_ms": 12.6,
+    "batch_75_docs_ms": 1782.3,
+    "cache_size_mb": 0.0
+  },
+  "bge-base-v1.5 (768d)": {
+    "load_ms": 65.4,
+    "query_latency_ms": 5.9,
+    "batch_75_docs_ms": 1010.5,
+    "cache_size_mb": 0.0
+  },
+  "bge-small-v1.5 (384d)": {
+    "load_ms": 37.5,
+    "query_latency_ms": 2.4,
+    "batch_75_docs_ms": 309.4,
+    "cache_size_mb": 0.0
+  },
+  "all-MiniLM-L6-v2 (384d)": {
+    "load_ms": 35.9,
+    "query_latency_ms": 3.1,
+    "batch_75_docs_ms": 201.8,
+    "cache_size_mb": 0.0
+  },
+  "arctic-embed-xs (384d)": {
+    "load_ms": 33.0,
+    "query_latency_ms": 0.9,
+    "batch_75_docs_ms": 93.8,
+    "cache_size_mb": 0.0
+  },
+  "arctic-embed-s (384d)": {
+    "load_ms": 57.9,
+    "query_latency_ms": 1.8,
+    "batch_75_docs_ms": 198.5,
+    "cache_size_mb": 0.0
+  },
+  "jina-v2-small-en (512d)": {
+    "load_ms": 42.4,
+    "query_latency_ms": 0.9,
+    "batch_75_docs_ms": 139.9,
+    "cache_size_mb": 0.0
+  },
+  "mxbai-xsmall (384d)": {
+    "load_ms": 2864.7,
+    "query_latency_ms": 3.9,
+    "batch_75_docs_ms": 229.3,
+    "cache_size_mb": 93.9
+  },
+  "mxbai-xsmall (256d)": {
+    "load_ms": 2779.8,
+    "query_latency_ms": 4.8,
+    "batch_75_docs_ms": 49.9,
+    "cache_size_mb": 93.9
+  },
+  "mxbai-xsmall (192d)": {
+    "load_ms": 2797.3,
+    "query_latency_ms": 4.9,
+    "batch_75_docs_ms": 40.4,
+    "cache_size_mb": 93.9
+  },
+  "mxbai-xsmall (128d)": {
+    "load_ms": 2602.5,
+    "query_latency_ms": 4.7,
+    "batch_75_docs_ms": 50.1,
+    "cache_size_mb": 93.9
+  }
+}

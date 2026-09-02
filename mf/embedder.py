@@ -29,8 +29,62 @@ from .page import Page
 # prefix "kind" mf/embedding.py keys on, and the vector width the `vec`
 # table is created with by `mf init --model`.
 MODEL_REGISTRY: dict[str, dict] = {
-    "nomic-embed-text-v1.5": {"kind": "nomic", "dim": 768},
-    "bge-large-en-v1.5": {"kind": "bge", "dim": 1024},
+    "snowflake-arctic-embed-xs": {
+        "kind": "arctic-xs",
+        "dim": 384,
+        "size_mb": 170,
+        "speed": "0.9 ms",
+        "description": "Default: ultra-fast 384-d, high accuracy (0.950 top-1)",
+    },
+    "snowflake-arctic-embed-s": {
+        "kind": "arctic-s",
+        "dim": 384,
+        "size_mb": 255,
+        "speed": "1.8 ms",
+        "description": "Highest blind accuracy (0.975 top-1), fast 384-d",
+    },
+    "bge-small-en-v1.5": {
+        "kind": "bge-small",
+        "dim": 384,
+        "size_mb": 130,
+        "speed": "2.4 ms",
+        "description": "Compact, balanced retrieval (0.950 top-1)",
+    },
+    "all-MiniLM-L6-v2": {
+        "kind": "minilm",
+        "dim": 384,
+        "size_mb": 170,
+        "speed": "3.1 ms",
+        "description": "Ultra-lightweight baseline (0.925 blind top-1)",
+    },
+    "jina-embeddings-v2-small-en": {
+        "kind": "jina-small",
+        "dim": 512,
+        "size_mb": 250,
+        "speed": "0.9 ms",
+        "description": "512-d output, 8192-token context window",
+    },
+    "bge-base-en-v1.5": {
+        "kind": "bge-base",
+        "dim": 768,
+        "size_mb": 420,
+        "speed": "5.9 ms",
+        "description": "768-d baseline (0.925 top-1)",
+    },
+    "nomic-embed-text-v1.5": {
+        "kind": "nomic",
+        "dim": 768,
+        "size_mb": 520,
+        "speed": "4.6 ms",
+        "description": "768-d asymmetric model, 8192-token context",
+    },
+    "bge-large-en-v1.5": {
+        "kind": "bge",
+        "dim": 1024,
+        "size_mb": 2500,
+        "speed": "12.6 ms",
+        "description": "1024-d high-capacity model (0.950 top-1)",
+    },
 }
 
 ENV_BACKEND = "MF_EMBED_BACKEND"

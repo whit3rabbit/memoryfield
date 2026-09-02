@@ -14,12 +14,17 @@ from typing import Literal
 
 Backend = Literal["mlx", "fastembed"]
 
-# kind -> per-backend model identifier. Both point at the same underlying
-# HF checkpoint; only the runtime differs.
+# kind -> per-backend model identifier.
 _MLX_REGISTRY: dict[str, str] = {"nomic": "nomic-text-v1.5", "bge": "bge-large"}
 _FASTEMBED_MODEL: dict[str, str] = {
-    "nomic": "nomic-ai/nomic-embed-text-v1.5",
+    "arctic-xs": "snowflake/snowflake-arctic-embed-xs",
+    "arctic-s": "snowflake/snowflake-arctic-embed-s",
+    "bge-small": "BAAI/bge-small-en-v1.5",
+    "bge-base": "BAAI/bge-base-en-v1.5",
     "bge": "BAAI/bge-large-en-v1.5",
+    "nomic": "nomic-ai/nomic-embed-text-v1.5",
+    "minilm": "sentence-transformers/all-MiniLM-L6-v2",
+    "jina-small": "jinaai/jina-embeddings-v2-small-en",
 }
 
 
@@ -41,18 +46,19 @@ def default_backend() -> Backend:
 class Embedder:
     """Uniform `embed(texts) -> list[list[float]]` over either backend.
 
-    `kind` is "nomic" or "bge", matching mf.embedding's model_kind. Backend
-    defaults to auto-detected (MLX on Apple Silicon if installed, fastembed
-    otherwise) but can be forced for testing or comparison runs.
+    `kind` matches mf.embedding's model_kind. Backend defaults to auto-detected
+    (MLX on Apple Silicon if available for that kind, fastembed otherwise).
     """
 
     def __init__(self, kind: str, backend: Backend | None = None):
-        if kind not in _MLX_REGISTRY:
+        if kind not in _FASTEMBED_MODEL and kind not in _MLX_REGISTRY:
             raise ValueError(f"unknown model kind: {kind!r}")
         self.kind = kind
-        self.backend: Backend = backend or default_backend()
+        self.backend: Backend = backend or (default_backend() if kind in _MLX_REGISTRY else "fastembed")
 
         if self.backend == "mlx":
+            if kind not in _MLX_REGISTRY:
+                raise ValueError(f"mlx backend only supports {list(_MLX_REGISTRY)}, not {kind!r}")
             if not mlx_available():
                 raise RuntimeError(
                     "mlx backend requested but unavailable: needs Apple "
@@ -61,6 +67,8 @@ class Embedder:
             from mlx_embedding_models.embedding import EmbeddingModel
             self._model = EmbeddingModel.from_registry(_MLX_REGISTRY[kind])
         elif self.backend == "fastembed":
+            if kind not in _FASTEMBED_MODEL:
+                raise ValueError(f"fastembed backend does not support kind: {kind!r}")
             from fastembed import TextEmbedding
             self._model = TextEmbedding(model_name=_FASTEMBED_MODEL[kind])
         else:

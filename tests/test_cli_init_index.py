@@ -21,10 +21,19 @@ def _fake_embed_pages(pages, model_code):
 
 
 def test_init_creates_field(tmp_path, capsys):
+    from mf import db, schema
+
     exit_code = cli.main(["init", str(tmp_path)])
     assert exit_code == 0
     assert (tmp_path / "mf.sqlite3").exists()
-    assert "Initialized" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "Initialized" in out
+    assert "snowflake-arctic-embed-xs" in out
+    assert "384-d" in out
+    conn = db.open_field(tmp_path)
+    assert schema.get_config(conn, "model_code") == "snowflake-arctic-embed-xs"
+    assert schema.get_config(conn, "embedding_dim") == "384"
+    conn.close()
 
 
 def test_init_twice_fails_without_overwriting(tmp_path, capsys):

@@ -27,9 +27,13 @@ def fake_backend(monkeypatch):
     return _FakeBackend
 
 
-def test_registry_has_both_models_with_dims():
-    assert embedder.MODEL_REGISTRY["nomic-embed-text-v1.5"] == {"kind": "nomic", "dim": 768}
-    assert embedder.MODEL_REGISTRY["bge-large-en-v1.5"] == {"kind": "bge", "dim": 1024}
+def test_registry_has_models_with_dims():
+    assert embedder.MODEL_REGISTRY["snowflake-arctic-embed-xs"]["kind"] == "arctic-xs"
+    assert embedder.MODEL_REGISTRY["snowflake-arctic-embed-xs"]["dim"] == 384
+    assert embedder.MODEL_REGISTRY["snowflake-arctic-embed-s"]["dim"] == 384
+    assert embedder.MODEL_REGISTRY["bge-small-en-v1.5"]["dim"] == 384
+    assert embedder.MODEL_REGISTRY["bge-large-en-v1.5"]["dim"] == 1024
+    assert embedder.MODEL_REGISTRY["nomic-embed-text-v1.5"]["dim"] == 768
 
 
 def test_unknown_model_code_raises():

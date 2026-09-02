@@ -18,6 +18,7 @@ from mf import claim as claim_mod
 from mf import consolidate as consolidate_mod
 from mf import hooks as hooks_mod
 from mf import lint as lint_mod
+from mf import models as models_mod
 from mf import pack as pack_mod
 from mf import raw as raw_mod
 from mf import read as read_mod
@@ -149,6 +150,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     raw_add_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
     raw_add_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    model_parser = subparsers.add_parser("model", help="list or download embedding models")
+    model_sub = model_parser.add_subparsers(dest="model_command")
+
+    model_list_parser = model_sub.add_parser("list", help="list available embedding models")
+    model_list_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
+
+    model_install_parser = model_sub.add_parser("install", help="download and cache an embedding model")
+    model_install_parser.add_argument(
+        "name", choices=sorted(embedder.MODEL_REGISTRY), help="model name to install"
+    )
+    model_install_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     for name in STUB_COMMANDS:
         subparsers.add_parser(name)
@@ -527,6 +540,51 @@ def _cmd_raw_add(args: argparse.Namespace) -> int:
     return 0
 
 
+def _render_model_list_text(models: list[models_mod.ModelInfo]) -> str:
+    lines = [
+        f"{'Model':<30} {'Dim':<6} {'Size':<10} {'Speed':<9} {'Cached':<8} {'Description'}",
+        "-" * 105,
+    ]
+    for m in models:
+        prefix = "* " if m.is_default else "  "
+        name = prefix + m.model_code
+        cached_str = "yes" if m.is_cached else "no"
+        size_str = f"~{m.size_mb} MB" if m.size_mb < 1000 else f"~{m.size_mb / 1000:.1f} GB"
+        lines.append(
+            f"{name:<30} {m.dim:<6} {size_str:<10} {m.speed:<9} {cached_str:<8} {m.description}"
+        )
+    lines.append("")
+    lines.append("* = default model for `mf init`")
+    return "\n".join(lines)
+
+
+def _cmd_model_list(args: argparse.Namespace) -> int:
+    models = models_mod.list_models()
+    if args.json:
+        print(json.dumps([m.as_dict() for m in models], indent=2))
+    else:
+        print(_render_model_list_text(models))
+    return 0
+
+
+def _cmd_model_install(args: argparse.Namespace) -> int:
+    try:
+        result = models_mod.install_model(args.name)
+    except Exception as e:  # noqa: BLE001
+        sys.stderr.write(f"mf model install: failed to install {args.name}: {e}\n")
+        return 1
+
+    if args.json:
+        print(json.dumps(result.as_dict(), indent=2))
+    else:
+        size_str = f"~{result.size_mb} MB" if result.size_mb < 1000 else f"~{result.size_mb / 1000:.1f} GB"
+        if result.already_cached:
+            print(f"Model {result.model_code} is already downloaded and ready ({result.dim}-d, {size_str}).")
+        else:
+            print(f"Downloaded and ready: {result.model_code} ({result.dim}-d, {size_str}).")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -561,6 +619,13 @@ def main(argv: list[str] | None = None) -> int:
         if args.raw_command == "add":
             return _cmd_raw_add(args)
         sys.stderr.write("mf raw: expected a subcommand (add)\n")
+        return 1
+    if args.command == "model":
+        if args.model_command in ("list", "ls"):
+            return _cmd_model_list(args)
+        if args.model_command in ("install", "download", "pull"):
+            return _cmd_model_install(args)
+        sys.stderr.write("mf model: expected a subcommand (list, install)\n")
         return 1
     sys.stderr.write(
         f"mf {args.command}: not implemented yet — see ROADMAP.md Phase 1/2.\n"

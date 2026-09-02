@@ -15,10 +15,10 @@ import sqlite3
 # refuses it and asks for `mf init` + `mf index`.
 SCHEMA_VERSION = 2
 
-# nomic-embed-text-v1.5's native output dimension. See mf/embedding.py
-# and PLAN.md's embedder table.
-EMBEDDING_DIM = 768
-DEFAULT_MODEL_CODE = "nomic-embed-text-v1.5"
+# snowflake-arctic-embed-xs's native output dimension (384-d). See mf/embedding.py,
+# mf/embedder.py, and docs/BENCHMARKS.md.
+EMBEDDING_DIM = 384
+DEFAULT_MODEL_CODE = "snowflake-arctic-embed-xs"
 
 _DDL = """
 CREATE TABLE IF NOT EXISTS config (

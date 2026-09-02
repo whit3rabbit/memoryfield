@@ -9,21 +9,30 @@ all call this instead of building the text themselves.
 """
 from __future__ import annotations
 
-# Document-side task prefix, per model. Nomic is asymmetric and requires
-# it; BGE-large is symmetric in raw form but conventionally takes the
-# empty prefix on the document side (its asymmetry is query-side only,
-# see QUERY_PREFIXES).
+# Document-side task prefix, per model kind.
 DOCUMENT_PREFIXES: dict[str, str] = {
-    "nomic": "search_document: ",
+    "arctic-xs": "",
+    "arctic-s": "",
+    "bge-small": "",
+    "bge-base": "",
     "bge": "",
+    "nomic": "search_document: ",
+    "minilm": "",
+    "jina-small": "",
 }
 
-# Query-side task prefix, per model. fastembed adds the nomic prefix
-# convention implicitly for some call paths but never adds BGE's, so
-# both are made explicit here rather than relying on library behavior.
+# Query-side task prefix, per model kind. fastembed adds the nomic prefix
+# convention implicitly for some call paths but never adds BGE/Arctic's, so
+# all are made explicit here rather than relying on library behavior.
 QUERY_PREFIXES: dict[str, str] = {
-    "nomic": "search_query: ",
+    "arctic-xs": "Represent this sentence for searching relevant passages: ",
+    "arctic-s": "Represent this sentence for searching relevant passages: ",
+    "bge-small": "Represent this sentence for searching relevant passages: ",
+    "bge-base": "Represent this sentence for searching relevant passages: ",
     "bge": "Represent this sentence for searching relevant passages: ",
+    "nomic": "search_query: ",
+    "minilm": "",
+    "jina-small": "",
 }
 
 

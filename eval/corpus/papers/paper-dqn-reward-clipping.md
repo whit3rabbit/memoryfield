@@ -1,10 +1,10 @@
 ---
 uuid: paper-dqn-reward-clipping
-title: DQN: rewards clipped to {-1, 0, +1} to handle different game score scales
-summary: Sign of reward, not magnitude; allows one set of hyperparameters to work across games with wildly different raw scores (Pong: +/-1; Ms. Pac-Man: thousands).
+title: "DQN: rewards clipped to {-1, 0, +1} to handle different game score scales"
+summary: "Sign of reward, not magnitude; allows one set of hyperparameters to work across games with wildly different raw scores (Pong: +/-1; Ms. Pac-Man: thousands)."
 status: active
 tags: [dqn, reward-clipping]
-source: https://www.nature.com/articles/nature14236
+source: "https://www.nature.com/articles/nature14236"
 ---
 ## Answer
 Reward clipping: positive reward becomes +1, negative becomes -1, zero stays 0.

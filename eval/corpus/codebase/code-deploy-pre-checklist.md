@@ -1,7 +1,7 @@
 ---
 uuid: code-deploy-pre-checklist
-title: Deploy: pre-deploy checklist
-summary: Tests green, migrations applied to staging, dashboards reviewed, on-call notified, rollback plan documented.
+title: "Deploy: pre-deploy checklist"
+summary: "Tests green, migrations applied to staging, dashboards reviewed, on-call notified, rollback plan documented."
 status: active
 tags: [deploy, checklist]
 ---

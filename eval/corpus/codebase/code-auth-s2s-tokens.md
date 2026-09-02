@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-s2s-tokens
-title: Auth: how service-to-service tokens work
-summary: Services exchange their workload identity for a 5-minute bearer token via the `auth-tokens` endpoint; the token's `aud` field is the calling service's name.
+title: "Auth: how service-to-service tokens work"
+summary: "Services exchange their workload identity for a 5-minute bearer token via the `auth-tokens` endpoint; the token's `aud` field is the calling service's name."
 status: active
 tags: [auth, s2s, tokens]
 ---

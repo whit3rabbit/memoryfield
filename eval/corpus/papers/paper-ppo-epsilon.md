@@ -1,10 +1,10 @@
 ---
 uuid: paper-ppo-epsilon
-title: PPO: clipping epsilon controls how far the new policy can drift
-summary: epsilon=0.2 in the original paper; lower epsilon (0.1) for more conservative updates; higher (0.3) for faster but riskier updates.
+title: "PPO: clipping epsilon controls how far the new policy can drift"
+summary: "epsilon=0.2 in the original paper; lower epsilon (0.1) for more conservative updates; higher (0.3) for faster but riskier updates."
 status: active
 tags: [ppo, hyperparameter]
-source: https://arxiv.org/abs/1707.06347
+source: "https://arxiv.org/abs/1707.06347"
 ---
 ## Answer
 epsilon in the PPO clip controls trust-region size:

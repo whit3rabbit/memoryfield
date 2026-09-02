@@ -1,7 +1,7 @@
 ---
 uuid: code-dm-timestamptz
-title: Data model: time columns use TIMESTAMPTZ not TIMESTAMP
-summary: All time columns are `TIMESTAMPTZ`; we always store UTC; client-side formatting happens at render time only.
+title: "Data model: time columns use TIMESTAMPTZ not TIMESTAMP"
+summary: "All time columns are `TIMESTAMPTZ`; we always store UTC; client-side formatting happens at render time only."
 status: active
 tags: [data-model, time]
 ---

@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-db-transactions
-title: Testing: how database tests use transactions
-summary: Each test runs in a transaction that's rolled back at the end; tests don't see each other's writes; speed ~10x vs per-test DB.
+title: "Testing: how database tests use transactions"
+summary: "Each test runs in a transaction that's rolled back at the end; tests don't see each other's writes; speed ~10x vs per-test DB."
 status: active
 tags: [testing, database]
 ---

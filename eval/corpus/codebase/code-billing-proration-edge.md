@@ -1,10 +1,10 @@
 ---
 uuid: code-billing-proration-edge
-title: Billing: the proration edge case at month boundaries
-summary: Lines that start or end exactly on a billing period boundary get factor 1.0 (boundary-inclusive); we use the half-open interval `(start, end]`.
+title: "Billing: the proration edge case at month boundaries"
+summary: "Lines that start or end exactly on a billing period boundary get factor 1.0 (boundary-inclusive); we use the half-open interval `(start, end]`."
 status: active
 tags: [billing, proration, edge-case]
-source: tests/test_billing_proration.py
+source: "tests/test_billing_proration.py"
 ---
 ## Answer
 Proration uses the half-open interval `(start, end]`. A line with

@@ -1,10 +1,10 @@
 ---
 uuid: paper-ln-vs-bn
-title: LayerNorm vs BatchNorm: which to use when
-summary: BatchNorm: CNNs, fixed batch sizes, faster training. LayerNorm: transformers, RNNs, variable batch sizes, distributed training.
+title: "LayerNorm vs BatchNorm: which to use when"
+summary: "BatchNorm: CNNs, fixed batch sizes, faster training. LayerNorm: transformers, RNNs, variable batch sizes, distributed training."
 status: active
 tags: [layernorm, batchnorm, comparison]
-source: https://arxiv.org/abs/1607.06450
+source: "https://arxiv.org/abs/1607.06450"
 ---
 ## Answer
 Rule of thumb:

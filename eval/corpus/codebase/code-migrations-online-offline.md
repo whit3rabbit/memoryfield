@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-online-offline
-title: Migrations: online vs offline schema changes
-summary: Online (concurrent index creation, NOT NULL via check constraint) takes longer but doesn't lock; offline takes seconds but blocks all writes.
+title: "Migrations: online vs offline schema changes"
+summary: "Online (concurrent index creation, NOT NULL via check constraint) takes longer but doesn't lock; offline takes seconds but blocks all writes."
 status: active
 tags: [migrations, schema]
 ---

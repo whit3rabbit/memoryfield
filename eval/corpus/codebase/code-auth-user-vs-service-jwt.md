@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-user-vs-service-jwt
-title: Auth: the difference between user JWT and service JWT
-summary: User JWTs have a `sub` claim with the user ID and live 1 hour; service JWTs have an `aud` claim with the service name and live 5 minutes.
+title: "Auth: the difference between user JWT and service JWT"
+summary: "User JWTs have a `sub` claim with the user ID and live 1 hour; service JWTs have an `aud` claim with the service name and live 5 minutes."
 status: active
 tags: [auth, jwt, distinction]
 ---

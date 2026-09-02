@@ -1,10 +1,10 @@
 ---
 uuid: paper-rope-relative
-title: RoPE: relative position emerges from absolute rotations
-summary: The dot product of rotated q and k depends only on their relative distance (m - n), not on absolute positions; this gives length extrapolation properties.
+title: "RoPE: relative position emerges from absolute rotations"
+summary: "The dot product of rotated q and k depends only on their relative distance (m - n), not on absolute positions; this gives length extrapolation properties."
 status: active
 tags: [rope, theory]
-source: https://arxiv.org/abs/2104.09864
+source: "https://arxiv.org/abs/2104.09864"
 ---
 ## Answer
 Algebraic property: for RoPE-rotated vectors q_m and k_n,

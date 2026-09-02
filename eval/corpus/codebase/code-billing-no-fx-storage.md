@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-no-fx-storage
-title: Billing: why we don't store currency conversions
-summary: We charge in the customer's billing currency; conversions happen at payout time via the recorded FX rate snapshot.
+title: "Billing: why we don't store currency conversions"
+summary: "We charge in the customer's billing currency; conversions happen at payout time via the recorded FX rate snapshot."
 status: active
 tags: [billing, currency, fx]
 ---

@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-payout-recon
-title: Billing: the payout reconciliation job
-summary: Runs daily at 02:00 UTC; matches ledger entries against Stripe payouts and flags discrepancies > $0.01.
+title: "Billing: the payout reconciliation job"
+summary: "Runs daily at 02:00 UTC; matches ledger entries against Stripe payouts and flags discrepancies > $0.01."
 status: active
 tags: [billing, payout, job]
 ---

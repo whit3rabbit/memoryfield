@@ -1,7 +1,7 @@
 ---
 uuid: code-dm-uuidv7
-title: Data model: why `id` is UUIDv7 not UUIDv4
-summary: UUIDv7 is time-ordered, so primary key B-tree inserts stay sequential; 2-3x faster than UUIDv4 on write-heavy tables.
+title: "Data model: why `id` is UUIDv7 not UUIDv4"
+summary: "UUIDv7 is time-ordered, so primary key B-tree inserts stay sequential; 2-3x faster than UUIDv4 on write-heavy tables."
 status: active
 tags: [data-model, uuid]
 ---

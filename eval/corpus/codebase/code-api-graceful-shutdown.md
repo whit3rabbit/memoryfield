@@ -1,7 +1,7 @@
 ---
 uuid: code-api-graceful-shutdown
-title: API: graceful shutdown behavior
-summary: On SIGTERM, server stops accepting new requests, drains in-flight ones up to 30s, then exits non-zero if any are still running.
+title: "API: graceful shutdown behavior"
+summary: "On SIGTERM, server stops accepting new requests, drains in-flight ones up to 30s, then exits non-zero if any are still running."
 status: active
 tags: [api, lifecycle]
 ---

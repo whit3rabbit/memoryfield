@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-audit-log
-title: Migrations: the audit log table
-summary: Every migration records `(migration_id, applied_at, applied_by, sha256, reverted: bool)` in `schema_migrations`; never delete rows.
+title: "Migrations: the audit log table"
+summary: "Every migration records `(migration_id, applied_at, applied_by, sha256, reverted: bool)` in `schema_migrations`; never delete rows."
 status: active
 tags: [migrations, audit]
 ---

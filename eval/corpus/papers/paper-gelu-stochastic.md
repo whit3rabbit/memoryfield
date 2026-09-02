@@ -1,10 +1,10 @@
 ---
 uuid: paper-gelu-stochastic
-title: GELU: smoother than ReLU; stochastic regularization interpretation
-summary: Can be interpreted as multiplying x by a Bernoulli mask with probability Phi(x); the stochastic view explains why it generalizes better than ReLU.
+title: "GELU: smoother than ReLU; stochastic regularization interpretation"
+summary: "Can be interpreted as multiplying x by a Bernoulli mask with probability Phi(x); the stochastic view explains why it generalizes better than ReLU."
 status: active
 tags: [gelu, activation, theory]
-source: https://arxiv.org/abs/1606.08415
+source: "https://arxiv.org/abs/1606.08415"
 ---
 ## Answer
 GELU(x) = x * P(X <= x) where X ~ N(0, 1).

@@ -113,3 +113,44 @@ Measured across 20 real agent tasks (`eval/results/token_costs_2_11.txt`):
 | Original (5 stubs / 3 neighbors) | 1,009 tokens (5.8x raw read) | 100% (20/20) |
 | Lean Default (2 stubs / 0 neighbors) | **104 tokens (0.6x raw read)** | **100% (20/20)** |
 | Point Lookup (1 stub / 0 neighbors) | **55 tokens** | **100% (20/20)** |
+
+---
+
+## 5. Real-Field Stress Test: Soapstones (2026-09-02)
+
+Every number above was measured on a corpus this project wrote, with
+queries that share its vocabulary (CLAUDE.md gotcha 7). Cal Paterson's
+`soapstones.memoryfield.zip` is the first field measured here that
+nobody on this project wrote: 95 pages by many agents, no writing
+discipline, 74/95 summaries a copied `# Title` (so the stub carries no
+answer and `mf lint` warns on 94 pages). Fixture: `uv run python3
+eval/fetch_soapstones.py` (sha256-pinned, gitignored). Queries: 20
+real-answer and 8 no-answer, authored blind from titles only
+(`eval/queries/soapstones/`). Shipped pipeline as-is: arctic-xs,
+dense-first, `FLOOR=2.0`, `DENSE_FLOOR=0.30`. Full output in
+`eval/results/calibration_blind_soapstones.txt`; rerun with
+`uv run python3 -m eval.calibrate_confidence_blind soapstones`.
+
+| Ranking Strategy | Soapstones Blind Top-1 | Soapstones Blind MRR@5 |
+|---|---|---|
+| FTS-First | 0.700 | 0.817 |
+| **Dense-First (shipped)** | **0.900** | **0.950** |
+| RRF (k=60) | 0.900 | 0.942 |
+
+| Shipped Gate (n=20 real, n=8 no-answer) | Soapstones Blind |
+|---|---|
+| Usable answers (top-1 correct, confidence not `none`) | **0.750** (15/20) |
+| Answerable demoted to `none` | 0.150 (3/20) |
+| False-high on no-answer queries | **0/8** |
+| No-answer queries not `none` (all `low`) | 2/8 |
+
+Reading: the 2.6 ranking decision holds on a field this project did not
+author (dense-first beats FTS-first by 0.20 top-1, RRF adds nothing),
+and the M4 reopen trigger (top-1 under 0.8) is not hit. The gate is
+more conservative here than on the two in-house domains (0.75 usable
+against 0.90 codebase / 0.85 papers), which is the expected cost of
+summaries that repeat the title: FTS over title+summary has less to
+match, so more correct dense hits arrive without the FTS signal that
+lifts them out of `none`. No constant was changed on this evidence;
+it is one more blind set, recorded so the next recalibration (gotcha
+36) has a third domain to sweep.

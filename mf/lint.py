@@ -19,15 +19,18 @@ Every check is grounded in what the 157-page eval corpus actually does
 """
 from __future__ import annotations
 
+import datetime
 import hashlib
 import os
 import re
 from dataclasses import dataclass, field
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from sqlite3 import Connection
 
+import yaml
+
 from .indexer import _SKIP_DIRS, _TYPED_LINK_KINDS
-from .page import Page, PageParseError, load_page
+from .page import FRONTMATTER_RE, Page, PageParseError, load_page
 from .tokens import default_tokenize
 
 # PLAN.md section 5 says 300-800 tokens per page. The eval corpus that
@@ -55,6 +58,9 @@ _TOPIC_PREFIX_RE = re.compile(
     re.IGNORECASE,
 )
 _DONT_SLUG = "don-t"
+# docs/upstream/SPEC.md "Pages": lowercase ASCII letters, digits, hyphens,
+# starting and ending with a letter or digit.
+_SPEC_FILENAME_RE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?$")
 
 Severity = str  # "error" | "warning" | "info"
 
@@ -96,12 +102,13 @@ class LintResult:
         }
 
 
-def _walk(field_dir: Path) -> list[tuple[str, Page | None, str | None]]:
-    """Every `.md` under the field: (relative filename, page, parse error).
-    Unlike indexer.discover_pages() this keeps duplicates (two files, one
-    uuid) and parse errors, both of which lint has to report.
+def _walk(field_dir: Path) -> list[tuple[str, Page | None, str | None, str]]:
+    """Every `.md` under the field: (relative filename, page, parse error,
+    raw text). Unlike indexer.discover_pages() this keeps duplicates (two
+    files, one uuid) and parse errors, both of which lint has to report.
+    The raw text is what the spec checks parse, unquoted.
     """
-    out: list[tuple[str, Page | None, str | None]] = []
+    out: list[tuple[str, Page | None, str | None, str]] = []
     for dirpath, dirnames, filenames in os.walk(field_dir):
         dirnames[:] = sorted(
             d for d in dirnames if d not in _SKIP_DIRS and not d.startswith(".")
@@ -112,9 +119,11 @@ def _walk(field_dir: Path) -> list[tuple[str, Page | None, str | None]]:
             path = Path(dirpath) / name
             rel = path.relative_to(field_dir).as_posix()
             try:
-                out.append((rel, load_page(path, filename=rel), None))
+                page = load_page(path, filename=rel)
             except PageParseError as e:
-                out.append((rel, None, str(e)))
+                out.append((rel, None, str(e), ""))
+                continue
+            out.append((rel, page, None, path.read_text(encoding="utf-8")))
     return out
 
 
@@ -133,10 +142,13 @@ def _page_checks(rel: str, page: Page, raw_bytes: int, add) -> None:
         add("error", "missing-summary", "no summary; the stub is the answer, and this page has none")
     else:
         words = summary.split()
-        if len(words) < SUMMARY_MIN_WORDS:
-            add("warning", "summary-shape", f"summary is {len(words)} words; write it as the answer, not the topic")
-        elif summary.lower().rstrip(".") == page.title.lower().rstrip("."):
+        # A leading "#" is a copied H1 (Cal's soapstones export writes 74/95
+        # summaries as `# Title`); compare before counting words so the
+        # diagnosis is the specific one.
+        if summary.lstrip("#").strip().lower().rstrip(".") == page.title.lower().rstrip("."):
             add("warning", "summary-shape", "summary repeats the title; write it as the answer")
+        elif len(words) < SUMMARY_MIN_WORDS:
+            add("warning", "summary-shape", f"summary is {len(words)} words; write it as the answer, not the topic")
         elif _TOPIC_PREFIX_RE.match(summary):
             add("warning", "summary-shape", f"summary reads as a topic ({words[0]!r} ...); write it as the answer")
 
@@ -171,6 +183,46 @@ def _page_checks(rel: str, page: Page, raw_bytes: int, add) -> None:
         add("error", "bad-status", f"status {page.status!r}; expected active, superseded, or contested")
 
 
+def _spec_checks(rel: str, raw_text: str, add) -> None:
+    """Conformance to docs/upstream/SPEC.md as other readers apply it.
+
+    mf's own parser quotes ambiguous values before YAML sees them
+    (mf/page.py), so a page can index here and still be unreadable by
+    upstream's tool, Obsidian, or any plain YAML loader (CLAUDE.md
+    gotcha 39): 157/157 eval corpus pages were, until they were
+    regenerated with quoted values. These checks parse the raw block the
+    way those readers do.
+    """
+    m = FRONTMATTER_RE.match(raw_text)
+    block = m.group(1) if m else ""
+    fm: object = None
+    try:
+        fm = yaml.safe_load(block)
+    except yaml.YAMLError as e:
+        add("warning", "spec-yaml",
+            f"plain YAML rejects this frontmatter ({type(e).__name__}); quote the value")
+    if isinstance(fm, dict):
+        for key in ("title", "summary"):
+            value = fm.get(key)
+            if value is not None and not isinstance(value, str):
+                add("warning", "spec-yaml",
+                    f"`{key}` parses as {type(value).__name__} under plain YAML; quote it")
+        for key in ("created", "updated"):
+            if key not in fm:
+                add("info", "spec-dates", f"no `{key}`; spec readers expect a quoted ISO datetime")
+            elif isinstance(fm[key], datetime.date):
+                add("error", "spec-dates",
+                    f"`{key}` is an unquoted datetime; spec readers reject it, quote it")
+    elif fm is not None:
+        add("warning", "spec-yaml", "frontmatter is not a mapping under plain YAML")
+    p = PurePosixPath(rel)
+    if not _SPEC_FILENAME_RE.match(p.stem):
+        add("warning", "spec-filename",
+            f"filename {p.name!r}; spec readers want lowercase letters, digits, and hyphens")
+    if len(p.parts) > 1:
+        add("info", "spec-subdir", "page in a subdirectory; spec readers only index root-level pages")
+
+
 def lint_field(field_dir: Path, conn: Connection | None = None) -> LintResult:
     field_dir = field_dir.resolve()
     result = LintResult()
@@ -182,7 +234,7 @@ def lint_field(field_dir: Path, conn: Connection | None = None) -> LintResult:
         return add
 
     pages: dict[str, tuple[str, Page]] = {}
-    for rel, page, err in entries:
+    for rel, page, err, raw_text in entries:
         if page is None:
             if err and "no frontmatter block" not in err:
                 result.findings.append(Finding("warning", "invalid-page", rel, err.split(": ", 1)[-1]))
@@ -194,6 +246,7 @@ def lint_field(field_dir: Path, conn: Connection | None = None) -> LintResult:
         else:
             pages[page.uuid] = (rel, page)
         _page_checks(rel, page, (field_dir / rel).stat().st_size, add)
+        _spec_checks(rel, raw_text, add)
 
     # Slug collisions (ROADMAP.md 4.3): two active pages with the same
     # filename stem are what `mf claim` exists to prevent going forward,

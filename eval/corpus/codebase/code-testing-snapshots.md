@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-snapshots
-title: Testing: how snapshot tests work
-summary: Snapshot files live next to the test (`test_foo.py` → `test_foo.py.snap`); review snapshot diffs in PRs as carefully as code changes.
+title: "Testing: how snapshot tests work"
+summary: "Snapshot files live next to the test (`test_foo.py` → `test_foo.py.snap`); review snapshot diffs in PRs as carefully as code changes."
 status: active
 tags: [testing, snapshots]
 ---

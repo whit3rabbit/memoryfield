@@ -1,7 +1,7 @@
 ---
 uuid: code-deploy-freeze-calendar
-title: Deploy: the deploy freeze calendar
-summary: No deploys between Dec 20–Jan 3 (holidays) and during the all-hands on the second Tuesday of each month.
+title: "Deploy: the deploy freeze calendar"
+summary: "No deploys between Dec 20–Jan 3 (holidays) and during the all-hands on the second Tuesday of each month."
 status: active
 tags: [deploy, policy]
 ---

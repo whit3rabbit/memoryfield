@@ -1,10 +1,10 @@
 ---
 uuid: paper-rank-based-vs-proportional-prioritization
-title: PER: rank-based vs proportional prioritization
-summary: Two variants: rank-based uses the rank in |TD error| order (robust to outliers); proportional uses raw |TD error| (faster but sensitive to outliers). Rank-based is more common.
+title: "PER: rank-based vs proportional prioritization"
+summary: "Two variants: rank-based uses the rank in |TD error| order (robust to outliers); proportional uses raw |TD error| (faster but sensitive to outliers). Rank-based is more common."
 status: active
 tags: [per, variants]
-source: https://arxiv.org/abs/1511.05952
+source: "https://arxiv.org/abs/1511.05952"
 ---
 ## Answer
 Two prioritization schemes:

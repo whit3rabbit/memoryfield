@@ -1,10 +1,10 @@
 ---
 uuid: paper-gan-mode-collapse
-title: GAN: training is unstable and prone to mode collapse
-summary: Mode collapse: G produces the same output regardless of z; G and D oscillate without convergence; many practical tricks (spectral norm, two-timescale updates) needed for stability.
+title: "GAN: training is unstable and prone to mode collapse"
+summary: "Mode collapse: G produces the same output regardless of z; G and D oscillate without convergence; many practical tricks (spectral norm, two-timescale updates) needed for stability."
 status: active
 tags: [gan, training, stability]
-source: https://arxiv.org/abs/1406.2661
+source: "https://arxiv.org/abs/1406.2661"
 ---
 ## Answer
 Classic GAN training problems:

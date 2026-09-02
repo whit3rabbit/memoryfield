@@ -1,10 +1,10 @@
 ---
 uuid: paper-tx-multi-head
-title: Transformer: multi-head attention lets the model attend to different representation subspaces
-summary: h parallel attention heads run in parallel; outputs are concatenated and projected; 8 heads in the base model.
+title: "Transformer: multi-head attention lets the model attend to different representation subspaces"
+summary: "h parallel attention heads run in parallel; outputs are concatenated and projected; 8 heads in the base model."
 status: active
 tags: [transformer, multi-head]
-source: https://arxiv.org/abs/1706.03762
+source: "https://arxiv.org/abs/1706.03762"
 ---
 ## Answer
 `MultiHead(Q,K,V) = Concat(head_1,...,head_h) W^O`

@@ -1,10 +1,10 @@
 ---
 uuid: paper-tok-special
-title: Tokenization: special tokens and their roles
-summary: <bos>, <eos>, <pad>, <unk>, <mask> mark sequence boundaries, padding, unknown words, and masked positions; each model family has its own vocabulary.
+title: "Tokenization: special tokens and their roles"
+summary: "<bos>, <eos>, <pad>, <unk>, <mask> mark sequence boundaries, padding, unknown words, and masked positions; each model family has its own vocabulary."
 status: active
 tags: [tokenization, preprocessing]
-source: https://huggingface.co/docs/transformers/tokenizer_summary
+source: "https://huggingface.co/docs/transformers/tokenizer_summary"
 ---
 ## Answer
 Standard special tokens:

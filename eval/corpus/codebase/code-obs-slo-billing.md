@@ -1,7 +1,7 @@
 ---
 uuid: code-obs-slo-billing
-title: Observability: the SLO for billing endpoints
-summary: 99.95% availability over 30-day window; error budget is 21.6 minutes of downtime per month.
+title: "Observability: the SLO for billing endpoints"
+summary: "99.95% availability over 30-day window; error budget is 21.6 minutes of downtime per month."
 status: active
 tags: [observability, slo, billing]
 ---

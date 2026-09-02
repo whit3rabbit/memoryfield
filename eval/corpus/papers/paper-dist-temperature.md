@@ -1,10 +1,10 @@
 ---
 uuid: paper-dist-temperature
-title: Distillation: temperature T controls softness of probability distribution
-summary: Softmax(x/T) with T=1 is the standard softmax; T>1 flattens the distribution, exposing dark knowledge; T<1 sharpens it.
+title: "Distillation: temperature T controls softness of probability distribution"
+summary: "Softmax(x/T) with T=1 is the standard softmax; T>1 flattens the distribution, exposing dark knowledge; T<1 sharpens it."
 status: active
 tags: [distillation, temperature]
-source: https://arxiv.org/abs/1503.02531
+source: "https://arxiv.org/abs/1503.02531"
 ---
 ## Answer
 Temperature scaling: `softmax(x/T)`.

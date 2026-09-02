@@ -1,7 +1,7 @@
 ---
 uuid: code-deploy-pdb
-title: Deploy: how pod disruption budgets work
-summary: PDB `minAvailable=1` ensures at least one pod stays up during voluntary disruptions; protects against rolling deploys that drain too aggressively.
+title: "Deploy: how pod disruption budgets work"
+summary: "PDB `minAvailable=1` ensures at least one pod stays up during voluntary disruptions; protects against rolling deploys that drain too aggressively."
 status: active
 tags: [deploy, k8s]
 ---

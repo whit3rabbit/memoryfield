@@ -1,10 +1,10 @@
 ---
 uuid: paper-tok-bpe
-title: Tokenization: BPE, WordPiece, and SentencePiece
-summary: Subword tokenization splits rare words into common pieces; BPE iteratively merges frequent pairs; WordPiece uses likelihood-based merges; SentencePiece is language-agnostic.
+title: "Tokenization: BPE, WordPiece, and SentencePiece"
+summary: "Subword tokenization splits rare words into common pieces; BPE iteratively merges frequent pairs; WordPiece uses likelihood-based merges; SentencePiece is language-agnostic."
 status: active
 tags: [tokenization, preprocessing]
-source: https://arxiv.org/abs/1508.07909
+source: "https://arxiv.org/abs/1508.07909"
 ---
 ## Answer
 Subword tokenization addresses the open-vocabulary problem:

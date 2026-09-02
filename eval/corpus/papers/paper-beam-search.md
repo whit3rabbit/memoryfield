@@ -1,10 +1,10 @@
 ---
 uuid: paper-beam-search
-title: Beam search: keep top-k partial hypotheses at each step
-summary: At each decoding step, expand each hypothesis with all next tokens; keep top-k by cumulative log-probability; trades compute for search quality; greedy is beam=1.
+title: "Beam search: keep top-k partial hypotheses at each step"
+summary: "At each decoding step, expand each hypothesis with all next tokens; keep top-k by cumulative log-probability; trades compute for search quality; greedy is beam=1."
 status: active
 tags: [beam-search, decoding]
-source: https://en.wikipedia.org/wiki/Beam_search
+source: "https://en.wikipedia.org/wiki/Beam_search"
 ---
 ## Answer
 Beam search with beam size k:

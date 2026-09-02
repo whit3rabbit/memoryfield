@@ -1,7 +1,7 @@
 ---
 uuid: code-api-bulk
-title: API: bulk endpoints and their request shapes
-summary: `POST /users/bulk` accepts an array of ≤500 create requests in one call; each item gets its own status in the response array.
+title: "API: bulk endpoints and their request shapes"
+summary: "`POST /users/bulk` accepts an array of ≤500 create requests in one call; each item gets its own status in the response array."
 status: active
 tags: [api, bulk]
 ---

@@ -1,7 +1,7 @@
 ---
 uuid: code-obs-log-levels
-title: Observability: log levels in production
-summary: Default INFO; DEBUG only when actively debugging, scoped to one service for ≤30 minutes, never in a steady-state service.
+title: "Observability: log levels in production"
+summary: "Default INFO; DEBUG only when actively debugging, scoped to one service for ≤30 minutes, never in a steady-state service."
 status: active
 tags: [observability, logging]
 ---

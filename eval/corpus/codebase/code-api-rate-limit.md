@@ -1,7 +1,7 @@
 ---
 uuid: code-api-rate-limit
-title: API: rate limiting per API key
-summary: Token bucket: 1000 req/min sustained + burst of 100; `429` includes `X-RateLimit-Reset` header in seconds.
+title: "API: rate limiting per API key"
+summary: "Token bucket: 1000 req/min sustained + burst of 100; `429` includes `X-RateLimit-Reset` header in seconds."
 status: active
 tags: [api, rate-limit]
 ---

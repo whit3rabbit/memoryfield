@@ -1,7 +1,7 @@
 ---
 uuid: code-api-versioning
-title: API: how versioning works
-summary: URL path version (`/v1/`, `/v2/`); the `Accept` header is *not* used for version negotiation.
+title: "API: how versioning works"
+summary: "URL path version (`/v1/`, `/v2/`); the `Accept` header is *not* used for version negotiation."
 status: active
 tags: [api, versioning]
 ---

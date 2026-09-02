@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-aud-meaning
-title: Auth: what `aud` claims mean in practice
-summary: `aud` is the service *receiving* the token, not the service *issuing* it; check the API docs for what each endpoint expects.
+title: "Auth: what `aud` claims mean in practice"
+summary: "`aud` is the service *receiving* the token, not the service *issuing* it; check the API docs for what each endpoint expects."
 status: active
 tags: [auth, jwt, aud]
 ---

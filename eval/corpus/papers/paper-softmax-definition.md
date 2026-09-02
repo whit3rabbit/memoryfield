@@ -1,10 +1,10 @@
 ---
 uuid: paper-softmax-definition
-title: Softmax: turns logits into a probability distribution
-summary: softmax(x_i) = exp(x_i) / Sigma_j exp(x_j); outputs sum to 1; amplifies differences; numerically unstable for large logits (subtract max first).
+title: "Softmax: turns logits into a probability distribution"
+summary: "softmax(x_i) = exp(x_i) / Sigma_j exp(x_j); outputs sum to 1; amplifies differences; numerically unstable for large logits (subtract max first)."
 status: active
 tags: [softmax, activation, fundamentals]
-source: https://en.wikipedia.org/wiki/Softmax_function
+source: "https://en.wikipedia.org/wiki/Softmax_function"
 ---
 ## Answer
 softmax(x_i) = exp(x_i) / sum_j exp(x_j)

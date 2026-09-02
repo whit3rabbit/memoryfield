@@ -154,3 +154,64 @@ def test_unpack_reports_index_drift(tmp_path, monkeypatch):
     r = pack.pack_field(field, out=tmp_path / "f.memoryfield.zip")
     u = pack.unpack_field(r.path, tmp_path / "out")
     assert u.index_drift == 1
+
+
+# --- `pack --spec` (docs/upstream/SPEC.md) ---------------------------------
+
+def _fake_embed_texts(texts, model_code):
+    return [[0.5] * EMBEDDING_DIM for _ in texts]
+
+
+def test_pack_spec_emits_root_pages_and_a_spec_index(tmp_path, monkeypatch):
+    import json
+    import sqlite3
+
+    field = _build(tmp_path, monkeypatch)
+    (field / "Bad_Name.md").write_text(PAGE.format(uuid="bad"))
+    monkeypatch.setattr(pack, "_embed_texts", _fake_embed_texts)
+    r = pack.pack_field(field, out=tmp_path / "s.memoryfield.zip", spec=True)
+    assert set(zipfile.ZipFile(r.path).namelist()) == {"a.md", "snowflake-arctic-embed-xs.sqlite3"}
+    assert r.spec_index == "snowflake-arctic-embed-xs.sqlite3"
+    assert sorted(r.skipped) == ["Bad_Name.md", "sub/b.md"]  # bad filename, subdirectory
+    assert r.files == 2
+    idx = tmp_path / "idx.sqlite3"
+    idx.write_bytes(zipfile.ZipFile(r.path).read(r.spec_index))
+    conn = sqlite3.connect(idx)
+    rows = conn.execute("SELECT filename, frontmatter, length(sha256_hash), length(embedding) FROM pages").fetchall()
+    conn.close()
+    assert len(rows) == 1
+    filename, fm, sha_len, emb_len = rows[0]
+    assert filename == "a.md" and sha_len == 32 and emb_len == EMBEDDING_DIM * 4
+    assert json.loads(fm) == {"uuid": "a", "title": "Rotate the key", "summary": "Run make rotate-key"}
+
+
+def test_pack_spec_embeds_the_whole_file_per_the_spec(tmp_path, monkeypatch):
+    captured = {}
+
+    def fake(texts, model_code):
+        captured["texts"], captured["model"] = texts, model_code
+        return _fake_embed_texts(texts, model_code)
+
+    field = _build(tmp_path, monkeypatch)
+    monkeypatch.setattr(pack, "_embed_texts", fake)
+    pack.pack_field(field, out=tmp_path / "s.memoryfield.zip", spec=True)
+    assert captured["model"] == "snowflake-arctic-embed-xs"
+    # Frontmatter included, no mf-style title+summary+L1 construction.
+    assert captured["texts"] == [(field / "a.md").read_text()]
+
+
+def test_pack_spec_without_an_index_writes_pages_only(tmp_path, monkeypatch):
+    field = _build(tmp_path, monkeypatch, with_index=False)
+    r = pack.pack_field(field, out=tmp_path / "s.memoryfield.zip", spec=True)
+    assert set(zipfile.ZipFile(r.path).namelist()) == {"a.md"}
+    assert r.spec_index == "" and r.skipped == ["sub/b.md"]
+
+
+def test_unpack_notes_a_spec_index_it_does_not_read(tmp_path):
+    z = tmp_path / "s.memoryfield.zip"
+    with zipfile.ZipFile(z, "w") as zf:
+        zf.writestr("a.md", PAGE.format(uuid="a"))
+        zf.writestr("nomic-embed-text-v1.5.sqlite3", b"not read")
+    u = pack.unpack_field(z, tmp_path / "out")
+    assert u.has_index is False
+    assert any("nomic-embed-text-v1.5.sqlite3" in n and "mf init" in n for n in u.notes)

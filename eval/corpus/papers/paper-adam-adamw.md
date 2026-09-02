@@ -1,10 +1,10 @@
 ---
 uuid: paper-adam-adamw
-title: Adam: weight decay should be decoupled (AdamW) for best results
-summary: L2 regularization in Adam interacts with the adaptive step size; decoupled weight decay (AdamW, Loshchilov & Hutter 2019) treats weight decay separately from the gradient.
+title: "Adam: weight decay should be decoupled (AdamW) for best results"
+summary: "L2 regularization in Adam interacts with the adaptive step size; decoupled weight decay (AdamW, Loshchilov & Hutter 2019) treats weight decay separately from the gradient."
 status: active
 tags: [adam, adamw, regularization]
-source: https://arxiv.org/abs/1711.05101
+source: "https://arxiv.org/abs/1711.05101"
 ---
 ## Answer
 Original Adam applies L2 regularization by adding it to the gradient. With Adam's adaptive step size, this regularization is *scaled* by `1/sqrt(v_hat)`, producing non-uniform shrinkage across parameters.

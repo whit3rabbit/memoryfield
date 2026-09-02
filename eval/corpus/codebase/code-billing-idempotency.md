@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-idempotency
-title: Billing: idempotency key for invoice creation
-summary: `Idempotency-Key` header on POST /invoices; replays with the same key return the original invoice without re-charging.
+title: "Billing: idempotency key for invoice creation"
+summary: "`Idempotency-Key` header on POST /invoices; replays with the same key return the original invoice without re-charging."
 status: active
 tags: [billing, idempotency]
 ---

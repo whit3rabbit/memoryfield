@@ -1,10 +1,10 @@
 ---
 uuid: paper-tfidf-definition
-title: TF-IDF: term frequency times inverse document frequency
-summary: TF(t,d) * IDF(t) = count(t in d) / |d| * log(N / df(t)); rewards words common in a document but rare in the corpus; classic IR baseline before dense retrievers.
+title: "TF-IDF: term frequency times inverse document frequency"
+summary: "TF(t,d) * IDF(t) = count(t in d) / |d| * log(N / df(t)); rewards words common in a document but rare in the corpus; classic IR baseline before dense retrievers."
 status: active
 tags: [tfidf, ir, lexical]
-source: https://en.wikipedia.org/wiki/Tf%E2%80%93idf
+source: "https://en.wikipedia.org/wiki/Tf%E2%80%93idf"
 ---
 ## Answer
 TF-IDF combines two intuitions:

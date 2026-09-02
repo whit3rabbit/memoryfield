@@ -1,10 +1,10 @@
 ---
 uuid: code-auth-rotate-jwt-key
-title: Auth: rotating the JWT signing key
-summary: Run `make rotate-jwt-key`; redeploys auth service in 60s; old keys valid for 5-minute overlap window.
+title: "Auth: rotating the JWT signing key"
+summary: "Run `make rotate-jwt-key`; redeploys auth service in 60s; old keys valid for 5-minute overlap window."
 status: active
 tags: [auth, jwt, rotation, ops]
-source: ops/runbook/auth.md#rotate-jwt
+source: "ops/runbook/auth.md#rotate-jwt"
 ---
 ## Answer
 Run `make rotate-jwt-key`. That target generates a new Ed25519 keypair,

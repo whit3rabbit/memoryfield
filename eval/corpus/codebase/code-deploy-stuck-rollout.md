@@ -1,7 +1,7 @@
 ---
 uuid: code-deploy-stuck-rollout
-title: Deploy: how to debug a stuck rollout
-summary: Check `kubectl rollout status`, pod events, image pull status, and the readiness probe; 80% of stuck rollouts are image pull errors.
+title: "Deploy: how to debug a stuck rollout"
+summary: "Check `kubectl rollout status`, pod events, image pull status, and the readiness probe; 80% of stuck rollouts are image pull errors."
 status: active
 tags: [deploy, debugging]
 ---

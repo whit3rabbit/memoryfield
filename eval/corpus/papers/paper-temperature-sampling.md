@@ -1,10 +1,10 @@
 ---
 uuid: paper-temperature-sampling
-title: Temperature in sampling: T<1 sharpens; T>1 flattens
-summary: softmax(logits/T); T=1 is the model's natural distribution; T=0 is argmax (greedy); T>1 is more random; lower T produces more deterministic outputs.
+title: "Temperature in sampling: T<1 sharpens; T>1 flattens"
+summary: "softmax(logits/T); T=1 is the model's natural distribution; T=0 is argmax (greedy); T>1 is more random; lower T produces more deterministic outputs."
 status: active
 tags: [sampling, temperature, decoding]
-source: https://arxiv.org/abs/1904.09751
+source: "https://arxiv.org/abs/1904.09751"
 ---
 ## Answer
 Sampling temperature T:

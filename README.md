@@ -1,10 +1,18 @@
 # memoryfields
 
-Based on: https://calpaterson.com/memoryfields.html
-
 mf is a search-first memory tool for coding agents. A field is a
 directory of Markdown pages with frontmatter, and mf indexes it into
 SQLite with full-text and vector search.
+
+The page format is the [memoryfield](https://calpaterson.com/memoryfields.html)
+format, Cal Paterson's spec for memory as plain files ([vendored
+copy](docs/upstream/SPEC.md)). mf builds on that format rather than
+reimplementing his tool: any spec field loads unchanged, `mf pack
+--spec` writes one back out, and everything mf adds on top (stub-first
+search, the confidence gate, the dedup gate, `raw/` and consolidation,
+typed links, claims) is its own measured design. Where the two differ,
+[docs/architecture.md](docs/architecture.md) section 6 says which side
+each decision fell on and why.
 
 A lookup returns stubs, not pages. The agent reads a summary first and
 opens the body only when it needs it. The tool never calls an LLM, and
@@ -84,6 +92,7 @@ Every retrieval and schema choice in `mf` is backed by empirical benchmarks acro
 - **Dense-first ranking over RRF and FTS**: The original design planned symmetric RRF, and early versions used FTS-first. When benchmarked through the real pipeline on blind vocabulary-mismatch queries (`eval/calibrate_confidence_blind.py`), dense-first significantly outperformed both:
   - Codebase blind top-1: **0.950** (dense-first) vs. 0.800 (RRF) vs. 0.700 (FTS-first).
   - Papers blind top-1: **0.900** (dense-first) vs. 0.850 (RRF) vs. 0.800 (FTS-first).
+  - Soapstones blind top-1 (a 95-page field written by other people's agents, not by this project): **0.900** (dense-first) vs. 0.900 (RRF) vs. 0.700 (FTS-first).
   RRF diluted ranking quality by averaging in FTS keyword noise. FTS is retained on every query as a confidence signal and fallback, not as the primary ranker.
 - **Calibrated multi-signal confidence gate**: Early confidence scoring relied solely on BM25 score floors. Blind testing revealed two major flaws: 45% of answerable blind queries returned `none`, and BM25's IDF term collapsed on small fields (an 80% `none` failure rate on 10-page fields). The gate was redesigned to combine dense floor distance (`<= 0.30`), BM25 score, and top-1 agreement:
   - Usable answers jumped from **0.550 -> 0.900** on blind queries and **0.185 -> 0.889** on 10-page field subsamples.
@@ -94,6 +103,7 @@ Every retrieval and schema choice in `mf` is backed by empirical benchmarks acro
 - **Ultra-lightweight default embedder (`snowflake-arctic-embed-xs`)**: Benchmarks across the 157-page corpus ([docs/BENCHMARKS.md](docs/BENCHMARKS.md)) show `snowflake-arctic-embed-xs` achieves **0.950 average blind Top-1** with **33 ms cached load time**, **0.9 ms query latency**, and 50% less vector storage than 768-d models (384-d vs 768-d). Alternative models like `bge-small-en-v1.5`, `nomic-embed-text-v1.5`, `bge-large-en-v1.5`, `all-MiniLM-L6-v2`, and `jina-embeddings-v2-small-en` are selectable via `mf init --model`.
 - **No in-tool LLM or cross-encoder reranker**: With blind top-1 retrieval accuracy reaching 0.90–0.95, a neural reranker was unnecessary. Page summarization and extraction are handled by the calling host agent already in context, keeping `mf` deterministic, local, and sub-second.
 - **In-flight session capture over post-hoc transcript parsing**: Parsing 50–200K token transcripts at session end without an LLM exceeded hook budgets. Instead, `mf hook stop` prompts the agent to capture findings while context is active, and `mf hook session-end` only stages a minimal metadata pointer (<0.25s execution).
+- **Spec compatibility verified on a real foreign field, not assumed**: The spec archive layout matched mf's own, so `mf unpack` reads Cal Paterson's soapstones export as-is and every page indexes and searches. The review also found that every one of this repo's own 157 corpus pages was unreadable by any plain-YAML consumer (unquoted `Topic: question` titles that only mf's lenient parser accepted). The corpus, the skill, and `mf lint` now enforce quoting, and `mf pack --spec` emits an archive in the spec's own shape.
 
 ## Using it with an agent
 
@@ -125,7 +135,7 @@ Full arguments, flags, exit codes, and JSON outputs are documented in [docs/CLI.
 | `mf write <draft>` | validate, dedup-check, copy in, and index a draft |
 | `mf raw add` | stage a freeform session extract under `raw/` |
 | `mf lint [DIR]` | check writing conventions and index drift, `--check` for CI |
-| `mf pack` / `mf unpack` | reproducible archive plus sha256 sidecar, verified extraction |
+| `mf pack` / `mf unpack` | reproducible archive plus sha256 sidecar, verified extraction; `--spec` for other memoryfield readers |
 | `mf import claude-memory <dir>` | turn a Claude Code memory directory into pages |
 | `mf import wiki <dir>` | turn an index.md-style wiki into pages |
 | `mf hook stop` / `mf hook session-end` | Claude Code hook handlers |
@@ -146,6 +156,30 @@ Both are un-gated bulk imports: the dedup gate does not run. uuids
 derive from the source names, so a re-import updates in place, and
 `source` points back at the original file. `--dry-run` lists the plan
 before anything is written. Run `mf lint` after importing.
+
+## Working with other memoryfield tools
+
+Any spec-conformant field loads as-is:
+
+```bash
+mf unpack soapstones.memoryfield.zip ~/soap && mf init ~/soap && mf index ~/soap
+```
+
+A spec vector index inside the archive (`nomic-embed-text-v1.5.sqlite3`
+or similar) is noted and left alone; mf builds its own. Cal Paterson's
+soapstones export is the demo field: `uv run python3
+eval/fetch_soapstones.py` downloads it with a pinned checksum.
+
+Going the other way, `mf pack --spec ~/field` writes an archive a spec
+reader expects: root-level pages, a `<model>.sqlite3` index in the
+spec's schema, no `mf.sqlite3` or `raw/`. Pages in subdirectories are
+skipped and listed.
+
+Two rules keep pages readable outside mf. Quote `title`, `summary`,
+`created`, `updated`, and anything with `: ` or a leading backtick in
+it: mf's parser tolerates the unquoted form, plain YAML readers do
+not. Keep filenames to lowercase letters, digits, and hyphens at the
+field root. `mf lint` reports both as `spec-*` findings.
 
 ## Keeping a field healthy
 
@@ -193,13 +227,18 @@ nomic, BGE-large, and hybrid).
 
 The query set shares an authoring process with the corpus, so scores
 sit near ceiling. Read the numbers with that in mind, in
-[docs/M0.5_REPORT.md](docs/M0.5_REPORT.md).
+[docs/M0.5_REPORT.md](docs/M0.5_REPORT.md). A third domain built from
+the soapstones export, with blind queries authored from titles only,
+is the first corpus outside that process; its numbers are in
+[docs/BENCHMARKS.md](docs/BENCHMARKS.md) section 5.
 
 ```bash
 uv sync --extra eval              # fastembed into a local venv
 uv sync --extra eval --extra mlx  # optional, Apple Silicon MLX variants
 uv run python3 -m eval.run_baselines   # 45+ minutes wall time
 uv run python3 -m eval.report          # render the report
+uv run python3 eval/fetch_soapstones.py                        # pinned foreign-field fixture
+uv run python3 -m eval.calibrate_confidence_blind soapstones   # ranking and gate on it
 ```
 
 ## Development

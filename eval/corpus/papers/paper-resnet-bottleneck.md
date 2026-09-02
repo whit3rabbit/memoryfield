@@ -1,10 +1,10 @@
 ---
 uuid: paper-resnet-bottleneck
-title: ResNet: bottleneck blocks reduce compute in deeper variants
-summary: Bottleneck: 1x1 conv (channel reduction) → 3x3 conv → 1x1 conv (channel restoration); ResNet-50/101/152 use this; ResNet-18/34 use basic blocks.
+title: "ResNet: bottleneck blocks reduce compute in deeper variants"
+summary: "Bottleneck: 1x1 conv (channel reduction) → 3x3 conv → 1x1 conv (channel restoration); ResNet-50/101/152 use this; ResNet-18/34 use basic blocks."
 status: active
 tags: [resnet, bottleneck]
-source: https://arxiv.org/abs/1512.03385
+source: "https://arxiv.org/abs/1512.03385"
 ---
 ## Answer
 Bottleneck block: `1x1 conv (channel/4) → 3x3 conv → 1x1 conv (channel)`.

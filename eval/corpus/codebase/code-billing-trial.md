@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-trial
-title: Billing: how trial periods are billed
-summary: Trials generate zero-amount invoice lines with `proration_factor = 0`; they exist only for audit trail.
+title: "Billing: how trial periods are billed"
+summary: "Trials generate zero-amount invoice lines with `proration_factor = 0`; they exist only for audit trail."
 status: active
 tags: [billing, trial]
 ---

@@ -1,10 +1,10 @@
 ---
 uuid: paper-rms-definition
-title: RMSNorm: layer norm without the mean-centering step
-summary: Only the root-mean-square scaling is applied; no mean subtraction; saves compute; matches LayerNorm quality on most transformer tasks.
+title: "RMSNorm: layer norm without the mean-centering step"
+summary: "Only the root-mean-square scaling is applied; no mean subtraction; saves compute; matches LayerNorm quality on most transformer tasks."
 status: active
 tags: [rmsnorm, normalization, transformer]
-source: https://arxiv.org/abs/1910.07467
+source: "https://arxiv.org/abs/1910.07467"
 ---
 ## Answer
 RMSNorm:

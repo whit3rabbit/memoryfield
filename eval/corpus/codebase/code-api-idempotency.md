@@ -1,7 +1,7 @@
 ---
 uuid: code-api-idempotency
-title: API: idempotency keys and request bodies
-summary: `Idempotency-Key` ties a response to a (key, body) pair; replaying with the same key but different body returns 422.
+title: "API: idempotency keys and request bodies"
+summary: "`Idempotency-Key` ties a response to a (key, body) pair; replaying with the same key but different body returns 422."
 status: active
 tags: [api, idempotency]
 ---

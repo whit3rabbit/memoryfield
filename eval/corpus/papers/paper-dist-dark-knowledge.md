@@ -1,10 +1,10 @@
 ---
 uuid: paper-dist-dark-knowledge
-title: Distillation: why soft labels encode more than hard labels
-summary: A 0.7 truck / 0.3 car distribution encodes similarity to other classes; a 1.0 truck hard label doesn't; the student learns relationships, not just categories.
+title: "Distillation: why soft labels encode more than hard labels"
+summary: "A 0.7 truck / 0.3 car distribution encodes similarity to other classes; a 1.0 truck hard label doesn't; the student learns relationships, not just categories."
 status: active
 tags: [distillation, theory]
-source: https://arxiv.org/abs/1503.02531
+source: "https://arxiv.org/abs/1503.02531"
 ---
 ## Answer
 Hinton et al.'s 'dark knowledge' insight: the teacher's soft probability distribution encodes inter-class similarities that hard labels miss.

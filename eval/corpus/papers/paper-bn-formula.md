@@ -1,10 +1,10 @@
 ---
 uuid: paper-bn-formula
-title: BatchNorm: normalize activations per mini-batch during training
-summary: x_hat = (x - mu_B) / sqrt(sigma^2_B + eps); scale and shift: y = gamma * x_hat + beta; mu_B and sigma^2_B are batch statistics; running averages maintained for inference.
+title: "BatchNorm: normalize activations per mini-batch during training"
+summary: "x_hat = (x - mu_B) / sqrt(sigma^2_B + eps); scale and shift: y = gamma * x_hat + beta; mu_B and sigma^2_B are batch statistics; running averages maintained for inference."
 status: active
 tags: [batchnorm, normalization, training]
-source: https://arxiv.org/abs/1502.03167
+source: "https://arxiv.org/abs/1502.03167"
 ---
 ## Answer
 Per mini-batch:

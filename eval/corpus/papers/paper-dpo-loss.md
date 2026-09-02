@@ -1,10 +1,10 @@
 ---
 uuid: paper-dpo-loss
-title: DPO: direct preference optimization replaces RLHF's reward model + PPO
-summary: Skip the reward model and the PPO loop; optimize a single classification loss directly on preference pairs (chosen, rejected); simpler, faster, often comparable quality.
+title: "DPO: direct preference optimization replaces RLHF's reward model + PPO"
+summary: "Skip the reward model and the PPO loop; optimize a single classification loss directly on preference pairs (chosen, rejected); simpler, faster, often comparable quality."
 status: active
 tags: [dpo, rlhf, alignment]
-source: https://arxiv.org/abs/2305.18290
+source: "https://arxiv.org/abs/2305.18290"
 ---
 ## Answer
 DPO loss:

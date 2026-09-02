@@ -1,10 +1,10 @@
 ---
 uuid: paper-moe-load-balancing
-title: MoE: load balancing loss prevents expert collapse
-summary: Auxiliary loss penalizes uneven routing across experts; without it, the router converges to sending all tokens to a few experts (collapse).
+title: "MoE: load balancing loss prevents expert collapse"
+summary: "Auxiliary loss penalizes uneven routing across experts; without it, the router converges to sending all tokens to a few experts (collapse)."
 status: active
 tags: [moe, load-balancing, training]
-source: https://arxiv.org/abs/2101.03961
+source: "https://arxiv.org/abs/2101.03961"
 ---
 ## Answer
 Without balancing, the router learns to favor a few 'good' experts, leaving others unused -- destroying the capacity benefit.

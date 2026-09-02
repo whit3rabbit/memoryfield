@@ -1,10 +1,10 @@
 ---
 uuid: paper-dqn-tricks
-title: DQN: deep Q-network with experience replay and target network
-summary: Two tricks stabilize Q-learning with neural networks: (1) experience replay buffer breaks temporal correlation; (2) target network updates slowly to stabilize the bootstrap target.
+title: "DQN: deep Q-network with experience replay and target network"
+summary: "Two tricks stabilize Q-learning with neural networks: (1) experience replay buffer breaks temporal correlation; (2) target network updates slowly to stabilize the bootstrap target."
 status: active
 tags: [dqn, rl, stability]
-source: https://www.nature.com/articles/nature14236
+source: "https://www.nature.com/articles/nature14236"
 ---
 ## Answer
 Two stability tricks:

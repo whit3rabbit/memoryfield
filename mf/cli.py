@@ -116,6 +116,9 @@ def build_parser() -> argparse.ArgumentParser:
     pack_parser.add_argument("--out", default=None, help="archive path (default: ../<field name>.memoryfield.zip)")
     pack_parser.add_argument("--no-index", action="store_true", help="leave mf.sqlite3 out")
     pack_parser.add_argument("--no-raw", action="store_true", help="leave raw/ out")
+    pack_parser.add_argument("--spec", action="store_true",
+                             help="spec-only archive for other readers: root-level pages, no mf.sqlite3 or raw/, "
+                                  "plus a <model>.sqlite3 index in the spec's schema")
     pack_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     unpack_parser = subparsers.add_parser("unpack", help="verify and extract a .memoryfield.zip")
@@ -432,15 +435,23 @@ def _cmd_pack(args: argparse.Namespace) -> int:
     if not field_dir.is_dir():
         sys.stderr.write(f"mf pack: {field_dir} is not a directory\n")
         return 1
-    result = pack_mod.pack_field(
-        field_dir, out=Path(args.out) if args.out else None,
-        include_index=not args.no_index, include_raw=not args.no_raw,
-    )
+    try:
+        result = pack_mod.pack_field(
+            field_dir, out=Path(args.out) if args.out else None,
+            include_index=not args.no_index, include_raw=not args.no_raw, spec=args.spec,
+        )
+    except db.SchemaVersionError as e:
+        sys.stderr.write(f"mf pack: {e}\n")
+        return 1
     if args.json:
         print(json.dumps(result.as_dict(), indent=2))
     else:
         print(f"Packed {result.files} files ({result.bytes} bytes) to {result.path}")
         print(f"sha256 {result.sha256} (sidecar {result.path.name}{pack_mod.SIDECAR_SUFFIX})")
+        if result.spec_index:
+            print(f"spec vector index {result.spec_index}")
+        for rel in result.skipped:
+            print(f"skipped {rel}: spec readers only see root-level [a-z0-9-] pages")
     return 0
 
 

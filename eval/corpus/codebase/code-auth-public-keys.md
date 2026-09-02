@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-public-keys
-title: Auth: where the public keys live
-summary: Active keys are in `secrets://auth/jwt/active`; rotated-out keys live in `secrets://auth/jwt/history/<version>` for 30 days.
+title: "Auth: where the public keys live"
+summary: "Active keys are in `secrets://auth/jwt/active`; rotated-out keys live in `secrets://auth/jwt/history/<version>` for 30 days."
 status: active
 tags: [auth, jwt, secrets]
 ---

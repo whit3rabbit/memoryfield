@@ -1,7 +1,7 @@
 ---
 uuid: code-dm-soft-delete
-title: Data model: how soft deletes work
-summary: `deleted_at` column; queries default to `WHERE deleted_at IS NULL`; the `with_deleted` scope is opt-in for admin tools.
+title: "Data model: how soft deletes work"
+summary: "`deleted_at` column; queries default to `WHERE deleted_at IS NULL`; the `with_deleted` scope is opt-in for admin tools."
 status: active
 tags: [data-model, soft-delete]
 ---

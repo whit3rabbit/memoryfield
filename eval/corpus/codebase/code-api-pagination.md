@@ -1,7 +1,7 @@
 ---
 uuid: code-api-pagination
-title: API: why GET /users returns paginated cursors
-summary: Cursor-based pagination on `created_at + id`; `next_cursor` is opaque, don't parse it; offsets would be O(n) on large tables.
+title: "API: why GET /users returns paginated cursors"
+summary: "Cursor-based pagination on `created_at + id`; `next_cursor` is opaque, don't parse it; offsets would be O(n) on large tables."
 status: active
 tags: [api, pagination]
 ---

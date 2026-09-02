@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-up-vs-expand
-title: Migrations: the difference between `up` and `expand`
-summary: `up` migrations change schema; `expand` migrations also deploy code that dual-writes/dual-reads; never use them interchangeably.
+title: "Migrations: the difference between `up` and `expand`"
+summary: "`up` migrations change schema; `expand` migrations also deploy code that dual-writes/dual-reads; never use them interchangeably."
 status: active
 tags: [migrations, vocabulary]
 ---

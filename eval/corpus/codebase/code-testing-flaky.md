@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-flaky
-title: Testing: how flaky tests are handled
-summary: Flaky tests are auto-quarantined with a `flaky` marker; if they fail 3 times in 7 days, they block CI; root cause within a week or they're deleted.
+title: "Testing: how flaky tests are handled"
+summary: "Flaky tests are auto-quarantined with a `flaky` marker; if they fail 3 times in 7 days, they block CI; root cause within a week or they're deleted."
 status: active
 tags: [testing, flaky]
 ---

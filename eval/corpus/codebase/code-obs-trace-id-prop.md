@@ -1,7 +1,7 @@
 ---
 uuid: code-obs-trace-id-prop
-title: Observability: what `trace_id` propagation requires
-summary: Set the W3C `traceparent` header on every outgoing HTTP/gRPC call; the receiving service extracts it and starts a child span.
+title: "Observability: what `trace_id` propagation requires"
+summary: "Set the W3C `traceparent` header on every outgoing HTTP/gRPC call; the receiving service extracts it and starts a child span."
 status: active
 tags: [observability, tracing]
 ---

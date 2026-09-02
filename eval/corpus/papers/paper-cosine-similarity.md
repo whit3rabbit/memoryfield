@@ -1,10 +1,10 @@
 ---
 uuid: paper-cosine-similarity
-title: Cosine similarity: angle between two vectors, ignoring magnitude
-summary: cos(theta) = (A . B) / (|A| * |B|); range -1 to 1; standard similarity for normalized embeddings; high = similar direction in vector space.
+title: "Cosine similarity: angle between two vectors, ignoring magnitude"
+summary: "cos(theta) = (A . B) / (|A| * |B|); range -1 to 1; standard similarity for normalized embeddings; high = similar direction in vector space."
 status: active
 tags: [similarity, embeddings]
-source: https://en.wikipedia.org/wiki/Cosine_similarity
+source: "https://en.wikipedia.org/wiki/Cosine_similarity"
 ---
 ## Answer
 Cosine similarity = cosine of the angle between two vectors.

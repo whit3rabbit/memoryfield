@@ -1,10 +1,10 @@
 ---
 uuid: paper-spearman-definition
-title: Spearman correlation: rank-based measure of monotonic association
-summary: Pearson correlation on ranks; range -1 to 1; -1 = perfectly anti-monotonic; 0 = no monotonic association; 1 = perfectly monotonic; works for ordinal data and outliers.
+title: "Spearman correlation: rank-based measure of monotonic association"
+summary: "Pearson correlation on ranks; range -1 to 1; -1 = perfectly anti-monotonic; 0 = no monotonic association; 1 = perfectly monotonic; works for ordinal data and outliers."
 status: active
 tags: [correlation, statistics]
-source: https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient
+source: "https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient"
 ---
 ## Answer
 Spearman rho = Pearson correlation applied to ranks:

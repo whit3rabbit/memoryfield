@@ -37,7 +37,20 @@ no-answer queries the 1.4 calibration used), `queries_blind.jsonl`
 (1.8, 40 real-answer + 8 no-answer), and `queries_blind_noanswer.jsonl`
 (2.7, 40 more blind no-answer queries authored the same way as 1.8's).
 
-Run: uv run python3 -m eval.calibrate_confidence_blind
+Embedding model: the field's default (`mf.schema.DEFAULT_MODEL_CODE`,
+arctic-xs since the model-management change) through `mf.embedder`, so
+the numbers are the pipeline as shipped. `MF_CAL_MODEL=nomic-embed-text-v1.5`
+reproduces the 2.7 run this script was written for (the gate constants
+were calibrated on nomic; docs/architecture.md records that caveat).
+
+Third domain (2026-09-02): `soapstones`, Cal Paterson's real 95-page
+export, built from the fixture `eval/fetch_soapstones.py` downloads
+(skipped when absent). Blind queries only (no in-vocabulary set exists
+for it, and no size sweep: its uuids are not filename stems). A real
+field with no writing discipline and `# Title` summaries, so this is a
+stress test of the shipped pipeline, not a calibration set.
+
+Run: uv run python3 -m eval.calibrate_confidence_blind [domain ...]
 """
 from __future__ import annotations
 
@@ -49,19 +62,24 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from sqlite3 import Connection
-from typing import Any
 
 from eval.mf_harness import Query, load_queries
-from mf import db, indexer
+from mf import db, embedder, indexer, pack
 from mf.confidence import Confidence
 from mf.embedder import vec_literal
-from mf.embedding import document_text, query_text
+from mf.embedding import document_text
 from mf.query_prep import fts_query
+from mf.schema import DEFAULT_MODEL_CODE
 
 ROOT = Path(__file__).parent
 CORPUS_DIR = ROOT / "corpus"
 QUERIES_DIR = ROOT / "queries"
-DOMAINS = {"codebase": "code", "papers": "papers"}
+DOMAINS = {"codebase": "code", "papers": "papers", "soapstones": "soap"}
+# Domains built from a fetched spec archive instead of eval/corpus/.
+FIXTURES = {"soapstones": ROOT / "fixtures" / "soapstones.memoryfield.zip"}
+MODEL = os.environ.get("MF_CAL_MODEL", DEFAULT_MODEL_CODE)
+MODEL_KIND = embedder.registry_entry(MODEL)["kind"]
+MODEL_DIM = embedder.registry_entry(MODEL)["dim"]
 SETS = {
     "original": "queries.jsonl",
     "blind": "queries_blind.jsonl",
@@ -73,31 +91,22 @@ FLOORS = [1.0, 1.5, 2.0, 2.5, 3.0]
 DENSE_DISTS = [0.25, 0.30, 0.35, 0.40, 0.45, 0.50]
 SIZES = [10, 25, 50]
 
-_MODEL: dict[str, Any] = {}
 _PAGE_CACHE: dict[str, list[float]] = {}
 _QUERY_CACHE: dict[str, list[float]] = {}
-
-
-def _model():
-    if "m" not in _MODEL:
-        from fastembed import TextEmbedding
-        _MODEL["m"] = TextEmbedding(model_name="nomic-ai/nomic-embed-text-v1.5")
-    return _MODEL["m"]
 
 
 def _cached_embed_pages(pages, model_code):
     missing = [p for p in pages if p.sha256 not in _PAGE_CACHE]
     if missing:
-        texts = [document_text(p.title, p.summary, p.l1, "nomic") for p in missing]
-        for p, v in zip(missing, _model().embed(texts, batch_size=32)):
-            _PAGE_CACHE[p.sha256] = [float(x) for x in v]
+        texts = [document_text(p.title, p.summary, p.l1, MODEL_KIND) for p in missing]
+        for p, v in zip(missing, embedder.embed_texts(texts, MODEL)):
+            _PAGE_CACHE[p.sha256] = v
     return {p.uuid: _PAGE_CACHE[p.sha256] for p in pages}
 
 
 def _embed_query(text: str) -> list[float]:
     if text not in _QUERY_CACHE:
-        vec = next(iter(_model().embed([query_text(text, "nomic")])))
-        _QUERY_CACHE[text] = [float(x) for x in vec]
+        _QUERY_CACHE[text] = embedder.embed_query(text, MODEL)
     return _QUERY_CACHE[text]
 
 
@@ -157,10 +166,13 @@ class Obs:
 
 def _build_field(corpus_subdir: str, uuids: set[str] | None = None) -> tuple[Path, Connection]:
     tmp = Path(tempfile.mkdtemp(prefix=f"mf-cal-{corpus_subdir}-"))
-    for p in (CORPUS_DIR / corpus_subdir).glob("*.md"):
-        if uuids is None or p.stem in uuids:
-            shutil.copy(p, tmp / p.name)
-    db.init_field(tmp)
+    if corpus_subdir in FIXTURES:
+        pack.unpack_field(FIXTURES[corpus_subdir], tmp, force=True)
+    else:
+        for p in (CORPUS_DIR / corpus_subdir).glob("*.md"):
+            if uuids is None or p.stem in uuids:
+                shutil.copy(p, tmp / p.name)
+    db.init_field(tmp, MODEL, MODEL_DIM)
     conn = db.open_field(tmp)
     indexer.index_field(tmp, conn)
     return tmp, conn
@@ -273,10 +285,28 @@ def _ranking_table(obs: list[Obs], label: str) -> None:
         print(f"    {how:<12} top1={top1/len(real):.3f} mrr@5={rr/len(real):.3f}")
 
 
+def _wanted() -> dict[str, str]:
+    """Domains to run: argv names, else all; fixture-backed ones only when
+    the fixture has been fetched."""
+    names = sys.argv[1:] or list(DOMAINS)
+    unknown = [n for n in names if n not in DOMAINS]
+    if unknown:
+        sys.exit(f"unknown domain(s) {unknown}; known: {list(DOMAINS)}")
+    out = {}
+    for name in names:
+        if name in FIXTURES and not FIXTURES[name].exists():
+            print(f"[{name}] skipped: fixture missing, run `uv run python3 eval/fetch_soapstones.py`")
+            continue
+        out[name] = DOMAINS[name]
+    return out
+
+
 def main() -> int:
     indexer._embed_pages = _cached_embed_pages  # type: ignore[assignment]
+    domains = _wanted()
+    print(f"model={MODEL} ({MODEL_DIM}-d) domains={list(domains)}")
     all_obs: dict[str, list[Obs]] = {}
-    for corpus_subdir, qdomain in DOMAINS.items():
+    for corpus_subdir, qdomain in domains.items():
         tmp, conn = _build_field(corpus_subdir)
         try:
             obs: list[Obs] = []
@@ -326,7 +356,10 @@ def main() -> int:
     print("3. CORPUS SIZE SWEEP (seed 42), presented=dense")
     print("=" * 78)
     rng = random.Random(42)
-    for corpus_subdir, qdomain in DOMAINS.items():
+    for corpus_subdir, qdomain in domains.items():
+        if corpus_subdir in FIXTURES:
+            print(f"\n[{corpus_subdir}] no size sweep: fixture uuids are not filename stems")
+            continue
         all_uuids = sorted(p.stem for p in (CORPUS_DIR / corpus_subdir).glob("*.md"))
         queries: list[tuple[str, Query]] = []
         for set_name, filename in SETS.items():

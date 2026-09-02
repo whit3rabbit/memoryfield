@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-stripe-webhook
-title: Billing: stripe webhook signature verification
-summary: Verify with `stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)`; never trust the raw payload.
+title: "Billing: stripe webhook signature verification"
+summary: "Verify with `stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)`; never trust the raw payload."
 status: active
 tags: [billing, stripe, webhook]
 ---

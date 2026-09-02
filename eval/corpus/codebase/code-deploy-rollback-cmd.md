@@ -1,7 +1,7 @@
 ---
 uuid: code-deploy-rollback-cmd
-title: Deploy: how to roll back a bad release
-summary: `kubectl rollout undo deployment/<service>`; rollback is a forward operation and takes ~90 seconds end-to-end.
+title: "Deploy: how to roll back a bad release"
+summary: "`kubectl rollout undo deployment/<service>`; rollback is a forward operation and takes ~90 seconds end-to-end."
 status: active
 tags: [deploy, rollback]
 ---

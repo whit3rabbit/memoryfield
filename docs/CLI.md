@@ -232,6 +232,13 @@ mf lint [DIR] [--check] [--all] [--json]
   - `--check`: Exit with code 1 if any `error` or `warning` is found (ideal for CI/git pre-commit).
   - `--all`: Also print `info`-level suggestions.
   - `--json`: Output as JSON.
+- **Spec-conformance codes** (what readers other than mf would reject,
+  `docs/upstream/SPEC.md`): `spec-yaml` (warning: frontmatter that
+  plain YAML rejects, typically an unquoted `Topic: question` title or
+  a backtick-leading summary), `spec-filename` (warning: not
+  `[a-z0-9-]`), `spec-dates` (info when `created`/`updated` are
+  missing, error when one is an unquoted datetime), `spec-subdir`
+  (info: spec readers only index root-level pages).
 
 ```console
 $ mf lint --check ~/field
@@ -245,16 +252,25 @@ $ mf lint --check ~/field
 Create and extract reproducible `.memoryfield.zip` archives with SHA256 sidecars.
 
 ```bash
-mf pack [DIR] [--out PATH] [--no-index] [--no-raw]
+mf pack [DIR] [--out PATH] [--no-index] [--no-raw] [--spec] [--json]
 mf unpack <ZIP> [DEST] [--sha256 HEX] [--force] [--json]
 ```
 
 - **`mf pack`**:
   - Archives field contents with normalized timestamps and POSIX paths for reproducible byte hashes.
   - Generates `<name>.memoryfield.zip.sha256`.
+  - `--spec`: an archive for readers that are not mf, per the vendored
+    spec (`docs/upstream/SPEC.md`): root-level pages with `[a-z0-9-]`
+    filenames, root-level non-page files, and a `<model_code>.sqlite3`
+    vector index in the spec's schema (whole-file embedding). Leaves
+    out `mf.sqlite3`, `raw/`, and pages in subdirectories, and lists
+    the skipped pages.
 - **`mf unpack`**:
   - Verifies SHA256 integrity before extraction.
   - Resolves field-relative database paths automatically.
+  - Reads a spec archive (such as Cal Paterson's soapstones export)
+    as-is; a spec `<model>.sqlite3` index is noted, not read. Run
+    `mf init` then `mf index` afterwards.
 
 ---
 

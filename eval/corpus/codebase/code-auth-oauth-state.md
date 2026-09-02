@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-oauth-state
-title: Auth: how OAuth callback validates state
-summary: State is a signed nonce cookie set before the redirect; we verify it with a constant-time compare on the way back.
+title: "Auth: how OAuth callback validates state"
+summary: "State is a signed nonce cookie set before the redirect; we verify it with a constant-time compare on the way back."
 status: active
 tags: [auth, oauth, csrf]
 ---

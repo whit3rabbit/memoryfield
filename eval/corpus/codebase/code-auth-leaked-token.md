@@ -1,10 +1,10 @@
 ---
 uuid: code-auth-leaked-token
-title: Auth: handling a leaked token
-summary: Page `#sec-incident` in Slack, run `make revoke-token <jti>`, force-rotate the affected service's identity.
+title: "Auth: handling a leaked token"
+summary: "Page `#sec-incident` in Slack, run `make revoke-token <jti>`, force-rotate the affected service's identity."
 status: active
 tags: [auth, incident, tokens]
-source: ops/runbook/auth.md#leaked-token
+source: "ops/runbook/auth.md#leaked-token"
 ---
 ## Answer
 1. Page `#sec-incident` in Slack.

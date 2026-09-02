@@ -1,10 +1,10 @@
 ---
 uuid: paper-nucleus-sampling
-title: Top-p (nucleus) sampling: sample from smallest set whose probabilities sum to p
-summary: Sort tokens by probability; take the smallest prefix whose cumulative mass >= p; sample uniformly from that set; better than top-k at adapting to distribution shape.
+title: "Top-p (nucleus) sampling: sample from smallest set whose probabilities sum to p"
+summary: "Sort tokens by probability; take the smallest prefix whose cumulative mass >= p; sample uniformly from that set; better than top-k at adapting to distribution shape."
 status: active
 tags: [sampling, nucleus, decoding]
-source: https://arxiv.org/abs/1904.09751
+source: "https://arxiv.org/abs/1904.09751"
 ---
 ## Answer
 Nucleus (top-p) sampling:

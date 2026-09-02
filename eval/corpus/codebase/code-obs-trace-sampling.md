@@ -1,7 +1,7 @@
 ---
 uuid: code-obs-trace-sampling
-title: Observability: how traces are sampled
-summary: Head-based sampling at 1% baseline + tail-based at 100% for traces with errors or latency > p99; sample rate is configurable per service.
+title: "Observability: how traces are sampled"
+summary: "Head-based sampling at 1% baseline + tail-based at 100% for traces with errors or latency > p99; sample rate is configurable per service."
 status: active
 tags: [observability, tracing]
 ---

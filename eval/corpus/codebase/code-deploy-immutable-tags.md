@@ -1,7 +1,7 @@
 ---
 uuid: code-deploy-immutable-tags
-title: Deploy: why we use immutable image tags
-summary: Tags are git SHAs (e.g., `billing:a7c9d2e`), not semver; you can never deploy the same tag twice with different code.
+title: "Deploy: why we use immutable image tags"
+summary: "Tags are git SHAs (e.g., `billing:a7c9d2e`), not semver; you can never deploy the same tag twice with different code."
 status: active
 tags: [deploy, immutability]
 ---

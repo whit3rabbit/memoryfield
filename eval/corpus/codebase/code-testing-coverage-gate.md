@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-coverage-gate
-title: Testing: what the coverage gate is
-summary: 80% line coverage on PRs; new code must be ≥ 80% or explicitly excluded with a `# pragma: no cover` and a justification.
+title: "Testing: what the coverage gate is"
+summary: "80% line coverage on PRs; new code must be ≥ 80% or explicitly excluded with a `# pragma: no cover` and a justification."
 status: active
 tags: [testing, coverage]
 ---

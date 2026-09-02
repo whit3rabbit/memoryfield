@@ -1,10 +1,10 @@
 ---
 uuid: paper-ppo-clipped-objective
-title: PPO: clipped surrogate objective prevents destructively large policy updates
-summary: ratio = exp(new_logp - old_logp); objective = min(ratio * advantage, clip(ratio, 1-eps, 1+eps) * advantage); eps=0.2 default.
+title: "PPO: clipped surrogate objective prevents destructively large policy updates"
+summary: "ratio = exp(new_logp - old_logp); objective = min(ratio * advantage, clip(ratio, 1-eps, 1+eps) * advantage); eps=0.2 default."
 status: active
 tags: [ppo, rl, policy-gradient]
-source: https://arxiv.org/abs/1707.06347
+source: "https://arxiv.org/abs/1707.06347"
 ---
 ## Answer
 PPO's clipped objective:

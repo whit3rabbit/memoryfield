@@ -1,10 +1,10 @@
 ---
 uuid: paper-lora-decomposition
-title: LoRA: low-rank decomposition of weight updates freezes W, trains A and B
-summary: ΔW = BA where B ∈ R^(d×r), A ∈ R^(r×k), r << min(d,k); only A and B are trained; the original W is frozen and merged back at inference.
+title: "LoRA: low-rank decomposition of weight updates freezes W, trains A and B"
+summary: "ΔW = BA where B ∈ R^(d×r), A ∈ R^(r×k), r << min(d,k); only A and B are trained; the original W is frozen and merged back at inference."
 status: active
 tags: [lora, peft, training]
-source: https://arxiv.org/abs/2106.09685
+source: "https://arxiv.org/abs/2106.09685"
 ---
 ## Answer
 For a pretrained weight matrix `W_0 ∈ R^(d×k)`, LoRA constrains the update to:

@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-ed25519-vs-rsa
-title: Auth: why we use Ed25519 not RSA
-summary: Ed25519 is 10x faster to verify; tokens are short; we never need to encrypt them.
+title: "Auth: why we use Ed25519 not RSA"
+summary: "Ed25519 is 10x faster to verify; tokens are short; we never need to encrypt them."
 status: active
 tags: [auth, jwt, design]
 ---

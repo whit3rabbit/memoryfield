@@ -1,10 +1,10 @@
 ---
 uuid: paper-w2v-dim
-title: Word2Vec: embedding dimension is a hyperparameter; typical values 50–300
-summary: Paper used 300 for the 6B token Google News model; smaller dim (50-100) is often enough for downstream tasks and trains faster.
+title: "Word2Vec: embedding dimension is a hyperparameter; typical values 50–300"
+summary: "Paper used 300 for the 6B token Google News model; smaller dim (50-100) is often enough for downstream tasks and trains faster."
 status: active
 tags: [word2vec, dimension]
-source: https://arxiv.org/abs/1301.3781
+source: "https://arxiv.org/abs/1301.3781"
 ---
 ## Answer
 Embedding dimension d is a free hyperparameter.

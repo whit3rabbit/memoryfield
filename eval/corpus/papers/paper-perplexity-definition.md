@@ -1,10 +1,10 @@
 ---
 uuid: paper-perplexity-definition
-title: Perplexity: exponentiated cross-entropy of a probability distribution
-summary: PPL = exp(-1/N * sum log p(x_i)); lower is better; standard evaluation for language models; 20-50 for well-trained small LMs, lower for larger.
+title: "Perplexity: exponentiated cross-entropy of a probability distribution"
+summary: "PPL = exp(-1/N * sum log p(x_i)); lower is better; standard evaluation for language models; 20-50 for well-trained small LMs, lower for larger."
 status: active
 tags: [perplexity, evaluation, lm]
-source: https://en.wikipedia.org/wiki/Perplexity
+source: "https://en.wikipedia.org/wiki/Perplexity"
 ---
 ## Answer
 Perplexity = exp(cross-entropy) = exp(-1/N * sum log p(x_i))

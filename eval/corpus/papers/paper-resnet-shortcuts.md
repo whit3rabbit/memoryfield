@@ -1,10 +1,10 @@
 ---
 uuid: paper-resnet-shortcuts
-title: ResNet: shortcut connections can be identity or projection
-summary: Identity shortcuts when dimensions match; projection shortcuts (1x1 conv) when dimensions change; identity works in practice for most layers.
+title: "ResNet: shortcut connections can be identity or projection"
+summary: "Identity shortcuts when dimensions match; projection shortcuts (1x1 conv) when dimensions change; identity works in practice for most layers."
 status: active
 tags: [resnet, architecture]
-source: https://arxiv.org/abs/1512.03385
+source: "https://arxiv.org/abs/1512.03385"
 ---
 ## Answer
 Two shortcut types:

@@ -1,10 +1,10 @@
 ---
 uuid: paper-moe-routing
-title: Sparse MoE: route each token to top-k experts out of N total
-summary: Router network produces N logits; top-k are selected (typically k=2); only those experts process the token; total compute stays low while parameter count grows.
+title: "Sparse MoE: route each token to top-k experts out of N total"
+summary: "Router network produces N logits; top-k are selected (typically k=2); only those experts process the token; total compute stays low while parameter count grows."
 status: active
 tags: [moe, sparse, transformer]
-source: https://arxiv.org/abs/1701.06538
+source: "https://arxiv.org/abs/1701.06538"
 ---
 ## Answer
 Sparse Mixture of Experts:

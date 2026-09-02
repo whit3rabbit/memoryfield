@@ -14,7 +14,10 @@ partials `consolidate --plan` and `claim`. For the complete CLI
 specification and flag reference, see [docs/CLI.md](docs/CLI.md). For
 the schema and retrieval design as currently decided, see
 [docs/architecture.md](docs/architecture.md). `eval/` is the eval and
-corpus rig from M0/M0.5, complete.
+corpus rig from M0/M0.5, complete. The upstream memoryfield spec is
+vendored at [docs/upstream/SPEC.md](docs/upstream/SPEC.md); mf builds
+on the format, not on Cal's tool, and architecture.md section 6 is
+the record of where the two deliberately differ.
 
 `notes/` is a real mf field, this repo dogfooding its own tool:
 `mf.sqlite3` at its root, Stop/SessionEnd hooks wired in
@@ -35,6 +38,9 @@ changes immediately (gotcha 20).
 - Tests + eval baselines in one venv: `uv sync --extra eval --group
   dev` in a single call (gotcha 21)
 - Real-corpus smoke test: gotcha 29's recipe
+- Interop fixture: `uv run python3 eval/fetch_soapstones.py` (sha256-pinned
+  download into gitignored `eval/fixtures/`; the soapstones tests skip
+  without it)
 
 ## Where things stand
 
@@ -47,6 +53,12 @@ baseline except grep and TF-IDF clears 0.94 P@3: read that as the
 query set being at ceiling, not as a verdict on which retriever wins
 (gotcha 7). Don't hand-copy detailed numbers from the report into
 this file. That duplication went stale before (gotcha 1).
+
+A third domain exists since 2026-09-02: Cal Paterson's soapstones
+export (95 real pages by other people's agents, fetched, never
+committed) with 28 blind queries in `eval/queries/soapstones/`. It is
+a stress test of the shipped pipeline, not a calibration set; the
+numbers live in docs/BENCHMARKS.md section 5.
 
 ## Gotchas and lessons learned
 
@@ -91,6 +103,9 @@ fixed bugs.
    from the queries. One vocabulary throughout, close to the best case
    any retriever will see. High scores are conditional on that and on
    the corpus's writing discipline, not portable to a sloppier corpus.
+   The soapstones fixture is the one corpus outside that process, and
+   the shipped gate's usable-answer rate drops from 0.85-0.90 to 0.75
+   on it, mostly because its summaries repeat the title.
 
 8. **De-biased stub labels use a more permissive bar than the original
    author labels.** Original: "agent wouldn't need the body" (67 to
@@ -108,7 +123,10 @@ fixed bugs.
    from background subagents at non-zero temperature. Paraphrase median
    Jaccard similarity to the original is 0.29 (max 0.50), so they're
    genuinely different wordings, not near-duplicates. Back up before
-   regenerating.
+   regenerating. `eval/build_corpus.py` overwrites
+   `eval/queries/*/queries.jsonl` on every run (it reproduces the corpus
+   byte-identically, the queries not): `git checkout` both files after
+   regenerating the corpus.
 
 10. **`summary.json` gets overwritten on every single-baseline run.**
     `--baseline X --domain Y` writes only that one entry. To
@@ -309,7 +327,9 @@ fixed bugs.
     was the same: run the *real* `mf search` code on a query set
     authored without seeing the corpus, and sweep corpus size, before
     hardcoding a constant. `eval/calibrate_confidence_blind.py` is the
-    template. Two pitfalls from writing it: score "usable answer" with
+    template: it now embeds through `mf.embedder` with the field's
+    default model (`MF_CAL_MODEL` overrides) and takes domain names as
+    arguments. Two pitfalls from writing it: score "usable answer" with
     the top-1 the tool actually *presents* (the FTS-scored and
     dense-scored numbers differ on every low-confidence query), and
     fastembed/onnxruntime aborts with `recursive_mutex lock failed` at
@@ -342,7 +362,27 @@ fixed bugs.
     warms a model ahead of time. When initializing a field,
     `mf init --model <name>` pins the model and dimension into
     `config`. Full benchmarks live in
-    [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+    [docs/BENCHMARKS.md](docs/BENCHMARKS.md). Open: `FLOOR`,
+    `DENSE_FLOOR`, and `DEDUP_THRESHOLD` were calibrated on nomic
+    distances (2.7, 2.10) and have not been re-swept on the arctic-xs
+    default; the soapstones run is the only measurement of the shipped
+    gate on it (docs/architecture.md "Known gaps").
+
+39. **mf's frontmatter parser is more lenient than every other reader,
+    and that leniency hid a 100% interop failure.** `mf/page.py` quotes
+    ambiguous values before YAML sees them, so `title: API: the
+    difference between 401 and 403` (this project's own convention) and
+    a backtick-leading summary parse here and nowhere else: upstream's
+    tool, Obsidian, and any plain `yaml.safe_load` reject them
+    (`ScannerError`). 157/157 eval corpus pages failed that way until
+    `eval/build_corpus.py` quoted title/summary/source (2026-09-02),
+    and the skill's reference.md used to say the unquoted form "is
+    fine". `mf lint` reports it as `spec-yaml`. Same family as gotcha
+    19, from the other side: a parser that accepts more than the format
+    lets pages drift out of the format without anyone noticing. The
+    spec itself is vendored at docs/upstream/SPEC.md, and Cal's real
+    95-page export (`eval/fetch_soapstones.py`) is the fixture that
+    caught this.
 
 ### Tooling patterns worth reusing
 
@@ -351,7 +391,10 @@ fixed bugs.
     "$tmpdir"/ && uv run python3 -m mf.cli init "$tmpdir" && uv run
     python3 -m mf.cli index "$tmpdir"`: catches gotcha-19-style
     parser/behavior bugs synthetic fixtures miss. It caught real bugs
-    in 1.6, 1.8, 2.1, and 2.2. Clean up the tmpdir when done.
+    in 1.6, 1.8, 2.1, and 2.2. Clean up the tmpdir when done. For a
+    field this project did not write, swap the `cp` for `uv run
+    python3 -m mf.cli unpack eval/fixtures/soapstones.memoryfield.zip
+    "$tmpdir"` after `eval/fetch_soapstones.py`; it caught gotcha 39.
 
 30. **New `mf` subcommand pattern**, established by `read`, `write`,
     `raw add`, `claim`, and `consolidate`: one module `mf/<verb>.py`
@@ -377,8 +420,12 @@ the `notes/` dogfooding field are built. Remaining: consolidate
 idempotency across runs, pointer-entry expansion, `write` auto-calling
 `claim`, and 4.4 (co_read weighting). M6 is the MCP server, then
 packaging. Full task detail, per-task decision records, and open debt
-(including 0.5's unsent upstream email) in [ROADMAP.md](ROADMAP.md).
+(including 0.5's upstream frontmatter proposal, which now has a
+destination and still needs a human to send it) in
+[ROADMAP.md](ROADMAP.md).
 The milestone list is PLAN.md section 9.
 
 M4 reopen trigger: rerank only if a later blind set drops the real
-pipeline's top-1 under 0.8.
+pipeline's top-1 under 0.8. Not triggered by the first foreign
+field (soapstones, 2026-09-02: dense-first blind top-1 0.90,
+docs/BENCHMARKS.md section 5).

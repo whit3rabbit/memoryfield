@@ -1,7 +1,7 @@
 ---
 uuid: code-api-expand
-title: API: what `expand` parameters do
-summary: Pass `expand[]=customer` to inline related objects; one level deep by default, recursion requires `expand[]=customer.invoices`.
+title: "API: what `expand` parameters do"
+summary: "Pass `expand[]=customer` to inline related objects; one level deep by default, recursion requires `expand[]=customer.invoices`."
 status: active
 tags: [api, expand]
 ---

@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-refunds
-title: Billing: handling refunds
-summary: Refunds are negative invoice lines with a `refund_of` reference to the original line; they don't modify the original line.
+title: "Billing: handling refunds"
+summary: "Refunds are negative invoice lines with a `refund_of` reference to the original line; they don't modify the original line."
 status: active
 tags: [billing, refunds]
 ---

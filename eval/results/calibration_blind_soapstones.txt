@@ -1,0 +1,150 @@
+model=snowflake-arctic-embed-xs (384-d) domains=['soapstones']
+==============================================================================
+1. GATE DESIGNS, full corpus. Sets: original (in-vocabulary) vs blind.
+   blind = queries_blind + queries_blind_noanswer
+==============================================================================
+
+[soapstones]
+  design=current presented=fts
+    F=1.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=0.375 real_none=0.050 real_ok_cited=0.650 (n_na=8 n_real=20)
+    F=1.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.500 real_ok_cited=0.450 (n_na=8 n_real=20)
+    F=2.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.850 real_ok_cited=0.150 (n_na=8 n_real=20)
+    F=2.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=1.000 real_ok_cited=0.000 (n_na=8 n_real=20)
+    F=3.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=1.000 real_ok_cited=0.000 (n_na=8 n_real=20)
+  design=current presented=dense
+    F=1.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=0.375 real_none=0.050 real_ok_cited=0.850 (n_na=8 n_real=20)
+    F=1.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.500 real_ok_cited=0.500 (n_na=8 n_real=20)
+    F=2.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.850 real_ok_cited=0.150 (n_na=8 n_real=20)
+    F=2.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=1.000 real_ok_cited=0.000 (n_na=8 n_real=20)
+    F=3.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=1.000 real_ok_cited=0.000 (n_na=8 n_real=20)
+  design=agree-rescues presented=fts
+    F=1.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=0.375 real_none=0.000 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=1.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.300 real_ok_cited=0.600 (n_na=8 n_real=20)
+    F=2.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.400 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=2.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.400 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=3.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.400 real_ok_cited=0.550 (n_na=8 n_real=20)
+  design=agree-rescues presented=dense
+    F=1.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=0.375 real_none=0.000 real_ok_cited=0.900 (n_na=8 n_real=20)
+    F=1.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.300 real_ok_cited=0.650 (n_na=8 n_real=20)
+    F=2.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.400 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=2.5  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.400 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=3.0  D=0.0   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.400 real_ok_cited=0.550 (n_na=8 n_real=20)
+  design=dense-floor presented=fts
+    F=0.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.900 real_ok_cited=0.050 (n_na=8 n_real=20)
+    F=0.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.550 real_ok_cited=0.350 (n_na=8 n_real=20)
+    F=0.0  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.375 real_none=0.250 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=0.0  D=0.4   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.750 real_none=0.050 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=0.0  D=0.45  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=1.000 real_none=0.000 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=0.0  D=0.5   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=1.000 real_none=0.000 real_ok_cited=0.700 (n_na=8 n_real=20)
+  design=dense-floor presented=dense
+    F=0.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.900 real_ok_cited=0.100 (n_na=8 n_real=20)
+    F=0.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.550 real_ok_cited=0.400 (n_na=8 n_real=20)
+    F=0.0  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.375 real_none=0.250 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=0.0  D=0.4   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.750 real_none=0.050 real_ok_cited=0.900 (n_na=8 n_real=20)
+    F=0.0  D=0.45  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=1.000 real_none=0.000 real_ok_cited=0.900 (n_na=8 n_real=20)
+    F=0.0  D=0.5   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.250 na_notnone=1.000 real_none=0.000 real_ok_cited=0.900 (n_na=8 n_real=20)
+  design=either presented=fts
+    F=2.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.800 real_ok_cited=0.150 (n_na=8 n_real=20)
+    F=2.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.450 real_ok_cited=0.450 (n_na=8 n_real=20)
+    F=2.5  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.900 real_ok_cited=0.050 (n_na=8 n_real=20)
+    F=2.5  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.550 real_ok_cited=0.350 (n_na=8 n_real=20)
+  design=either presented=dense
+    F=2.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.800 real_ok_cited=0.200 (n_na=8 n_real=20)
+    F=2.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.450 real_ok_cited=0.500 (n_na=8 n_real=20)
+    F=2.5  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.900 real_ok_cited=0.100 (n_na=8 n_real=20)
+    F=2.5  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.000 real_none=0.550 real_ok_cited=0.400 (n_na=8 n_real=20)
+  design=combo presented=fts
+    F=2.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.350 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=2.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.150 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=2.0  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.500 real_none=0.050 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=2.5  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.350 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=2.5  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.150 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=2.5  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.500 real_none=0.050 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=3.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.350 real_ok_cited=0.550 (n_na=8 n_real=20)
+    F=3.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.150 real_ok_cited=0.700 (n_na=8 n_real=20)
+    F=3.0  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.500 real_none=0.050 real_ok_cited=0.700 (n_na=8 n_real=20)
+  design=combo presented=dense
+    F=2.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.350 real_ok_cited=0.600 (n_na=8 n_real=20)
+    F=2.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.150 real_ok_cited=0.750 (n_na=8 n_real=20)
+    F=2.0  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.500 real_none=0.050 real_ok_cited=0.850 (n_na=8 n_real=20)
+    F=2.5  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.350 real_ok_cited=0.600 (n_na=8 n_real=20)
+    F=2.5  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.150 real_ok_cited=0.750 (n_na=8 n_real=20)
+    F=2.5  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.500 real_none=0.050 real_ok_cited=0.850 (n_na=8 n_real=20)
+    F=3.0  D=0.25  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.350 real_ok_cited=0.600 (n_na=8 n_real=20)
+    F=3.0  D=0.3   original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.000 na_notnone=0.250 real_none=0.150 real_ok_cited=0.750 (n_na=8 n_real=20)
+    F=3.0  D=0.35  original: na_high=0.000 na_notnone=0.000 real_none=0.000 real_ok_cited=0.000 (n_na=0 n_real=0)
+                 blind:    na_high=0.125 na_notnone=0.500 real_none=0.050 real_ok_cited=0.850 (n_na=8 n_real=20)
+
+==============================================================================
+2. RANKING (ROADMAP.md 2.6): fts_first as built, dense_first, rrf k=60
+==============================================================================
+
+[soapstones]
+  ranking, blind (n=20):
+    fts_first    top1=0.700 mrr@5=0.817
+    dense_first  top1=0.900 mrr@5=0.950
+    dense_plus_fts1 top1=0.900 mrr@5=0.950
+    rrf          top1=0.900 mrr@5=0.942
+
+==============================================================================
+3. CORPUS SIZE SWEEP (seed 42), presented=dense
+==============================================================================
+
+[soapstones] no size sweep: fixture uuids are not filename stems

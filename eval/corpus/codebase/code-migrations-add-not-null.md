@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-add-not-null
-title: Migrations: how to add a NOT NULL column safely
-summary: Three-step: add nullable column, backfill in batches, set NOT NULL. Each step is its own migration; never combine.
+title: "Migrations: how to add a NOT NULL column safely"
+summary: "Three-step: add nullable column, backfill in batches, set NOT NULL. Each step is its own migration; never combine."
 status: active
 tags: [migrations, schema, safety]
 ---

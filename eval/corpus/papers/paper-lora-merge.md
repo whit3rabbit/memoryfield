@@ -1,10 +1,10 @@
 ---
 uuid: paper-lora-merge
-title: LoRA: adapters can be merged into the base model for zero-latency inference
-summary: After training, `W_new = W_0 + B@A`; merged once into the model weights; inference has no adapter overhead.
+title: "LoRA: adapters can be merged into the base model for zero-latency inference"
+summary: "After training, `W_new = W_0 + B@A`; merged once into the model weights; inference has no adapter overhead."
 status: active
 tags: [lora, inference]
-source: https://arxiv.org/abs/2106.09685
+source: "https://arxiv.org/abs/2106.09685"
 ---
 ## Answer
 After training, the merge is:

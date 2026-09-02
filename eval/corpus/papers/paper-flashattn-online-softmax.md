@@ -1,10 +1,10 @@
 ---
 uuid: paper-flashattn-online-softmax
-title: FlashAttention: online softmax trick handles block-wise computation
-summary: Standard softmax needs the full row to compute the denominator; FlashAttention tracks running max and sum so partial blocks can be rescaled correctly.
+title: "FlashAttention: online softmax trick handles block-wise computation"
+summary: "Standard softmax needs the full row to compute the denominator; FlashAttention tracks running max and sum so partial blocks can be rescaled correctly."
 status: active
 tags: [flashattention, softmax, numerics]
-source: https://arxiv.org/abs/2205.14135
+source: "https://arxiv.org/abs/2205.14135"
 ---
 ## Answer
 Standard softmax: `softmax(x_i) = exp(x_i) / Σ exp(x_j)` — needs the full row.

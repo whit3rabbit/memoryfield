@@ -43,6 +43,14 @@ QCODE_DIR = ROOT / "queries" / "codebase"
 QPAPERS_DIR = ROOT / "queries" / "papers"
 
 
+def _yaml_str(value: str) -> str:
+    """Double-quote a frontmatter value. mf's parser quotes ambiguous
+    values itself, but plain YAML readers (upstream's tool, Obsidian) do
+    not: an unquoted `Topic: question` title or a backtick-leading
+    summary is a parse error for them (CLAUDE.md gotcha 39)."""
+    return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ") + '"'
+
+
 def write_page(directory: Path, *, uuid: str, title: str, summary: str,
                tags: list[str], body: str, status: str = "active",
                source: str = "") -> Path:
@@ -50,13 +58,13 @@ def write_page(directory: Path, *, uuid: str, title: str, summary: str,
     fm_lines = [
         "---",
         f"uuid: {uuid}",
-        f"title: {title}",
-        f"summary: {summary}",
+        f"title: {_yaml_str(title)}",
+        f"summary: {_yaml_str(summary)}",
         f"status: {status}",
         f"tags: [{', '.join(tags)}]",
     ]
     if source:
-        fm_lines.append(f"source: {source}")
+        fm_lines.append(f"source: {_yaml_str(source)}")
     fm_lines.append("---")
     fm = "\n".join(fm_lines) + "\n"
     path = directory / f"{uuid}.md"

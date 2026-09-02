@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-rollback
-title: Migrations: how to roll back
-summary: Every migration has a paired `down.sql`; the rollback path is `apply <N-1> --rollback`. Reversible migrations are the default; irreversible ones require a sign-off.
+title: "Migrations: how to roll back"
+summary: "Every migration has a paired `down.sql`; the rollback path is `apply <N-1> --rollback`. Reversible migrations are the default; irreversible ones require a sign-off."
 status: active
 tags: [migrations, rollback]
 ---

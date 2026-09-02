@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-no-sessions
-title: Auth: why we don't use sessions
-summary: Sessions require server-side state; JWTs are stateless and let us scale auth-free at the edge.
+title: "Auth: why we don't use sessions"
+summary: "Sessions require server-side state; JWTs are stateless and let us scale auth-free at the edge."
 status: active
 tags: [auth, design, sessions]
 ---

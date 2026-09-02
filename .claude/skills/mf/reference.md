@@ -89,8 +89,14 @@ warnings fail `--check`; `--all` also prints the advice-level findings
 - Required frontmatter: `uuid`, `title`. Optional but load-bearing:
   `summary`, `status` (`active`/`superseded`/`contested`),
   `supersedes`/`contradicts`/`depends_on` (lists of uuids), `tags`,
-  `source`, `writer`. A title or summary containing `: ` is fine (the
-  parser quotes values), but avoid a leading `[` or `{`.
+  `source`, `writer`.
+- Quote `title`, `summary`, `created`, `updated`, and any value that
+  contains `: ` or starts with a backtick, `#`, `[`, or `{`. mf's own
+  parser is lenient, but upstream's tool, Obsidian, and every plain
+  YAML reader reject the unquoted form (`mf lint` reports it as
+  `spec-yaml`). Keep filenames to lowercase letters, digits, and
+  hyphens, at the field root: spec readers do not index
+  subdirectories.
 
 To retire a page, write the replacement with `supersedes: [old-uuid]`.
 `mf search` then shows the replacement, annotated

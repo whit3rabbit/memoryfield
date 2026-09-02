@@ -1,7 +1,7 @@
 ---
 uuid: code-api-webhook-sig
-title: API: how webhook signatures are verified
-summary: `X-Ledger-Signature: t=<unix>,v1=<hex>`; compute HMAC-SHA256 over `t.body` with the webhook secret; reject if `|now - t| > 5min`.
+title: "API: how webhook signatures are verified"
+summary: "`X-Ledger-Signature: t=<unix>,v1=<hex>`; compute HMAC-SHA256 over `t.body` with the webhook secret; reject if `|now - t| > 5min`."
 status: active
 tags: [api, webhooks]
 ---

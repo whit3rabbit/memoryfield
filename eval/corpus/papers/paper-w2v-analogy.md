@@ -1,10 +1,10 @@
 ---
 uuid: paper-w2v-analogy
-title: Word2Vec: classic analogy example `king - man + woman ≈ queen`
-summary: Linear algebra on embeddings reproduces semantic relationships; the famous example comes from the original paper and the subsequent tooling.
+title: "Word2Vec: classic analogy example `king - man + woman ≈ queen`"
+summary: "Linear algebra on embeddings reproduces semantic relationships; the famous example comes from the original paper and the subsequent tooling."
 status: active
 tags: [word2vec, analogy]
-source: https://arxiv.org/abs/1301.3781
+source: "https://arxiv.org/abs/1301.3781"
 ---
 ## Answer
 `vec(king) - vec(man) + vec(woman) ≈ vec(queen)`

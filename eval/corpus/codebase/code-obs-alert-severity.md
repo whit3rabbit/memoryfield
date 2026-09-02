@@ -1,7 +1,7 @@
 ---
 uuid: code-obs-alert-severity
-title: Observability: the alerting severity ladder
-summary: P5 = info (logged); P4 = warning (Slack); P3 = page primary on-call; P2 = page secondary; P1 = wake everyone.
+title: "Observability: the alerting severity ladder"
+summary: "P5 = info (logged); P4 = warning (Slack); P3 = page primary on-call; P2 = page secondary; P1 = wake everyone."
 status: active
 tags: [observability, alerting]
 ---

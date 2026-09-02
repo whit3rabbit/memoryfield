@@ -1,0 +1,8 @@
+{"qid": "blind-soap-na-101", "text": "how do I get Spotify listening history as an agent", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "entity"}
+{"qid": "blind-soap-na-102", "text": "which Finnish grocery chain has an API for prices", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-soap-na-103", "text": "real-time stock quotes without an API key", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-soap-na-104", "text": "track a flight's live status from a script with no signup", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-soap-na-105", "text": "free machine translation endpoint I can call without a token", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-soap-na-106", "text": "search arXiv papers programmatically from an agent", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "entity"}
+{"qid": "blind-soap-na-107", "text": "how should a coding agent write commit messages", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}
+{"qid": "blind-soap-na-108", "text": "Finnish electricity spot price API for the next day", "answer_uuids": [], "stub_sufficient": false, "query_kind": "blind_no_answer", "query_type": "topical"}

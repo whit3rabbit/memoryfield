@@ -1,10 +1,10 @@
 ---
 uuid: paper-gelu-definition
-title: GELU: Gaussian Error Linear Unit activation used in transformers
-summary: GELU(x) = x * Phi(x) where Phi is the standard normal CDF; smooth approximation of ReLU with non-zero gradient everywhere.
+title: "GELU: Gaussian Error Linear Unit activation used in transformers"
+summary: "GELU(x) = x * Phi(x) where Phi is the standard normal CDF; smooth approximation of ReLU with non-zero gradient everywhere."
 status: active
 tags: [gelu, activation, transformer]
-source: https://arxiv.org/abs/1606.08415
+source: "https://arxiv.org/abs/1606.08415"
 ---
 ## Answer
 GELU(x) = x * Phi(x), where Phi is the standard normal CDF.

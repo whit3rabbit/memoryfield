@@ -1,10 +1,10 @@
 ---
 uuid: paper-ce-definition
-title: Cross-entropy loss: negative log-likelihood of the true class
-summary: L = -log(p_true); for one-hot y: L = -sum y_i log(p_i); combined with softmax gives a clean gradient equal to (p - y).
+title: "Cross-entropy loss: negative log-likelihood of the true class"
+summary: "L = -log(p_true); for one-hot y: L = -sum y_i log(p_i); combined with softmax gives a clean gradient equal to (p - y)."
 status: active
 tags: [cross-entropy, loss, fundamentals]
-source: https://en.wikipedia.org/wiki/Cross-entropy
+source: "https://en.wikipedia.org/wiki/Cross-entropy"
 ---
 ## Answer
 Cross-entropy loss:

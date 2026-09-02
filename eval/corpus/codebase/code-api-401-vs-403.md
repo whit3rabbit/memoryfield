@@ -1,7 +1,7 @@
 ---
 uuid: code-api-401-vs-403
-title: API: the difference between 401 and 403
-summary: 401 = no/invalid auth; 403 = auth valid but caller lacks permission. We always return 403 (never 404) for forbidden resources to avoid resource enumeration.
+title: "API: the difference between 401 and 403"
+summary: "401 = no/invalid auth; 403 = auth valid but caller lacks permission. We always return 403 (never 404) for forbidden resources to avoid resource enumeration."
 status: active
 tags: [api, auth, status-codes]
 ---

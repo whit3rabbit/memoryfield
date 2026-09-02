@@ -1,10 +1,10 @@
 ---
 uuid: paper-sparse-vs-dense
-title: Sparse vs dense retrieval: when each wins
-summary: Sparse (BM25, TF-IDF): exact term matches, fast, predictable. Dense (embeddings): semantic similarity, robust to vocabulary mismatch. Hybrid fuses both.
+title: "Sparse vs dense retrieval: when each wins"
+summary: "Sparse (BM25, TF-IDF): exact term matches, fast, predictable. Dense (embeddings): semantic similarity, robust to vocabulary mismatch. Hybrid fuses both."
 status: active
 tags: [retrieval, comparison]
-source: https://en.wikipedia.org/wiki/Sparse_retrieval
+source: "https://en.wikipedia.org/wiki/Sparse_retrieval"
 ---
 ## Answer
 Tradeoffs:

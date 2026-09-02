@@ -1,10 +1,10 @@
 ---
 uuid: paper-parameter-equivalent-vs-parameter-matched
-title: SwiGLU: parameter-equivalent vs parameter-matched compared to ReLU/GELU
-summary: Naive SwiGLU adds an extra W_gate matrix (3 matrices vs 2); the common practice is to shrink W_1 and W_gate to 2/3 width so total params stay equal.
+title: "SwiGLU: parameter-equivalent vs parameter-matched compared to ReLU/GELU"
+summary: "Naive SwiGLU adds an extra W_gate matrix (3 matrices vs 2); the common practice is to shrink W_1 and W_gate to 2/3 width so total params stay equal."
 status: active
 tags: [swiglu, parameter-count]
-source: https://arxiv.org/abs/2002.05202
+source: "https://arxiv.org/abs/2002.05202"
 ---
 ## Answer
 Parameter accounting:

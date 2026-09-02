@@ -1,10 +1,10 @@
 ---
 uuid: paper-why-dropping-mean-centering-works
-title: RMSNorm: why dropping mean-centering works
-summary: The re-centering operation has minimal effect because the subsequent linear layer can absorb any constant offset; the re-scaling is what actually stabilizes training.
+title: "RMSNorm: why dropping mean-centering works"
+summary: "The re-centering operation has minimal effect because the subsequent linear layer can absorb any constant offset; the re-scaling is what actually stabilizes training."
 status: active
 tags: [rmsnorm, theory]
-source: https://arxiv.org/abs/1910.07467
+source: "https://arxiv.org/abs/1910.07467"
 ---
 ## Answer
 LayerNorm's re-centering step shifts activations to zero mean. But:

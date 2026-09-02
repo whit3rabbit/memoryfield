@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-property-based
-title: Testing: property-based testing with Hypothesis
-summary: Use Hypothesis for parsers, serializers, and pure functions; pre-generated examples are stored in `hypothesis/examples/` for reproducibility.
+title: "Testing: property-based testing with Hypothesis"
+summary: "Use Hypothesis for parsers, serializers, and pure functions; pre-generated examples are stored in `hypothesis/examples/` for reproducibility."
 status: active
 tags: [testing, property-based]
 ---

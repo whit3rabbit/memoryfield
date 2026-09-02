@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-integration-org
-title: Testing: how integration tests are organized
-summary: `tests/integration/` runs against a Postgres container per test; each test gets a fresh DB, runs migrations, seeds fixtures.
+title: "Testing: how integration tests are organized"
+summary: "`tests/integration/` runs against a Postgres container per test; each test gets a fresh DB, runs migrations, seeds fixtures."
 status: active
 tags: [testing, integration]
 ---

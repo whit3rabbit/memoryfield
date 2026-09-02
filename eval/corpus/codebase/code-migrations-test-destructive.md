@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-test-destructive
-title: Migrations: testing a destructive change
-summary: Restore prod snapshot to staging, run the migration, run the full integration suite, then run a sampling query to confirm row counts match.
+title: "Migrations: testing a destructive change"
+summary: "Restore prod snapshot to staging, run the migration, run the full integration suite, then run a sampling query to confirm row counts match."
 status: active
 tags: [migrations, testing]
 ---

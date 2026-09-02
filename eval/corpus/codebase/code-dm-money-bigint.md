@@ -1,7 +1,7 @@
 ---
 uuid: code-dm-money-bigint
-title: Data model: how monetary amounts are stored
-summary: `BIGINT` storing the smallest currency unit (cents/pence/yen); never `FLOAT` or `NUMERIC` for money; conversion happens at API boundaries.
+title: "Data model: how monetary amounts are stored"
+summary: "`BIGINT` storing the smallest currency unit (cents/pence/yen); never `FLOAT` or `NUMERIC` for money; conversion happens at API boundaries."
 status: active
 tags: [data-model, money]
 ---

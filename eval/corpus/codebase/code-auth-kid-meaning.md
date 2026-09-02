@@ -1,7 +1,7 @@
 ---
 uuid: code-auth-kid-meaning
-title: Auth: what the token `kid` header means
-summary: `kid` is the key version label; verifiers must check it against the active key set, not the signing key's URL.
+title: "Auth: what the token `kid` header means"
+summary: "`kid` is the key version label; verifiers must check it against the active key set, not the signing key's URL."
 status: active
 tags: [auth, jwt, kid]
 ---

@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-zero-downtime
-title: Migrations: zero-downtime schema changes cheat sheet
-summary: Add column → dual-write → backfill → dual-read → drop old column. Each step is a separate deploy.
+title: "Migrations: zero-downtime schema changes cheat sheet"
+summary: "Add column → dual-write → backfill → dual-read → drop old column. Each step is a separate deploy."
 status: active
 tags: [migrations, reference]
 ---

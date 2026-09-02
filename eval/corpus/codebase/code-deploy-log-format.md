@@ -1,7 +1,7 @@
 ---
 uuid: code-deploy-log-format
-title: Deploy: the deploy log format
-summary: Each deploy emits a structured log with `deploy_id, service, image, sha, deployer, started_at, completed_at`; queries against this drive the deploy dashboard.
+title: "Deploy: the deploy log format"
+summary: "Each deploy emits a structured log with `deploy_id, service, image, sha, deployer, started_at, completed_at`; queries against this drive the deploy dashboard."
 status: active
 tags: [deploy, observability]
 ---

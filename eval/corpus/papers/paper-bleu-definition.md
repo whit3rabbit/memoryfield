@@ -1,10 +1,10 @@
 ---
 uuid: paper-bleu-definition
-title: BLEU score: n-gram overlap between candidate and reference translations
-summary: BLEU = BP * exp(sum w_n log p_n); p_n = modified n-gram precision; BP = brevity penalty; range 0-100; standard metric for translation.
+title: "BLEU score: n-gram overlap between candidate and reference translations"
+summary: "BLEU = BP * exp(sum w_n log p_n); p_n = modified n-gram precision; BP = brevity penalty; range 0-100; standard metric for translation."
 status: active
 tags: [bleu, evaluation, translation]
-source: https://aclanthology.org/P02-1040/
+source: "https://aclanthology.org/P02-1040/"
 ---
 ## Answer
 BLEU (Papineni et al., 2002):

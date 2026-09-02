@@ -32,6 +32,15 @@ writer:       agent-or-person id
 Body convention: first section is L1 (answer-first, 150-300 tokens),
 later sections are L2. Sections are addressable as `uuid#slug`.
 
+Quoting convention: `title`, `summary`, `created`, `updated`, and any
+value containing `: ` or starting with a backtick, `#`, `[`, or `{`
+are written double-quoted. mf's parser (`mf/page.py`) quotes ambiguous
+values itself and would read them either way; every other reader of
+the format uses plain YAML and rejects the unquoted form (CLAUDE.md
+gotcha 39). Filenames are lowercase letters, digits, and hyphens, at
+the field root, which is all a spec reader indexes. The spec itself is
+vendored at [upstream/SPEC.md](upstream/SPEC.md).
+
 ### 2. Index (derived, mostly deletable)
 
 One SQLite file, `mf.sqlite3`, inside the field:
@@ -72,8 +81,9 @@ never go stale. Only typed links and co-reads are stored.
 
 `config`'s three keys are what make "never conflate model versions"
 enforceable rather than aspirational: `model_code` defaults to
-`nomic-embed-text-v1.5`, `embedding_dim` to `768` (the `vec` table's
-fixed vector width), `schema_version` to `2`. Set once by `mf init`,
+`snowflake-arctic-embed-xs`, `embedding_dim` to `384` (the `vec`
+table's fixed vector width; `mf init --model` pins another registry
+entry, docs/BENCHMARKS.md), `schema_version` to `2`. Set once by `mf init`,
 read by `mf index`/`mf search` on every call. Model identity lives here,
 at the index level, not per `vec` row. `open_field()` refuses an index
 whose `schema_version` doesn't match and says to delete it and rerun
@@ -117,6 +127,9 @@ result):
 Dense wins every cell, in-vocabulary included. RRF loses to dense-first
 because it averages in FTS's noise. Inserting FTS's top-1 at rank 2
 under dense moved MRR by under 0.01 either way and was not adopted.
+The first corpus this project did not write, Cal Paterson's 95-page
+soapstones export (blind n=20, 2026-09-02, BENCHMARKS.md section 5),
+agrees: FTS-first 0.700, RRF 0.900, dense-first 0.900 (MRR@5 0.950).
 
 1. Results return as the top-k stubs (uuid, title, summary, status,
    tokens; `k=2` by default, `mf search --limit`) with up to n neighbor
@@ -149,7 +162,7 @@ under dense moved MRR by under 0.01 either way and was not adopted.
 5. Reranker (cross-encoder over the top 20): the tool's own blind top-1
    is now 0.95 / 0.90 through the real pipeline, above the ~0.8 trigger
    in ROADMAP.md 4.1. Cut, not deferred, unless a later blind set says
-   otherwise.
+   otherwise. The soapstones set (0.90) did not.
 
 Output is JSON or a compact text table. The agent never sees a body
 unless it asks.
@@ -182,6 +195,14 @@ plus 48 blind ones authored without seeing the corpus):
 | No-answer queries returned as `low` | 5/17 | 4/24 | 2/13 | 4/24 |
 | Usable answers on a 10-page subsample, 1.4 gate | 0.185 | | 0.300 | |
 | Usable answers on a 10-page subsample, 2.7 gate | 0.889 | | 1.000 | |
+
+On the soapstones field (shipped gate, arctic-xs, blind n=20 real and
+8 no-answer): usable 0.750, demoted to `none` 3/20, false-high 0/8,
+no-answer returned as `low` 2/8. Lower than the in-house domains, and
+expected: 74/95 of its summaries are a copied `# Title`, so FTS over
+title+summary has less to match and fewer correct dense hits get the
+FTS signal that lifts them out of `none`. No constant was changed on
+it (gotcha 36: it is one more blind set for the next sweep).
 
 The cost is the `low` row: a no-answer query gets a topically-adjacent
 page labelled `low` 15-30% of the time instead of `none`. `low` means
@@ -325,6 +346,19 @@ exits 1 on any error or warning; info prints only with `--all`.
 Baseline on the eval corpus: codebase 0 errors, 3 warnings (two
 relative-time phrases, one two-section short page); papers 0 and 0.
 
+Spec conformance (2026-09-02, section 6 below) is a second family of
+checks that parse the raw frontmatter block with plain YAML, the way
+readers other than mf do: `spec-yaml` (warning: the block fails to
+parse, or `title`/`summary` is not a string), `spec-filename`
+(warning: stem outside `[a-z0-9-]`), `spec-dates` (info when
+`created`/`updated` is missing, error when one is an unquoted YAML
+datetime, which upstream's validator rejects), `spec-subdir` (info:
+a page below the field root, which spec readers do not index). The
+summary-repeats-title check strips a leading `#` first, since a copied
+H1 is how 74 of soapstones' 95 summaries were written. On that field
+`lint` reports 0 errors, 94 `summary-shape` warnings, and no `spec-*`
+finding.
+
 **`claim` built (ROADMAP.md 4.3).** `mf/claim.py`, wired into
 `mf/cli.py`: `claim slug --by WRITER [--field DIR] [--json]`. Slug is
 the filename stem (`Page.slug`), decided here since nothing before
@@ -354,7 +388,7 @@ latter is really 4.2's job, once `raw/` has real data).
 ### 6. Pack
 
 **Built (ROADMAP.md 2.4).** `mf/pack.py`: `pack [DIR] [--out PATH]
-[--no-index] [--no-raw]` and `unpack ZIP [DEST] [--sha256 HEX]
+[--no-index] [--no-raw] [--spec]` and `unpack ZIP [DEST] [--sha256 HEX]
 [--force]`. The archive root mirrors the field root: pages keep their
 relative paths, `raw/` and `mf.sqlite3` are included by default, and
 everything `mf index` skips is left out. A sidecar
@@ -370,10 +404,39 @@ index works as-is because `pages.filename` is field-relative; a
 spec-plain field (four spec fields, no index) unpacks and then needs
 `mf init` + `mf index`.
 
-What is not verified: the memoryfield spec's own zip layout. No copy of
-it exists in this repo (the same gap that blocks ROADMAP.md 0.5), so
-"root mirrors field, plus a folder-zipped variant" is a stated
-assumption, and compatibility with a real spec archive is untested.
+Verified against the spec (docs/upstream/SPEC.md, vendored 2026-09-02)
+and Cal's 95-page soapstones export (`eval/fetch_soapstones.py`,
+tests/test_interop_soapstones.py): a spec archive is exactly the
+root-mirrors-field layout, so `mf unpack` reads it as-is, every page
+parses, indexes, and searches, and `mf pack --spec` emits what a spec
+reader expects (root-level pages, a `<model_code>.sqlite3` in the
+spec's own schema embedded from the whole file, no `mf.sqlite3`, no
+`raw/`). `--spec` skips pages in subdirectories and pages with
+non-conforming filenames and lists them; `unpack` notes a spec
+`<model>.sqlite3` it finds and does not read. Upstream's own
+`memoryfield-tool validate` could not be run against the export on
+this machine (its `pysqlite3-binary` dependency has no macOS arm64
+wheels), so the plain-YAML parse of every page stands in for it.
+
+Where mf and the spec differ, and which side each decision fell on:
+
+- Frontmatter quoting. The spec's readers use plain YAML. mf's parser
+  quotes ambiguous values first, which hid that unquoted
+  `Topic: question` titles fail everywhere else (CLAUDE.md gotcha
+  39). Fixed on mf's side: the corpus generator and the skill quote,
+  `mf lint` reports `spec-yaml`.
+- Pages in subdirectories. Spec readers ignore them; mf indexes them
+  and its imports write into `claude-memory/` and `wiki/`. Kept:
+  `pack --spec` lists them as skipped, lint notes `spec-subdir`.
+- Vector index. The spec's is one whole-file embedding per page in a
+  filename-keyed table. mf's `vec` embeds title+summary+L1 (a
+  measured decision, ROADMAP.md 2.6) and lives in `mf.sqlite3` next
+  to FTS, links, reads, and claims. Kept: the spec index is an export
+  artifact, never mf's retrieval, and mf never reads a foreign one
+  (fastembed and ollama vectors for the same checkpoint differ).
+- Embedding model. The spec suggests `nomic-embed-text-v1.5`; mf
+  defaults to `snowflake-arctic-embed-xs` (docs/BENCHMARKS.md).
+  `mf init --model nomic-embed-text-v1.5` is the interop choice.
 
 ### 7. Session capture
 
@@ -448,6 +511,8 @@ first paragraph is a topic, not an answer, and `mf lint` will say so.
   Code fences only around real commands.
 - ISO dates in frontmatter, no relative time in bodies.
 - `source` filled whenever the memory came from somewhere.
+- Frontmatter values quoted whenever plain YAML would misread them
+  (section 1). `lint` reports `spec-yaml` otherwise.
 
 ## Scorecard against PLAN.md section 1
 
@@ -465,8 +530,18 @@ measured (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`):
 Things the code does that the docs used to describe differently, each
 with the roadmap item that closes it:
 
-- None open. The last one (`claims.slug` had no definition) closed with
-  ROADMAP.md 4.3: slug is the filename stem, and `mf claim` exists.
+- The gate and dedup constants (`FLOOR`, `DENSE_FLOOR`,
+  `DEDUP_THRESHOLD`) were calibrated on nomic distances (2.7, 2.10)
+  and the default model is now `snowflake-arctic-embed-xs`. The only
+  measurement of the shipped gate on the default model is the
+  soapstones run (section 3). `eval/calibrate_confidence_blind.py` now
+  embeds through `mf.embedder` with the field default and takes domain
+  names as arguments, so the sweep across all three domains is one
+  command away; it has not been run. Until it is, treat `confidence`
+  on an arctic-xs field as calibrated by analogy, not by measurement.
+- Closed: `claims.slug` had no definition (ROADMAP.md 4.3), and the
+  spec's zip layout was unverified (2.4, closed 2026-09-02 against the
+  vendored spec and the soapstones export).
 
 ## Stack
 
@@ -477,10 +552,12 @@ with the roadmap item that closes it:
   5.1) would amortize it. Rust port only if install friction becomes
   the top complaint, and only after the schema stops changing (v2
   landed with 2.5).
-- Embedder: `nomic-embed-text-v1.5` (270 MB, 768-d, asymmetric
-  `search_query:`/`search_document:` prefixes). M0.5 confirmed
-  `bge-large-en-v1.5` is within noise of nomic on this corpus and
-  costs ~1 GB more, so nomic stays the default (CLAUDE.md gotcha 3 on
+- Embedder: `snowflake-arctic-embed-xs` by default (170 MB, 384-d;
+  docs/BENCHMARKS.md: 0.950 blind top-1 against nomic's 0.925 at a
+  fifth of the load time). `nomic-embed-text-v1.5` (768-d, asymmetric
+  `search_query:`/`search_document:` prefixes) stays in the registry as
+  the spec's suggested model; M0.5 measured `bge-large-en-v1.5` within
+  noise of it at ~1 GB more (CLAUDE.md gotcha 3 on
   the prefix trap, gotcha 4 on running nomic and bge in separate
   processes). `mf init --model bge-large-en-v1.5` builds a 1024-d field
   with it (2.9); the model is fixed per field. All three commands embed
@@ -490,9 +567,9 @@ with the roadmap item that closes it:
   not auto-selected, because an index's vectors must come from one
   runtime and the backend isn't recorded in `config`. Caveat: `FLOOR`,
   `DENSE_FLOOR`, and `DEDUP_THRESHOLD` were calibrated on nomic
-  distances; a bge field runs on those constants uncalibrated (bge's
-  cosine distances sit in a different range). Recalibrate before
-  trusting a bge field's `confidence`.
+  distances, and every non-nomic field, the arctic-xs default
+  included, runs on them uncalibrated (each model's cosine distances
+  sit in their own range). See "Known gaps".
 - Reranker: none, see section 3 point 5.
 - LLM: none. Extraction and consolidation are done by the host agent
   that's already running, the tool never calls an LLM itself.
@@ -505,7 +582,12 @@ with the roadmap item that closes it:
 - Eval evidence behind the retrieval design: [M0.5_REPORT.md](M0.5_REPORT.md).
 - Confidence gate and ranking calibration, full parameter grid and
   corpus-size sweep: `eval/calibrate_confidence_blind.py` (2.7), output
-  in `eval/results/calibration_2_7.txt`. Dedup threshold:
+  in `eval/results/calibration_2_7.txt` (nomic; rerun with
+  `MF_CAL_MODEL=nomic-embed-text-v1.5` to reproduce). The same script
+  on the soapstones domain, default model:
+  `eval/results/calibration_blind_soapstones.txt`, queries in
+  `eval/queries/soapstones/`, fixture via `eval/fetch_soapstones.py`.
+  Dedup threshold:
   `eval/calibrate_dedup.py` (2.10) over `eval/dedup_set/`, output in
   `eval/results/calibration_dedup_2_10.txt`. The 1.4 calibration
   (`eval/calibrate_confidence.py`) and 1.8 re-test

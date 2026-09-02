@@ -1,10 +1,10 @@
 ---
 uuid: paper-yolo-grid
-title: YOLO: divides image into SxS grid; each cell predicts B boxes
-summary: Grid-based prediction: each cell is responsible for objects whose center falls in that cell; B=2 default; confidence score is P(object) times IoU.
+title: "YOLO: divides image into SxS grid; each cell predicts B boxes"
+summary: "Grid-based prediction: each cell is responsible for objects whose center falls in that cell; B=2 default; confidence score is P(object) times IoU."
 status: active
 tags: [yolo, architecture]
-source: https://arxiv.org/abs/1506.02640
+source: "https://arxiv.org/abs/1506.02640"
 ---
 ## Answer
 YOLO architecture:

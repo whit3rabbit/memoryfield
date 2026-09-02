@@ -1,7 +1,7 @@
 ---
 uuid: code-obs-dashboard-naming
-title: Observability: dashboard naming convention
-summary: Service-name first, then use case (e.g., `billing: latency`, `billing: errors`); one dashboard per service + use case pair, never per query.
+title: "Observability: dashboard naming convention"
+summary: "Service-name first, then use case (e.g., `billing: latency`, `billing: errors`); one dashboard per service + use case pair, never per query."
 status: active
 tags: [observability, dashboards]
 ---

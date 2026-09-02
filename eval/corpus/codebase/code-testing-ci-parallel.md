@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-ci-parallel
-title: Testing: how CI parallelizes
-summary: Tests are sharded by file; ~6 shards in CI; merge queue runs the full suite serially to catch shard-dependent flakes.
+title: "Testing: how CI parallelizes"
+summary: "Tests are sharded by file; ~6 shards in CI; merge queue runs the full suite serially to catch shard-dependent flakes."
 status: active
 tags: [testing, ci]
 ---

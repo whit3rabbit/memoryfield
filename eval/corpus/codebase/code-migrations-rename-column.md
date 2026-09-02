@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-rename-column
-title: Migrations: how to rename a column safely
-summary: Three-release sequence: add new column, dual-write from old, backfill, dual-read with old-precedence, drop old. ~6 weeks.
+title: "Migrations: how to rename a column safely"
+summary: "Three-release sequence: add new column, dual-write from old, backfill, dual-read with old-precedence, drop old. ~6 weeks."
 status: active
 tags: [migrations, schema, rename]
 ---

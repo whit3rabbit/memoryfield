@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-dunning
-title: Billing: how dunning works
-summary: Failed payments trigger `dunning_level` increments (1–4); each level fires an email and may pause the subscription at level 4.
+title: "Billing: how dunning works"
+summary: "Failed payments trigger `dunning_level` increments (1–4); each level fires an email and may pause the subscription at level 4."
 status: active
 tags: [billing, dunning]
 ---

@@ -1,10 +1,10 @@
 ---
 uuid: paper-gd-basics
-title: Gradient descent: the basic training loop
-summary: theta <- theta - lr * grad(L(theta)); iterate over mini-batches until convergence; SGD uses one example at a time; mini-batch is a compromise.
+title: "Gradient descent: the basic training loop"
+summary: "theta <- theta - lr * grad(L(theta)); iterate over mini-batches until convergence; SGD uses one example at a time; mini-batch is a compromise."
 status: active
 tags: [optimization, training, fundamentals]
-source: https://en.wikipedia.org/wiki/Gradient_descent
+source: "https://en.wikipedia.org/wiki/Gradient_descent"
 ---
 ## Answer
 Vanilla gradient descent:

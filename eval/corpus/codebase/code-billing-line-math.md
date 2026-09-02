@@ -1,7 +1,7 @@
 ---
 uuid: code-billing-line-math
-title: Billing: how invoice lines are computed
-summary: Each line is `(unit_price × quantity) × proration_factor` where proration_factor is the fraction of the billing period the line covers.
+title: "Billing: how invoice lines are computed"
+summary: "Each line is `(unit_price × quantity) × proration_factor` where proration_factor is the fraction of the billing period the line covers."
 status: active
 tags: [billing, invoices, math]
 ---

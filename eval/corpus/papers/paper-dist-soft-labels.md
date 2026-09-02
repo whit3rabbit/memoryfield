@@ -1,10 +1,10 @@
 ---
 uuid: paper-dist-soft-labels
-title: Knowledge distillation: train a small model to match a large model's soft outputs
-summary: Student is trained on a softmax of the teacher's logits at temperature T > 1; the soft labels carry more information than hard labels.
+title: "Knowledge distillation: train a small model to match a large model's soft outputs"
+summary: "Student is trained on a softmax of the teacher's logits at temperature T > 1; the soft labels carry more information than hard labels."
 status: active
 tags: [distillation, training, compression]
-source: https://arxiv.org/abs/1503.02531
+source: "https://arxiv.org/abs/1503.02531"
 ---
 ## Answer
 Distillation loss:

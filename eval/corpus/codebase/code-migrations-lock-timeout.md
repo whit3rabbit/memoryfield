@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-lock-timeout
-title: Migrations: the `lock_timeout` setting
-summary: Set `lock_timeout = '5s'` at the top of every migration; migration aborts if it can't acquire the lock in 5 seconds, avoiding queue buildup.
+title: "Migrations: the `lock_timeout` setting"
+summary: "Set `lock_timeout = '5s'` at the top of every migration; migration aborts if it can't acquire the lock in 5 seconds, avoiding queue buildup."
 status: active
 tags: [migrations, ops, safety]
 ---

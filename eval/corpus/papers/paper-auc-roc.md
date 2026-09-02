@@ -1,10 +1,10 @@
 ---
 uuid: paper-auc-roc
-title: AUC-ROC: area under the receiver operating characteristic curve
-summary: AUC = probability that a random positive ranks above a random negative; 0.5 = random; 1.0 = perfect; threshold-invariant metric for binary classification.
+title: "AUC-ROC: area under the receiver operating characteristic curve"
+summary: "AUC = probability that a random positive ranks above a random negative; 0.5 = random; 1.0 = perfect; threshold-invariant metric for binary classification."
 status: active
 tags: [auc, evaluation, classification]
-source: https://en.wikipedia.org/wiki/Receiver_operating_characteristic
+source: "https://en.wikipedia.org/wiki/Receiver_operating_characteristic"
 ---
 ## Answer
 ROC curve: true positive rate vs false positive rate as the classification threshold varies.

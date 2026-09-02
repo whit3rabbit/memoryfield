@@ -1,7 +1,7 @@
 ---
 uuid: code-testing-mock-http
-title: Testing: how to mock external HTTP calls
-summary: Use `responses` (requests) or `httpx_mock` (httpx); never use `unittest.mock.patch` on `requests.get` directly.
+title: "Testing: how to mock external HTTP calls"
+summary: "Use `responses` (requests) or `httpx_mock` (httpx); never use `unittest.mock.patch` on `requests.get` directly."
 status: active
 tags: [testing, mocking]
 ---

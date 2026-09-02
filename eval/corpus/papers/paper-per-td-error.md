@@ -1,10 +1,10 @@
 ---
 uuid: paper-per-td-error
-title: PER: prioritize replay buffer samples by TD error magnitude
-summary: Sample transitions with probability proportional to |TD error|; high-error (i.e. surprising) transitions are sampled more often; importance-sampling weights correct the bias.
+title: "PER: prioritize replay buffer samples by TD error magnitude"
+summary: "Sample transitions with probability proportional to |TD error|; high-error (i.e. surprising) transitions are sampled more often; importance-sampling weights correct the bias."
 status: active
 tags: [per, dqn, replay-buffer]
-source: https://arxiv.org/abs/1511.05952
+source: "https://arxiv.org/abs/1511.05952"
 ---
 ## Answer
 Prioritized Experience Replay:

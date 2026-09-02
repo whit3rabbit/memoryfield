@@ -109,3 +109,6 @@ models/
 # Eval results (kept local until reported)
 results/raw/
 *.eval.json
+
+# External fixtures fetched by eval/fetch_soapstones.py (pinned, not committed)
+eval/fixtures/

@@ -1,7 +1,7 @@
 ---
 uuid: code-obs-error-budget
-title: Observability: what the error budget is for
-summary: The error budget is for *risk-taking* (deploys, experiments); when 50% remains, freeze non-critical deploys and shift work to reliability.
+title: "Observability: what the error budget is for"
+summary: "The error budget is for *risk-taking* (deploys, experiments); when 50% remains, freeze non-critical deploys and shift work to reliability."
 status: active
 tags: [observability, slo, policy]
 ---

@@ -1,10 +1,10 @@
 ---
 uuid: paper-mamba-selective
-title: Mamba: the selective mechanism makes the recurrence input-dependent
-summary: Unlike S4 (which uses fixed A, B, C), Mamba makes the discretization parameters functions of the input; this lets the model selectively remember or forget.
+title: "Mamba: the selective mechanism makes the recurrence input-dependent"
+summary: "Unlike S4 (which uses fixed A, B, C), Mamba makes the discretization parameters functions of the input; this lets the model selectively remember or forget."
 status: active
 tags: [mamba, ssm, design]
-source: https://arxiv.org/abs/2312.00752
+source: "https://arxiv.org/abs/2312.00752"
 ---
 ## Answer
 S4 (predecessor): fixed A, B, C parameters per layer; can't adapt to input.

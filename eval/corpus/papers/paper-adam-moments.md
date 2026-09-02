@@ -1,10 +1,10 @@
 ---
 uuid: paper-adam-moments
-title: Adam: adaptive moments combine momentum and RMSProp
-summary: First moment m_t = EMA of gradients (momentum-like); second moment v_t = EMA of squared gradients (RMSProp-like); bias-corrected; default betas = 0.9, 0.999.
+title: "Adam: adaptive moments combine momentum and RMSProp"
+summary: "First moment m_t = EMA of gradients (momentum-like); second moment v_t = EMA of squared gradients (RMSProp-like); bias-corrected; default betas = 0.9, 0.999."
 status: active
 tags: [adam, optimizer, training]
-source: https://arxiv.org/abs/1412.6980
+source: "https://arxiv.org/abs/1412.6980"
 ---
 ## Answer
 Adam maintains two moving averages:

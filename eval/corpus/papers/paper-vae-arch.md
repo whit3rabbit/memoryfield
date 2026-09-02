@@ -1,10 +1,10 @@
 ---
 uuid: paper-vae-arch
-title: VAE: encoder-decoder with a probabilistic latent space
-summary: Encoder outputs mean and variance of a Gaussian posterior q(z|x); sample z from N(mu, sigma^2); decoder reconstructs x; KL term regularizes q toward N(0, I).
+title: "VAE: encoder-decoder with a probabilistic latent space"
+summary: "Encoder outputs mean and variance of a Gaussian posterior q(z|x); sample z from N(mu, sigma^2); decoder reconstructs x; KL term regularizes q toward N(0, I)."
 status: active
 tags: [vae, generative, latent]
-source: https://arxiv.org/abs/1312.6114
+source: "https://arxiv.org/abs/1312.6114"
 ---
 ## Answer
 VAE training:

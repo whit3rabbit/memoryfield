@@ -1,7 +1,7 @@
 ---
 uuid: code-migrations-never-drop-same-release
-title: Migrations: why we never drop a column in the same release
-summary: Two-release rule: release N removes all code that reads the column; release N+1 drops it. One release to find stragglers.
+title: "Migrations: why we never drop a column in the same release"
+summary: "Two-release rule: release N removes all code that reads the column; release N+1 drops it. One release to find stragglers."
 status: active
 tags: [migrations, schema, discipline]
 ---

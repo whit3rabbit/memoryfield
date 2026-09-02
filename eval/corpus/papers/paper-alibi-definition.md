@@ -1,10 +1,10 @@
 ---
 uuid: paper-alibi-definition
-title: ALiBi: attention with linear biases (no position embeddings)
-summary: Adds a non-trainable linear bias `-m * |i - j|` to attention scores; the slope m is fixed per head; no learned position embeddings needed.
+title: "ALiBi: attention with linear biases (no position embeddings)"
+summary: "Adds a non-trainable linear bias `-m * |i - j|` to attention scores; the slope m is fixed per head; no learned position embeddings needed."
 status: active
 tags: [alibi, positional-encoding, transformer]
-source: https://arxiv.org/abs/2108.12409
+source: "https://arxiv.org/abs/2108.12409"
 ---
 ## Answer
 ALiBi modifies attention scores:

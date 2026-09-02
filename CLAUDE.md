@@ -13,7 +13,8 @@ Phase 1-3 command is real: `init`/`index`/`search`/`read`/`write`/
 partials `consolidate --plan` and `claim`. For the complete CLI
 specification and flag reference, see [docs/CLI.md](docs/CLI.md). For
 the schema and retrieval design as currently decided, see
-[docs/architecture.md](docs/architecture.md). `eval/` is the eval and
+[docs/architecture.md](docs/architecture.md). [docs/README.md](docs/README.md)
+is the hub for the user-facing guides (agents, models, fields). `eval/` is the eval and
 corpus rig from M0/M0.5, complete. The upstream memoryfield spec is
 vendored at [docs/upstream/SPEC.md](docs/upstream/SPEC.md); mf builds
 on the format, not on Cal's tool, and architecture.md section 6 is

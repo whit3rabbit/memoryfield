@@ -65,7 +65,7 @@ eval/
     hybrid_baseline.py   # RRF fusion of FTS + dense
   build_corpus.py        # generates the labeled corpus from seeds
   run_baselines.py       # runs all four baselines, writes results JSON
-  report.py              # produces M0_REPORT.md from results JSON
+  report.py              # produces docs/M0.5_REPORT.md from results JSON
 ```
 
 The corpus and queries live under `eval/corpus/` and `eval/queries/`
@@ -111,7 +111,7 @@ The harness reports, per baseline per domain:
   stub + L1 lookup, computed from the actual rendered output.
 - **MRR** — mean reciprocal rank of the first relevant page.
 
-The full numbers land in `M0_REPORT.md` at the end of M0.
+The M0 numbers landed in `docs/M0_REPORT.md` (frozen). The current report is `docs/M0.5_REPORT.md`.
 
 ## How to run
 
@@ -120,7 +120,7 @@ The full numbers land in `M0_REPORT.md` at the end of M0.
 uv sync --extra eval
 uv run python3 -m eval.build_corpus   # writes eval/corpus/{codebase,papers}/
 uv run python3 -m eval.run_baselines  # writes eval/results/*.json
-uv run python3 -m eval.report         # writes M0_REPORT.md
+uv run python3 -m eval.report         # writes docs/M0.5_REPORT.md
 ```
 
 grep/fts/dense_tfidf need stdlib only. dense_nomic/dense_bge/hybrid need
@@ -145,7 +145,7 @@ M0 is "done" when:
 - [ ] ≥ 60 labeled queries exist (≥ 30 per domain), each with at least one
       `answer_uuid` and a `stub_sufficient: bool` label.
 - [ ] All four baselines run end-to-end on both domains.
-- [ ] `M0_REPORT.md` reports P@3, R@5, MRR, stub-end rate, and tokens/lookup
+- [ ] `docs/M0_REPORT.md` reports P@3, R@5, MRR, stub-end rate, and tokens/lookup
       for every (baseline, domain) pair.
 - [ ] Report explicitly states whether each baseline met, exceeded, or fell
       short of the design targets in PLAN.md §1.

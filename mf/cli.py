@@ -166,6 +166,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     model_install_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
+    subparsers.add_parser(
+        "mcp", help="run an MCP server wrapping search/read/write/raw_add (stdio transport)"
+    )
+
     for name in STUB_COMMANDS:
         subparsers.add_parser(name)
     return parser
@@ -596,6 +600,20 @@ def _cmd_model_install(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_mcp(args: argparse.Namespace) -> int:
+    try:
+        from mf import mcp_server  # lazy: mcp is an optional extra
+    except ImportError:
+        sys.stderr.write(
+            "mf mcp: the mcp package isn't installed; run "
+            "`uv tool install '.[mcp]'` (or `pip install 'mf[mcp]'`) and retry\n"
+        )
+        return 1
+
+    mcp_server.main()
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -626,6 +644,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_import(args)
     if args.command == "hook":
         return _cmd_hook(args)
+    if args.command == "mcp":
+        return _cmd_mcp(args)
     if args.command == "raw":
         if args.raw_command == "add":
             return _cmd_raw_add(args)

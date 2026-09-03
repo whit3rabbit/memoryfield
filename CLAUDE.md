@@ -385,6 +385,26 @@ fixed bugs.
     95-page export (`eval/fetch_soapstones.py`) is the fixture that
     caught this.
 
+### Phase 5 packaging gotchas
+
+40. **MCP Python SDK v2 renamed `FastMCP` to `MCPServer` and moved the
+    import path.** `from mcp.server.fastmcp import FastMCP` (the
+    widely-documented v1 API) is a stub in `mcp>=2` that raises
+    `ModuleNotFoundError` pointing at a migration guide, not a working
+    import. Use `from mcp.server import MCPServer` (`mf/mcp_server.py`,
+    ROADMAP.md 5.1). Confirm the installed SDK version (`mcp==2.1.1`
+    here) before trusting any mcp code sample, training-data or
+    otherwise.
+
+41. **hatchling's default sdist bundles every git-tracked file:**
+    `uv build` shipped the full eval corpus, every doc, and this
+    repo's own private `notes/raw/` session extracts into the source
+    distribution, since no `[tool.hatch.build.targets.sdist]` config
+    existed to scope it (the wheel was already scoped via `packages =
+    ["mf"]`). Same silent-failure family as gotcha 37. Fixed with
+    `only-include = ["mf"]` (ROADMAP.md 5.2); verify any future
+    packaging change with `uv build && tar tzf dist/*.tar.gz`.
+
 ### Tooling patterns worth reusing
 
 29. **Quick real-corpus smoke test, cheaper than writing new
@@ -412,6 +432,15 @@ fixed bugs.
     distance to compare against `DEDUP_THRESHOLD`. Worth knowing
     before assuming it's unavailable.
 
+42. **Measure a dependency's real install cost before deciding core
+    vs optional:** build twice into a scratch tool dir
+    (`UV_TOOL_DIR=$(mktemp -d) uv tool install --force .`), once with
+    and once without the dependency, and diff the installed package
+    lists. Caught that `mcp` pulled in 14 packages (`cryptography`,
+    `starlette`, `uvicorn`, and their own trees) nothing in the core
+    CLI touches, moved to the `mcp` extra instead of shipping as a
+    hard dependency (ROADMAP.md 5.2).
+
 ## Roadmap
 
 M0 through M4 are closed (eval matrix, read path, write path,
@@ -420,8 +449,9 @@ in progress: `consolidate --plan`, `claim`, `contested` status, and
 the `notes/` dogfooding field are built, and 4.4 (co_read weighting
 in neighbor ranking, `MIN_CO_READ_WEIGHT` uncalibrated) landed
 2026-09-02. Remaining: consolidate idempotency across runs,
-pointer-entry expansion, and `write` auto-calling `claim`. M6 is the
-MCP server, then packaging. Full task detail, per-task decision records, and open debt
+pointer-entry expansion, and `write` auto-calling `claim`. M6, the
+MCP server (5.1) and packaging polish (5.2), landed 2026-09-02. Full
+task detail, per-task decision records, and open debt
 (including 0.5's upstream frontmatter proposal, which now has a
 destination and still needs a human to send it) in
 [ROADMAP.md](ROADMAP.md).

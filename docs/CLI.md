@@ -23,6 +23,7 @@ Complete reference for all `mf` commands, flags, arguments, and JSON output stru
 | [`mf consolidate`](#mf-consolidate) | Propose create/review actions from staged `raw/` extracts |
 | [`mf import`](#mf-import) | Import Claude Code auto-memory or wiki directories |
 | [`mf hook`](#mf-hook) | Claude Code session lifecycle hooks (`stop`, `session-end`) |
+| [`mf mcp`](#mf-mcp) | Run an MCP server wrapping `search`/`read`/`write`/`raw_add` over stdio |
 
 ---
 
@@ -331,3 +332,31 @@ Handlers invoked by Claude Code hooks at session lifecycle events.
 mf hook stop          # Prompts agent to capture learnings before finishing session
 mf hook session-end   # Stages session metadata pointer into raw/ (<0.25s runtime)
 ```
+
+---
+
+### `mf mcp`
+
+Run an MCP server (stdio transport) exposing `search`, `read`, `write`, and `raw_add` as tools.
+
+The `mcp` package is an optional extra, not a core dependency: `uv tool install .` (or a plain `pip install mf`) doesn't pull in the MCP server stack (`mcp` plus its own dependency tree, cryptography, starlette, uvicorn, and friends), since most `mf` usage is the CLI or the Claude Code skill and never touches it. Install it with:
+
+```bash
+uv tool install ".[mcp]"                 # from a checkout
+pip install "mf[mcp]"
+```
+
+Running `mf mcp` without the extra installed exits 1 with a message naming the install command, not a traceback.
+
+```bash
+mf mcp
+```
+
+Each tool wraps the same library function the CLI command calls, and every tool takes a `field` argument (default `"."`, resolved against the server process's cwd), matching the CLI's own `--field` default. There's no separate server-side field configuration to keep in sync: launch `mf mcp` from inside the field directory, or pass `field` per call.
+
+- `search(query, field=".", limit=2, neighbor_limit=0, budget=None, stale_ok=False)`: same gate and ranking as `mf search`. Returns `SearchResult.as_dict()`.
+- `read(refs, field=".", tier=None)`: `refs` is a list of `uuid` or `uuid#section`. Returns `{"results": [ReadResult.as_dict(), ...]}` (the CLI's own `--json` output is a bare array here, but MCP structured output must be a JSON object, so it's wrapped under `results`).
+- `write(text, dest, field=".", update=None, force=False)`: `text` is a draft's full frontmatter and body, `dest` is the filename to write it under inside the field. Returns `WriteResult.as_dict()`. A dedup-blocked draft comes back with `written: false` and a `duplicates` list, not an error.
+- `raw_add(text, field=".")`: appends a session extract to `raw/`. Returns `RawAddResult.as_dict()`.
+
+A caller-avoidable failure (no field at that path, a stale index, a ref that doesn't exist, a draft that fails validation, empty raw text, a stale result without `stale_ok`) is raised as an MCP `ToolError`. The message reaches the model as a normal tool result, not a crash.

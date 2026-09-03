@@ -1,0 +1,129 @@
+"""`mf mcp` — MCP server wrapping search/read/write/raw_add (ROADMAP.md 5.1).
+
+Each tool is a thin wrapper around the same library functions the CLI
+calls (mf/search.py, mf/read.py, mf/write.py, mf/raw.py) and returns
+the same `.as_dict()` shape `mf <verb> --json` prints — one exception:
+`read` returns a list of `ReadResult`, and MCP structured tool output
+must be a JSON object, so it's wrapped here as `{"results": [...]}`
+instead of the CLI's bare JSON array.
+
+Errors the caller could have avoided by passing different arguments
+(no field at that path, a stale schema, a page/section that doesn't
+exist, a draft that fails validation, an empty raw extract, a stale
+result without --stale-ok) are raised as `ToolError`: the message
+reaches the model as a normal tool result it can read and retry from,
+not a crash. `write`'s dedup gate is not an error in that sense — like
+the CLI, a blocked write returns normally with `written: false` and
+the candidate list in `duplicates`.
+
+Every tool takes `field` (default ".", resolved against the server
+process's cwd), matching the CLI's own `--field` default — same
+semantics, no separate server-side field configuration to keep in
+sync.
+"""
+from __future__ import annotations
+
+from pathlib import Path
+from sqlite3 import Connection
+from typing import Any
+
+from mcp.server import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
+
+from . import db
+from . import raw as raw_mod
+from . import read as read_mod
+from . import search as search_mod
+from . import write as write_mod
+from .page import PageParseError
+
+mcp = MCPServer("mf")
+
+
+def _open(field: str) -> tuple[Path, Connection]:
+    field_dir = Path(field).resolve()
+    try:
+        conn = db.open_field(field_dir)
+    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
+        raise ToolError(str(e)) from e
+    return field_dir, conn
+
+
+@mcp.tool()
+def search(
+    query: str,
+    field: str = ".",
+    limit: int = search_mod.DEFAULT_LIMIT,
+    neighbor_limit: int = search_mod.DEFAULT_NEIGHBOR_LIMIT,
+    budget: int | None = None,
+    stale_ok: bool = False,
+) -> dict[str, Any]:
+    """Search a field. Check `confidence` (high/low/none) before citing
+    a result — `none` means the gate didn't trust the match."""
+    field_dir, conn = _open(field)
+    try:
+        result = search_mod.search(
+            conn, query, limit=limit, neighbor_limit=neighbor_limit,
+            budget=budget, field_dir=field_dir, stale_ok=stale_ok,
+        )
+    except search_mod.StaleIndexError as e:
+        raise ToolError(f"{e}; pass stale_ok=true or run `mf index`") from e
+    finally:
+        conn.close()
+    return result.as_dict()
+
+
+@mcp.tool()
+def read(refs: list[str], field: str = ".", tier: str | None = None) -> dict[str, Any]:
+    """Read one or more refs (uuid, or uuid#section) at tier L1|L2.
+    A bare uuid with no tier defaults to L1. Batch related refs into one
+    call so the co_read signal (used by search's neighbor ranking) fires."""
+    field_dir, conn = _open(field)
+    try:
+        results = read_mod.read(conn, refs, tier=tier, field_dir=field_dir)
+    except (read_mod.PageNotFoundError, read_mod.SectionNotFoundError) as e:
+        raise ToolError(f"not found: {e}") from e
+    finally:
+        conn.close()
+    return {"results": [r.as_dict() for r in results]}
+
+
+@mcp.tool()
+def write(
+    text: str,
+    dest: str,
+    field: str = ".",
+    update: str | None = None,
+    force: bool = False,
+) -> dict[str, Any]:
+    """Validate, dedup-gate, and index a draft page (full frontmatter +
+    body text) under filename `dest` inside the field. `written: false`
+    with a `duplicates` list means the dedup gate blocked it — pass the
+    existing page's uuid as `update` to update it, or `force=true` to
+    write anyway."""
+    field_dir, conn = _open(field)
+    try:
+        result = write_mod.write_text(field_dir, conn, text, dest, update_uuid=update, force=force)
+    except (write_mod.WriteValidationError, PageParseError) as e:
+        raise ToolError(str(e)) from e
+    finally:
+        conn.close()
+    return result.as_dict()
+
+
+@mcp.tool()
+def raw_add(text: str, field: str = ".") -> dict[str, Any]:
+    """Append a session extract to raw/ for a later `mf consolidate --plan`
+    pass, rather than writing a page directly. Duplicate of the most
+    recent entry is a silent no-op (retried/racing hook, not new)."""
+    field_dir, conn = _open(field)
+    conn.close()  # raw/ never touches the index; only used to validate the field exists
+    try:
+        result = raw_mod.add_raw(field_dir, text)
+    except raw_mod.EmptyRawTextError as e:
+        raise ToolError(str(e)) from e
+    return result.as_dict()
+
+
+def main() -> None:
+    mcp.run(transport="stdio")

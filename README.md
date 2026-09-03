@@ -55,6 +55,11 @@ The first search downloads the embedding model (default
 per field at `mf init`. Alternatives, and when to pick one:
 [docs/models.md](docs/models.md).
 
+`mf mcp` (an MCP server for `search`/`read`/`write`/`raw_add`) needs an
+extra: `uv tool install ".[mcp]"`. It's optional because most usage is
+the CLI directly or the Claude Code skill, and the MCP stack (roughly
+a dozen extra packages) isn't worth pulling in for those.
+
 ## Quickstart
 
 Using this repo's eval corpus as sample pages:
@@ -154,6 +159,7 @@ Full arguments, flags, exit codes, and JSON outputs are documented in
 | `mf model install <name>` | download and cache an embedding model ahead of time |
 | `mf claim <slug> --by <writer>` | atomically claim a slug before creating a page (multi-writer) |
 | `mf consolidate --plan` | propose create/review actions from `raw/` entries |
+| `mf mcp` | run an MCP server exposing `search`/`read`/`write`/`raw_add` over stdio |
 
 ## Documentation
 

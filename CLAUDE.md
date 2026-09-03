@@ -32,8 +32,8 @@ Run from the repo root. `uv run ...` uses `.venv` and reflects source
 changes immediately (gotcha 20).
 
 - Tests: `uv run pytest tests/ -q`
-- Lint: `ruff check mf/ eval/ tests/` (stable baseline of 7 `ISC004`
-  findings, gotcha 23)
+- Lint: `ruff check mf/ eval/ tests/` (clean, gated in
+  `.github/workflows/test.yml`)
 - Typecheck: `npx --yes pyright <files>` (bare `pyright` isn't on
   PATH)
 - Tests + eval baselines in one venv: `uv sync --extra eval --group
@@ -60,7 +60,14 @@ reviewers), and cuts a GitHub release from the built artifacts.
 `.github/workflows/test.yml` runs pytest/ruff/pyright on every push and
 PR. `astral-sh/setup-uv` only publishes exact-version tags, not a
 rolling major (`@v10` 404s; use `@v10.0.1`-style pins and bump
-deliberately) — same pin-exact lesson as gotcha 23's ruff pin.
+deliberately, same discipline as the ruff pin below it). The macOS leg
+of the test matrix needs `actions/setup-python` plus
+`UV_PYTHON_PREFERENCE: only-system`: uv's own managed CPython builds
+for macOS lack `--enable-loadable-sqlite-extensions` (confirmed via a
+real failing run, `AttributeError: 'sqlite3.Connection' object has no
+attribute 'enable_load_extension'`, needed by `sqlite-vec`), even
+though the identical build works fine on a local dev Mac — an
+environment-specific gap, not a code bug.
 
 One-time PyPI setup (already done as of the `v0.1.0` tag): register a
 pending trusted publisher at
@@ -89,8 +96,8 @@ numbers live in docs/BENCHMARKS.md section 5.
 ## Gotchas and lessons learned
 
 Organized by where they will bite next. Numbers are stable IDs cited
-from ROADMAP.md and the reports. Gaps (12, 28) are deleted records of
-fixed bugs.
+from ROADMAP.md and the reports. Gaps (12, 23, 28) are deleted records
+of fixed bugs.
 
 ### Eval harness gotchas
 
@@ -246,12 +253,6 @@ fixed bugs.
     so far). A missing entry doesn't error and silently skips
     type-checking that directory, so a clean `pyright` run can hide
     real problems in unlisted code.
-
-23. **`ruff check mf/ eval/ tests/` has a stable baseline of 7
-    pre-existing findings, all `ISC004` (implicit string concatenation)
-    in `eval/report.py`'s hardcoded prose strings.** Compare the count
-    after a change instead of re-diagnosing the same 7 every time, and
-    don't fold fixing them into unrelated work.
 
 24. **This repo can have more than one Claude Code session running
     against it at once.** Before assuming sole-writer state (especially

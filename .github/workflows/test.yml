@@ -15,6 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # uv's own managed CPython builds for macOS runners lack
+      # --enable-loadable-sqlite-extensions (AttributeError:
+      # 'sqlite3.Connection' object has no attribute
+      # 'enable_load_extension', needed by sqlite-vec). actions/setup-python's
+      # macOS builds do have it, so provision the interpreter that way on
+      # macOS and tell uv to use it instead of downloading its own.
+      - uses: actions/setup-python@v7
+        if: runner.os == 'macOS'
+        with:
+          python-version: ${{ matrix.python-version }}
+
       - uses: astral-sh/setup-uv@v10.0.1
         with:
           python-version: ${{ matrix.python-version }}
@@ -22,8 +33,12 @@ jobs:
       # gotcha 21 (CLAUDE.md): --extra and --group don't compose across
       # separate `uv sync` calls, so both go in one.
       - run: uv sync --extra eval --group dev
+        env:
+          UV_PYTHON_PREFERENCE: ${{ runner.os == 'macOS' && 'only-system' || '' }}
 
       - run: uv run pytest tests/ -q
+        env:
+          UV_PYTHON_PREFERENCE: ${{ runner.os == 'macOS' && 'only-system' || '' }}
 
   lint:
     runs-on: ubuntu-latest
@@ -36,9 +51,8 @@ jobs:
 
       - run: uv sync --extra eval --group dev
 
-      # Pinned to match the repo's local baseline (CLAUDE.md gotcha 23:
-      # 7 pre-existing ISC004 findings in eval/report.py). Bump deliberately,
-      # not as a side effect of an unrelated change.
+      # Pinned to the repo's local ruff version. Bump deliberately, not as
+      # a side effect of an unrelated change.
       - run: uvx ruff@0.16.5 check mf/ eval/ tests/
 
       - uses: actions/setup-node@v7

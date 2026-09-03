@@ -518,16 +518,22 @@ def main() -> int:
         "",
         "M0.5 fixes three problems called out in the M0 review:",
         "",
-        "1. **The 'dense' baseline was TF-IDF, not embeddings.** Replaced with "
-        "`nomic-embed-text-v1.5` (768-d, asymmetric `search_query:`/`search_document:` "
-        "prefixes) and `bge-large-en-v1.5` (1024-d, symmetric). Both via "
-        "fastembed in-process.",
-        "2. **The query set was at ceiling** (P@3 0.95–0.98 across methods). "
-        "Added paraphrased queries (vocabulary-overlapping with matched page "
-        "removed) and no-answer queries (correct result = empty). Both via "
-        "subagent-generated blind paraphrase + topical/entity tagging.",
-        "3. **Stub-end rate was self-labeled.** Re-judged by a subagent with "
-        "page bodies hidden, from query + stub alone.",
+        (
+            "1. **The 'dense' baseline was TF-IDF, not embeddings.** Replaced with "
+            "`nomic-embed-text-v1.5` (768-d, asymmetric `search_query:`/`search_document:` "
+            "prefixes) and `bge-large-en-v1.5` (1024-d, symmetric). Both via "
+            "fastembed in-process."
+        ),
+        (
+            "2. **The query set was at ceiling** (P@3 0.95–0.98 across methods). "
+            "Added paraphrased queries (vocabulary-overlapping with matched page "
+            "removed) and no-answer queries (correct result = empty). Both via "
+            "subagent-generated blind paraphrase + topical/entity tagging."
+        ),
+        (
+            "3. **Stub-end rate was self-labeled.** Re-judged by a subagent with "
+            "page bodies hidden, from query + stub alone."
+        ),
         "",
         "## Results (overall)",
         render_table(summary),
@@ -539,16 +545,22 @@ def main() -> int:
         "",
         "## What M0.5 still does not measure",
         "",
-        "- **Index size, indexing cost, embedding cost.** The runner rebuilds "
-        "the FTS index and re-embeds all pages per query session. The real "
-        "cost in M1 will be one-time per page edit and depends on the "
-        "embedder choice; deferred to M1 measurement.",
-        "- **No-answer precision/recall.** We report hit rate on no-answer "
-        "queries (should be 0), but the convention is 'no answer in top-5', "
-        "not 'no answer at all'. M1 should add the strict 'no answer anywhere' "
-        "metric.",
-        "- **Stub quality on real agents.** De-bias reduces author bias but "
-        "doesn't replace a human eval. M2 needs a real agent trial.",
+        (
+            "- **Index size, indexing cost, embedding cost.** The runner rebuilds "
+            "the FTS index and re-embeds all pages per query session. The real "
+            "cost in M1 will be one-time per page edit and depends on the "
+            "embedder choice; deferred to M1 measurement."
+        ),
+        (
+            "- **No-answer precision/recall.** We report hit rate on no-answer "
+            "queries (should be 0), but the convention is 'no answer in top-5', "
+            "not 'no answer at all'. M1 should add the strict 'no answer anywhere' "
+            "metric."
+        ),
+        (
+            "- **Stub quality on real agents.** De-bias reduces author bias but "
+            "doesn't replace a human eval. M2 needs a real agent trial."
+        ),
         "",
         "## M0.5 exit criteria",
         "",
@@ -561,9 +573,11 @@ def main() -> int:
         "",
         "## M0.5 -> M1 gate",
         "",
-        "The M0.5 numbers replace M0's as the load-bearing evidence for M1 "
-        "design decisions. The verdict on FTS vs dense and on hybrid fusion "
-        "comes from M0.5's per-axis tables, not from M0's aggregate.",
+        (
+            "The M0.5 numbers replace M0's as the load-bearing evidence for M1 "
+            "design decisions. The verdict on FTS vs dense and on hybrid fusion "
+            "comes from M0.5's per-axis tables, not from M0's aggregate."
+        ),
     ]
     REPORT_PATH.write_text("\n".join(out) + "\n")
     print(f"Wrote {REPORT_PATH}")

@@ -15,16 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # uv's own managed CPython builds for macOS runners lack
-      # --enable-loadable-sqlite-extensions (AttributeError:
-      # 'sqlite3.Connection' object has no attribute
-      # 'enable_load_extension', needed by sqlite-vec). actions/setup-python's
-      # macOS builds do have it, so provision the interpreter that way on
-      # macOS and tell uv to use it instead of downloading its own.
-      - uses: actions/setup-python@v7
+      # Neither uv's own managed CPython builds nor actions/setup-python's
+      # hosted builds support --enable-loadable-sqlite-extensions on macOS
+      # (AttributeError: 'sqlite3.Connection' object has no attribute
+      # 'enable_load_extension', needed by sqlite-vec) -- confirmed by two
+      # separate failing CI runs, not assumed. Homebrew's python@X.Y does
+      # (confirmed locally); macos-latest ships Homebrew preinstalled, so
+      # use that instead and point uv at it.
+      - name: Install Python via Homebrew (macOS only)
         if: runner.os == 'macOS'
-        with:
-          python-version: ${{ matrix.python-version }}
+        run: |
+          brew install python@${{ matrix.python-version }}
+          echo "UV_PYTHON_PREFERENCE=only-system" >> "$GITHUB_ENV"
 
       - uses: astral-sh/setup-uv@v10.0.1
         with:
@@ -33,12 +35,8 @@ jobs:
       # gotcha 21 (CLAUDE.md): --extra and --group don't compose across
       # separate `uv sync` calls, so both go in one.
       - run: uv sync --extra eval --group dev
-        env:
-          UV_PYTHON_PREFERENCE: ${{ runner.os == 'macOS' && 'only-system' || '' }}
 
       - run: uv run pytest tests/ -q
-        env:
-          UV_PYTHON_PREFERENCE: ${{ runner.os == 'macOS' && 'only-system' || '' }}
 
   lint:
     runs-on: ubuntu-latest

@@ -43,6 +43,31 @@ changes immediately (gotcha 20).
   download into gitignored `eval/fixtures/`; the soapstones tests skip
   without it)
 
+## Release
+
+PyPI distribution name is `memoryfield` (`mf` was already taken by an
+unrelated package). Console command, import package, and module layout
+all stay `mf` — only the published name changed. Repo:
+[github.com/whit3rabbit/memoryfield](https://github.com/whit3rabbit/memoryfield)
+(singular; `memoryfields` in older commit messages/ROADMAP.md entries
+is a stale name from before this was decided).
+
+To cut a release: push to `main`, then `git tag vX.Y.Z && git push
+origin vX.Y.Z`. `.github/workflows/release.yml` builds on that tag,
+publishes to PyPI via trusted-publisher OIDC (no stored token — the
+`pypi` GitHub environment is restricted to `v*` tags, no required
+reviewers), and cuts a GitHub release from the built artifacts.
+`.github/workflows/test.yml` runs pytest/ruff/pyright on every push and
+PR. `astral-sh/setup-uv` only publishes exact-version tags, not a
+rolling major (`@v10` 404s; use `@v10.0.1`-style pins and bump
+deliberately) — same pin-exact lesson as gotcha 23's ruff pin.
+
+One-time PyPI setup (already done as of the `v0.1.0` tag): register a
+pending trusted publisher at
+[pypi.org/manage/account/publishing](https://pypi.org/manage/account/publishing/)
+naming project `memoryfield`, owner `whit3rabbit`, repo `memoryfield`,
+workflow `release.yml`, environment `pypi`.
+
 ## Where things stand
 
 The eval matrix is complete: 6 baselines (grep, FTS5, TF-IDF, nomic,

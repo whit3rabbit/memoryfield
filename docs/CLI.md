@@ -339,11 +339,11 @@ mf hook session-end   # Stages session metadata pointer into raw/ (<0.25s runtim
 
 Run an MCP server (stdio transport) exposing `search`, `read`, `write`, and `raw_add` as tools.
 
-The `mcp` package is an optional extra, not a core dependency: `uv tool install .` (or a plain `pip install mf`) doesn't pull in the MCP server stack (`mcp` plus its own dependency tree, cryptography, starlette, uvicorn, and friends), since most `mf` usage is the CLI or the Claude Code skill and never touches it. Install it with:
+The `mcp` package is an optional extra, not a core dependency: `uv tool install .` (or a plain `pip install memoryfield`) doesn't pull in the MCP server stack (`mcp` plus its own dependency tree, cryptography, starlette, uvicorn, and friends), since most `mf` usage is the CLI or the Claude Code skill and never touches it. Install it with:
 
 ```bash
 uv tool install ".[mcp]"                 # from a checkout
-pip install "mf[mcp]"
+pip install "memoryfield[mcp]"
 ```
 
 Running `mf mcp` without the extra installed exits 1 with a message naming the install command, not a traceback.

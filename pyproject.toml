@@ -1,5 +1,5 @@
 [project]
-name = "mf"
+name = "memoryfield"
 version = "0.1.0"
 description = "Memoryfield: a search-first, tiered-read memory tool for coding agents"
 readme = "README.md"
@@ -26,8 +26,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/whit3rabbit/memoryfields"
-Repository = "https://github.com/whit3rabbit/memoryfields"
+Homepage = "https://github.com/whit3rabbit/memoryfield"
+Repository = "https://github.com/whit3rabbit/memoryfield"
 
 [project.optional-dependencies]
 eval = ["fastembed>=0.8"]

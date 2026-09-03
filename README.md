@@ -47,7 +47,7 @@ Python 3.11 or newer, installed through [uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv tool install .                        # from a checkout
-uv tool install git+https://github.com/whit3rabbit/memoryfields
+uv tool install git+https://github.com/whit3rabbit/memoryfield
 ```
 
 The first search downloads the embedding model (default

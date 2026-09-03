@@ -18,7 +18,7 @@ Moved `mcp` from a core dependency to the `mcp` optional extra
 (matching the existing `eval`/`mlx` precedent in `pyproject.toml`),
 duplicated into the `dev` dependency group so the test suite still
 installs it. `mf mcp` without the extra now exits 1 with the install
-command (`uv tool install '.[mcp]'` / `pip install 'mf[mcp]'`) instead
+command (`uv tool install '.[mcp]'` / `pip install 'memoryfield[mcp]'`) instead
 of a raw `ImportError` traceback.
 
 Install with:

@@ -1,3 +1,5 @@
+import pytest
+
 from mf.embedding import document_text, embedding_text, query_text
 
 
@@ -24,12 +26,8 @@ def test_document_text_bge_prefix_is_empty():
 
 
 def test_document_text_rejects_unknown_model_kind():
-    try:
+    with pytest.raises(ValueError):
         document_text("T", "S", "L", "unknown")
-    except ValueError:
-        pass
-    else:
-        raise AssertionError("expected ValueError for unknown model_kind")
 
 
 def test_query_text_nomic_prefix():
@@ -45,9 +43,5 @@ def test_query_text_bge_prefix():
 
 
 def test_query_text_rejects_unknown_model_kind():
-    try:
+    with pytest.raises(ValueError):
         query_text("q", "unknown")
-    except ValueError:
-        pass
-    else:
-        raise AssertionError("expected ValueError for unknown model_kind")

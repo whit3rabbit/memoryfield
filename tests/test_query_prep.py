@@ -7,12 +7,13 @@ def test_or_joins_kept_tokens():
 
 
 def test_drops_stopwords_and_short_tokens():
-    # Single-character tokens ("i", "a") never reach the tokenizer at all
-    # (the regex requires 2+ chars), so only "do" shows up as dropped.
+    # Single-character tokens ("i", "a") and stopwords are dropped, and
+    # every dropped token is reported so a caller can see what was lost.
     result = fts_query("how do I rotate a key")
     assert "how" not in result.dropped
-    assert result.dropped == ["do"]
+    assert result.dropped == ["do", "i", "a"]
     assert result.expr == '"how" OR "rotate" OR "key"'
+    assert result.terms == ["how", "rotate", "key"]
 
 
 def test_keeps_internal_hyphens():
@@ -34,7 +35,14 @@ def test_empty_query_returns_empty_expression():
 
 
 def test_all_stopwords_returns_empty_expression_with_dropped_tokens():
-    # "a" is a single char and never reaches the tokenizer (see above).
     result = fts_query("is the a of")
     assert result.expr == ""
-    assert result.dropped == ["is", "the", "of"]
+    assert result.dropped == ["is", "the", "a", "of"]
+
+
+def test_digits_and_non_latin_words_are_terms():
+    # HTTP status codes, version numbers, and non-Latin scripts used to be
+    # dropped by a leading-ASCII-letter requirement.
+    assert fts_query("HTTP 401 vs 403").terms == ["http", "401", "vs", "403"]
+    assert fts_query("v2.5 migration").terms == ["v2", "migration"]
+    assert fts_query("日本語 検索").terms == ["日本語", "検索"]

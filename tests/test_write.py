@@ -222,7 +222,7 @@ def test_uuid_already_indexed_elsewhere_rejected(tmp_path, monkeypatch):
     field, conn, draft = _field_and_draft(
         tmp_path, monkeypatch, draft_name="rotate-v2.md", text=PAGE_ROTATE
     )
-    with pytest.raises(write.WriteValidationError, match="already indexed at rotate.md"):
+    with pytest.raises(write.WriteValidationError, match=r"already indexed at rotate\.md"):
         write.write_page(field, conn, draft, update_uuid="page-rotate")
     conn.close()
 

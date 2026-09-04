@@ -27,10 +27,18 @@ fallback that records where the transcript lives.
 The Stop guidance fires once per session: `stop_hook_active` covers the
 continuation turn, and a marker file under the temp dir covers later
 turns, so an agent that decides there's nothing to keep isn't asked
-again every turn.
+again every turn. "Already captured" is decided from the transcript's
+tool calls, not from prose: the guidance text itself names `mf write`,
+and a session that merely discussed the command (a review of this
+repo, say) was being counted as one that ran it.
+
+Nothing here raises to the caller. A hook that prints a traceback into
+Claude Code is worse than a hook that quietly does nothing, so
+`mf/cli.py` catches everything and exits 0 either way.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import tempfile
@@ -41,7 +49,8 @@ from pathlib import Path
 from .db import DB_FILENAME
 from .raw import RAW_DIRNAME, RawAddResult
 
-_CAPTURE_RE = re.compile(r"\bmf (write|raw add|hook session-end)\b")
+_CAPTURE_RE = re.compile(r"(?:^|[;&|(\s])mf (write|raw add|hook session-end)\b")
+_FENCED_RE = re.compile(r"`([^`\n]*)`")
 
 STOP_GUIDANCE = (
     "This directory is an mf memoryfield ({field}). Before finishing: if "
@@ -74,21 +83,54 @@ def _field_from(payload: dict) -> Path | None:
 
 
 def _marker(session_id: str) -> Path:
-    return Path(tempfile.gettempdir()) / f"mf-stop-{session_id}"
+    # Hashed: the id is external input and used to be interpolated into a
+    # path as-is, so `../x` in it pointed the marker outside the temp dir.
+    digest = hashlib.sha256(session_id.encode("utf-8")).hexdigest()[:16]
+    return Path(tempfile.gettempdir()) / f"mf-stop-{digest}"
+
+
+def _commands_in(obj: object) -> list[str]:
+    """Every Bash `command` in one transcript record's tool_use blocks."""
+    out: list[str] = []
+    message = obj.get("message") if isinstance(obj, dict) else None
+    content = message.get("content") if isinstance(message, dict) else None
+    if not isinstance(content, list):
+        return out
+    for block in content:
+        if (
+            isinstance(block, dict)
+            and block.get("type") == "tool_use"
+            and block.get("name") == "Bash"
+            and isinstance(block.get("input"), dict)
+        ):
+            command = block["input"].get("command")
+            if isinstance(command, str):
+                out.append(command)
+    return out
 
 
 def _transcript_shows_capture(payload: dict) -> bool:
     text = payload.get("last_assistant_message") or ""
-    if _CAPTURE_RE.search(text):
+    # Prose mentions don't count; a fenced command the agent just ran does.
+    if any(_CAPTURE_RE.search(cmd) for cmd in _FENCED_RE.findall(text)):
         return True
     path = payload.get("transcript_path")
     if not path:
         return False
     try:
         with Path(path).expanduser().open("r", encoding="utf-8", errors="replace") as f:
-            return any(_CAPTURE_RE.search(line) for line in f)
+            for line in f:
+                if "mf " not in line:
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if any(_CAPTURE_RE.search(cmd) for cmd in _commands_in(record)):
+                    return True
     except OSError:
         return False
+    return False
 
 
 def stop(payload: dict) -> HookResult:
@@ -141,7 +183,7 @@ def session_end(payload: dict) -> RawAddResult | None:
     # Dedupe on session id across the last few entries (a retried hook,
     # or `resume` then `other` for one session), not on text prefix.
     for entry in sorted(raw_dir.glob("*-session.md"))[-5:]:
-        if session_id and needle in entry.read_text(encoding="utf-8"):
+        if session_id and needle in entry.read_text(encoding="utf-8", errors="replace"):
             return RawAddResult(written=False, path=entry)
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
     path = raw_dir / f"{stamp}-session.md"

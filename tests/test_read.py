@@ -1,3 +1,5 @@
+import pytest
+
 from mf import db, indexer, read
 from mf.schema import EMBEDDING_DIM
 
@@ -94,21 +96,15 @@ def test_read_named_section(tmp_path, monkeypatch):
 
 def test_read_unknown_uuid_raises(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
-    try:
+    with pytest.raises(read.PageNotFoundError):
         read.read(conn, ["does-not-exist"], field_dir=tmp_path)
-        assert False, "expected PageNotFoundError"
-    except read.PageNotFoundError:
-        pass
     conn.close()
 
 
 def test_read_unknown_section_raises(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
-    try:
+    with pytest.raises(read.SectionNotFoundError):
         read.read(conn, ["page-rotate#nope"], field_dir=tmp_path)
-        assert False, "expected SectionNotFoundError"
-    except read.SectionNotFoundError:
-        pass
     conn.close()
 
 

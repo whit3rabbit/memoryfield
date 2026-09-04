@@ -2,10 +2,10 @@
 
 `raw/` is the write path's staging area (PLAN.md sections 2 and 8):
 freeform session extracts land here first, `mf index` never sees them
-(`mf/indexer.py`'s `_SKIP_DIRS` skips the directory outright, matching
+(`mf/spec.py`'s `SKIP_DIRS` skips the directory outright, matching
 the spec's "implementations must not index raw/" requirement), and
-`consolidate --plan` (ROADMAP.md 4.2, not yet built) is what eventually
-turns an entry here into a real page via `mf write`.
+`consolidate --plan` (ROADMAP.md 4.2) is what turns an entry here into
+a real page via `mf write`.
 
 Session-end hooks can double-fire (a retry, a flaky hook, two hooks
 racing on the same event) -- `add_raw()` guards against writing the
@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-RAW_DIRNAME = "raw"
+from .spec import RAW_DIRNAME
 
 
 class EmptyRawTextError(ValueError):

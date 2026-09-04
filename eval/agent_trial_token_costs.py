@@ -28,53 +28,47 @@ import sys
 import tempfile
 from pathlib import Path
 
+from eval.mf_harness import load_queries
 from mf import db, indexer
-from mf import search as search_mod
 from mf.cli import _render_text
-from mf.embedding import query_text
 from mf.search import search
 from mf.tokens import default_tokenize
 
 ROOT = Path(__file__).parent
 CORPUS_DIR = ROOT / "corpus" / "codebase"
+QUERIES_BLIND_PATH = ROOT / "queries" / "codebase" / "queries_blind.jsonl"
 
-_MODEL_CACHE: dict = {}
-
-
-def _cached_embed_query(query: str, model_code: str) -> list[float]:
-    model_kind, model_name = "nomic", "nomic-ai/nomic-embed-text-v1.5"
-    if model_name not in _MODEL_CACHE:
-        from fastembed import TextEmbedding
-        _MODEL_CACHE[model_name] = TextEmbedding(model_name=model_name)
-    model = _MODEL_CACHE[model_name]
-    vec = next(iter(model.embed([query_text(query, model_kind)])))
-    return [float(v) for v in vec]
+# search() already routes queries through mf.embedder.embed_query, which
+# has its own process-wide model cache keyed by model_code (mf/embedder.py
+# _CACHE) -- an earlier version of this script re-implemented that caching
+# itself via a monkeypatch, hardcoded to the nomic model regardless of
+# which model the field was actually built with. That silently broke once
+# the shipped default moved to snowflake-arctic-embed-xs (gotcha 38):
+# querying a 384-d field with a 768-d nomic vector is a dimension
+# mismatch, not just a wrong-model measurement.
 
 
-# (target uuid, question, extra raw files the trial's agent actually read
-# beyond the target -- see eval/agent_trial_1_9.md for the transcripts)
-TASKS = [
-    ("code-api-webhook-sig", "How do we verify the signature on an incoming webhook request?", []),
-    ("code-api-pagination", "How does pagination work on the GET /users endpoint?", []),
-    ("code-auth-s2s-tokens", "How do two internal services authenticate to each other?", ["code-auth-user-vs-service-jwt"]),
-    ("code-auth-ed25519-vs-rsa", "Why do we sign tokens with Ed25519 instead of RSA?", []),
-    ("code-auth-public-keys", "Where are the public keys used to verify our JWTs stored?", []),
-    ("code-billing-stripe-webhook", "How do we verify a Stripe webhook is legitimate?", []),
-    ("code-billing-proration-edge", "What happens to a billing line that starts or ends exactly on a period boundary?", ["code-billing-line-math"]),
-    ("code-billing-trial", "How are trial periods represented on an invoice?", []),
-    ("code-deploy-immutable-tags", "Why do we use immutable image tags for deploys?", []),
-    ("code-deploy-stuck-rollout", "A deploy rollout seems stuck. How do I debug that?", []),
-    ("code-deploy-pdb", "What's a pod disruption budget and how does it protect our deploys?", []),
-    ("code-dm-no-fk", "Why don't we use foreign key constraints in the database?", []),
-    ("code-dm-timestamptz", "What column type should I use for a time field in the database?", []),
-    ("code-migrations-rename-column", "What's the safe process for renaming a database column?", []),
-    ("code-migrations-online-offline", "What's the difference between an online and offline schema migration?", []),
-    ("code-migrations-rollback", "How do I roll back a migration that was already applied?", []),
-    ("code-obs-error-budget", "What's the error budget used for?", []),
-    ("code-obs-oncall-rotation", "How does the on-call rotation work?", []),
-    ("code-testing-coverage-gate", "What's the required code coverage for a PR?", []),
-    ("code-testing-integration-org", "How are integration tests organized and run?", []),
-]
+def _load_tasks() -> list[tuple[str, str, list[str]]]:
+    """(target uuid, question, extra raw files) tuples, sourced from
+    eval/queries/codebase/queries_blind.jsonl rather than a second
+    hand-maintained list: that file is already the field's blind,
+    single-answer ground truth (ROADMAP.md 1.8's methodology), and a
+    parallel list here duplicated the exact kind of source-of-truth
+    ROADMAP.md already blames for the two biggest past bugs. Only
+    single-answer entries whose target page exists in the corpus are
+    usable (a raw-read baseline needs a real file); the four
+    no-answer entries in that file are excluded. `extra` is always
+    empty here -- the blind query set doesn't carry the "other files
+    the trial's agent also opened" detail the original hand-written
+    TASKS did (see eval/agent_trial_1_9.md for those transcripts)."""
+    tasks = []
+    for q in load_queries(QUERIES_BLIND_PATH, domain="codebase"):
+        if len(q.answer_uuids) == 1 and (CORPUS_DIR / f"{q.answer_uuids[0]}.md").exists():
+            tasks.append((q.answer_uuids[0], q.text, []))
+    return tasks
+
+
+TASKS = _load_tasks()
 
 
 def _build_field() -> Path:
@@ -88,13 +82,46 @@ def _build_field() -> Path:
     return tmp
 
 
+def check_regression(conn, *, top1_floor: float = 0.9) -> tuple[bool, str]:
+    """Assert the two invariants this script exists to catch: default
+    `mf search` must not cost more tokens than reading the raw target
+    file (the exact regression the pre-2.11 defaults shipped once
+    already, CLAUDE.md gotcha 26), and lean top-1 correctness must not
+    regress below `top1_floor`. Returns (ok, message)."""
+    default_total = raw_total = 0
+    top1_ok = 0
+    n = len(TASKS)
+    for uuid, question, extra in TASKS:
+        r_default = search(conn, question)
+        r_lean = search(conn, question, limit=1, neighbor_limit=0)
+        default_total += default_tokenize(_render_text(r_default))
+        if r_lean.results and r_lean.results[0].uuid == uuid:
+            top1_ok += 1
+        for f in [uuid, *extra]:
+            raw_total += default_tokenize((CORPUS_DIR / f"{f}.md").read_text(encoding="utf-8"))
+
+    top1_rate = top1_ok / n if n else 0.0
+    problems = []
+    if default_total > raw_total:
+        problems.append(
+            f"default mf search cost {default_total} tokens, more than "
+            f"raw file reads at {raw_total} tokens"
+        )
+    if top1_rate < top1_floor:
+        problems.append(
+            f"lean top-1 correctness {top1_ok}/{n} ({top1_rate:.2f}) "
+            f"is below the {top1_floor:.2f} floor"
+        )
+    return (not problems, "; ".join(problems))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--field", type=Path, default=None,
                          help="existing mf field (default: build a throwaway one)")
+    parser.add_argument("--assert", dest="assert_regression", action="store_true",
+                         help="exit 1 if check_regression() fails, after printing the report")
     args = parser.parse_args()
-
-    search_mod._embed_query = _cached_embed_query
 
     owns_field = args.field is None
     field_dir = args.field or _build_field()
@@ -143,7 +170,7 @@ def main() -> int:
     for limit in (1, 2, 3, 5):
         for nb in (0, 1, 3):
             total = shown = 0
-            for uuid, question, extra in TASKS:
+            for uuid, question, _extra in TASKS:
                 r = search(conn, question, limit=limit, neighbor_limit=nb)
                 total += default_tokenize(_render_text(r))
                 on_screen = {st.uuid for st in r.results} | {
@@ -152,10 +179,13 @@ def main() -> int:
                 shown += uuid in on_screen
             print(f"{limit}/{nb:<14} {total/n:>10.1f} {total/raw_total:>6.2f}x {shown:>10}/{n}")
 
+    ok, message = check_regression(conn)
+    print(f"\ncheck_regression: {'PASS' if ok else 'FAIL'}" + (f" ({message})" if message else ""))
+
     conn.close()
     if owns_field:
         shutil.rmtree(field_dir, ignore_errors=True)
-    return 0
+    return 0 if ok or not args.assert_regression else 1
 
 
 if __name__ == "__main__":

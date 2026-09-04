@@ -1,6 +1,6 @@
 import pytest
 
-from mf.page import PageParseError, parse_page, slugify
+from mf.page import PageParseError, load_page, parse_page, slugify
 
 VALID_PAGE = """\
 ---
@@ -135,3 +135,57 @@ def test_value_with_backslash_round_trips():
     )
     page = parse_page(text, filename="backslash.md")
     assert page.summary == "C:\\Users\\path style, not escaped by the author"
+
+
+# --- parser robustness (2026-09-03 audit) ---------------------------------
+
+def test_block_scalar_frontmatter_parses():
+    text = (
+        "---\nuuid: b1\ntitle: T\nsummary: >\n  folded line one\n  line two\n"
+        "note: |\n  key: value inside block\n  second\nstatus: active\n---\nbody\n"
+    )
+    page = parse_page(text)
+    assert page.summary == "folded line one line two\n"
+    assert page.status == "active"
+
+
+def test_bom_is_tolerated(tmp_path):
+    path = tmp_path / "p.md"
+    path.write_bytes("﻿---\nuuid: b2\ntitle: T\n---\nbody\n".encode())
+    page = load_page(path)
+    assert page.uuid == "b2"
+    import hashlib
+    assert page.sha256 == hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_crlf_values_have_no_carriage_return():
+    page = parse_page("---\r\nuuid: c1\r\ntitle: T\r\nsummary: S\r\n---\r\nbody\r\n")
+    assert page.title == "T" and page.summary == "S"
+
+
+def test_non_utf8_file_is_a_parse_error(tmp_path):
+    path = tmp_path / "p.md"
+    path.write_bytes(b"---\nuuid: x\ntitle: caf\xe9\n---\nbody\n")
+    with pytest.raises(PageParseError, match="not UTF-8"):
+        load_page(path)
+
+
+def test_no_frontmatter_is_its_own_error():
+    from mf.page import NoFrontmatterError
+    with pytest.raises(NoFrontmatterError):
+        parse_page("# just a readme\n")
+
+
+def test_duplicate_section_headings_get_unique_slugs():
+    page = parse_page("---\nuuid: s1\ntitle: T\n---\n## Notes\na\n## Notes 1\nb\n## Notes\nc\n")
+    assert [s.slug for s in page.sections] == ["notes", "notes-1", "notes-2"]
+
+
+def test_preamble_belongs_to_l1_not_instead_of_it():
+    page = parse_page("---\nuuid: l1\ntitle: T\n---\nSome preamble.\n\n## Answer\n\nThe answer.\n\n## Detail\n\nmore\n")
+    assert page.l1 == "Some preamble.\n\nThe answer."
+    assert page.l2 == "more"
+    no_preamble = parse_page("---\nuuid: l2\ntitle: T\n---\n## Answer\n\nThe answer.\n\n## Detail\n\nmore\n")
+    assert no_preamble.l1 == "The answer." and no_preamble.l2 == "more"
+    flat = parse_page("---\nuuid: l3\ntitle: T\n---\njust prose\n")
+    assert flat.l1 == "just prose" and flat.l2 == ""

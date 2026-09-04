@@ -1,3 +1,5 @@
+import pytest
+
 from mf import embed_backend
 from mf.embed_backend import Embedder, apple_silicon, default_backend, mlx_available
 
@@ -49,19 +51,11 @@ def test_default_backend_falls_back_to_fastembed(monkeypatch):
 
 
 def test_embedder_rejects_unknown_kind():
-    try:
+    with pytest.raises(ValueError):
         Embedder("unknown", backend="fastembed")
-    except ValueError:
-        pass
-    else:
-        raise AssertionError("expected ValueError for unknown model kind")
 
 
 def test_embedder_rejects_mlx_backend_when_unavailable(monkeypatch):
     monkeypatch.setattr(embed_backend, "mlx_available", lambda: False)
-    try:
+    with pytest.raises(RuntimeError):
         Embedder("nomic", backend="mlx")
-    except RuntimeError:
-        pass
-    else:
-        raise AssertionError("expected RuntimeError when mlx forced but unavailable")

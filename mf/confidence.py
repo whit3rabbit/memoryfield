@@ -48,19 +48,23 @@ FLOOR = 2.0
 DENSE_FLOOR = 0.30
 
 
-def normalized_score(top_score: float, matched_term_count: int) -> float:
-    """FTS top-1 score (higher is better), normalized by the number of
-    matched query terms. Raw top_score alone is not comparable across
-    queries (it mostly tracks query length and term rarity).
+def normalized_score(top_score: float, term_count: int) -> float:
+    """FTS top-1 score (higher is better), divided by the number of terms
+    in the MATCH expression (`FtsQuery.terms`), not by how many of them
+    the top page matched. Raw top_score alone is not comparable across
+    queries (it mostly tracks query length and term rarity). `FLOOR` was
+    calibrated against this denominator; changing it to matched terms
+    would silently move the gate (re-sweep with
+    eval/calibrate_confidence_blind.py first).
     """
-    if matched_term_count <= 0:
-        raise ValueError("matched_term_count must be positive")
-    return top_score / matched_term_count
+    if term_count <= 0:
+        raise ValueError("term_count must be positive")
+    return top_score / term_count
 
 
 def confidence(
     top_score: float | None,
-    matched_term_count: int,
+    term_count: int,
     fts_dense_agree: bool,
     dense_distance: float | None = None,
     floor: float = FLOOR,
@@ -70,8 +74,8 @@ def confidence(
 
     `top_score`: FTS's top-1 result score, higher-is-better convention
       (pass `-bm25(...)` for SQLite FTS5), or None if FTS had no hit.
-    `matched_term_count`: number of OR-joined terms in the FTS MATCH
-      expression that produced `top_score`.
+    `term_count`: number of OR-joined terms in the FTS MATCH expression
+      that produced `top_score` (`FtsQuery.terms`).
     `fts_dense_agree`: whether FTS's and dense's top-1 picks are the
       same page. False if either side had no result.
     `dense_distance`: cosine distance (1 - cos) of dense's top-1, or
@@ -81,8 +85,8 @@ def confidence(
     """
     passes_fts = (
         top_score is not None
-        and matched_term_count > 0
-        and normalized_score(top_score, matched_term_count) >= floor
+        and term_count > 0
+        and normalized_score(top_score, term_count) >= floor
     )
     passes_dense = dense_distance is not None and dense_distance <= dense_floor
     if not (passes_fts or passes_dense or fts_dense_agree):

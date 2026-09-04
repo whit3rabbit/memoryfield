@@ -7,25 +7,31 @@ the same `.as_dict()` shape `mf <verb> --json` prints — one exception:
 must be a JSON object, so it's wrapped here as `{"results": [...]}`
 instead of the CLI's bare JSON array.
 
-Errors the caller could have avoided by passing different arguments
+Every failure the model could act on reaches it as a `ToolError` (a
+readable tool result), never as a server-level crash: bad arguments
 (no field at that path, a stale schema, a page/section that doesn't
-exist, a draft that fails validation, an empty raw extract, a stale
-result without --stale-ok) are raised as `ToolError`: the message
-reaches the model as a normal tool result it can read and retry from,
-not a crash. `write`'s dedup gate is not an error in that sense — like
-the CLI, a blocked write returns normally with `written: false` and
-the candidate list in `duplicates`.
+exist, a bad tier or limit, a draft that fails validation, an empty raw
+extract, a stale result without stale_ok) and environment failures
+alike (a locked index, an unknown model, an unreadable page). `write`'s
+dedup gate is not an error in that sense — like the CLI, a blocked
+write returns normally with `written: false` and the candidate list in
+`duplicates`.
 
 Every tool takes `field` (default ".", resolved against the server
 process's cwd), matching the CLI's own `--field` default — same
 semantics, no separate server-side field configuration to keep in
-sync.
+sync. One server process serves one embedding model: the SDK runs these
+sync tools on worker threads, and mf's model cache serializes loading,
+so two fields pinned to different models through one server would
+load both models into one process (CLAUDE.md gotcha 4).
 """
+# pyright: reportMissingImports=false
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
 from sqlite3 import Connection
-from typing import Any
+from typing import Any, TypeVar
 
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -35,9 +41,10 @@ from . import raw as raw_mod
 from . import read as read_mod
 from . import search as search_mod
 from . import write as write_mod
-from .page import PageParseError
 
 mcp = MCPServer("mf")
+
+T = TypeVar("T")
 
 
 def _open(field: str) -> tuple[Path, Connection]:
@@ -47,6 +54,16 @@ def _open(field: str) -> tuple[Path, Connection]:
     except (db.FieldNotFoundError, db.SchemaVersionError) as e:
         raise ToolError(str(e)) from e
     return field_dir, conn
+
+
+def _guarded(fn: Callable[[], T]) -> T:
+    """Run a library call, turning any failure into a ToolError."""
+    try:
+        return fn()
+    except ToolError:
+        raise
+    except Exception as e:
+        raise ToolError(f"{type(e).__name__}: {e}") from e
 
 
 @mcp.tool()
@@ -61,16 +78,21 @@ def search(
     """Search a field. Check `confidence` (high/low/none) before citing
     a result — `none` means the gate didn't trust the match."""
     field_dir, conn = _open(field)
+
+    def run() -> dict[str, Any]:
+        try:
+            result = search_mod.search(
+                conn, query, limit=limit, neighbor_limit=neighbor_limit,
+                budget=budget, field_dir=field_dir, stale_ok=stale_ok,
+            )
+        except search_mod.StaleIndexError as e:
+            raise ToolError(f"{e}; pass stale_ok=true or run `mf index`") from e
+        return result.as_dict()
+
     try:
-        result = search_mod.search(
-            conn, query, limit=limit, neighbor_limit=neighbor_limit,
-            budget=budget, field_dir=field_dir, stale_ok=stale_ok,
-        )
-    except search_mod.StaleIndexError as e:
-        raise ToolError(f"{e}; pass stale_ok=true or run `mf index`") from e
+        return _guarded(run)
     finally:
         conn.close()
-    return result.as_dict()
 
 
 @mcp.tool()
@@ -78,14 +100,21 @@ def read(refs: list[str], field: str = ".", tier: str | None = None) -> dict[str
     """Read one or more refs (uuid, or uuid#section) at tier L1|L2.
     A bare uuid with no tier defaults to L1. Batch related refs into one
     call so the co_read signal (used by search's neighbor ranking) fires."""
+    if tier is not None and tier not in read_mod.TIERS:
+        raise ToolError(f"tier must be one of {', '.join(read_mod.TIERS)}, not {tier!r}")
     field_dir, conn = _open(field)
+
+    def run() -> dict[str, Any]:
+        try:
+            results = read_mod.read(conn, refs, tier=tier, field_dir=field_dir)
+        except (read_mod.PageNotFoundError, read_mod.SectionNotFoundError) as e:
+            raise ToolError(f"not found: {e}") from e
+        return {"results": [r.as_dict() for r in results]}
+
     try:
-        results = read_mod.read(conn, refs, tier=tier, field_dir=field_dir)
-    except (read_mod.PageNotFoundError, read_mod.SectionNotFoundError) as e:
-        raise ToolError(f"not found: {e}") from e
+        return _guarded(run)
     finally:
         conn.close()
-    return {"results": [r.as_dict() for r in results]}
 
 
 @mcp.tool()
@@ -103,12 +132,13 @@ def write(
     write anyway."""
     field_dir, conn = _open(field)
     try:
-        result = write_mod.write_text(field_dir, conn, text, dest, update_uuid=update, force=force)
-    except (write_mod.WriteValidationError, PageParseError) as e:
-        raise ToolError(str(e)) from e
+        return _guarded(
+            lambda: write_mod.write_text(
+                field_dir, conn, text, dest, update_uuid=update, force=force
+            ).as_dict()
+        )
     finally:
         conn.close()
-    return result.as_dict()
 
 
 @mcp.tool()
@@ -118,11 +148,7 @@ def raw_add(text: str, field: str = ".") -> dict[str, Any]:
     recent entry is a silent no-op (retried/racing hook, not new)."""
     field_dir, conn = _open(field)
     conn.close()  # raw/ never touches the index; only used to validate the field exists
-    try:
-        result = raw_mod.add_raw(field_dir, text)
-    except raw_mod.EmptyRawTextError as e:
-        raise ToolError(str(e)) from e
-    return result.as_dict()
+    return _guarded(lambda: raw_mod.add_raw(field_dir, text).as_dict())
 
 
 def main() -> None:

@@ -30,7 +30,7 @@ def _rank(corpus: dict[str, Page], query: Query) -> list[str]:
     qvec = tfidf_vector(_tokenize(query.text), idf)
     scored = [
         (cosine_sparse(qvec, dv), uuid)
-        for dv, uuid in zip(doc_vectors, page_uuids)
+        for dv, uuid in zip(doc_vectors, page_uuids, strict=True)
     ]
     scored.sort(key=lambda x: (-x[0], x[1]))
     return [uuid for score, uuid in scored if score > 0][:10]

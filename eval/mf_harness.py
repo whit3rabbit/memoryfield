@@ -8,8 +8,12 @@ Single source of truth for:
 Token accounting is mf/tokens.py's job (single source of truth shared
 with mf index/search); this module just imports it.
 
-Stdlib only, aside from the mf package itself — no numpy, no fastembed,
-no yaml. The whole point of M0 is the harness works on a clean checkout.
+Stdlib plus the mf package itself: no numpy, no fastembed. Pages are
+parsed by mf.page.load_page, the same parser `mf index` runs, so every
+baseline number is measured against the corpus as the shipped tool sees
+it (the harness carried its own frontmatter parser until 2026-09-03;
+tests/test_eval_harness.py holds the two to parity on the 157-page
+corpus before that swap was made).
 """
 from __future__ import annotations
 
@@ -18,10 +22,12 @@ import math
 import random
 import re
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from mf.page import PageParseError
+from mf.page import load_page as _mf_load_page
 from mf.tokens import default_tokenize
 
 # ---------------------------------------------------------------------------
@@ -39,14 +45,7 @@ from mf.tokens import default_tokenize
 # Memoryfield-spec page loading
 # ---------------------------------------------------------------------------
 #
-# Minimal Markdown frontmatter parser. Handles `---` delimited YAML-ish
-# blocks with `key: value` and `key: [a, b, c]` lines. Good enough for M0's
-# generated corpus; full YAML comes in M1.
-
-FRONTMATTER_RE = re.compile(
-    r"\A---\s*\n(.*?)\n---\s*\n(.*)\Z", re.DOTALL
-)
-
+# Pages are memoryfield-spec Markdown; mf.page does the parsing.
 
 @dataclass
 class Page:
@@ -63,10 +62,17 @@ class Page:
 
     @property
     def body_l1(self) -> str:
-        """First section (the 'answer-first' portion)."""
-        if self.body_sections:
-            return self.body_sections[0][1]
-        return self.body
+        """The answer-first portion: any preamble plus the first `##`
+        section, matching mf.page.Page.l1."""
+        if not self.body_sections:
+            return self.body
+        parts: list[str] = []
+        for heading, content in self.body_sections:
+            if content:
+                parts.append(content)
+            if heading:
+                break
+        return "\n\n".join(parts)
 
     @property
     def full_text(self) -> str:
@@ -74,68 +80,28 @@ class Page:
         return f"{self.title}\n{self.summary}\n{self.body}".strip()
 
 
-def _parse_frontmatter(blob: str) -> tuple[dict, str]:
-    m = FRONTMATTER_RE.match(blob)
-    if not m:
-        return {}, blob
-    fm_blob, body = m.group(1), m.group(2)
-    fm: dict = {}
-    for line in fm_blob.splitlines():
-        line = line.rstrip()
-        if not line or line.startswith("#"):
-            continue
-        if ":" not in line:
-            continue
-        k, _, v = line.partition(":")
-        k = k.strip()
-        v = v.strip()
-        if v.startswith("[") and v.endswith("]"):
-            inner = v[1:-1].strip()
-            if inner:
-                fm[k] = [x.strip().strip('"').strip("'") for x in inner.split(",")]
-            else:
-                fm[k] = []
-        else:
-            fm[k] = v.strip('"').strip("'")
-    return fm, body
-
-
-_SECTION_RE = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
-
-
-def _split_sections(body: str) -> list[tuple[str, str]]:
-    """Return list of (heading, content) for `## heading` sections.
-
-    The preamble before any `##` is returned as ("", preamble).
-    """
-    matches = list(_SECTION_RE.finditer(body))
-    if not matches:
-        return [("", body.strip())]
-    out = []
-    if matches[0].start() > 0:
-        out.append(("", body[: matches[0].start()].strip()))
-    for i, m in enumerate(matches):
-        heading = m.group(1).strip()
-        start = m.end()
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(body)
-        out.append((heading, body[start:end].strip()))
-    return out
-
-
 def load_page(path: Path) -> Page:
-    text = path.read_text(encoding="utf-8")
-    fm, body = _parse_frontmatter(text)
+    """The harness's Page view of a corpus file, parsed by mf.page."""
+    try:
+        page = _mf_load_page(path, filename=str(path))
+    except PageParseError:
+        # A corpus file that isn't a page: keep the harness permissive
+        # (it never indexed such a file as anything but its stem).
+        text = path.read_text(encoding="utf-8", errors="replace")
+        return Page(uuid=path.stem, filename=str(path), title=path.stem, summary="",
+                    body=text.strip(), body_sections=[("", text.strip())],
+                    tokens=default_tokenize(text))
     return Page(
-        uuid=fm.get("uuid") or path.stem,
+        uuid=page.uuid,
         filename=str(path),
-        title=fm.get("title") or path.stem,
-        summary=fm.get("summary", ""),
-        status=fm.get("status", "active"),
-        tags=fm.get("tags", []) if isinstance(fm.get("tags"), list) else [],
-        body=body.strip(),
-        body_sections=_split_sections(body),
-        tokens=default_tokenize(text),
-        source=fm.get("source", ""),
+        title=page.title,
+        summary=page.summary,
+        status=page.status,
+        tags=list(page.tags),
+        body=page.body,
+        body_sections=[(s.heading, s.body) for s in page.sections],
+        tokens=default_tokenize(path.read_text(encoding="utf-8-sig")),
+        source=page.source,
     )
 
 
@@ -181,7 +147,7 @@ def load_queries(path: Path, domain: str) -> list[Query]:
         try:
             obj = json.loads(line)
         except json.JSONDecodeError as e:
-            raise ValueError(f"Bad query line in {path}: {line!r}\n{e}")
+            raise ValueError(f"Bad query line in {path}: {line!r}\n{e}") from e
         out.append(
             Query(
                 qid=obj["qid"],
@@ -233,6 +199,8 @@ class BaselineMetrics:
     details_path: Path
     p_at_3_ci: tuple[float, float, float] = (0.0, 0.0, 0.0)
     p_at_5_ci: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    r_at_5_ci: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    mrr_ci: tuple[float, float, float] = (0.0, 0.0, 0.0)
 
     def as_dict(self) -> dict:
         return {
@@ -253,6 +221,10 @@ class BaselineMetrics:
             "p_at_3_ci_high": self.p_at_3_ci[2],
             "p_at_5_ci_low": self.p_at_5_ci[1],
             "p_at_5_ci_high": self.p_at_5_ci[2],
+            "r_at_5_ci_low": self.r_at_5_ci[1],
+            "r_at_5_ci_high": self.r_at_5_ci[2],
+            "mrr_ci_low": self.mrr_ci[1],
+            "mrr_ci_high": self.mrr_ci[2],
             "details": str(self.details_path),
         }
 
@@ -269,11 +241,13 @@ def percentile(values: list[float], p: float) -> float:
     return s[f] * (c - k) + s[c] * (k - f)
 
 
-def bootstrap_ci(values: list[int], stat="mean", n_resamples: int = 1000,
+def bootstrap_ci(values: Sequence[float], stat="mean", n_resamples: int = 1000,
                  alpha: float = 0.05, rng_seed: int = 0) -> tuple[float, float, float]:
     """Return (point_estimate, ci_low, ci_high) for `stat` over `values`.
 
-    `stat` may be 'mean' or 'sum'. values are 0/1 ints.
+    `stat` may be 'mean' or 'sum'. `values` are usually 0/1 ints (P@k
+    hits) but any bounded floats work the same way (e.g. per-query R@5
+    or MRR contributions, which are fractional, not binary).
     Resampling is non-parametric (sampling with replacement).
     """
     if not values:

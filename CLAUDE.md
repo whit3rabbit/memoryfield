@@ -36,8 +36,9 @@ changes immediately (gotcha 20).
   `.github/workflows/test.yml`)
 - Typecheck: `npx --yes pyright <files>` (bare `pyright` isn't on
   PATH)
-- Tests + eval baselines in one venv: `uv sync --extra eval --group
-  dev` in a single call (gotcha 21)
+- Tests + eval baselines in one venv: `uv sync --group dev` (fastembed
+  is a core dependency and there is no `eval` extra. Add `--extra mlx`
+  in the same call if you want it, gotcha 21)
 - Real-corpus smoke test: gotcha 29's recipe
 - Interop fixture: `uv run python3 eval/fetch_soapstones.py` (sha256-pinned
   download into gitignored `eval/fixtures/`; the soapstones tests skip
@@ -56,18 +57,27 @@ To cut a release: push to `main`, then `git tag vX.Y.Z && git push
 origin vX.Y.Z`. `.github/workflows/release.yml` builds on that tag,
 publishes to PyPI via trusted-publisher OIDC (no stored token — the
 `pypi` GitHub environment is restricted to `v*` tags, no required
-reviewers), and cuts a GitHub release from the built artifacts.
+reviewers), and cuts a GitHub release from the built artifacts. The
+version lives once, in `mf/__init__.py` (`dynamic = ["version"]` in
+pyproject.toml), so `mf --version` and the wheel cannot disagree.
 `.github/workflows/test.yml` runs pytest/ruff/pyright on every push and
-PR. `astral-sh/setup-uv` only publishes exact-version tags, not a
+PR, with `uv sync --locked` against the committed `uv.lock`, ruff and
+pyright both pinned (`uvx ruff@0.16.5`, `npx pyright@1.1.409`), and
+bare `pyright` so `pyrightconfig.json`'s include is authoritative.
+`astral-sh/setup-uv` only publishes exact-version tags, not a
 rolling major (`@v10` 404s; use `@v10.0.1`-style pins and bump
-deliberately, same discipline as the ruff pin below it). The macOS leg
-of the test matrix needs `actions/setup-python` plus
-`UV_PYTHON_PREFERENCE: only-system`: uv's own managed CPython builds
-for macOS lack `--enable-loadable-sqlite-extensions` (confirmed via a
-real failing run, `AttributeError: 'sqlite3.Connection' object has no
+deliberately). The macOS leg of the test matrix installs Python via
+Homebrew (`brew install python@X.Y`) and sets `UV_PYTHON_PREFERENCE:
+only-system`: neither uv's own managed CPython builds nor
+`actions/setup-python`'s hosted builds support
+`--enable-loadable-sqlite-extensions` on macOS (confirmed via real
+failing runs, `AttributeError: 'sqlite3.Connection' object has no
 attribute 'enable_load_extension'`, needed by `sqlite-vec`), even
 though the identical build works fine on a local dev Mac — an
-environment-specific gap, not a code bug.
+environment-specific gap, not a code bug. Deferred, recorded in
+ROADMAP.md: the release workflow has no tag/version assertion, no test
+gate before publish, and `upload-artifact@v7` against
+`download-artifact@v8`.
 
 One-time PyPI setup (already done as of the `v0.1.0` tag): register a
 pending trusted publisher at
@@ -245,8 +255,8 @@ of fixed bugs.
 21. **`uv sync --extra X` and `uv sync --group Y` don't compose across
     separate calls**: each `uv sync` invocation resets the venv to
     exactly what that invocation specifies. Running eval baselines and
-    the test suite together needs `uv sync --extra eval --group dev`
-    in one call, not two sequential ones.
+    the test suite together needs every extra and group in one `uv
+    sync` call, not two sequential ones.
 
 22. **`pyrightconfig.json`'s `include` list needs a manual update
     whenever a new top-level package appears** (`mf`, `eval`, `tests`
@@ -324,7 +334,10 @@ of fixed bugs.
     from tool calls and have no other source, so "delete the index and
     rebuild" loses them. Upserts delete only the three typed link
     kinds, never `co_read`. A removed page drops its `co_read` rows in
-    both directions.
+    both directions. Since schema v3, a schema bump does not force that
+    loss: `schema.migrate()` drops only the derived tables and `mf
+    index` rebuilds them (`db.migrate_field`). Keep it that way when
+    bumping again.
 
 34. **A per-domain gap can hide inside a two-domain average.** 1.8's
     blind-set headline reported FTS "flat" at 0.925, averaged across
@@ -431,6 +444,46 @@ of fixed bugs.
     `only-include = ["mf"]` (ROADMAP.md 5.2); verify any future
     packaging change with `uv build && tar tzf dist/*.tar.gz`.
 
+### 2026-09-03 audit gotchas
+
+43. **The quoting shim in `mf/page.py` is a parser of its own, and it
+    had the same blind spot as gotcha 19.** `_quote_ambiguous_values`
+    quoted every `key: value` line, including a block-scalar indicator
+    (`summary: |` became `summary: "|"`) and the lines indented under
+    it, so any page using a block scalar parsed as YAML nowhere and was
+    silently not a page. Same family as 19 and 39: anything that
+    rewrites text before a real parser sees it needs the real corpus
+    and the spec's full value grammar as fixtures, not the shapes the
+    author happened to write.
+
+44. **Any distance compared against a calibrated threshold must be
+    embedded on the same side of the model as the calibration was.**
+    `consolidate --plan` embedded raw entries with the *query* prefix
+    and compared them against `DEDUP_THRESHOLD`, calibrated
+    document-to-document. On an asymmetric model those vectors sit in
+    a different region. `embedder.embed_document(s)` exists for this.
+    Gotcha 32's rule (same metric both sides) has a second clause: same
+    prefix both sides.
+
+45. **"Is the model downloaded?" must never instantiate the model.**
+    `mf model list` constructed a fastembed `TextEmbedding` for all
+    eight registry entries in one process to ask whether each was
+    cached, which is gotcha 4's deadlock recipe and loaded up to 2.5 GB
+    of weights to print a table. `mf/models.py` probes the cache
+    directory instead. The same rule guards `get_embedder`: its cache
+    fill is behind a lock because the MCP SDK runs tools on threads.
+
+46. **The FTS tokenizer decides what the lexical arm can see, and it
+    was blind to digits.** `_TOKEN_RE` required a leading ASCII letter,
+    so `401`, `403`, version numbers, and every non-Latin script were
+    dropped before FTS ran. This repo's own "difference between 401
+    and 403" page was unreachable by its anchors. Re-swept
+    `eval/calibrate_confidence_blind.py` after widening it: the shipped
+    gate's numbers were identical before and after (both sweeps in
+    `eval/results/calibration_2026-09-03_audit.txt` and ROADMAP.md
+    6.1), and FTS-only top-1 rose on codebase. Any tokenizer change
+    gets that A/B before it lands.
+
 ### Tooling patterns worth reusing
 
 29. **Quick real-corpus smoke test, cheaper than writing new
@@ -476,7 +529,10 @@ the `notes/` dogfooding field are built, and 4.4 (co_read weighting
 in neighbor ranking, `MIN_CO_READ_WEIGHT` uncalibrated) landed
 2026-09-02. Remaining: consolidate idempotency across runs,
 pointer-entry expansion, and `write` auto-calling `claim`. M6, the
-MCP server (5.1) and packaging polish (5.2), landed 2026-09-02. Full
+MCP server (5.1) and packaging polish (5.2), landed 2026-09-02. Phase
+6 (2026-09-03) was a full audit pass: schema v3 with in-place
+migration, WAL, parser and tokenizer fixes, and 46 findings in all,
+recorded as ROADMAP.md 6.1 and gotchas 43-46. Full
 task detail, per-task decision records, and open debt
 (including 0.5's upstream frontmatter proposal, which now has a
 destination and still needs a human to send it) in

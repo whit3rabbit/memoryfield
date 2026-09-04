@@ -1,7 +1,9 @@
 """mf — the memoryfield CLI.
 
-No commands are implemented yet. See ROADMAP.md Phase 1 (M1 read path):
-`init`, `index`, `search`, `read` land there; `write` lands in Phase 2.
+`mf.cli` is the entry point; every subcommand is a module here
+(`mf/<verb>.py`) with a dataclass result and an `.as_dict()`. See
+docs/CLI.md for the command reference and docs/architecture.md for the
+schema and retrieval design.
 """
 from __future__ import annotations
 

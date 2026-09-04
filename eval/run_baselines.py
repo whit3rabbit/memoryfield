@@ -125,26 +125,20 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
     stub_tokens = []
     l1_tokens = []
     full_tokens = []
-    no_answer_correct = 0
     no_answer_n = 0
     stub_ends_given_hit = 0
     n_given_hit = 0
     per_query = []
 
-    for q, t in zip(queries, traces):
+    for q, t in zip(queries, traces, strict=True):
         is_no_answer = (len(q.answer_uuids) == 0)
 
         if is_no_answer:
-            # No-answer query: the "empty top-k" metric is misleading --
-            # top-k always returns k. The real question is "did abstention
-            # fire?" and that requires a feature M1 hasn't built yet.
-            # Record both empty-top-k (currently always 0) and the count,
-            # so M1 can replace the metric with one that uses confidence.
-            no_answer_correct += 1 if not t.topk_uuids else 0
+            # No-answer queries have no rank; whether the top-k was empty is
+            # computed by report.py from per_query (gotcha 6: top-k always
+            # returns k, so no baseline here abstains). The confidence gate
+            # is measured by eval/calibrate_confidence_blind.py instead.
             no_answer_n += 1
-            # Track per-query top scores once LookupTrace carries them (M0.6+).
-            # For M0.5 we just record the metric we have, which is the wrong
-            # one, and call it out in the report.
         else:
             if t.rank is not None:
                 mrr_sum += 1.0 / t.rank
@@ -188,11 +182,25 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
 
     n = len(traces)
 
-    # Bootstrap 95% CIs for P@3 and R@5 over real-answer queries only.
+    # Bootstrap 95% CIs for P@3, P@5, R@5, and MRR over real-answer queries
+    # only, mirroring run_one's own r_at_5/mrr_sum scoping (both share the
+    # r_at_5_n denominator above). R@5 and MRR per-query values are
+    # rebuilt post-hoc from per_query the same way real_hits/real_hits_5
+    # already are, rather than collected inline during the main loop.
     real_hits = [1 if (t["rank"] is not None and t["rank"] <= 3) else 0 for t in per_query if not t["is_no_answer"]]
     p_at_3_ci = bootstrap_ci(real_hits, stat="mean", n_resamples=2000, alpha=0.05)
     real_hits_5 = [1 if (t["rank"] is not None and t["rank"] <= 5) else 0 for t in per_query if not t["is_no_answer"]]
     p_at_5_ci = bootstrap_ci(real_hits_5, stat="mean", n_resamples=2000, alpha=0.05)
+    r_at_5_values = [
+        (sum(1 for u in t["answer_uuids"] if u in t["topk"]) if t["topk"] else 0) / max(1, len(t["answer_uuids"]))
+        for t in per_query if not t["is_no_answer"]
+    ]
+    r_at_5_ci = bootstrap_ci(r_at_5_values, stat="mean", n_resamples=2000, alpha=0.05)
+    mrr_values = [
+        (1.0 / t["rank"]) if t["rank"] else 0.0
+        for t in per_query if not t["is_no_answer"]
+    ]
+    mrr_ci = bootstrap_ci(mrr_values, stat="mean", n_resamples=2000, alpha=0.05)
 
     metrics = BaselineMetrics(
         baseline=baseline_name,
@@ -213,10 +221,9 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         details_path=RESULTS_DIR / f"{baseline_name}_{domain_name}.json",
         p_at_3_ci=p_at_3_ci,
         p_at_5_ci=p_at_5_ci,
+        r_at_5_ci=r_at_5_ci,
+        mrr_ci=mrr_ci,
     )
-
-    # Add no-answer correctness to metrics by attaching to details.
-    no_answer_rate = (no_answer_correct / no_answer_n) if no_answer_n else 0.0
 
     # Write detailed results.
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -226,14 +233,14 @@ def run_one(baseline_name: str, domain_name: str) -> BaselineMetrics:
         "n_pages": len(corpus),
         "n_queries": n,
         "n_no_answer": no_answer_n,
-        "no_answer_correct": no_answer_correct,
-        "no_answer_rate": no_answer_rate,
         "stub_end_given_hit_rate": (
             stub_ends_given_hit / n_given_hit if n_given_hit else 0
         ),
         "n_given_hit": n_given_hit,
         "p_at_3_95ci": p_at_3_ci,
         "p_at_5_95ci": p_at_5_ci,
+        "r_at_5_95ci": r_at_5_ci,
+        "mrr_95ci": mrr_ci,
         "elapsed_seconds": round(elapsed, 4),
         "metrics": metrics.as_dict(),
         "per_query": per_query,

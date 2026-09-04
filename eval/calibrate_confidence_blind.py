@@ -95,11 +95,11 @@ _PAGE_CACHE: dict[str, list[float]] = {}
 _QUERY_CACHE: dict[str, list[float]] = {}
 
 
-def _cached_embed_pages(pages, model_code):
+def _cached_embed_pages(pages, model_code):  # noqa: ARG001 -- monkeypatch target keeps the real signature
     missing = [p for p in pages if p.sha256 not in _PAGE_CACHE]
     if missing:
         texts = [document_text(p.title, p.summary, p.l1, MODEL_KIND) for p in missing]
-        for p, v in zip(missing, embedder.embed_texts(texts, MODEL)):
+        for p, v in zip(missing, embedder.embed_texts(texts, MODEL), strict=True):
             _PAGE_CACHE[p.sha256] = v
     return {p.uuid: _PAGE_CACHE[p.sha256] for p in pages}
 
@@ -155,7 +155,7 @@ class Obs:
         if how == "dense_plus_fts1":
             # dense order, FTS's top-1 inserted at rank 2 when absent
             if fts and fts[0] not in dense:
-                return dense[:1] + [fts[0]] + dense[1:]
+                return [*dense[:1], fts[0], *dense[1:]]
             return dense
         fused: dict[str, float] = {}
         for lst in (fts, dense):
@@ -198,13 +198,13 @@ def _observe(conn: Connection, q: Query, set_name: str) -> Obs:
 
 # ---- gate designs -------------------------------------------------------
 
-def gate_current(o: Obs, F: float, D: float) -> Confidence:
+def gate_current(o: Obs, F: float, D: float) -> Confidence:  # noqa: ARG001 -- uniform DESIGNS signature
     if o.norm is None or o.norm < F:
         return "none"
     return "high" if o.agree else "low"
 
 
-def gate_agree_rescues(o: Obs, F: float, D: float) -> Confidence:
+def gate_agree_rescues(o: Obs, F: float, D: float) -> Confidence:  # noqa: ARG001 -- uniform DESIGNS signature
     if o.norm is None:
         return "none"
     if o.norm < F:
@@ -212,7 +212,7 @@ def gate_agree_rescues(o: Obs, F: float, D: float) -> Confidence:
     return "high" if o.agree else "low"
 
 
-def gate_dense_floor(o: Obs, F: float, D: float) -> Confidence:
+def gate_dense_floor(o: Obs, F: float, D: float) -> Confidence:  # noqa: ARG001 -- uniform DESIGNS signature
     if o.dense_dist is None or o.dense_dist > D:
         return "none"
     return "high" if o.agree else "low"
@@ -256,7 +256,7 @@ def _rates(obs: list[Obs], gate, F: float, D: float, presented: str = "fts") -> 
         "na_high": sum(c == "high" for c in confs_na) / len(na) if na else 0.0,
         "na_notnone": sum(c != "none" for c in confs_na) / len(na) if na else 0.0,
         "real_none": sum(c == "none" for c in confs_real) / len(real) if real else 0.0,
-        "real_ok_cited": sum(ok and c != "none" for ok, c in zip(top1_ok, confs_real)) / len(real) if real else 0.0,
+        "real_ok_cited": sum(ok and c != "none" for ok, c in zip(top1_ok, confs_real, strict=True)) / len(real) if real else 0.0,
     }
 
 
@@ -367,7 +367,7 @@ def main() -> int:
             if path.exists():
                 queries += [(set_name, q) for q in load_queries(path, qdomain)]
         print(f"\n[{corpus_subdir}] full={len(all_uuids)} pages")
-        for n in SIZES + [len(all_uuids)]:
+        for n in [*SIZES, len(all_uuids)]:
             keep = set(rng.sample(all_uuids, n)) if n < len(all_uuids) else set(all_uuids)
             tmp, conn = _build_field(corpus_subdir, keep)
             try:

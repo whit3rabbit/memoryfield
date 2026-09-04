@@ -87,7 +87,7 @@ async def test_search_no_field_raises_tool_error(tmp_path):
     async with Client(mcp_server.mcp) as client:
         result = await client.call_tool("search", {"query": "anything", "field": str(tmp_path)})
     assert result.is_error is True
-    assert "mf init" in result.content[0].text
+    assert "mf init" in getattr(result.content[0], "text", "")
 
 
 async def test_read_wraps_list_under_results_key(tmp_path, monkeypatch):
@@ -105,7 +105,7 @@ async def test_read_not_found_raises_tool_error(tmp_path, monkeypatch):
     async with Client(mcp_server.mcp) as client:
         result = await client.call_tool("read", {"refs": ["does-not-exist"], "field": str(tmp_path)})
     assert result.is_error is True
-    assert "not found" in result.content[0].text
+    assert "not found" in getattr(result.content[0], "text", "")
 
 
 async def test_write_new_page_succeeds(tmp_path, monkeypatch):

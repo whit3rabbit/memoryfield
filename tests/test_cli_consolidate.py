@@ -28,7 +28,7 @@ def test_consolidate_json_output_with_no_matches(tmp_path, capsys, monkeypatch):
     capsys.readouterr()
 
     from mf import consolidate as consolidate_mod
-    monkeypatch.setattr(consolidate_mod.embedder, "embed_query", lambda text, model_code: [0.1] * EMBEDDING_DIM)
+    monkeypatch.setattr(consolidate_mod, "_embed_entries", lambda texts, model_code: [[0.1] * EMBEDDING_DIM for _ in texts])
 
     exit_code = cli.main(["consolidate", "--plan", "--field", str(tmp_path), "--json"])
     assert exit_code == 0

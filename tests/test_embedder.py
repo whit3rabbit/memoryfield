@@ -68,5 +68,19 @@ def test_backend_defaults_to_fastembed_and_honors_env(fake_backend, monkeypatch)
         embedder.backend()
 
 
-def test_vec_literal_is_a_json_array():
-    assert embedder.vec_literal([1.0, 0.5]) == "[1.0,0.5]"
+def test_vec_blob_is_float32_bytes():
+    import sqlite_vec
+    assert embedder.vec_blob([1.0, 0.5]) == sqlite_vec.serialize_float32([1.0, 0.5])
+    assert embedder.vec_literal is embedder.vec_blob
+
+
+def test_vec_blob_refuses_non_finite():
+    with pytest.raises(ValueError, match="non-finite"):
+        embedder.vec_blob([1.0, float("nan")])
+
+
+def test_backend_falls_back_when_mlx_lacks_the_kind(fake_backend, monkeypatch, capsys):
+    monkeypatch.setenv(embedder.ENV_BACKEND, "mlx")
+    assert embedder.backend("arctic-xs") == "fastembed"
+    assert "using fastembed" in capsys.readouterr().err
+    assert embedder.backend("nomic") == "mlx"

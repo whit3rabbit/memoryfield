@@ -1,19 +1,28 @@
 """Command-line entry point for `mf`.
 
-Every Phase 1-3 command is real: `init`/`index`/`search`/`read`/
-`write`/`raw add`/`lint`/`pack`/`unpack`/`hook`/`import` (ROADMAP.md
-1.3-1.6, 2.1-2.4, 3.1-3.2). `claim` (ROADMAP.md 4.3) is the first
-Phase 4 command.
+Every command is real: `init`/`index`/`search`/`read`/`write`/`claim`/
+`consolidate --plan`/`lint`/`pack`/`unpack`/`import`/`hook`/`raw add`/
+`model`/`mcp` (ROADMAP.md 1.3-1.6, 2.1-2.4, 3.1-3.2, 4.2-4.3, 5.1).
+
+One place turns failures into exit codes: `main()` maps every error a
+user can cause or fix (no field here, an old schema, a bad flag value,
+a locked index, an unparsable page, a missing model) to a one-line
+`mf <cmd>: ...` on stderr and exit 1. Commands keep their own codes for
+outcomes that aren't errors: `write` 2 on a dedup block, `claim` 2 on a
+lost race, `search` 3 on a stale index, `unpack` 2 on a digest
+mismatch, `lint --check` 1 on findings. Hooks return 0 no matter what.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import sqlite3
 import sys
 import zipfile
+from collections.abc import Callable
 from pathlib import Path
 
-from mf import __version__, db, embedder, importers, indexer
+from mf import __version__, db, embedder, importers, indexer, schema
 from mf import claim as claim_mod
 from mf import consolidate as consolidate_mod
 from mf import hooks as hooks_mod
@@ -27,7 +36,23 @@ from mf import write as write_mod
 from mf.page import PageParseError
 from mf.schema import DEFAULT_MODEL_CODE
 
-STUB_COMMANDS = ()
+# Failures a one-line message serves better than a traceback.
+_USER_ERRORS: tuple[type[BaseException], ...] = (
+    db.FieldNotFoundError,
+    db.SchemaVersionError,
+    schema.EmbeddingDimMismatchError,
+    embedder.UnknownModelCodeError,
+    write_mod.WriteValidationError,
+    raw_mod.EmptyRawTextError,
+    read_mod.PageNotFoundError,
+    read_mod.SectionNotFoundError,
+    PageParseError,
+    pack_mod.UnpackError,
+    sqlite3.DatabaseError,
+    zipfile.BadZipFile,
+    OSError,
+    ValueError,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -42,7 +67,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="embedding model for this field; fixed at init (default: %(default)s)",
     )
 
-    index_parser = subparsers.add_parser("index", help="scan a field's pages into mf.sqlite3")
+    index_parser = subparsers.add_parser(
+        "index", help="scan a field's pages into mf.sqlite3 (migrates a v2 index in place)"
+    )
     index_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
 
     search_parser = subparsers.add_parser("search", help="search a field")
@@ -88,6 +115,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     claim_parser.add_argument("slug", help="the slug to claim (a page's filename stem)")
     claim_parser.add_argument("--by", required=True, metavar="WRITER", help="claimant identity")
+    claim_parser.add_argument("--release", action="store_true", help="drop your own claim on the slug")
     claim_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
     claim_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
@@ -169,9 +197,6 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser(
         "mcp", help="run an MCP server wrapping search/read/write/raw_add (stdio transport)"
     )
-
-    for name in STUB_COMMANDS:
-        subparsers.add_parser(name)
     return parser
 
 
@@ -189,11 +214,10 @@ def _cmd_init(args: argparse.Namespace) -> int:
 
 def _cmd_index(args: argparse.Namespace) -> int:
     field_dir = Path(args.dir).resolve()
-    try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf index: {e}\n")
-        return 1
+    migrated_from = db.migrate_field(field_dir)
+    if migrated_from is not None:
+        print(f"migrated index v{migrated_from} -> v{schema.SCHEMA_VERSION}")
+    conn = db.open_field(field_dir)
     try:
         result = indexer.index_field(field_dir, conn)
     finally:
@@ -202,7 +226,14 @@ def _cmd_index(args: argparse.Namespace) -> int:
         f"{len(result.upserted)} upserted, {result.unchanged} unchanged, "
         f"{len(result.deleted)} deleted"
     )
-    return 0
+    for rel, why in result.skipped.items():
+        sys.stderr.write(f"mf index: skipped {rel}: {why}\n")
+    for uuid, rels in result.duplicates.items():
+        sys.stderr.write(
+            f"mf index: uuid {uuid!r} is claimed by {', '.join(rels)}; none of them "
+            "was indexed, give all but one a new uuid\n"
+        )
+    return 1 if result.duplicates else 0
 
 
 def _render_stub_text(stub: search_mod.Stub, indent: str = "") -> str:
@@ -232,11 +263,7 @@ def _render_text(result: search_mod.SearchResult) -> str:
 
 def _cmd_search(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
-    try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf search: {e}\n")
-        return 1
+    conn = db.open_field(field_dir)
     try:
         result = search_mod.search(
             conn, args.query, limit=args.limit,
@@ -269,11 +296,7 @@ def _render_read_text(results: list[read_mod.ReadResult]) -> str:
 
 def _cmd_read(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
-    try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf read: {e}\n")
-        return 1
+    conn = db.open_field(field_dir)
     try:
         results = read_mod.read(conn, args.refs, tier=args.tier, field_dir=field_dir)
     except (read_mod.PageNotFoundError, read_mod.SectionNotFoundError) as e:
@@ -306,16 +329,12 @@ def _render_write_text(result: write_mod.WriteResult) -> str:
 
 def _cmd_write(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
-    try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf write: {e}\n")
+    if args.path == "-" and not args.dest:
+        sys.stderr.write("mf write: reading from stdin needs --dest NAME\n")
         return 1
+    conn = db.open_field(field_dir)
     try:
         if args.path == "-":
-            if not args.dest:
-                sys.stderr.write("mf write: reading from stdin needs --dest NAME\n")
-                return 1
             result = write_mod.write_text(
                 field_dir, conn, sys.stdin.read(), args.dest,
                 update_uuid=args.update, force=args.force,
@@ -325,9 +344,6 @@ def _cmd_write(args: argparse.Namespace) -> int:
                 field_dir, conn, Path(args.path),
                 update_uuid=args.update, force=args.force, dest_name=args.dest,
             )
-    except (write_mod.WriteValidationError, PageParseError) as e:
-        sys.stderr.write(f"mf write: {e}\n")
-        return 1
     finally:
         conn.close()
 
@@ -338,24 +354,43 @@ def _cmd_write(args: argparse.Namespace) -> int:
     return 0 if result.written else 2
 
 
+def _claim_age(claimed_at: str) -> str:
+    from datetime import UTC, datetime
+    try:
+        then = datetime.fromisoformat(claimed_at)
+    except ValueError:
+        return ""
+    hours = (datetime.now(UTC) - then).total_seconds() / 3600
+    if hours < 1:
+        return "under an hour ago"
+    if hours < 48:
+        return f"{hours:.0f} hours ago"
+    return f"{hours / 24:.0f} days ago"
+
+
 def _render_claim_text(result: claim_mod.ClaimResult) -> str:
+    if result.released:
+        return f"Released {result.slug!r} (was claimed by {result.claimed_by} at {result.claimed_at})"
     if result.claimed:
         return f"Claimed {result.slug!r} for {result.claimed_by} at {result.claimed_at}"
+    if not result.claimed_at:
+        return f"mf claim: {result.slug!r} was not claimed; nothing to release"
+    age = _claim_age(result.claimed_at)
+    age_note = f" ({age})" if age else ""
     return (
         f"mf claim: {result.slug!r} already claimed by {result.claimed_by} "
-        f"at {result.claimed_at}; look up that page and use `write --update` instead"
+        f"at {result.claimed_at}{age_note}; look up that page and use `write --update` instead"
     )
 
 
 def _cmd_claim(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
+    conn = db.open_field(field_dir)
     try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf claim: {e}\n")
-        return 1
-    try:
-        result = claim_mod.claim_slug(conn, args.slug, args.by)
+        if args.release:
+            result = claim_mod.release_slug(conn, args.slug, args.by)
+        else:
+            result = claim_mod.claim_slug(conn, args.slug, args.by)
     finally:
         conn.close()
 
@@ -363,6 +398,8 @@ def _cmd_claim(args: argparse.Namespace) -> int:
         print(json.dumps(result.as_dict(), indent=2))
     else:
         print(_render_claim_text(result))
+    if args.release:
+        return 0 if (result.released or not result.claimed_at) else 2
     return 0 if result.claimed else 2
 
 
@@ -380,11 +417,7 @@ def _render_consolidate_text(result: consolidate_mod.ConsolidatePlan) -> str:
 
 def _cmd_consolidate(args: argparse.Namespace) -> int:
     field_dir = Path(args.field).resolve()
-    try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf consolidate: {e}\n")
-        return 1
+    conn = db.open_field(field_dir)
     try:
         result = consolidate_mod.plan(field_dir, conn, threshold=args.threshold)
     finally:
@@ -419,9 +452,6 @@ def _cmd_lint(args: argparse.Namespace) -> int:
         conn = db.open_field(field_dir)
     except db.FieldNotFoundError:
         pass  # lint the pages alone; index-drift checks need mf init
-    except db.SchemaVersionError as e:
-        sys.stderr.write(f"mf lint: {e}\n")
-        return 1
     try:
         result = lint_mod.lint_field(field_dir, conn)
     finally:
@@ -439,14 +469,10 @@ def _cmd_pack(args: argparse.Namespace) -> int:
     if not field_dir.is_dir():
         sys.stderr.write(f"mf pack: {field_dir} is not a directory\n")
         return 1
-    try:
-        result = pack_mod.pack_field(
-            field_dir, out=Path(args.out) if args.out else None,
-            include_index=not args.no_index, include_raw=not args.no_raw, spec=args.spec,
-        )
-    except db.SchemaVersionError as e:
-        sys.stderr.write(f"mf pack: {e}\n")
-        return 1
+    result = pack_mod.pack_field(
+        field_dir, out=Path(args.out) if args.out else None,
+        include_index=not args.no_index, include_raw=not args.no_raw, spec=args.spec,
+    )
     if args.json:
         print(json.dumps(result.as_dict(), indent=2))
     else:
@@ -468,9 +494,6 @@ def _cmd_unpack(args: argparse.Namespace) -> int:
     except pack_mod.PackVerifyError as e:
         sys.stderr.write(f"mf unpack: {e}\n")
         return 2
-    except (pack_mod.UnpackError, FileNotFoundError, zipfile.BadZipFile) as e:
-        sys.stderr.write(f"mf unpack: {e}\n")
-        return 1
     if args.json:
         print(json.dumps(result.as_dict(), indent=2))
     else:
@@ -492,11 +515,7 @@ def _cmd_import(args: argparse.Namespace) -> int:
     if not src.is_dir():
         sys.stderr.write(f"mf import: {src} is not a directory\n")
         return 1
-    try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf import: {e}\n")
-        return 1
+    conn = db.open_field(field_dir)
     try:
         fn = importers.import_claude_memory if args.import_kind == "claude-memory" else importers.import_wiki
         result = fn(src, field_dir, conn, dry_run=args.dry_run)
@@ -517,34 +536,33 @@ def _cmd_import(args: argparse.Namespace) -> int:
 
 
 def _cmd_hook(args: argparse.Namespace) -> int:
-    payload = hooks_mod.read_payload(sys.stdin)
-    if args.hook_command == "stop":
-        result = hooks_mod.stop(payload)
-        if result.output is not None:
-            print(json.dumps(result.output))
-        return 0
-    if args.hook_command == "session-end":
-        hooks_mod.session_end(payload)  # fire-and-forget; stdout isn't shown
-        return 0
-    sys.stderr.write("mf hook: expected a subcommand (stop, session-end)\n")
-    return 1
-
-
-def _cmd_raw_add(args: argparse.Namespace) -> int:
-    field_dir = Path(args.field).resolve()
-    try:
-        conn = db.open_field(field_dir)
-    except (db.FieldNotFoundError, db.SchemaVersionError) as e:
-        sys.stderr.write(f"mf raw add: {e}\n")
+    if args.hook_command not in ("stop", "session-end"):
+        sys.stderr.write("mf hook: expected a subcommand (stop, session-end)\n")
         return 1
-    conn.close()  # raw/ never touches the index; only used to validate the field exists
+    # A hook must never surface a traceback inside Claude Code: report on
+    # stderr, exit 0, and let the session go on.
+    try:
+        payload = hooks_mod.read_payload(sys.stdin)
+        if args.hook_command == "stop":
+            result = hooks_mod.stop(payload)
+            if result.output is not None:
+                print(json.dumps(result.output))
+        else:
+            hooks_mod.session_end(payload)  # fire-and-forget; stdout isn't shown
+    except Exception as e:
+        sys.stderr.write(f"mf hook {args.hook_command}: {type(e).__name__}: {e}\n")
+    return 0
+
+
+def _cmd_raw(args: argparse.Namespace) -> int:
+    if args.raw_command != "add":
+        sys.stderr.write("mf raw: expected a subcommand (add)\n")
+        return 1
+    field_dir = Path(args.field).resolve()
+    db.open_field(field_dir).close()  # raw/ never touches the index; only used to validate the field exists
 
     text = args.text if args.text is not None else sys.stdin.read()
-    try:
-        result = raw_mod.add_raw(field_dir, text)
-    except raw_mod.EmptyRawTextError as e:
-        sys.stderr.write(f"mf raw add: {e}\n")
-        return 1
+    result = raw_mod.add_raw(field_dir, text)
 
     if args.json:
         print(json.dumps(result.as_dict(), indent=2))
@@ -553,6 +571,10 @@ def _cmd_raw_add(args: argparse.Namespace) -> int:
     else:
         print(f"Skipped: duplicate of {result.path}")
     return 0
+
+
+def _size_str(size_mb: int) -> str:
+    return f"~{size_mb} MB" if size_mb < 1000 else f"~{size_mb / 1000:.1f} GB"
 
 
 def _render_model_list_text(models: list[models_mod.ModelInfo]) -> str:
@@ -564,54 +586,80 @@ def _render_model_list_text(models: list[models_mod.ModelInfo]) -> str:
         prefix = "* " if m.is_default else "  "
         name = prefix + m.model_code
         cached_str = "yes" if m.is_cached else "no"
-        size_str = f"~{m.size_mb} MB" if m.size_mb < 1000 else f"~{m.size_mb / 1000:.1f} GB"
         lines.append(
-            f"{name:<30} {m.dim:<6} {size_str:<10} {m.speed:<9} {cached_str:<8} {m.description}"
+            f"{name:<30} {m.dim:<6} {_size_str(m.size_mb):<10} {m.speed:<9} {cached_str:<8} {m.description}"
         )
     lines.append("")
     lines.append("* = default model for `mf init`")
     return "\n".join(lines)
 
 
-def _cmd_model_list(args: argparse.Namespace) -> int:
-    models = models_mod.list_models()
-    if args.json:
-        print(json.dumps([m.as_dict() for m in models], indent=2))
-    else:
-        print(_render_model_list_text(models))
-    return 0
-
-
-def _cmd_model_install(args: argparse.Namespace) -> int:
-    try:
-        result = models_mod.install_model(args.name)
-    except Exception as e:  # noqa: BLE001
-        sys.stderr.write(f"mf model install: failed to install {args.name}: {e}\n")
-        return 1
-
-    if args.json:
-        print(json.dumps(result.as_dict(), indent=2))
-    else:
-        size_str = f"~{result.size_mb} MB" if result.size_mb < 1000 else f"~{result.size_mb / 1000:.1f} GB"
-        if result.already_cached:
-            print(f"Model {result.model_code} is already downloaded and ready ({result.dim}-d, {size_str}).")
+def _cmd_model(args: argparse.Namespace) -> int:
+    if args.model_command == "list":
+        models = models_mod.list_models()
+        if args.json:
+            print(json.dumps([m.as_dict() for m in models], indent=2))
         else:
-            print(f"Downloaded and ready: {result.model_code} ({result.dim}-d, {size_str}).")
-    return 0
+            print(_render_model_list_text(models))
+        return 0
+    if args.model_command == "install":
+        try:
+            result = models_mod.install_model(args.name)
+        except Exception as e:
+            sys.stderr.write(f"mf model install: failed to install {args.name}: {e}\n")
+            return 1
+        if args.json:
+            print(json.dumps(result.as_dict(), indent=2))
+        elif result.already_cached:
+            print(f"Model {result.model_code} is already downloaded and ready ({result.dim}-d, {_size_str(result.size_mb)}).")
+        else:
+            print(f"Downloaded and ready: {result.model_code} ({result.dim}-d, {_size_str(result.size_mb)}).")
+        return 0
+    sys.stderr.write("mf model: expected a subcommand (list, install)\n")
+    return 1
 
 
 def _cmd_mcp(args: argparse.Namespace) -> int:
+    del args  # no flags; the dispatch table passes them anyway
     try:
         from mf import mcp_server  # lazy: mcp is an optional extra
     except ImportError:
         sys.stderr.write(
             "mf mcp: the mcp package isn't installed; run "
-            "`uv tool install '.[mcp]'` (or `pip install 'mf[mcp]'`) and retry\n"
+            "`uv tool install 'memoryfield[mcp]'` (or `pip install 'memoryfield[mcp]'`) and retry\n"
         )
         return 1
 
     mcp_server.main()
     return 0
+
+
+_COMMANDS: dict[str, Callable[[argparse.Namespace], int]] = {
+    "init": _cmd_init,
+    "index": _cmd_index,
+    "search": _cmd_search,
+    "read": _cmd_read,
+    "write": _cmd_write,
+    "claim": _cmd_claim,
+    "consolidate": _cmd_consolidate,
+    "lint": _cmd_lint,
+    "pack": _cmd_pack,
+    "unpack": _cmd_unpack,
+    "import": _cmd_import,
+    "hook": _cmd_hook,
+    "raw": _cmd_raw,
+    "model": _cmd_model,
+    "mcp": _cmd_mcp,
+}
+
+
+def _label(args: argparse.Namespace) -> str:
+    parts = [args.command]
+    for attr in ("raw_command", "model_command", "hook_command"):
+        value = getattr(args, attr, None)
+        if value:
+            parts.append(value)
+    return "mf " + " ".join(parts)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -620,48 +668,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.command is None:
         parser.print_help()
         return 0
-    if args.command == "init":
-        return _cmd_init(args)
-    if args.command == "index":
-        return _cmd_index(args)
-    if args.command == "search":
-        return _cmd_search(args)
-    if args.command == "read":
-        return _cmd_read(args)
-    if args.command == "write":
-        return _cmd_write(args)
-    if args.command == "claim":
-        return _cmd_claim(args)
-    if args.command == "consolidate":
-        return _cmd_consolidate(args)
-    if args.command == "lint":
-        return _cmd_lint(args)
-    if args.command == "pack":
-        return _cmd_pack(args)
-    if args.command == "unpack":
-        return _cmd_unpack(args)
-    if args.command == "import":
-        return _cmd_import(args)
-    if args.command == "hook":
-        return _cmd_hook(args)
-    if args.command == "mcp":
-        return _cmd_mcp(args)
-    if args.command == "raw":
-        if args.raw_command == "add":
-            return _cmd_raw_add(args)
-        sys.stderr.write("mf raw: expected a subcommand (add)\n")
+    try:
+        return _COMMANDS[args.command](args)
+    except KeyboardInterrupt:
+        return 130
+    except _USER_ERRORS as e:
+        sys.stderr.write(f"{_label(args)}: {e}\n")
         return 1
-    if args.command == "model":
-        if args.model_command in ("list", "ls"):
-            return _cmd_model_list(args)
-        if args.model_command in ("install", "download", "pull"):
-            return _cmd_model_install(args)
-        sys.stderr.write("mf model: expected a subcommand (list, install)\n")
-        return 1
-    sys.stderr.write(
-        f"mf {args.command}: not implemented yet — see ROADMAP.md Phase 1/2.\n"
-    )
-    return 1
 
 
 if __name__ == "__main__":

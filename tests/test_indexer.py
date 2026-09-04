@@ -191,3 +191,82 @@ def test_reindex_of_an_edited_page_keeps_co_read(tmp_path, monkeypatch):
     indexer.index_field(tmp_path, conn)
     assert conn.execute("SELECT * FROM links WHERE kind = 'co_read'").fetchall() == []
     conn.close()
+
+
+# --- discovery robustness (2026-09-03 audit) ------------------------------
+
+def test_duplicate_uuid_files_are_reported_and_neither_indexed(tmp_path, monkeypatch):
+    monkeypatch.setattr(indexer, "_embed_pages", _fake_embed_pages)
+    _write(tmp_path, "a.md", PAGE_1)
+    _write(tmp_path, "b.md", PAGE_1)
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    result = indexer.index_field(tmp_path, conn)
+    assert result.upserted == [] and result.duplicates == {"page-001": ["a.md", "b.md"]}
+    conn.close()
+
+
+def test_duplicate_uuid_keeps_the_existing_row(tmp_path, monkeypatch):
+    monkeypatch.setattr(indexer, "_embed_pages", _fake_embed_pages)
+    _write(tmp_path, "a.md", PAGE_1)
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    indexer.index_field(tmp_path, conn)
+    _write(tmp_path, "copy.md", PAGE_1)
+    result = indexer.index_field(tmp_path, conn)
+    assert result.deleted == [] and "page-001" in result.duplicates
+    assert conn.execute("SELECT filename FROM pages").fetchone()[0] == "a.md"
+    conn.close()
+
+
+def test_non_utf8_and_debris_files_do_not_abort_the_walk(tmp_path, monkeypatch):
+    monkeypatch.setattr(indexer, "_embed_pages", _fake_embed_pages)
+    _write(tmp_path, "page1.md", PAGE_1)
+    (tmp_path / "latin.md").write_bytes(b"---\nuuid: l\ntitle: caf\xe9\n---\nx\n")
+    _write(tmp_path, "page1.sync-conflict-1.md", PAGE_1.replace("page-001", "page-dup"))
+    found = indexer.discover(tmp_path)
+    assert list(found.pages) == ["page-001"]
+    assert "latin.md" in found.skipped and "not UTF-8" in found.skipped["latin.md"]
+
+
+def test_renamed_page_updates_filename(tmp_path, monkeypatch):
+    monkeypatch.setattr(indexer, "_embed_pages", _fake_embed_pages)
+    _write(tmp_path, "old.md", PAGE_1)
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    indexer.index_field(tmp_path, conn)
+    (tmp_path / "old.md").rename(tmp_path / "new.md")
+    result = indexer.index_field(tmp_path, conn)
+    assert result.upserted == ["page-001"]
+    assert conn.execute("SELECT filename FROM pages").fetchone()[0] == "new.md"
+    conn.close()
+
+
+def test_fts_row_follows_the_page_rowid(tmp_path, monkeypatch):
+    monkeypatch.setattr(indexer, "_embed_pages", _fake_embed_pages)
+    _write(tmp_path, "page1.md", PAGE_1)
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    indexer.index_field(tmp_path, conn)
+    _write(tmp_path, "page1.md", PAGE_1 + "\nmore\n")
+    indexer.index_field(tmp_path, conn)
+    assert conn.execute("SELECT count(*) FROM fts").fetchone()[0] == 1
+    (tmp_path / "page1.md").unlink()
+    indexer.index_field(tmp_path, conn)
+    assert conn.execute("SELECT count(*) FROM fts").fetchone()[0] == 0
+    conn.close()
+
+
+def test_index_page_accepts_preparsed_page_and_embedding(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(indexer, "_embed_pages", lambda pages, model_code: calls.append(1) or _fake_embed_pages(pages, model_code))
+    _write(tmp_path, "page1.md", PAGE_1)
+    db.init_field(tmp_path)
+    conn = db.open_field(tmp_path)
+    from mf.page import load_page
+    from mf.schema import EMBEDDING_DIM
+    page = load_page(tmp_path / "page1.md", filename="page1.md")
+    indexer.index_page(tmp_path, conn, tmp_path / "page1.md", page=page, embedding=[0.2] * EMBEDDING_DIM)
+    assert calls == []
+    assert conn.execute("SELECT count(*) FROM vec").fetchone()[0] == 1
+    conn.close()

@@ -27,7 +27,13 @@ Formats, from real examples rather than the plan's one-liners:
   heading and first paragraph standing in.
 
 Uuids are derived from source paths, so re-importing updates the same
-pages in place. `source` on every page points at the original file.
+pages in place. Two sources that flatten to one filename (`a/b.md` and
+`a-b.md`) get a numeric suffix and a `skipped` note rather than one
+silently overwriting the other. `source` on every page points at the
+original file. Dates are quoted, since an unquoted ISO date is a
+`datetime` to every plain YAML reader and a `spec-dates` error to
+`mf lint` (the first version emitted them bare, so every imported page
+failed the field's own lint).
 """
 from __future__ import annotations
 
@@ -72,6 +78,15 @@ class ImportResult:
         }
 
 
+@dataclass
+class _Rendered:
+    uuid: str
+    filename: str
+    source: str
+    title: str
+    text: str
+
+
 def _yaml_str(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ") + '"'
 
@@ -93,25 +108,35 @@ def render_page(
     if source:
         lines.append(f"source: {_yaml_str(source)}")
     if created:
-        lines.append(f"created: {created}")
+        lines.append(f"created: {_yaml_str(created)}")
     if updated:
-        lines.append(f"updated: {updated}")
+        lines.append(f"updated: {_yaml_str(updated)}")
     lines.append("---")
     text = "\n".join(lines) + "\n\n" + body.strip() + ("\n" if body.strip() else "")
     return text
 
 
-def _split_frontmatter(text: str) -> tuple[dict, str]:
+def _split_frontmatter(text: str) -> tuple[dict, str, str | None]:
+    """(frontmatter, body, problem). On malformed YAML the block is
+    stripped from the body and the problem reported, rather than the raw
+    YAML being embedded into the generated page."""
     import yaml
 
     m = FRONTMATTER_RE.match(text)
     if not m:
-        return {}, text
+        return {}, text, None
     try:
         fm = yaml.safe_load(_quote_ambiguous_values(m.group(1))) or {}
-    except yaml.YAMLError:
-        return {}, text
-    return (fm if isinstance(fm, dict) else {}), m.group(2)
+    except yaml.YAMLError as e:
+        return {}, m.group(2), f"frontmatter ignored ({type(e).__name__})"
+    return (fm if isinstance(fm, dict) else {}), m.group(2), None
+
+
+def _read_source(path: Path) -> str | None:
+    try:
+        return path.read_text(encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        return None
 
 
 def _first_paragraph(body: str) -> str:
@@ -135,7 +160,7 @@ def _parse_index(index_path: Path) -> list[tuple[str, str, str]]:
     if not index_path.exists():
         return []
     out = []
-    for line in index_path.read_text(encoding="utf-8").splitlines():
+    for line in index_path.read_text(encoding="utf-8-sig", errors="replace").splitlines():
         m = _INDEX_LINE_RE.match(line)
         if m:
             out.append((m.group("title").strip(), m.group("path").strip(), (m.group("desc") or "").strip()))
@@ -143,21 +168,35 @@ def _parse_index(index_path: Path) -> list[tuple[str, str, str]]:
 
 
 def _write_pages(
-    field_dir: Path, conn: Connection, subdir: str, rendered: list[tuple[str, str, str, str]],
+    field_dir: Path, conn: Connection, subdir: str, rendered: list[_Rendered],
     result: ImportResult, dry_run: bool,
 ) -> ImportResult:
-    """rendered: (uuid, filename, source, page text)."""
     out_dir = field_dir / subdir
-    for uuid, filename, source, text in rendered:
+    taken: dict[str, str] = {}  # filename -> source that got it
+    for r in rendered:
+        filename = r.filename
+        if filename in taken:
+            stem = filename[:-3]
+            n = 2
+            while f"{stem}-{n}.md" in taken:
+                n += 1
+            filename = f"{stem}-{n}.md"
+            result.skipped.append(
+                f"{r.source}: flattens to the same name as {taken[r.filename]}; written as {filename}"
+            )
+            r.text = r.text.replace(f"uuid: {_yaml_str(r.uuid)}", f"uuid: {_yaml_str(filename[:-3])}", 1)
+            r.uuid = filename[:-3]
+        taken[filename] = r.source
         rel = f"{subdir}/{filename}"
-        title = re.search(r'^title: "(.*)"$', text, re.MULTILINE)
-        result.pages.append(ImportedPage(uuid, rel, source, title.group(1) if title else uuid))
+        result.pages.append(ImportedPage(r.uuid, rel, r.source, r.title))
         if not dry_run:
             out_dir.mkdir(parents=True, exist_ok=True)
-            (out_dir / filename).write_text(text, encoding="utf-8")
+            (out_dir / filename).write_text(r.text, encoding="utf-8")
     result.dry_run = dry_run
     if not dry_run and rendered:
-        result.indexed = len(indexer.index_field(field_dir, conn).upserted)
+        imported = {p.uuid for p in result.pages}
+        upserted = indexer.index_field(field_dir, conn).upserted
+        result.indexed = len(imported.intersection(upserted))
     return result
 
 
@@ -167,13 +206,19 @@ def import_claude_memory(src: Path, field_dir: Path, conn: Connection, dry_run: 
     result = ImportResult(kind="claude-memory")
     index = _parse_index(src / "MEMORY.md")
     by_file = {path: (title, desc) for title, path, desc in index}
-    rendered: list[tuple[str, str, str, str]] = []
+    rendered: list[_Rendered] = []
     seen: set[str] = set()
 
     for path in sorted(src.glob("*.md")):
         if path.name == "MEMORY.md":
             continue
-        fm, body = _split_frontmatter(path.read_text(encoding="utf-8"))
+        text = _read_source(path)
+        if text is None:
+            result.skipped.append(f"{path.name}: not UTF-8")
+            continue
+        fm, body, problem = _split_frontmatter(text)
+        if problem:
+            result.skipped.append(f"{path.name}: {problem}")
         name = str(fm.get("name") or path.stem)
         uuid = slugify(name)
         idx_title, idx_desc = by_file.get(path.name, ("", ""))
@@ -182,9 +227,9 @@ def import_claude_memory(src: Path, field_dir: Path, conn: Connection, dry_run: 
         meta = fm.get("metadata") if isinstance(fm.get("metadata"), dict) else {}
         tags = [str(meta["type"])] if meta and meta.get("type") else []
         created, updated = _dates(path)
-        rendered.append((uuid, f"{uuid}.md", str(path),
-                         render_page(uuid, title, summary, body, source=str(path), tags=tags,
-                                     created=created, updated=updated)))
+        rendered.append(_Rendered(uuid, f"{uuid}.md", str(path), title,
+                                  render_page(uuid, title, summary, body, source=str(path), tags=tags,
+                                              created=created, updated=updated)))
         seen.add(path.name)
 
     for title, rel, desc in index:
@@ -194,8 +239,8 @@ def import_claude_memory(src: Path, field_dir: Path, conn: Connection, dry_run: 
             continue
         uuid = slugify(Path(rel).stem)
         result.skipped.append(f"{rel}: listed in MEMORY.md but missing; imported as a stub-only page")
-        rendered.append((uuid, f"{uuid}.md", str(src / "MEMORY.md"),
-                         render_page(uuid, title, desc or title, "", source=str(src / "MEMORY.md"))))
+        rendered.append(_Rendered(uuid, f"{uuid}.md", str(src / "MEMORY.md"), title,
+                                  render_page(uuid, title, desc or title, "", source=str(src / "MEMORY.md"))))
 
     return _write_pages(field_dir, conn, "claude-memory", rendered, result, dry_run)
 
@@ -214,12 +259,20 @@ def import_wiki(src: Path, field_dir: Path, conn: Connection, dry_run: bool = Fa
             continue
         by_path[key] = (title, desc)
 
-    rendered: list[tuple[str, str, str, str]] = []
+    rendered: list[_Rendered] = []
     for path in sorted(src.rglob("*.md")):
         rel = path.relative_to(src).as_posix()
-        if path.name == "index.md" or any(part.startswith(".") for part in path.parts):
+        # Hidden parts are judged inside the wiki only: a wiki that itself
+        # lives under ~/.config used to import nothing.
+        if path.name == "index.md" or any(part.startswith(".") for part in path.relative_to(src).parts):
             continue
-        fm, body = _split_frontmatter(path.read_text(encoding="utf-8"))
+        text = _read_source(path)
+        if text is None:
+            result.skipped.append(f"{rel}: not UTF-8")
+            continue
+        fm, body, problem = _split_frontmatter(text)
+        if problem:
+            result.skipped.append(f"{rel}: {problem}")
         h1 = _H1_RE.search(body)
         idx_title, idx_desc = by_path.get(rel, ("", ""))
         title = idx_title or (h1.group(1).strip() if h1 else str(fm.get("title") or path.stem.replace("-", " ")))
@@ -231,9 +284,9 @@ def import_wiki(src: Path, field_dir: Path, conn: Connection, dry_run: bool = Fa
             result.skipped.append(f"{rel}: could not derive a filename")
             continue
         created, updated = _dates(path)
-        rendered.append((flat, f"{flat}.md", str(path),
-                         render_page(flat, title, summary, body, source=str(path),
-                                     created=created, updated=updated)))
+        rendered.append(_Rendered(flat, f"{flat}.md", str(path), title,
+                                  render_page(flat, title, summary, body, source=str(path),
+                                              created=created, updated=updated)))
     return _write_pages(field_dir, conn, "wiki", rendered, result, dry_run)
 
 

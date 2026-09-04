@@ -97,7 +97,7 @@ def main() -> int:
     print(f"corpus nearest-distinct:     min={cd[0]:.3f} p5={q(cd, .05):.3f} median={q(cd, .5):.3f}")
     print()
     print(f"{'T':>5} {'para miss':>10} {'sib block':>10} {'corpus block':>13}  {'errors':>6}")
-    best = None
+    best: tuple[float, int] | None = None
     for t in THRESHOLDS:
         miss = sum(d > t for d in pd)
         sblock = sum(d <= t for d in sd)
@@ -106,12 +106,13 @@ def main() -> int:
         print(f"{t:>5.2f} {miss:>4}/{len(pd):<5} {sblock:>4}/{len(sd):<5} {cblock:>6}/{len(cd):<6} {errors:>6}")
         if best is None or errors < best[1]:
             best = (t, errors)
-    print(f"\nlowest total error at T={best[0]:.2f} ({best[1]} errors)")
+    if best is not None:
+        print(f"\nlowest total error at T={best[0]:.2f} ({best[1]} errors)")
     print("\nparaphrases farthest from their anchor (hardest to catch):")
-    for domain, u, d, ok in sorted(paras, key=lambda x: -x[2])[:5]:
+    for _domain, u, d, ok in sorted(paras, key=lambda x: -x[2])[:5]:
         print(f"  {d:.3f} {u} anchor_nearest={ok}")
     print("siblings closest to an existing page (hardest to let through):")
-    for domain, u, d, nu in sorted(sibs, key=lambda x: x[2])[:5]:
+    for _domain, u, d, nu in sorted(sibs, key=lambda x: x[2])[:5]:
         print(f"  {d:.3f} {u} nearest={nu}")
     print("closest genuinely-different corpus pairs (what a higher T would block on write):")
     seen = set()

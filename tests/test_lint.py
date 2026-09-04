@@ -1,3 +1,5 @@
+import datetime
+
 from mf import db, indexer, lint
 from mf.schema import EMBEDDING_DIM
 
@@ -131,6 +133,30 @@ def test_contested_status_page_is_exempt_from_slug_collision(tmp_path):
     )
     r = lint.lint_field(tmp_path)
     assert "contested-slug" not in _codes(r, "warning")
+
+
+def test_stale_updated_flags_old_pages_but_not_recent_ones(tmp_path):
+    old_date = (datetime.date.today() - datetime.timedelta(days=lint.STALE_DAYS + 10)).isoformat()
+    recent_date = datetime.date.today().isoformat()
+    old = GOOD.replace("uuid: good", f'uuid: old\nupdated: "{old_date}"')
+    fresh = GOOD.replace("uuid: good", f'uuid: fresh\nupdated: "{recent_date}"')
+    r = _lint(tmp_path, old=old, fresh=fresh)
+    by_uuid = {(f.uuid, f.code) for f in r.findings}
+    assert ("old", "stale-updated") in by_uuid
+    assert ("fresh", "stale-updated") not in by_uuid
+
+
+def test_stale_updated_falls_back_to_created_when_updated_missing(tmp_path):
+    old_date = (datetime.date.today() - datetime.timedelta(days=lint.STALE_DAYS + 10)).isoformat()
+    old = GOOD.replace("uuid: good", f'uuid: old\ncreated: "{old_date}"')
+    r = _lint(tmp_path, old=old)
+    assert ("old", "stale-updated") in {(f.uuid, f.code) for f in r.findings}
+
+
+def test_stale_updated_skips_unparseable_dates_without_crashing(tmp_path):
+    bad = GOOD.replace("uuid: good", 'uuid: t\nupdated: "not a date"')
+    r = _lint(tmp_path, t=bad)
+    assert "stale-updated" not in _codes(r)
 
 
 def test_index_drift_checks(tmp_path, monkeypatch):

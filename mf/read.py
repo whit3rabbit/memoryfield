@@ -2,22 +2,22 @@
 
 Per docs/architecture.md's "Read" layer (PLAN.md: `read uuid[#section]
 --tier L1|L2`): a `uuid#slug` ref returns that section verbatim; a bare
-uuid returns the L1 (first section, answer-first) or L2 (everything
-after L1) tier. Every successful read is logged to the `reads` table,
-and when a single call reads more than one page, `co_read` weight in
-`links` is bumped for every pair -- the only path that ever populates
-`co_read` (search's kNN/typed-link neighbors are the other two
-sources, computed at query time instead of stored; see
-mf/search.py's `_neighbors()`). An agent that reads a page by
-`cat`ing the file instead of going through this module leaves no
-trace here -- an accepted gap, PLAN.md section 10.
+uuid returns the L1 (preamble plus first section, answer-first) or L2
+(everything after L1) tier, as mf.page.Page defines them. Every
+successful read is logged to the `reads` table, and when a single call
+reads more than one page, `co_read` weight in `links` is bumped for
+every pair -- the only path that ever populates `co_read` (search's
+kNN/typed-link neighbors are the other two sources, computed at query
+time instead of stored; see mf/search.py's `_neighbors()`). An agent
+that reads a page by `cat`ing the file instead of going through this
+module leaves no trace here -- an accepted gap, PLAN.md section 10.
 
 Page content itself is never cached in the index: `mf.sqlite3` only
 stores enough (`filename`, relative to the field directory) to find the
 page again, and this module re-parses it fresh off disk every call via
-mf.page.load_page(), the same parser `mf index` uses. An index built
-before filenames were stored relative holds absolute paths; those are
-used as-is until the next `mf index` rewrites them.
+mf.page.load_page(), the same parser `mf index` uses. A page the index
+knows but the disk no longer has (or no longer parses) is reported as
+not found with a pointer at `mf index`, not as a traceback.
 """
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from sqlite3 import Connection
 
-from .page import load_page
+from .page import PageParseError, load_page, page_path
 from .tokens import default_tokenize
 
 DEFAULT_TIER = "L1"
@@ -35,7 +35,8 @@ TIERS = ("L1", "L2")
 
 
 class PageNotFoundError(LookupError):
-    """Raised when a ref's uuid isn't in the pages table."""
+    """Raised when a ref's uuid isn't in the pages table, or its file is
+    gone or unparsable since `mf index`."""
 
 
 class SectionNotFoundError(LookupError):
@@ -78,9 +79,8 @@ def _page_filename(conn: Connection, uuid: str) -> tuple[str, str]:
     return row[0], row[1]
 
 
-def _resolve_path(field_dir: Path, filename: str) -> Path:
-    path = Path(filename)
-    return path if path.is_absolute() else field_dir / path
+# Older name; mf.page.page_path is the one implementation.
+_resolve_path = page_path
 
 
 def _read_one(
@@ -88,7 +88,12 @@ def _read_one(
 ) -> ReadResult:
     uuid, section = parse_ref(ref)
     title, filename = _page_filename(conn, uuid)
-    page = load_page(_resolve_path(field_dir, filename))
+    try:
+        page = load_page(page_path(field_dir, filename))
+    except (OSError, PageParseError) as e:
+        raise PageNotFoundError(
+            f"{uuid}: {filename} is missing or unparsable since `mf index` ({e})"
+        ) from e
 
     if section is not None:
         for s in page.sections:
@@ -100,10 +105,7 @@ def _read_one(
         raise SectionNotFoundError(f"{uuid}#{section}")
 
     resolved_tier = tier or DEFAULT_TIER
-    if resolved_tier == "L1":
-        body = page.sections[0].body if page.sections else page.body
-    else:
-        body = "\n\n".join(s.body for s in page.sections[1:])
+    body = page.l1 if resolved_tier == "L1" else page.l2
     return ReadResult(
         uuid=uuid, title=title, body=body,
         tokens=default_tokenize(body), tier=resolved_tier,
@@ -147,6 +149,8 @@ def read(
     """`field_dir` is the directory `mf.sqlite3` lives in; `pages.filename`
     is stored relative to it (mf/indexer.py's discover_pages()).
     """
+    if tier is not None and tier not in TIERS:
+        raise ValueError(f"tier must be one of {', '.join(TIERS)}, not {tier!r}")
     results = [_read_one(conn, ref, tier, field_dir) for ref in refs]
     call_id = uuid_mod.uuid4().hex
     for result in results:

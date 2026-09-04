@@ -58,7 +58,11 @@ mf read <uuid>[#section] [<uuid2>[#section] ...] [--tier L1|L2] [--field DIR] [-
 mf write <draft-path | -> [--field DIR] [--dest NAME] [--update UUID] [--force] [--json]
 mf lint [DIR] [--check] [--all] [--json]
 mf index [DIR]
+mf raw add [TEXT] [--field DIR] [--json]        # session-end staging, not for lookups
 ```
+
+Multi-writer and consolidation (`mf claim <slug> --by <writer>
+[--release]`, `mf consolidate --plan`) are in the reference.
 
 Exit codes: `write` 0 written, 1 invalid, 2 dedup-blocked. `search` 0
 ok, 1 no field, 3 stale index. `lint --check` 1 on any error or warning.

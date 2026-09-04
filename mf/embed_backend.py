@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import platform
 from importlib.util import find_spec
-from typing import Literal
+from typing import Any, Literal
 
 Backend = Literal["mlx", "fastembed"]
 
@@ -26,6 +26,17 @@ _FASTEMBED_MODEL: dict[str, str] = {
     "minilm": "sentence-transformers/all-MiniLM-L6-v2",
     "jina-small": "jinaai/jina-embeddings-v2-small-en",
 }
+
+
+def fastembed_model_name(kind: str) -> str:
+    """The fastembed `model_name` for a registry kind."""
+    if kind not in _FASTEMBED_MODEL:
+        raise ValueError(f"fastembed backend does not support kind: {kind!r}")
+    return _FASTEMBED_MODEL[kind]
+
+
+def mlx_supports(kind: str) -> bool:
+    return kind in _MLX_REGISTRY
 
 
 def apple_silicon() -> bool:
@@ -46,17 +57,19 @@ def default_backend() -> Backend:
 class Embedder:
     """Uniform `embed(texts) -> list[list[float]]` over either backend.
 
-    `kind` matches mf.embedding's model_kind. Backend defaults to auto-detected
-    (MLX on Apple Silicon if available for that kind, fastembed otherwise).
+    `kind` matches mf.embedding's model_kind. The backend is chosen by
+    mf.embedder.backend(); this class only checks the request is
+    satisfiable.
     """
 
-    def __init__(self, kind: str, backend: Backend | None = None):
+    def __init__(self, kind: str, backend: Backend):
         if kind not in _FASTEMBED_MODEL and kind not in _MLX_REGISTRY:
             raise ValueError(f"unknown model kind: {kind!r}")
         self.kind = kind
-        self.backend: Backend = backend or (default_backend() if kind in _MLX_REGISTRY else "fastembed")
+        self.backend: Backend = backend
+        self._model: Any
 
-        if self.backend == "mlx":
+        if backend == "mlx":
             if kind not in _MLX_REGISTRY:
                 raise ValueError(f"mlx backend only supports {list(_MLX_REGISTRY)}, not {kind!r}")
             if not mlx_available():
@@ -64,17 +77,15 @@ class Embedder:
                     "mlx backend requested but unavailable: needs Apple "
                     "Silicon macOS and `uv sync --extra mlx`"
                 )
-            from mlx_embedding_models.embedding import EmbeddingModel
+            from mlx_embedding_models.embedding import EmbeddingModel  # pyright: ignore[reportMissingImports]
             self._model = EmbeddingModel.from_registry(_MLX_REGISTRY[kind])
-        elif self.backend == "fastembed":
-            if kind not in _FASTEMBED_MODEL:
-                raise ValueError(f"fastembed backend does not support kind: {kind!r}")
+        elif backend == "fastembed":
             from fastembed import TextEmbedding
-            self._model = TextEmbedding(model_name=_FASTEMBED_MODEL[kind])
+            self._model = TextEmbedding(model_name=fastembed_model_name(kind))
         else:
-            raise ValueError(f"unknown backend: {self.backend!r}")
+            raise ValueError(f"unknown backend: {backend!r}")
 
     def embed(self, texts: list[str]) -> list[list[float]]:
         if self.backend == "mlx":
             return self._model.encode(texts).tolist()
-        return list(self._model.embed(texts, batch_size=32))
+        return [list(v) for v in self._model.embed(texts, batch_size=32)]

@@ -5,8 +5,13 @@ is also what docs/upstream/SPEC.md prescribes (verified against Cal's
 soapstones export, tests/test_interop_soapstones.py). Pages and their
 subdirectories keep their relative paths, `raw/` and `mf.sqlite3` are
 included by default, and everything `mf index` skips (`.git`,
-virtualenvs, dotfiles) is left out. A sidecar
+virtualenvs, dotfiles, spec debris) is left out. A sidecar
 `<name>.memoryfield.zip.sha256` carries the digest in `sha256sum` form.
+
+The index goes into the archive through SQLite's backup API, not by
+reading the file: under WAL (mf/db.py) committed rows can still sit in
+`mf.sqlite3-wal`, which the archive never carries, so a raw copy of the
+main file could be missing whatever the last writer did.
 
 `pack --spec` emits only what the spec defines, for readers that are
 not mf: root-level pages with conforming filenames, root-level non-page
@@ -17,23 +22,27 @@ subdirectories, `raw/`, and `mf.sqlite3` are left out and the skipped
 pages are listed. Spec readers ignore subdirectories, so the mf
 archive is a superset the spec archive cannot express.
 
-The archive is reproducible: members are written in sorted order with a
-fixed timestamp, so the same field content always produces the same
-digest, and a changed digest means changed content, not a re-pack.
+The mf archive is reproducible: members are written in sorted order
+with a fixed timestamp, so the same field content always produces the
+same digest, and a changed digest means changed content, not a re-pack.
+The spec archive is not: its `<model_code>.sqlite3` records each page's
+mtime as `last_modified` (the spec's field), so a `touch` or a fresh
+clone changes the digest.
 
 `unpack` verifies the digest (sidecar or `--sha256`) before extracting,
-refuses member paths that escape the destination, strips a single
-top-level directory if every member sits under one (a folder zipped
-from a file manager), and, when the archive carries an index, reports
-how many pages the index disagrees with on disk. The extracted index
-works as-is because `pages.filename` is field-relative.
+refuses member paths that escape the destination, refuses members
+larger than `MAX_MEMBER_BYTES` (an archive is untrusted input), never
+writes through an existing symlink, strips a single top-level directory
+if every member sits under one (a folder zipped from a file manager),
+and, when the archive carries an index, reports how many pages the
+index disagrees with on disk. The extracted index works as-is because
+`pages.filename` is field-relative.
 """
 from __future__ import annotations
 
 import hashlib
 import json
-import os
-import re
+import shutil
 import sqlite3
 import tempfile
 import zipfile
@@ -48,21 +57,19 @@ from . import db, embedder
 from .db import DB_FILENAME
 from .embedder import MODEL_REGISTRY
 from .embedding import DOCUMENT_PREFIXES
-from .indexer import _SKIP_DIRS
 from .page import FRONTMATTER_RE
-from .raw import RAW_DIRNAME
-from .schema import DEFAULT_MODEL_CODE, get_config
+from .schema import field_model
+from .spec import SPEC_FILENAME_RE, walk_field
 
 SUFFIX = ".memoryfield.zip"
 SIDECAR_SUFFIX = ".sha256"
 # Fixed member timestamp (the ZIP epoch) so the digest tracks content only.
 _FIXED_TIME = (1980, 1, 1, 0, 0, 0)
+MAX_MEMBER_BYTES = 256 * 1024 * 1024
 
-# docs/upstream/SPEC.md: page filenames, the embedding input size cap,
-# the debris every reader ignores, and the vector index schema.
-SPEC_FILENAME_RE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?$")
+# docs/upstream/SPEC.md: the embedding input size cap and the vector
+# index schema.
 SPEC_EMBED_BYTES = 8192
-_SPEC_DEBRIS = (".DS_Store", "desktop.ini", "Thumbs.db")
 SPEC_INDEX_DDL = """\
 CREATE TABLE pages (
     filename      TEXT PRIMARY KEY,
@@ -78,7 +85,8 @@ class PackVerifyError(RuntimeError):
 
 
 class UnpackError(RuntimeError):
-    """A member path escapes the destination, or the destination isn't empty."""
+    """A member path escapes the destination, a member is oversized, or
+    the destination isn't empty."""
 
 
 @dataclass
@@ -128,30 +136,18 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def _members(field_dir: Path, include_index: bool, include_raw: bool) -> list[Path]:
+def _is_archive_or_index_sidecar(name: str) -> bool:
+    return name.endswith((SUFFIX, SUFFIX + SIDECAR_SUFFIX)) or name.startswith(DB_FILENAME + "-")
+
+
+def _members(field_dir: Path, include_raw: bool) -> list[Path]:
+    """Every file the mf archive carries, except the index (added via
+    the backup API by pack_field)."""
     out: list[Path] = []
-    for dirpath, dirnames, filenames in os.walk(field_dir):
-        rel_dir = Path(dirpath).relative_to(field_dir)
-        dirnames[:] = sorted(
-            d for d in dirnames
-            if d not in _SKIP_DIRS and not d.startswith(".")
-            and not (rel_dir == Path(".") and d == RAW_DIRNAME and not include_raw)
-        )
-        # `raw/` is in _SKIP_DIRS for indexing; pack wants it unless told not to.
-        if (include_raw and rel_dir == Path(".") and (field_dir / RAW_DIRNAME).is_dir()
-                and RAW_DIRNAME not in dirnames):
-            dirnames.append(RAW_DIRNAME)
-            dirnames.sort()
-        for name in sorted(filenames):
-            if name.startswith("."):
-                continue
-            if name.endswith((SUFFIX, SUFFIX + SIDECAR_SUFFIX)):
-                continue
-            if name == DB_FILENAME and not include_index:
-                continue
-            if name.startswith(DB_FILENAME + "-"):
-                continue  # sqlite -wal / -shm / -journal sidecars
-            out.append(Path(dirpath) / name)
+    for path in walk_field(field_dir, include_raw=include_raw):
+        if path.name == DB_FILENAME or _is_archive_or_index_sidecar(path.name):
+            continue
+        out.append(path)
     return out
 
 
@@ -161,22 +157,19 @@ def _spec_members(field_dir: Path) -> tuple[list[Path], list[str]]:
     """
     members: list[Path] = []
     skipped: list[str] = []
-    for dirpath, dirnames, filenames in os.walk(field_dir):
-        rel_dir = Path(dirpath).relative_to(field_dir)
-        dirnames[:] = sorted(d for d in dirnames if d not in _SKIP_DIRS and not d.startswith("."))
-        for name in sorted(filenames):
-            if name.startswith(".") or name.endswith("~") or ".sync-conflict-" in name or name in _SPEC_DEBRIS:
-                continue
-            if rel_dir != Path("."):
-                if name.endswith(".md"):
-                    skipped.append((rel_dir / name).as_posix())
-                continue
-            if name.endswith((SUFFIX, SUFFIX + SIDECAR_SUFFIX, ".sqlite3")) or name.startswith(DB_FILENAME + "-"):
-                continue
-            if name.endswith(".md") and not SPEC_FILENAME_RE.match(name[:-3]):
-                skipped.append(name)
-                continue
-            members.append(Path(dirpath) / name)
+    for path in walk_field(field_dir):
+        rel = path.relative_to(field_dir)
+        name = path.name
+        if len(rel.parts) > 1:
+            if name.endswith(".md"):
+                skipped.append(rel.as_posix())
+            continue
+        if name.endswith(".sqlite3") or _is_archive_or_index_sidecar(name):
+            continue
+        if name.endswith(".md") and not SPEC_FILENAME_RE.match(name[:-3]):
+            skipped.append(name)
+            continue
+        members.append(path)
     return members, skipped
 
 
@@ -221,12 +214,29 @@ def build_spec_index(pages: list[Path], model_code: str) -> bytes:
             conn.execute(SPEC_INDEX_DDL)
             conn.executemany(
                 "INSERT INTO pages (filename, frontmatter, last_modified, sha256_hash, embedding) VALUES (?, ?, ?, ?, ?)",
-                [(*row, sqlite_vec.serialize_float32(vec)) for row, vec in zip(rows, vectors)],
+                [(*row, sqlite_vec.serialize_float32(vec)) for row, vec in zip(rows, vectors, strict=True)],
             )
             conn.commit()
         finally:
             conn.close()
         return db_path.read_bytes()
+
+
+def _index_snapshot(field_dir: Path) -> bytes:
+    """`mf.sqlite3` as a consistent single-file snapshot (backup API), so
+    rows still in the WAL are included."""
+    src = db.connect(field_dir / DB_FILENAME)
+    try:
+        with tempfile.TemporaryDirectory(prefix="mf-index-snapshot-") as tmp:
+            snapshot = Path(tmp) / DB_FILENAME
+            dst = sqlite3.connect(snapshot)
+            try:
+                src.backup(dst)
+            finally:
+                dst.close()
+            return snapshot.read_bytes()
+    finally:
+        src.close()
 
 
 def default_archive_path(field_dir: Path) -> Path:
@@ -244,18 +254,21 @@ def pack_field(
     out = (out or default_archive_path(field_dir)).resolve()
     skipped: list[str] = []
     extra: list[tuple[str, bytes]] = []
+    has_index = (field_dir / DB_FILENAME).exists()
     if spec:
         members, skipped = _spec_members(field_dir)
-        if (field_dir / DB_FILENAME).exists():
+        if has_index:
             conn = db.open_field(field_dir)  # raises SchemaVersionError on a foreign index
             try:
-                model_code = get_config(conn, "model_code") or DEFAULT_MODEL_CODE
+                model_code, _ = field_model(conn)
             finally:
                 conn.close()
             pages = [m for m in members if m.name.endswith(".md")]
             extra.append((f"{model_code}.sqlite3", build_spec_index(pages, model_code)))
     else:
-        members = _members(field_dir, include_index, include_raw)
+        members = _members(field_dir, include_raw)
+        if include_index and has_index:
+            extra.append((DB_FILENAME, _index_snapshot(field_dir)))
     out.parent.mkdir(parents=True, exist_ok=True)
 
     def write(zf: zipfile.ZipFile, arcname: str, data: bytes) -> None:
@@ -264,17 +277,19 @@ def pack_field(
         info.external_attr = 0o644 << 16
         zf.writestr(info, data)
 
+    entries = sorted(
+        [(p.relative_to(field_dir).as_posix(), p) for p in members] + [(name, None) for name, _ in extra]
+    )
+    extra_data = dict(extra)
     with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        for path in members:
-            write(zf, path.relative_to(field_dir).as_posix(), path.read_bytes())
-        for arcname, data in extra:
-            write(zf, arcname, data)
+        for arcname, path in entries:
+            write(zf, arcname, path.read_bytes() if path is not None else extra_data[arcname])
     digest = sha256_file(out)
     sidecar = out.with_name(out.name + SIDECAR_SUFFIX)
     sidecar.write_text(f"{digest}  {out.name}\n", encoding="utf-8")
     return PackResult(
         path=out, sha256=digest, files=len(members) + len(extra), bytes=out.stat().st_size,
-        skipped=skipped, spec_index=extra[0][0] if extra else "",
+        skipped=skipped, spec_index=extra[0][0] if spec and extra else "",
     )
 
 
@@ -321,12 +336,20 @@ def unpack_field(
             )
         verified = True
 
-    if dest.exists() and any(dest.iterdir()) and not force:
+    if dest.exists() and not dest.is_dir():
+        raise UnpackError(f"{dest} exists and is not a directory")
+    if dest.is_dir() and any(dest.iterdir()) and not force:
         raise UnpackError(f"{dest} is not empty; pass --force to extract into it anyway")
 
     with zipfile.ZipFile(zip_path) as zf:
         infos = [i for i in zf.infolist() if not i.is_dir()]
         rels = [_safe_relative(i.filename) for i in infos]
+        for info in infos:
+            if info.file_size > MAX_MEMBER_BYTES:
+                raise UnpackError(
+                    f"refusing archive member {info.filename!r}: {info.file_size} bytes, "
+                    f"cap is {MAX_MEMBER_BYTES}"
+                )
         # A folder zipped whole puts everything under one directory.
         tops = {r.parts[0] for r in rels}
         stripped = ""
@@ -334,11 +357,13 @@ def unpack_field(
             stripped = tops.pop()
             rels = [PurePosixPath(*r.parts[1:]) for r in rels]
         dest.mkdir(parents=True, exist_ok=True)
-        for info, rel in zip(infos, rels):
+        for info, rel in zip(infos, rels, strict=True):
             target = dest / Path(*rel.parts)
             target.parent.mkdir(parents=True, exist_ok=True)
-            with zf.open(info) as src:
-                target.write_bytes(src.read())
+            if target.is_symlink():
+                target.unlink()  # never write through a link into somewhere else
+            with zf.open(info) as src, target.open("wb") as out:
+                shutil.copyfileobj(src, out, 1 << 20)
 
     result = UnpackResult(dest=dest, sha256=digest, verified=verified, files=len(infos), stripped_prefix=stripped)
     if (dest / DB_FILENAME).exists():
@@ -347,7 +372,7 @@ def unpack_field(
             conn = db.open_field(dest)
         except db.SchemaVersionError as e:
             result.index_error = str(e)
-            result.notes.append("packed index is unusable by this mf; delete it, then `mf init` and `mf index`")
+            result.notes.append("packed index needs migrating or rebuilding: run `mf index` (v2) or delete it, then `mf init` and `mf index`")
         else:
             try:
                 for filename, sha in conn.execute("SELECT filename, sha256 FROM pages").fetchall():

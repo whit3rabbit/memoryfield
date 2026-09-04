@@ -86,10 +86,13 @@ def load_spotcheck() -> list[dict]:
 def render_table(summary: list[dict], columns: list[str] | None = None) -> str:
     columns = columns or [
         "baseline", "domain", "n_queries", "p_at_3", "p_at_3_ci",
-        "r_at_5", "mrr", "stub_end_given_hit_rate",
+        "r_at_5", "r_at_5_ci", "mrr", "mrr_ci", "stub_end_given_hit_rate",
         "tokens_stub_median", "tokens_stub_p95",
     ]
-    header = [c if c not in ("p_at_3_ci",) else "p_at_3 (95% CI)" for c in columns]
+    # Any column ending in "_ci" (p_at_3_ci, r_at_5_ci, mrr_ci, ...) reads
+    # its low/high from "{col}_low"/"{col}_high" in the metrics dict --
+    # see BaselineMetrics.as_dict() in eval/mf_harness.py.
+    header = [(c[:-3] + " (95% CI)") if c.endswith("_ci") else c for c in columns]
     header = [
         "stub_end_given_hit" if c == "stub_end_given_hit_rate" else c
         for c in header
@@ -99,8 +102,8 @@ def render_table(summary: list[dict], columns: list[str] | None = None) -> str:
     for m in summary:
         cells = []
         for c in columns:
-            if c == "p_at_3_ci":
-                lo, hi = m.get("p_at_3_ci_low"), m.get("p_at_3_ci_high")
+            if c.endswith("_ci"):
+                lo, hi = m.get(f"{c}_low"), m.get(f"{c}_high")
                 cells.append(f"[{lo:.3f}, {hi:.3f}]" if lo is not None else "n/a")
                 continue
             v = m.get(c)
@@ -128,11 +131,27 @@ def per_baseline_breakdown(summary: list[dict]) -> str:
     return "\n".join(out)
 
 
-def per_axis_breakdown(summary: list[dict], tags: dict, paraphrase_meta: dict) -> str:
-    """Read per-query JSON results and break down by query type / kind.
+def load_per_query() -> dict[str, dict[str, dict]]:
+    """baseline -> domain -> the details JSON run_baselines wrote."""
+    by_baseline: dict[str, dict[str, dict]] = {}
+    for domain in ("codebase", "papers"):
+        for path in RESULTS_DIR.glob(f"*_{domain}.json"):
+            baseline = path.stem[: -len(f"_{domain}")]
+            data = json.loads(path.read_text())
+            by_baseline.setdefault(baseline, {})[data["domain"]] = data
+    return by_baseline
 
-    Each per_query entry has qid, answer_uuids, rank, etc. We need to
-    reconstruct which queries are paraphrased / no-answer / topical / entity.
+
+def noans_empty_rate(by_domain: dict[str, dict]) -> float:
+    """Share of no-answer queries whose top-k came back empty, across domains."""
+    noans = [q for data in by_domain.values() for q in data["per_query"] if not q.get("answer_uuids")]
+    return sum(1 for q in noans if not q["topk"]) / len(noans) if noans else 0.0
+
+
+def per_axis_breakdown(by_baseline: dict[str, dict[str, dict]], tags: dict) -> str:
+    """Break the per-query results down by query type (topical/entity,
+    from the tags file) and query kind (lexical/paraphrased/no-answer,
+    recorded per query by run_baselines), aggregated across domains.
     """
     out = ["", "## Per-axis breakdown", ""]
 
@@ -144,29 +163,12 @@ def per_axis_breakdown(summary: list[dict], tags: dict, paraphrase_meta: dict) -
         )
         out.append("")
 
-    # Build per-baseline per-query detail from the JSON files
-    by_baseline: dict[str, dict[str, dict]] = {}
-    for path in RESULTS_DIR.glob("*_codebase.json"):
-        baseline = path.stem.replace("_codebase", "")
-        data = json.loads(path.read_text())
-        by_baseline.setdefault(baseline, {})[data["domain"]] = data
-    for path in RESULTS_DIR.glob("*_papers.json"):
-        baseline = path.stem.replace("_papers", "")
-        data = json.loads(path.read_text())
-        by_baseline.setdefault(baseline, {})[data["domain"]] = data
-
-    def is_paraphrased(qid: str) -> bool:
-        return qid.startswith("para-")
-
-    def is_no_answer(qid: str) -> bool:
-        return qid.startswith("noans-")
-
     sections: list[str] = []
     for baseline, by_domain in by_baseline.items():
         if baseline not in ("grep", "fts", "dense_nomic", "dense_bge", "dense_tfidf", "hybrid"):
             continue
         rows = ["", f"### `{baseline}`", "",
-                "| Axis | Domain | N | N(no-ans) | P@3 | P@5 | R@5 | MRR | no-ans empty |", "|---|---|---|---|---|---|---|---|"]
+                "| Axis | Domain | N | N(no-ans) | P@3 | P@5 | R@5 | MRR | no-ans empty |", "|---|---|---|---|---|---|---|---|---|"]
         # Aggregate across both domains
         buckets: dict[str, list[dict]] = {
             "all": [],
@@ -184,10 +186,11 @@ def per_axis_breakdown(summary: list[dict], tags: dict, paraphrase_meta: dict) -
                     buckets["topical"].append(q)
                 elif qtype == "entity":
                     buckets["entity"].append(q)
-                if is_paraphrased(q["qid"]):
-                    buckets["paraphrased"].append(q)
-                if is_no_answer(q["qid"]):
+                kind = q.get("query_kind") or ""
+                if kind.startswith("no_answer"):
                     buckets["no_answer"].append(q)
+                elif kind in ("lexical", "paraphrased"):
+                    buckets[kind].append(q)
         for label, qs in buckets.items():
             if not qs:
                 continue
@@ -297,8 +300,16 @@ def spotcheck_section(spotcheck: list[dict]) -> str:
     return "\n".join(out)
 
 
-def substantive_findings(summary: list[dict]) -> str:
-    """The substantive findings, computed from the actual summary numbers."""
+def substantive_findings(
+    summary: list[dict],
+    per_query: dict[str, dict[str, dict]],
+    tags: dict[str, str],
+    debiased: dict,
+) -> str:
+    """The substantive findings, computed from the actual numbers. No
+    number in this prose is typed by hand (CLAUDE.md gotcha 1): a claim
+    that quotes one derives it from `summary`, `per_query`, `tags`, or
+    `debiased` right here."""
     by_baseline: dict[str, list[dict]] = {}
     for m in summary:
         by_baseline.setdefault(m["baseline"], []).append(m)
@@ -313,6 +324,44 @@ def substantive_findings(summary: list[dict]) -> str:
             if m["domain"] == domain:
                 return m[metric]
         return 0.0
+
+    def pct(x: float) -> str:
+        return f"{x * 100:.1f}%"
+
+    def points(a: float, b: float) -> str:
+        d = abs(a - b) * 100
+        return f"{d:.0f} point{'s' if round(d) != 1 else ''}"
+
+    fts_empty = noans_empty_rate(per_query.get("fts", {}))
+    dense_empty = max(
+        noans_empty_rate(per_query.get(b, {})) for b in ("dense_nomic", "dense_bge", "hybrid")
+    ) if per_query else 0.0
+    judgments = [v.get("judgment") for v in debiased.values()]
+    debiased_rate = (sum(1 for j in judgments if j == "sufficient") / len(judgments)) if judgments else 0.0
+
+    def topical_share(domain: str) -> float:
+        qids: set[str] = set()
+        for by_domain in per_query.values():
+            data = by_domain.get(domain)
+            if data:
+                qids.update(q["qid"] for q in data["per_query"] if q.get("answer_uuids"))
+        if not qids:
+            return 0.0
+        return sum(1 for qid in qids if tags.get(qid) == "topical") / len(qids)
+
+    def type_gap() -> str:
+        gaps: list[float] = []
+        for by_domain in per_query.values():
+            real = [q for data in by_domain.values() for q in data["per_query"] if q.get("answer_uuids")]
+            def p3(qs: list[dict]) -> float:
+                return sum(1 for q in qs if q["rank"] is not None and q["rank"] <= 3) / len(qs) if qs else 0.0
+            topical = [q for q in real if tags.get(q["qid"]) == "topical"]
+            entity = [q for q in real if tags.get(q["qid"]) == "entity"]
+            if topical and entity:
+                gaps.append((p3(entity) - p3(topical)) * 100)
+        if not gaps:
+            return "n/a"
+        return f"{min(gaps):.0f}-{max(gaps):.0f}"
 
     stub_given_hit_vals = [m["stub_end_given_hit_rate"] for m in summary]
     stub_given_hit_range = (
@@ -371,9 +420,9 @@ def substantive_findings(summary: list[dict]) -> str:
     )
     out.append(
         "3. **No-answer abstention is the one axis that still "
-        "discriminates.** FTS returns an empty top-k for 6.7% of "
+        f"discriminates.** FTS returns an empty top-k for {pct(fts_empty)} of "
         "no-answer queries; dense_nomic, dense_bge, and hybrid return "
-        "something for essentially all of them (0.0% empty). Neither is a "
+        f"something for essentially all of them ({pct(dense_empty)} empty). Neither is a "
         "real confidence mechanism — FTS's empty results are a side effect "
         "of strict term matching, not a designed abstention feature — but "
         "it's the only place any baseline shows abstention-like behavior "
@@ -398,7 +447,7 @@ def substantive_findings(summary: list[dict]) -> str:
     out.append(
         f"- **Stub-end rate remains high, given a hit.** {stub_given_hit_range} "
         "across baselines on real-answer queries where retrieval succeeded. "
-        "The de-biased label rate (~0.99) is higher because it uses a "
+        f"The de-biased label rate ({debiased_rate:.2f}) is higher because it uses a "
         "different bar (\"stub has the answer\") than the original (\"agent "
         "wouldn't need the body\"). Both numbers are valid; they answer "
         "different questions."
@@ -420,8 +469,10 @@ def substantive_findings(summary: list[dict]) -> str:
         f"({val('p_at_3', 'dense_bge', 'codebase'):.3f} vs nomic "
         f"{val('p_at_3', 'dense_nomic', 'codebase'):.3f}); dense_nomic wins "
         f"papers ({val('p_at_3', 'dense_nomic', 'papers'):.3f} vs bge "
-        f"{val('p_at_3', 'dense_bge', 'papers'):.3f}). The gap in either "
-        "direction is 1-2 points — noise-level, not a plan deviation worth "
+        f"{val('p_at_3', 'dense_bge', 'papers'):.3f}). The gap is "
+        f"{points(val('p_at_3', 'dense_bge', 'codebase'), val('p_at_3', 'dense_nomic', 'codebase'))} "
+        f"on codebase and {points(val('p_at_3', 'dense_nomic', 'papers'), val('p_at_3', 'dense_bge', 'papers'))} "
+        "on papers — noise-level, not a plan deviation worth "
         "flagging. Nomic (270MB, the plan's spec) is vindicated; bge-large's "
         "extra ~1GB buys nothing measurable here."
     )
@@ -433,10 +484,10 @@ def substantive_findings(summary: list[dict]) -> str:
         "text got embedded."
     )
     out.append(
-        "- **Topical vs entity differential is weak.** 26% of codebase "
-        "queries are topical, 29% of papers. Topical queries score "
-        "consistently 1-3 points below entity queries across every "
-        "baseline, not the dramatic split the literature suggests. The "
+        f"- **Topical vs entity differential is weak.** {pct(topical_share('codebase'))} of codebase "
+        f"real-answer queries are topical, {pct(topical_share('papers'))} of papers. Entity queries "
+        f"score {type_gap()} P@3 points above topical ones (range across baselines), "
+        "not the dramatic split the literature suggests. The "
         "corpus may not have enough topical breadth to test the hypothesis."
     )
     out.append("")
@@ -507,7 +558,7 @@ def substantive_findings(summary: list[dict]) -> str:
 def main() -> int:
     summary = load_summary()
     tags = load_tags()
-    para_meta = load_paraphrase_meta()
+    per_query = load_per_query()
     debiased = load_debiased()
     spotcheck = load_spotcheck()
 
@@ -538,10 +589,10 @@ def main() -> int:
         "## Results (overall)",
         render_table(summary),
         per_baseline_breakdown(summary),
-        per_axis_breakdown(summary, tags, para_meta),
+        per_axis_breakdown(per_query, tags),
         stub_end_debias(summary, debiased),
         spotcheck_section(spotcheck),
-        substantive_findings(summary),
+        substantive_findings(summary, per_query, tags, debiased),
         "",
         "## What M0.5 still does not measure",
         "",

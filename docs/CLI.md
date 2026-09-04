@@ -54,6 +54,13 @@ Initialized empty field at ~/field/mf.sqlite3 (model snowflake-arctic-embed-xs, 
 
 ### `mf index`
 
+A schema v2 index is migrated in place on the way (`migrated index v2 ->
+v3` is printed): the derived tables are rebuilt, the reads log, `co_read`
+weights, and claims are kept. Two files carrying one uuid are reported
+on stderr, neither is indexed, and the exit code is 1. Files that have
+frontmatter but fail to parse (or are not UTF-8) are reported and
+skipped rather than aborting the run.
+
 Walk a field directory and incrementally index all valid Markdown pages. Skips unchanged files (matching SHA256) and prunes index entries for deleted files.
 
 ```bash
@@ -91,8 +98,14 @@ mf search "<query>" [--field DIR] [--limit N] [--neighbor-limit N] [--budget N] 
   - `--stale-ok`: Return results even if on-disk files changed since last indexing (marked `stale`).
   - `--json`: Format output as JSON.
 - **Exit codes**:
-  - `0`: Search completed successfully.
+  - `0`: Search completed successfully. Check the `confidence` field before citing.
+  - `1`: No field at `--field`, a schema that needs `mf index`, or a bad flag value (`--limit` under 1, negative `--neighbor-limit` or `--budget`).
   - `3`: Stale index detected (a file changed or was removed on disk; re-run `mf index` or pass `--stale-ok`).
+
+On a field with no vectors yet, the model is not loaded and FTS alone
+answers. `--budget` keeps every stub that fits in rank order (a large
+rank-1 stub does not hide a small rank-2 one) and reports `none` when
+nothing fits.
 
 ```console
 $ mf search "how do we roll back a deploy" --field ~/field
@@ -122,10 +135,13 @@ mf read <uuid>[#section] ... [--field DIR] [--tier L1|L2] [--json]
 
 ```console
 $ mf read code-deploy-rollback-cmd --field ~/field
-# Deploy: how to roll back a bad release
-
-`kubectl rollout undo deployment/<service>`; rollback is a forward operation and takes ~90 seconds end-to-end.
+[code-deploy-rollback-cmd (L1)] Deploy: how to roll back a bad release
+`kubectl rollout undo deployment/<service>` re-deploys the
+previous image. Takes ~90s for full pod replacement at our scale.
 ```
+
+L1 is any prose before the first `##` plus the first `##` section. L2 is
+everything after that.
 
 ---
 
@@ -148,12 +164,19 @@ mf write <path> [--field DIR] [--dest NAME] [--update UUID] [--force] [--json]
 - **Exit codes**:
   - `0`: Page successfully validated and indexed.
   - `1`: Frontmatter validation failed.
-  - `2`: Near-duplicate detected (cosine distance $\le 0.10$). Use `--update <uuid>` or `--force`.
+  - `2`: Near-duplicate detected (cosine distance at or under 0.10). Use `--update <uuid>` or `--force`.
+
+`--dest` must stay inside the field and outside directories `mf index`
+never walks (`raw/`, dot-directories). The copy-in is atomic: the file
+takes its final name only after it is indexed.
 
 ```console
 $ mf write /tmp/draft.md --field ~/field
-Wrote code-new-deploy to ~/field/new-deploy.md and indexed (384-d)
+Wrote code-new-deploy to draft.md
 ```
+
+JSON shape: `{"written": bool, "uuid": str, "path"?: str,
+"duplicates"?: [{"uuid", "title", "summary", "distance"}], "warning"?: str}`.
 
 ---
 
@@ -216,8 +239,10 @@ mf raw add [text] [--field DIR] [--json]
 
 ```console
 $ mf raw add "Encountered timeout on redis cluster during shard rebalancing" --field ~/field
-Appended to ~/field/raw/2026-09-01T20-00-00Z.md
+Appended to /home/me/field/raw/20260903T111702381618Z.md
 ```
+
+JSON shape: `{"written": bool, "path": str}`.
 
 ---
 
@@ -242,11 +267,19 @@ mf lint [DIR] [--check] [--all] [--json]
   `[a-z0-9-]`), `spec-dates` (info when `created`/`updated` are
   missing, error when one is an unquoted datetime), `spec-subdir`
   (info: spec readers only index root-level pages).
+- **Freshness code**: `stale-updated` (info: `updated`, falling back to
+  `created`, is more than 180 days old. A nudge to review the page, not
+  a check that its content is still accurate).
 
 ```console
 $ mf lint --check ~/field
-0 errors, 0 warnings
+75 pages: 0 errors, 0 warnings, 340 info (--all to show info)
 ```
+
+JSON shape: `{"pages": int, "errors": int, "warnings": int, "info": int,
+"findings": [{"severity", "code", "filename", "uuid", "message"}]}`.
+With an index present, `orphan-claim` (info) names claims whose slug has
+no page on disk.
 
 ---
 
@@ -288,15 +321,29 @@ mf unpack <ZIP> [DEST] [--sha256 HEX] [--force] [--json]
 Atomically claim a page slug in multi-writer environments before drafting.
 
 ```bash
-mf claim <slug> --by <writer> [--field DIR] [--json]
+mf claim <slug> --by <writer> [--release] [--field DIR] [--json]
 ```
 
 - **Arguments**:
   - `slug`: Filename stem to claim.
   - `--by <writer>`: Identity of claiming agent/user.
+  - `--release`: Drop your own claim on the slug. Another writer's claim is left alone and reported.
 - **Exit codes**:
-  - `0`: Claim successful or already owned by caller.
+  - `0`: Claim successful or already owned by caller. With `--release`: released, or nothing was claimed.
   - `2`: Slug already claimed by another writer.
+
+Claims never expire on their own. `mf lint` reports `orphan-claim` for a claim with no page behind it.
+
+```console
+$ mf claim new-deploy --by alice --field ~/field
+Claimed 'new-deploy' for alice at 2026-09-03T11:17:02.851821+00:00
+$ mf claim new-deploy --by bob --field ~/field
+mf claim: 'new-deploy' already claimed by alice at 2026-09-03T11:17:02.851821+00:00 (under an hour ago); look up that page and use `write --update` instead
+$ mf claim new-deploy --by alice --release --field ~/field
+Released 'new-deploy' (was claimed by alice at 2026-09-03T11:17:02.851821+00:00)
+```
+
+JSON shape: `{"slug": str, "claimed": bool, "claimed_by": str, "claimed_at": str, "released"?: true}`.
 
 ---
 
@@ -305,8 +352,12 @@ mf claim <slug> --by <writer> [--field DIR] [--json]
 Inspect staged session notes in `raw/` and propose new pages, edits, or review actions without modifying the index directly.
 
 ```bash
-mf consolidate --plan [--field DIR] [--json]
+mf consolidate --plan [--field DIR] [--threshold FLOAT] [--json]
 ```
+
+`--threshold` is the cosine distance under which an existing page makes
+an entry a `review` rather than a `create` (default 0.10, untuned).
+Entries are embedded on the document side, the same side pages are.
 
 ---
 

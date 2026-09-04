@@ -1,25 +1,38 @@
-"""One embedding entry point for `mf index`, `mf search`, and `mf write`
-(ROADMAP.md 2.9).
+"""One embedding entry point for `mf index`, `mf search`, `mf write`,
+and `mf consolidate` (ROADMAP.md 2.9).
 
 Before this module each of the three instantiated `fastembed.TextEmbedding`
-itself and carried its own copy of `vec_literal()`, the single-source-
+itself and carried its own copy of the vector literal, the single-source-
 of-truth drift the roadmap's checklist warns about (and `mf write`
 loaded the model twice per call: once for the gate, once to index).
 Text construction and model prefixes stay in mf/embedding.py; this
-module owns the model registry, the model cache, and the vector
-literal sqlite-vec expects.
+module owns the model registry, the model cache, and the vector blob
+sqlite-vec expects.
 
 Backend: fastembed (ONNX, CPU) always, unless `MF_EMBED_BACKEND=mlx`
-is set and mf/embed_backend.py says MLX is available. Not auto-selected:
-an index's vectors must all come from one runtime, and the two runtimes'
-outputs for the same checkpoint differ slightly, so switching silently
-between machines would shift every distance the gate is calibrated on.
-The backend isn't recorded in `config` yet; if MLX ever becomes the
+is set and mf/embed_backend.py says MLX is available for that model
+kind. Not auto-selected: an index's vectors must all come from one
+runtime, and the two runtimes' outputs for the same checkpoint differ
+slightly, so switching silently between machines would shift every
+distance the gate is calibrated on. A kind MLX cannot serve falls back
+to fastembed with a warning rather than failing every command. The
+backend isn't recorded in `config` yet; if MLX ever becomes the
 default, add it next to `model_code`.
+
+Which side of an asymmetric model a text is embedded on matters as much
+as the model: `DEDUP_THRESHOLD` and `REVIEW_THRESHOLD` were calibrated
+document-to-document, so anything compared against them goes through
+`embed_page`/`embed_document`, never `embed_query` (CLAUDE.md gotcha
+32's family).
 """
 from __future__ import annotations
 
+import math
 import os
+import sys
+import threading
+
+import sqlite_vec
 
 from . import embed_backend
 from .embedding import document_text, query_text
@@ -102,16 +115,27 @@ def registry_entry(model_code: str) -> dict:
     return MODEL_REGISTRY[model_code]
 
 
-def backend() -> embed_backend.Backend:
+def backend(kind: str | None = None) -> embed_backend.Backend:
+    """The backend `MF_EMBED_BACKEND` asks for, checked against `kind`
+    when one is given: MLX serves only the kinds in its registry."""
     requested = os.environ.get(ENV_BACKEND, "fastembed")
-    if requested == "mlx":
-        return "mlx"
     if requested == "fastembed":
         return "fastembed"
-    raise ValueError(f"{ENV_BACKEND} must be 'fastembed' or 'mlx', not {requested!r}")
+    if requested != "mlx":
+        raise ValueError(f"{ENV_BACKEND} must be 'fastembed' or 'mlx', not {requested!r}")
+    if kind is not None and not embed_backend.mlx_supports(kind):
+        sys.stderr.write(
+            f"mf: {ENV_BACKEND}=mlx but MLX has no {kind!r} model; using fastembed\n"
+        )
+        return "fastembed"
+    return "mlx"
 
 
 _CACHE: dict[tuple[str, str], embed_backend.Embedder] = {}
+# fastembed's TextEmbedding is not safe to instantiate twice concurrently
+# in one process (CLAUDE.md gotcha 4), and the MCP server runs tools on
+# worker threads, so the cache fill is serialized.
+_CACHE_LOCK = threading.Lock()
 
 
 def get_embedder(model_code: str) -> embed_backend.Embedder:
@@ -120,10 +144,13 @@ def get_embedder(model_code: str) -> embed_backend.Embedder:
     a model twice.
     """
     kind = registry_entry(model_code)["kind"]
-    key = (kind, backend())
-    if key not in _CACHE:
-        _CACHE[key] = embed_backend.Embedder(kind, backend=key[1])
-    return _CACHE[key]
+    key = (kind, backend(kind))
+    if key in _CACHE:
+        return _CACHE[key]
+    with _CACHE_LOCK:
+        if key not in _CACHE:
+            _CACHE[key] = embed_backend.Embedder(kind, backend=key[1])
+        return _CACHE[key]
 
 
 def embed_texts(texts: list[str], model_code: str) -> list[list[float]]:
@@ -134,20 +161,43 @@ def embed_texts(texts: list[str], model_code: str) -> list[list[float]]:
 
 
 def embed_query(query: str, model_code: str) -> list[float]:
+    """Query-side embedding: for comparing a question against pages."""
     kind = registry_entry(model_code)["kind"]
     return embed_texts([query_text(query, kind)], model_code)[0]
+
+
+def embed_documents(texts: list[str], model_code: str) -> list[list[float]]:
+    """Document-side embedding of free text (no title/summary structure):
+    for comparing a draft or a raw extract against pages on the same
+    side of the model the pages themselves were embedded on."""
+    kind = registry_entry(model_code)["kind"]
+    return embed_texts([document_text("", "", t, kind) for t in texts], model_code)
+
+
+def embed_document(text: str, model_code: str) -> list[float]:
+    return embed_documents([text], model_code)[0]
 
 
 def embed_pages(pages: list[Page], model_code: str) -> dict[str, list[float]]:
     kind = registry_entry(model_code)["kind"]
     texts = [document_text(p.title, p.summary, p.l1, kind) for p in pages]
-    return {p.uuid: v for p, v in zip(pages, embed_texts(texts, model_code))}
+    return {p.uuid: v for p, v in zip(pages, embed_texts(texts, model_code), strict=True)}
 
 
 def embed_page(page: Page, model_code: str) -> list[float]:
     return embed_pages([page], model_code)[page.uuid]
 
 
-def vec_literal(vector: list[float]) -> str:
-    """The JSON-array text form sqlite-vec accepts for a MATCH or INSERT."""
-    return "[" + ",".join(repr(v) for v in vector) + "]"
+def vec_blob(vector: list[float]) -> bytes:
+    """The float32 blob sqlite-vec accepts for a MATCH or INSERT. Exact
+    (no text round-trip through 17-digit reprs) and a quarter the size of
+    the JSON form this used to emit. A non-finite component is refused
+    here with a readable error instead of a sqlite-vec parse error.
+    """
+    if any(not math.isfinite(v) for v in vector):
+        raise ValueError("embedding contains a non-finite value")
+    return sqlite_vec.serialize_float32(vector)
+
+
+# Older name, kept for the eval scripts. Same bytes.
+vec_literal = vec_blob

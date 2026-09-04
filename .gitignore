@@ -54,9 +54,11 @@ venv/
 env/
 .python-version
 
-# uv
-uv.lock
+# uv (uv.lock is committed: CI runs `uv sync --locked`)
 .uv-cache/
+
+# st (syntext) search index
+.syntext/
 
 # mypy / ruff / pytest
 .mypy_cache/

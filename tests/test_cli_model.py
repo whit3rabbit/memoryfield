@@ -44,7 +44,7 @@ def test_model_install_and_json(capsys, monkeypatch):
     assert exit_code == 0
     data = json.loads(capsys.readouterr().out)
     assert data["model_code"] == "snowflake-arctic-embed-xs"
-    assert data["installed"] if "installed" in data else data["already_cached"] is False
+    assert data["already_cached"] is False
 
 
 def test_model_install_rejects_unknown():

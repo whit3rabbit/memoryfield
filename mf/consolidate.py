@@ -18,6 +18,12 @@ related. The host agent turns a `review` into `write --update UUID`
 [UUID]` (replaces it), and a `create` into a fresh draft -- either way
 through `write`, which is what actually gates and indexes.
 
+Entries are embedded on the document side (`embedder.embed_documents`),
+the same side pages are embedded on and the side `DEDUP_THRESHOLD` was
+calibrated on. The first version used the query prefix, which for an
+asymmetric model puts the vector in a different region and makes the
+threshold mean something else (CLAUDE.md gotcha 32's family).
+
 Untuned by design, same shape as `write.py`'s `DEDUP_THRESHOLD` when it
 first shipped (ROADMAP.md 2.1, calibrated for real only in 2.10 once a
 labeled set existed): this reuses that same threshold as a first-cut
@@ -43,9 +49,9 @@ from pathlib import Path
 from sqlite3 import Connection
 
 from . import embedder
-from .embedder import vec_literal
-from .raw import RAW_DIRNAME
-from .schema import DEFAULT_MODEL_CODE, get_config
+from .embedder import vec_blob
+from .schema import field_model
+from .spec import RAW_DIRNAME
 from .write import DEDUP_THRESHOLD
 
 REVIEW_THRESHOLD = DEDUP_THRESHOLD
@@ -96,12 +102,18 @@ def _raw_entries(field_dir: Path) -> list[Path]:
     return sorted(raw_dir.glob("*.md"))
 
 
+def _embed_entries(texts: list[str], model_code: str) -> list[list[float]]:
+    """Thin wrapper over mf.embedder so tests can monkeypatch the plan
+    without loading a model."""
+    return embedder.embed_documents(texts, model_code)
+
+
 def _find_candidates(
     conn: Connection, embedding: list[float], threshold: float, limit: int
 ) -> list[Candidate]:
     rows = conn.execute(
         "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = ?",
-        (vec_literal(embedding), limit),
+        (vec_blob(embedding), limit),
     ).fetchall()
     out: list[Candidate] = []
     for uuid, distance in rows:
@@ -119,20 +131,28 @@ def plan(
 ) -> ConsolidatePlan:
     """Read every `raw/` entry and propose create/review/pointer for it.
     Read-only: never writes to `raw/` or the index. The agent runs
-    `write` to act on whatever this returns.
+    `write` to act on whatever this returns. All entries are embedded in
+    one batch.
     """
-    model_code = get_config(conn, "model_code") or DEFAULT_MODEL_CODE
+    model_code, _ = field_model(conn)
     result = ConsolidatePlan()
+    pending: list[tuple[str, str]] = []
     for entry in _raw_entries(field_dir):
-        text = entry.read_text(encoding="utf-8").strip()
+        text = entry.read_text(encoding="utf-8", errors="replace").strip()
         rel = entry.relative_to(field_dir).as_posix()
         if text.startswith(POINTER_MARKER):
             result.actions.append(ConsolidateAction(entry=rel, action="pointer", text=text))
             continue
-        embedding = embedder.embed_query(text, model_code)
-        candidates = _find_candidates(conn, embedding, threshold, REVIEW_CANDIDATES)
-        action = "review" if candidates else "create"
-        result.actions.append(
-            ConsolidateAction(entry=rel, action=action, text=text, candidates=candidates)
-        )
+        pending.append((rel, text))
+        result.actions.append(ConsolidateAction(entry=rel, action="create", text=text))
+
+    if pending:
+        vectors = _embed_entries([text for _, text in pending], model_code)
+        by_entry = {rel: vec for (rel, _), vec in zip(pending, vectors, strict=True)}
+        for action in result.actions:
+            if action.action == "pointer":
+                continue
+            action.candidates = _find_candidates(conn, by_entry[action.entry], threshold, REVIEW_CANDIDATES)
+            if action.candidates:
+                action.action = "review"
     return result

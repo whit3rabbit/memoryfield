@@ -56,7 +56,7 @@ def test_empty_raw_dir_is_an_empty_plan(tmp_path, monkeypatch):
 def test_entry_near_an_existing_page_is_review(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
     raw.add_raw(tmp_path, "Turns out `make rotate-key` also needs VAULT_TOKEN set.")
-    monkeypatch.setattr(consolidate.embedder, "embed_query", lambda text, model_code: _near_dup_vec())
+    monkeypatch.setattr(consolidate, "_embed_entries", lambda texts, model_code: [_near_dup_vec() for _ in texts])
 
     result = consolidate.plan(tmp_path, conn)
     assert len(result.actions) == 1
@@ -69,7 +69,7 @@ def test_entry_near_an_existing_page_is_review(tmp_path, monkeypatch):
 def test_entry_far_from_everything_is_create(tmp_path, monkeypatch):
     conn = _build_field(tmp_path, monkeypatch)
     raw.add_raw(tmp_path, "The billing dunning cadence is 1/3/7/14 days.")
-    monkeypatch.setattr(consolidate.embedder, "embed_query", lambda text, model_code: _far_vec())
+    monkeypatch.setattr(consolidate, "_embed_entries", lambda texts, model_code: [_far_vec() for _ in texts])
 
     result = consolidate.plan(tmp_path, conn)
     assert len(result.actions) == 1
@@ -87,10 +87,10 @@ def test_session_pointer_entry_is_reported_without_searching(tmp_path, monkeypat
         "kind: session-pointer\nsession_id: abc\ntranscript_path: /tmp/x.jsonl\n"
     )
 
-    def _boom(text, model_code):
+    def _boom(texts, model_code):
         raise AssertionError("pointer entries must not be embedded/searched")
 
-    monkeypatch.setattr(consolidate.embedder, "embed_query", _boom)
+    monkeypatch.setattr(consolidate, "_embed_entries", _boom)
     result = consolidate.plan(tmp_path, conn)
     assert len(result.actions) == 1
     assert result.actions[0].action == "pointer"

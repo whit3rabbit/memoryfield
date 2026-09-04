@@ -13,6 +13,14 @@ it up with no check at all. Drafting outside the field and letting
 draft still works (it's how 2.1 shipped) and the result carries a
 warning saying exactly that.
 
+The copy-in is atomic with the index step: the bytes land in a temp
+file next to the destination, `index_page` runs, and only then does the
+file take its real name. An embedding failure or a locked index leaves
+nothing un-gated inside the field. `--dest` is resolved and checked
+against the field directory on every entry point (the stdin path did
+this from the start, the file path did not, so `--dest ../x.md` used to
+write outside the field).
+
 Dedup is deliberately a gate the tool enforces, not just an FYI: PLAN.md
 section 10 calls it "an LLM judgment the tool can only inform," but the
 gate still has to have an opinion about what counts as a candidate --
@@ -21,14 +29,15 @@ once it's made the actual judgment call.
 """
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from sqlite3 import Connection
 
-from . import embedder, indexer
-from .embedder import vec_literal
-from .page import Page, load_page, parse_page
-from .schema import DEFAULT_MODEL_CODE, get_config
+from . import embedder, indexer, spec
+from .embedder import vec_blob
+from .page import Page, PageParseError, load_page, parse_page
+from .schema import field_model
 
 # Cosine distance (1 - cos), calibrated on a labeled set (ROADMAP.md
 # 2.10, eval/calibrate_dedup.py, eval/results/calibration_dedup_2_10.txt):
@@ -94,8 +103,8 @@ class WriteResult:
 
 def _embed_page(page: Page, model_code: str) -> list[float]:
     """Thin wrapper over mf.embedder so tests can monkeypatch the gate
-    without loading a model. The model is cached process-wide, so the
-    index step after a gate pass reuses it."""
+    without loading a model. The vector is handed to the index step on a
+    pass, so the model runs once per write."""
     return embedder.embed_page(page, model_code)
 
 
@@ -110,7 +119,7 @@ def _find_duplicates(
     # page being re-written in place isn't a duplicate of itself).
     rows = conn.execute(
         "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = ?",
-        (vec_literal(embedding), limit + 1),
+        (vec_blob(embedding), limit + 1),
     ).fetchall()
 
     candidates: list[DedupCandidate] = []
@@ -129,10 +138,34 @@ def _find_duplicates(
     return candidates
 
 
+def _resolve_dest(field_dir: Path, name: str) -> Path:
+    """`field_dir / name`, refused if it lands outside the field or in a
+    directory `mf index` never walks (the page would be indexed now and
+    dropped by the next `mf index`)."""
+    if PurePosixPath(name).is_absolute() or Path(name).is_absolute():
+        raise WriteValidationError(f"--dest {name!r} must be a path inside the field, not absolute")
+    dest = (field_dir / name).resolve()
+    if field_dir not in dest.parents:
+        raise WriteValidationError(f"--dest {name!r} escapes the field directory")
+    for part in dest.relative_to(field_dir).parts[:-1]:
+        if part in spec.SKIP_DIRS or part.startswith("."):
+            raise WriteValidationError(
+                f"--dest {name!r} is under {part!r}, which `mf index` never walks"
+            )
+    if spec.is_debris(dest.name):
+        raise WriteValidationError(f"--dest {name!r} is a filename every reader ignores")
+    return dest
+
+
 def _check_destination(field_dir: Path, conn: Connection, page: Page, dest: Path) -> None:
     rel = dest.relative_to(field_dir).as_posix()
     if dest.exists():
-        existing = load_page(dest)
+        try:
+            existing = load_page(dest)
+        except PageParseError as e:
+            raise WriteValidationError(
+                f"{rel} already exists and is not a memoryfield page ({e}); pick another --dest"
+            ) from e
         if existing.uuid != page.uuid:
             raise WriteValidationError(
                 f"{rel} already exists with a different uuid ({existing.uuid!r}); "
@@ -150,7 +183,7 @@ def _commit(
     field_dir: Path,
     conn: Connection,
     page: Page,
-    text: str,
+    data: bytes,
     dest: Path,
     in_field_source: bool,
     update_uuid: str | None,
@@ -163,8 +196,9 @@ def _commit(
         )
     _check_destination(field_dir, conn, page, dest)
 
+    embedding: list[float] | None = None
     if not force and update_uuid is None:
-        model_code = get_config(conn, "model_code") or DEFAULT_MODEL_CODE
+        model_code, _ = field_model(conn)
         embedding = _embed_page(page, model_code)
         duplicates = _find_duplicates(
             conn, embedding, page.uuid, threshold, DEDUP_CANDIDATES
@@ -175,10 +209,18 @@ def _commit(
                 warning=IN_FIELD_WARNING if in_field_source else None,
             )
 
-    if not in_field_source:
+    if in_field_source:
+        indexer.index_page(field_dir, conn, dest, page=page, embedding=embedding)
+    else:
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(text, encoding="utf-8")
-    indexer.index_page(field_dir, conn, dest)
+        tmp = dest.with_name(f".{dest.name}.mf-tmp")
+        tmp.write_bytes(data)
+        try:
+            indexer.index_page(field_dir, conn, dest, page=page, embedding=embedding)
+            os.replace(tmp, dest)
+        except BaseException:
+            tmp.unlink(missing_ok=True)
+            raise
     return WriteResult(written=True, uuid=page.uuid, path=dest.relative_to(field_dir).as_posix())
 
 
@@ -202,10 +244,10 @@ def write_page(
     if in_field and dest_name is not None:
         raise WriteValidationError("--dest only applies to a draft outside the field")
 
-    text = page_path.read_text(encoding="utf-8")
-    page = parse_page(text, filename=str(page_path))  # raises PageParseError
-    dest = page_path if in_field else field_dir / (dest_name or page_path.name)
-    return _commit(field_dir, conn, page, text, dest, in_field, update_uuid, force, threshold)
+    dest = page_path if in_field else _resolve_dest(field_dir, dest_name or page_path.name)
+    rel = dest.relative_to(field_dir).as_posix()
+    page = load_page(page_path, filename=rel)  # raises PageParseError
+    return _commit(field_dir, conn, page, page_path.read_bytes(), dest, in_field, update_uuid, force, threshold)
 
 
 def write_text(
@@ -219,8 +261,7 @@ def write_text(
 ) -> WriteResult:
     """Same as write_page() for a draft that only exists as text (stdin)."""
     field_dir = field_dir.resolve()
-    page = parse_page(text, filename=dest_name)
-    dest = (field_dir / dest_name).resolve()
-    if field_dir not in dest.parents:
-        raise WriteValidationError(f"--dest {dest_name!r} escapes the field directory")
-    return _commit(field_dir, conn, page, text, dest, False, update_uuid, force, threshold)
+    dest = _resolve_dest(field_dir, dest_name)
+    rel = dest.relative_to(field_dir).as_posix()
+    page = parse_page(text, filename=rel)
+    return _commit(field_dir, conn, page, text.encode("utf-8"), dest, False, update_uuid, force, threshold)

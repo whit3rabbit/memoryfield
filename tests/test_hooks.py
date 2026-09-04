@@ -38,13 +38,46 @@ def test_stop_is_silent_when_not_a_field_or_already_continuing(tmp_path, monkeyp
     assert hooks.stop(_payload(field, stop_hook_active=True)).acted is False
 
 
+def _tool_use_line(command):
+    return json.dumps({"type": "assistant", "message": {"role": "assistant", "content": [
+        {"type": "tool_use", "id": "t1", "name": "Bash", "input": {"command": command}}]}}) + "\n"
+
+
 def test_stop_is_silent_when_session_already_captured(tmp_path, monkeypatch):
     monkeypatch.setattr(hooks.tempfile, "gettempdir", lambda: str(tmp_path))
     field = _field(tmp_path)
-    assert hooks.stop(_payload(field, last_assistant_message="I ran mf write draft.md")).acted is False
+    assert hooks.stop(_payload(field, last_assistant_message="Done: `mf write draft.md --field x`")).acted is False
     transcript = tmp_path / "t.jsonl"
-    transcript.write_text('{"tool":"Bash","command":"mf raw add --field x"}\n')
+    transcript.write_text("garbage line\n" + _tool_use_line("cd /x && mf raw add --field x < extract.md"))
     assert hooks.stop(_payload(field, transcript_path=str(transcript))).acted is False
+
+
+def test_stop_ignores_prose_mentions_of_mf_write(tmp_path, monkeypatch):
+    """The guidance text itself says `mf write`; talking about the command
+    is not running it."""
+    monkeypatch.setattr(hooks.tempfile, "gettempdir", lambda: str(tmp_path))
+    field = _field(tmp_path)
+    transcript = tmp_path / "t.jsonl"
+    prose = json.dumps({"type": "assistant", "message": {"role": "assistant", "content": [
+        {"type": "text", "text": "You could run mf write later. " + hooks.STOP_GUIDANCE}]}})
+    transcript.write_text(prose + "\n" + _tool_use_line("grep -rn 'mf write' docs/"))
+    payload = _payload(field, transcript_path=str(transcript),
+                       last_assistant_message="I reviewed how mf write and mf raw add behave.")
+    assert hooks.stop(payload).acted is True
+
+
+def test_marker_path_never_leaves_the_temp_dir(tmp_path, monkeypatch):
+    monkeypatch.setattr(hooks.tempfile, "gettempdir", lambda: str(tmp_path))
+    marker = hooks._marker("../../etc/evil")
+    assert marker.parent == tmp_path and "/" not in marker.name and ".." not in marker.name
+
+
+def test_cli_hook_never_raises(tmp_path, monkeypatch, capsys):
+    field = _field(tmp_path)
+    monkeypatch.setattr(hooks, "session_end", lambda payload: (_ for _ in ()).throw(OSError("disk full")))
+    monkeypatch.setattr("sys.stdin", io.StringIO(json.dumps(_payload(field))))
+    assert cli.main(["hook", "session-end"]) == 0
+    assert "disk full" in capsys.readouterr().err
 
 
 def test_session_end_writes_a_pointer_and_dedupes_on_session_id(tmp_path):

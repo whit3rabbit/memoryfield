@@ -186,8 +186,8 @@ because the queries share an authoring process with the corpus. Read
 field, the first corpus outside that process.
 
 ```bash
-uv sync --extra eval              # fastembed into a local venv
-uv sync --extra eval --extra mlx  # optional, Apple Silicon MLX variants
+uv sync                            # fastembed is a core dependency
+uv sync --extra mlx                # optional, Apple Silicon MLX variants
 uv run python3 -m eval.run_baselines   # 45+ minutes wall time
 uv run python3 -m eval.report          # render the report
 uv run python3 eval/fetch_soapstones.py                        # pinned foreign-field fixture
@@ -197,13 +197,13 @@ uv run python3 -m eval.calibrate_confidence_blind soapstones   # ranking and gat
 ## Development
 
 ```bash
-uv sync --extra eval --group dev
+uv sync --group dev
 uv run pytest tests/
 ```
 
 `uv sync` calls do not compose: each one resets the venv to exactly
-what that call specifies. Pass `--extra eval` and `--group dev`
-together, in one invocation.
+what that call specifies. Pass every extra and group you need in
+one invocation.
 
 ## Status
 

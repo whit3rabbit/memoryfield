@@ -16,6 +16,11 @@ SQLite serializes concurrent writers at the file level, so the
 INSERT ... ON CONFLICT DO NOTHING below is atomic across processes, not
 just within one connection: a second process's INSERT blocks until the
 first commits, then sees the row already there.
+
+Claims never expire on their own. A writer that crashes between `claim`
+and `write` holds the slug until it (or whoever inherits its identity)
+runs `claim --release`; `mf lint` reports claims with no page behind
+them as `orphan-claim` so they get noticed.
 """
 from __future__ import annotations
 
@@ -30,14 +35,18 @@ class ClaimResult:
     claimed: bool
     claimed_by: str
     claimed_at: str
+    released: bool = False
 
     def as_dict(self) -> dict:
-        return {
+        d = {
             "slug": self.slug,
             "claimed": self.claimed,
             "claimed_by": self.claimed_by,
             "claimed_at": self.claimed_at,
         }
+        if self.released:
+            d["released"] = True
+        return d
 
 
 def claim_slug(conn: Connection, slug: str, claimed_by: str) -> ClaimResult:
@@ -58,5 +67,24 @@ def claim_slug(conn: Connection, slug: str, claimed_by: str) -> ClaimResult:
     row = conn.execute(
         "SELECT claimed_by, claimed_at FROM claims WHERE slug = ?", (slug,)
     ).fetchone()
-    assert row is not None, "just-inserted-or-existing row must be there"
+    if row is None:
+        raise RuntimeError(f"claim for {slug!r} vanished between insert and read")
     return ClaimResult(slug=slug, claimed=(row[0] == claimed_by), claimed_by=row[0], claimed_at=row[1])
+
+
+def release_slug(conn: Connection, slug: str, claimed_by: str) -> ClaimResult:
+    """Drop `claimed_by`'s claim on `slug`. released=True if a row was
+    removed. A claim held by someone else is left alone and reported
+    (claimed=False, their identity), so a release can never steal.
+    A slug nobody holds releases as a no-op.
+    """
+    row = conn.execute(
+        "SELECT claimed_by, claimed_at FROM claims WHERE slug = ?", (slug,)
+    ).fetchone()
+    if row is None:
+        return ClaimResult(slug=slug, claimed=False, claimed_by=claimed_by, claimed_at="", released=False)
+    if row[0] != claimed_by:
+        return ClaimResult(slug=slug, claimed=False, claimed_by=row[0], claimed_at=row[1], released=False)
+    conn.execute("DELETE FROM claims WHERE slug = ? AND claimed_by = ?", (slug, claimed_by))
+    conn.commit()
+    return ClaimResult(slug=slug, claimed=False, claimed_by=claimed_by, claimed_at=row[1], released=True)

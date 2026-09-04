@@ -7,13 +7,16 @@ codebase top-1 0.925 vs 0.828 vs 0.862 on the original set, 0.95 vs
 0.70 vs 0.80 blind (`eval/calibrate_confidence_blind.py`). FTS still
 runs on every query: its top score and top-1 are two of the three
 gate signals (mf/confidence.py), and its ranked list is the result set
-only when dense has nothing (an empty `vec` table).
+only when dense has nothing (an empty `vec` table, in which case the
+model is not loaded at all).
 
 A superseded page never occupies a result slot: it resolves to the page
 that supersedes it (following the chain), and that stub carries a
 `supersedes: [...]` list naming what it replaced (ROADMAP.md 2.8; the
 1.5 design returned a `{uuid, superseded_by}` pointer in the slot, which
-under `--limit 1` meant no answer at all).
+under `--limit 1` meant no answer at all). The FTS/dense agreement
+signal is computed on the resolved pages for the same reason: a
+superseded FTS hit and its dense superseder are one answer.
 
 Stale check (PLAN.md section 3, ROADMAP.md 2.8): when a `field_dir` is
 given, every stub about to be shown has its file's sha256 compared to
@@ -29,9 +32,10 @@ from sqlite3 import Connection
 
 from . import embedder
 from .confidence import Confidence, confidence
-from .embedder import vec_literal
+from .embedder import vec_blob
+from .page import page_path
 from .query_prep import fts_query
-from .schema import DEFAULT_MODEL_CODE, get_config
+from .schema import field_model
 from .tokens import default_tokenize
 
 # Measured on the 1.9 tasks (eval/agent_trial_token_costs.py, output in
@@ -112,18 +116,18 @@ def _embed_query(query: str, model_code: str) -> list[float]:
 
 def _fts_search(conn: Connection, query: str, limit: int) -> tuple[list[tuple[str, float]], int]:
     """Top-`limit` (uuid, score) pairs, score = -bm25 (higher is better),
-    plus the number of matched query terms (mf.confidence's normalizer).
+    plus the number of terms in the expression (mf.confidence's
+    normalizer).
     """
     parsed = fts_query(query)
     if not parsed.expr:
         return [], 0
-    term_count = parsed.expr.count(" OR ") + 1
     cur = conn.execute(
         "SELECT uuid, -bm25(fts) AS score FROM fts WHERE fts MATCH ? "
         "ORDER BY score DESC LIMIT ?",
         (parsed.expr, limit),
     )
-    return [(row[0], row[1]) for row in cur.fetchall()], term_count
+    return [(row[0], row[1]) for row in cur.fetchall()], len(parsed.terms)
 
 
 def _dense_search(
@@ -132,9 +136,13 @@ def _dense_search(
     """Top-`limit` (uuid, cosine distance) pairs, nearest first."""
     cur = conn.execute(
         "SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND k = ?",
-        (vec_literal(query_vector), limit),
+        (vec_blob(query_vector), limit),
     )
     return [(row[0], row[1]) for row in cur.fetchall()]
+
+
+def _has_vectors(conn: Connection) -> bool:
+    return conn.execute("SELECT 1 FROM vec LIMIT 1").fetchone() is not None
 
 
 def _superseded_by(conn: Connection, uuid: str) -> str | None:
@@ -173,6 +181,13 @@ def _resolve_stub(conn: Connection, uuid: str) -> Stub | None:
     if stub is not None:
         stub.supersedes = chain
     return stub
+
+
+def _resolved_uuid(conn: Connection, uuid: str | None) -> str | None:
+    if uuid is None:
+        return None
+    stub = _resolve_stub(conn, uuid)
+    return stub.uuid if stub else uuid
 
 
 def _neighbors(conn: Connection, uuid: str, limit: int) -> list[Stub]:
@@ -238,33 +253,32 @@ def _stub_cost(stub: Stub) -> int:
 
 
 def _apply_budget(result: SearchResult, budget: int) -> None:
+    """Keep the stubs that fit in `budget` tokens, in rank order. A stub
+    that doesn't fit is skipped, not a wall: a large rank-1 page must
+    not hide a small rank-2 one. A stub whose neighbors don't fit keeps
+    its slot and drops the neighbors. If nothing fits, the gate's verdict
+    is meaningless for what's shown, so confidence becomes `none`."""
     used = 0
     kept: list[Stub] = []
     for stub in result.results:
         cost = _stub_cost(stub)
-        neighbor_costs = [_stub_cost(n) for n in stub.neighbors]
-        if used + cost + sum(neighbor_costs) <= budget:
-            used += cost + sum(neighbor_costs)
+        neighbor_costs = sum(_stub_cost(n) for n in stub.neighbors)
+        if used + cost + neighbor_costs <= budget:
+            used += cost + neighbor_costs
             kept.append(stub)
-            continue
-        if used + cost <= budget:
-            # Stub fits, its neighbors don't -- keep the stub, drop
-            # neighbors rather than dropping a real result over its
-            # extras.
+        elif used + cost <= budget:
             stub.neighbors = []
             used += cost
             kept.append(stub)
-            continue
-        break
     result.results = kept
+    if not kept:
+        result.confidence = "none"
 
 
 def _mark_stale(field_dir: Path, stubs: list[Stub]) -> list[tuple[str, str]]:
     stale: list[tuple[str, str]] = []
     for stub in stubs:
-        path = Path(stub.filename)
-        if not path.is_absolute():
-            path = field_dir / path
+        path = page_path(field_dir, stub.filename)
         try:
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
         except OSError:
@@ -288,16 +302,22 @@ def search(
     """`field_dir` enables the stale check (compare each shown page's
     on-disk sha256 to the index); without it no check runs. `stale_ok`
     downgrades a stale hit from an error to a `stale: true` flag."""
-    model_code = get_config(conn, "model_code") or DEFAULT_MODEL_CODE
-    embedder.registry_entry(model_code)  # raises UnknownModelCodeError early
+    if limit < 1:
+        raise ValueError(f"limit must be at least 1, not {limit}")
+    if neighbor_limit < 0:
+        raise ValueError(f"neighbor_limit must be at least 0, not {neighbor_limit}")
+    if budget is not None and budget < 0:
+        raise ValueError(f"budget must be at least 0, not {budget}")
+    model_code, _ = field_model(conn)  # raises before any model is loaded
 
     fts_ranked, term_count = _fts_search(conn, query, limit)
-    query_vector = _embed_query(query, model_code)
-    dense_ranked = _dense_search(conn, query_vector, limit)
+    dense_ranked: list[tuple[str, float]] = []
+    if _has_vectors(conn):
+        dense_ranked = _dense_search(conn, _embed_query(query, model_code), limit)
 
-    fts_top1 = fts_ranked[0][0] if fts_ranked else None
+    fts_top1 = _resolved_uuid(conn, fts_ranked[0][0] if fts_ranked else None)
     top_score = fts_ranked[0][1] if fts_ranked else None
-    dense_top1 = dense_ranked[0][0] if dense_ranked else None
+    dense_top1 = _resolved_uuid(conn, dense_ranked[0][0] if dense_ranked else None)
     dense_distance = dense_ranked[0][1] if dense_ranked else None
     agree = fts_top1 is not None and fts_top1 == dense_top1
     conf = confidence(top_score, term_count, agree, dense_distance)

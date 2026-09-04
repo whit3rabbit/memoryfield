@@ -31,8 +31,14 @@ source:       url or path                # citation slot
 writer:       agent-or-person id
 ```
 
-Body convention: first section is L1 (answer-first, 150-300 tokens),
-later sections are L2. Sections are addressable as `uuid#slug`.
+Body convention: the first `##` section is L1 (answer-first, 150-300
+tokens), later sections are L2. Prose before the first `##` belongs to
+L1 too (it used to displace it: a one-line preamble was embedded and
+read as the whole of L1). Sections are addressable as `uuid#slug`. A
+repeated heading gets a numeric suffix. Frontmatter may use block
+scalars (`summary: >`), which mf's quoting shim passes through. Files
+the spec calls debris (`.sync-conflict-` copies, `~` backups,
+`.DS_Store` and friends, `mf/spec.py`) are never pages.
 
 Quoting convention: `title`, `summary`, `created`, `updated`, and any
 value containing `: ` or starting with a backtick, `#`, `[`, or `{`
@@ -49,8 +55,8 @@ One SQLite file, `mf.sqlite3`, inside the field:
 
 ```
 pages   (uuid PK, filename, title, summary, status, tokens, sha256, updated, writer)
-sections(uuid, slug, ordinal, byte_start, byte_end, tokens)
-fts     -- FTS5 over title, summary, body (full page)
+sections(uuid, slug, ordinal, tokens)
+fts     -- FTS5 over title, summary, body (full page), rowid = pages.rowid
 vec     -- sqlite-vec, embedding of title+summary+L1 only
 links   (src, dst, kind, weight)      -- kind: supersedes|contradicts|depends_on|co_read
 claims  (slug, claimed_by, claimed_at) -- for multi-writer create/update resolution
@@ -85,12 +91,33 @@ never go stale. Only typed links and co-reads are stored.
 enforceable rather than aspirational: `model_code` defaults to
 `snowflake-arctic-embed-xs`, `embedding_dim` to `384` (the `vec`
 table's fixed vector width; `mf init --model` pins another registry
-entry, docs/BENCHMARKS.md), `schema_version` to `2`. Set once by `mf init`,
-read by `mf index`/`mf search` on every call. Model identity lives here,
-at the index level, not per `vec` row. `open_field()` refuses an index
-whose `schema_version` doesn't match and says to delete it and rerun
-`mf init` + `mf index`: there is no in-place migration, because a
-`vec0` table can't change metric and the index is derived anyway.
+entry, docs/BENCHMARKS.md), `schema_version` to `3`. Set once by `mf init`,
+read together by `schema.field_model()` on every embedding call, which
+also refuses a `model_code` whose registry dimension disagrees with
+`embedding_dim` (a hand-edited config, or an index built by another
+mf). Model identity lives here, at the index level, not per `vec` row.
+`open_field()` refuses an index whose `schema_version` doesn't match.
+v2 migrates in place: `mf index` drops the derived tables (`pages`,
+`sections`, `fts`, `vec`, typed links), recreates the v3 DDL, and
+rebuilds them, keeping `config`, `claims`, `reads`, and `co_read`
+links. Older versions are rebuilt from scratch (a `vec0` table can't
+change metric).
+
+**Schema v3 (2026-09-03).** `fts` rows share `pages.rowid`, so a
+page's FTS row is deleted by rowid. Before, `DELETE ... WHERE uuid = ?`
+scanned the whole virtual table per page (`uuid` is UNINDEXED), making a
+full reindex quadratic. `sections` lost `byte_start`/`byte_end` (computed
+against a stripped body, never read). Indexes on `links(dst, kind)` and
+`reads(uuid)`, `reads(call_id)`.
+
+**WAL journal mode, 30-second busy timeout (mf/db.py).** More than one
+process touches a field at once by design (two sessions, hooks, the MCP
+server's worker threads). Under the default rollback journal a running
+`mf index` blocked readers for its whole walk and the 5-second default
+timeout turned that into `database is locked`. The cost is
+`mf.sqlite3-wal`/`-shm` sidecars next to the index. `mf pack` copies
+the index through SQLite's backup API so rows still in the WAL are in
+the archive.
 
 **Distance metric: cosine (schema v2, ROADMAP.md 2.5).** `vec` is a
 `vec0` table declared `distance_metric=cosine`, so every distance the
@@ -232,8 +259,11 @@ agent that `cat`s a page bypasses it (accepted risk, PLAN.md section
 page fresh off disk via `mf.page.load_page()`, resolving the
 field-relative `filename` column against the `--field` directory. A
 bare uuid with no `--tier` defaults to L1 (answer-first, matching the
-intended stub -> L1 -> L2 escalation order). L2 is everything after the
-first section, concatenated, possibly empty on a single-section page.
+intended stub -> L1 -> L2 escalation order). L1 and L2 are
+`Page.l1`/`Page.l2` (preamble plus first `##` section, and the rest),
+so `read`, the embedder, and the linter agree on what L1 is. A page the
+index knows but the disk no longer has, or no longer parses, is
+reported as not found with a pointer at `mf index`.
 Verified end to end against the real 157-page corpus, including after
 moving the field directory.
 

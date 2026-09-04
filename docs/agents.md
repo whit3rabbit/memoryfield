@@ -133,5 +133,6 @@ has the detail.
 
 Every command takes `--json` and returns the shapes documented in the
 [CLI reference](CLI.md), so any agent that can run a subprocess can use
-mf today. An MCP server wrapping search, read, write, and raw add is
-[ROADMAP.md](../ROADMAP.md) 5.1 and is not built yet.
+mf today. `mf mcp` runs an MCP server (stdio) wrapping search, read,
+write, and raw add with the same JSON contract. It needs the `mcp`
+extra. See the [CLI reference](CLI.md#mf-mcp).

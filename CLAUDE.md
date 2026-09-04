@@ -6,540 +6,255 @@ model.
 
 ## What this repo is
 
-The `mf` memoryfield tool described in PLAN.md, plus its eval harness.
-`mf/` is a packaged CLI (`pyproject.toml`, `uv tool install .`). Every
-Phase 1-3 command is real: `init`/`index`/`search`/`read`/`write`/
-`raw add`/`lint`/`pack`/`unpack`/`model`/`hook`/`import`, plus the M5
-partials `consolidate --plan` and `claim`. For the complete CLI
-specification and flag reference, see [docs/CLI.md](docs/CLI.md). For
-the schema and retrieval design as currently decided, see
-[docs/architecture.md](docs/architecture.md). [docs/README.md](docs/README.md)
-is the hub for the user-facing guides (agents, models, fields). `eval/` is the eval and
-corpus rig from M0/M0.5, complete. The upstream memoryfield spec is
-vendored at [docs/upstream/SPEC.md](docs/upstream/SPEC.md); mf builds
-on the format, not on Cal's tool, and architecture.md section 6 is
-the record of where the two deliberately differ.
+`mf/` is the packaged CLI described in PLAN.md (`pyproject.toml`,
+`uv tool install .`). Every Phase 1-3 command is real, plus the M5
+partials `consolidate --plan` and `claim`. `eval/` is the eval and
+corpus rig from M0/M0.5. The upstream memoryfield spec is vendored at
+[docs/upstream/SPEC.md](docs/upstream/SPEC.md). mf builds on the
+format, not on Cal's tool, and architecture.md section 6 records where
+the two deliberately differ.
 
-`notes/` is a real mf field, this repo dogfooding its own tool:
-`mf.sqlite3` at its root, Stop/SessionEnd hooks wired in
-`notes/.claude/settings.json`, its own CLAUDE.md, and real `raw/`
-entries for `consolidate --plan` to work against. `eval/corpus` pages
-are calibration fixtures, never memory.
+- CLI and flag reference: [docs/CLI.md](docs/CLI.md)
+- Schema and retrieval design: [docs/architecture.md](docs/architecture.md)
+- User-facing guides hub: [docs/README.md](docs/README.md)
+- Eval numbers: [docs/M0.5_REPORT.md](docs/M0.5_REPORT.md) and
+  [docs/BENCHMARKS.md](docs/BENCHMARKS.md). Never copy numbers from
+  them into this file (gotcha 1).
+- Decision trail, per-task records, and open debt (including 0.5's
+  upstream frontmatter proposal, which needs a human to send it):
+  [ROADMAP.md](ROADMAP.md). Milestone list: PLAN.md section 9.
+
+`notes/` is a real mf field, this repo dogfooding its own tool. See
+[notes/CLAUDE.md](notes/CLAUDE.md). `eval/corpus` pages are
+calibration fixtures, never memory.
 
 ## Commands
 
 Run from the repo root. `uv run ...` uses `.venv` and reflects source
 changes immediately (gotcha 20).
 
-- Tests: `uv run pytest tests/ -q`
-- Lint: `ruff check mf/ eval/ tests/` (clean, gated in
-  `.github/workflows/test.yml`)
-- Typecheck: `npx --yes pyright <files>` (bare `pyright` isn't on
-  PATH)
-- Tests + eval baselines in one venv: `uv sync --group dev` (fastembed
-  is a core dependency and there is no `eval` extra. Add `--extra mlx`
-  in the same call if you want it, gotcha 21)
-- Real-corpus smoke test: gotcha 29's recipe
-- Interop fixture: `uv run python3 eval/fetch_soapstones.py` (sha256-pinned
-  download into gitignored `eval/fixtures/`; the soapstones tests skip
-  without it)
+```bash
+uv run pytest tests/ -q                   # tests
+ruff check mf/ eval/ tests/               # lint, gated in CI
+npx --yes pyright <files>                 # typecheck, bare pyright is not on PATH
+uv sync --group dev                       # tests + eval in one venv, add --extra mlx in the same call (gotcha 21)
+uv run python3 eval/fetch_soapstones.py   # sha256-pinned interop fixture into gitignored eval/fixtures/, soapstones tests skip without it
+```
+
+Real-corpus smoke test: gotcha 29.
 
 ## Release
 
-PyPI distribution name is `memoryfield` (`mf` was already taken by an
-unrelated package). Console command, import package, and module layout
-all stay `mf` — only the published name changed. Repo:
+PyPI name is `memoryfield` (`mf` was taken). Console command, import
+package, and module layout stay `mf`. Repo:
 [github.com/whit3rabbit/memoryfield](https://github.com/whit3rabbit/memoryfield)
-(singular; `memoryfields` in older commit messages/ROADMAP.md entries
-is a stale name from before this was decided).
+(singular, `memoryfields` in older commit messages is stale).
 
-To cut a release: push to `main`, then `git tag vX.Y.Z && git push
-origin vX.Y.Z`. `.github/workflows/release.yml` builds on that tag,
-publishes to PyPI via trusted-publisher OIDC (no stored token — the
-`pypi` GitHub environment is restricted to `v*` tags, no required
-reviewers), and cuts a GitHub release from the built artifacts. The
-version lives once, in `mf/__init__.py` (`dynamic = ["version"]` in
-pyproject.toml), so `mf --version` and the wheel cannot disagree.
-`.github/workflows/test.yml` runs pytest/ruff/pyright on every push and
-PR, with `uv sync --locked` against the committed `uv.lock`, ruff and
-pyright both pinned (`uvx ruff@0.16.5`, `npx pyright@1.1.409`), and
-bare `pyright` so `pyrightconfig.json`'s include is authoritative.
-`astral-sh/setup-uv` only publishes exact-version tags, not a
-rolling major (`@v10` 404s; use `@v10.0.1`-style pins and bump
-deliberately). The macOS leg of the test matrix installs Python via
-Homebrew (`brew install python@X.Y`) and sets `UV_PYTHON_PREFERENCE:
-only-system`: neither uv's own managed CPython builds nor
-`actions/setup-python`'s hosted builds support
-`--enable-loadable-sqlite-extensions` on macOS (confirmed via real
-failing runs, `AttributeError: 'sqlite3.Connection' object has no
-attribute 'enable_load_extension'`, needed by `sqlite-vec`), even
-though the identical build works fine on a local dev Mac — an
-environment-specific gap, not a code bug. Deferred, recorded in
-ROADMAP.md: the release workflow has no tag/version assertion, no test
-gate before publish, and `upload-artifact@v7` against
-`download-artifact@v8`.
+Cut a release: push to `main`, then `git tag vX.Y.Z && git push origin
+vX.Y.Z`. `release.yml` builds, publishes via trusted-publisher OIDC
+(the `pypi` environment is restricted to `v*` tags, no reviewers), and
+cuts a GitHub release. The version lives once, in `mf/__init__.py`.
+The PyPI trusted-publisher registration is already done.
 
-One-time PyPI setup (already done as of the `v0.1.0` tag): register a
-pending trusted publisher at
-[pypi.org/manage/account/publishing](https://pypi.org/manage/account/publishing/)
-naming project `memoryfield`, owner `whit3rabbit`, repo `memoryfield`,
-workflow `release.yml`, environment `pypi`.
+CI (`test.yml`) runs pytest, ruff, and pyright with `uv sync --locked`,
+`uvx ruff@0.16.5`, `npx pyright@1.1.409`, and bare `pyright` so
+`pyrightconfig.json` is authoritative. Quirks:
 
-## Where things stand
+- `astral-sh/setup-uv` publishes only exact tags (`@v10` 404s). Pin
+  `@v10.0.1`-style and bump deliberately.
+- The macOS leg installs Python via Homebrew with
+  `UV_PYTHON_PREFERENCE: only-system`. uv-managed and
+  `actions/setup-python` builds there lack
+  `--enable-loadable-sqlite-extensions`, which `sqlite-vec` needs,
+  even though a local Mac works. Environment gap, not a code bug.
+- Deferred (ROADMAP.md): no tag/version assertion, no test gate before
+  publish, and `upload-artifact@v7` against `download-artifact@v8`.
 
-The eval matrix is complete: 6 baselines (grep, FTS5, TF-IDF, nomic,
-BGE-large, hybrid) times 2 domains (codebase, papers), 458 queries
-(lexical, paraphrased, no-answer). Full numbers and the current
-reading live in [docs/M0.5_REPORT.md](docs/M0.5_REPORT.md), generated
-by `eval/report.py` from `eval/results/summary.json`. Every real
-baseline except grep and TF-IDF clears 0.94 P@3: read that as the
-query set being at ceiling, not as a verdict on which retriever wins
-(gotcha 7). Don't hand-copy detailed numbers from the report into
-this file. That duplication went stale before (gotcha 1).
+## Gotchas
 
-A third domain exists since 2026-09-02: Cal Paterson's soapstones
-export (95 real pages by other people's agents, fetched, never
-committed) with 28 blind queries in `eval/queries/soapstones/`. It is
-a stress test of the shipped pipeline, not a calibration set; the
-numbers live in docs/BENCHMARKS.md section 5.
+Numbers are stable IDs cited from ROADMAP.md, docs/architecture.md,
+and the reports. Gaps (12, 23, 28, 49, 50) are deleted or merged
+records. The full trail behind each lives in ROADMAP.md under the
+item it cites.
 
-## Gotchas and lessons learned
+### Eval harness
 
-Organized by where they will bite next. Numbers are stable IDs cited
-from ROADMAP.md and the reports. Gaps (12, 23, 28) are deleted records
-of fixed bugs.
+1. Report prose must derive from computed values (`report.py`'s
+   `avg()`/`val()`), never from hand-written claims. Hardcoded prose
+   went stale once already.
+2. Embedding bugs show only at retrieval, never at corpus level.
+   Sanity-check one embedding's input text before trusting aggregate
+   numbers.
+3. fastembed adds the nomic query prefix implicitly but not BGE's.
+   Re-check the prefix convention when swapping models.
+4. Two fastembed `TextEmbedding` instances in one process can deadlock
+   (`recursive_mutex lock failed`). Run models as separate processes.
+5. `eval/baselines/dense_baseline.py` is the TF-IDF control.
+   `dense_real_baseline.py` is the real embedder.
+6. Top-k always returns k. No baseline abstains, so an empty-top-k
+   check is not a no-answer metric.
+7. Queries share an authoring process with the corpus, so in-vocabulary
+   scores are a best case. The soapstones fixture (gotcha 29) is the
+   only corpus outside it, and usable-answer rate drops to 0.75 there
+   (BENCHMARKS.md 5).
+8. De-biased stub labels ("stub has the answer") are more permissive
+   than the original ("agent wouldn't need the body"). Lead with the
+   de-biased one, PLAN.md section 6 depends on it (M0.5 report,
+   spot-check section).
+9. Subagent-generated labels (paraphrases, tags, de-bias judgments)
+   cannot be regenerated identically. `eval/build_corpus.py`
+   overwrites `eval/queries/*/queries.jsonl` on every run, so `git
+   checkout` those files after regenerating the corpus.
+10. Every single-baseline run overwrites `summary.json`. Rebuild it
+    from the `metrics` entry of each
+    `eval/results/{baseline}_{domain}.json`.
+11. Never run the full baseline suite in the foreground (15 to 45
+    minutes). Use the Bash tool's `run_in_background`, not manual
+    `nohup`, so completion is tracked.
+17. A computed metric nobody reads hides its own bugs
+    (`stub_end_given_hit_rate` was silently 1.0 everywhere). If a
+    field is not wired into the report, verify it directly.
+18. Re-derive any "0% false positive" calibration result a second way
+    before it becomes a constant. A scale mismatch once turned 13.3%
+    into a clean 0%.
+47. Never cache embeddings per script with a hardcoded model. Call
+    `mf.embedder.embed_query`, which caches per `model_code` and
+    follows the field's model.
 
-### Eval harness gotchas
+### Retrieval and calibration
 
-1. **A report generator's hardcoded prose goes stale like a commit
-   message.** `report.py`'s `substantive_findings()` claimed "FTS
-   wins" after a bug fix flipped the numbers, right above a table
-   proving otherwise. Prefer prose derived from computed values (its
-   `avg()`/`val()` helpers) over hand-written claims.
+13. Ranking is dense-first since 2.6. FTS runs on every query as a
+    gate signal and is the result set only when `vec` is empty.
+    Earlier decisions: ROADMAP.md 1.5 and 2.6.
+14. The vec table backs kNN neighbor stubs, write-time dedup, and the
+    FTS-empty fallback. Only ranking was ever contested.
+15. A raw bm25 floor cannot separate no-answer from real-answer
+    queries. The gate is three-signal since 2.7. Trade-off table in
+    `eval/calibrate_confidence.py`.
+16. `lint` is required infrastructure. Every quality number depends
+    on summary density, and density comes from writing discipline.
+25. The "0% false-high-confidence" claim did not hold on blind
+    phrasing (1.8). The dense fallback almost never fires, because
+    OR-joined `fts_query()` nearly always finds some overlap. A larger
+    blind no-answer sample is unclaimed follow-up.
+26. Search defaults `--limit 2 --neighbor-limit 0` are a measured cost
+    decision (ROADMAP.md 2.11). Only the lean call delivers PLAN.md
+    section 6's savings. Measure content tokens with
+    `eval/agent_trial_token_costs.py`, not the Agent tool's
+    `subagent_tokens`.
+27. The dedup gate (`DEDUP_THRESHOLD` = 0.10 cosine,
+    `eval/calibrate_dedup.py`) catches copies and light rewordings,
+    not thorough rewrites. About one in eight paraphrases passes.
+    Check labeled negatives against the whole corpus, not only their
+    anchor.
+32. Eval and `mf/` must compute a calibrated constant the same way
+    (cosine since schema v2). sqlite-vec
+    returns NULL for a zero vector's cosine distance: guard for it,
+    and never use zero base vectors in tests.
+34. Report per-domain numbers. A codebase gap of 0.85 against 1.0 hid
+    inside a two-domain average of 0.925.
+35. When two eval tasks measure the same pipeline under different
+    conditions, write the joint reading down. 1.8 and 1.9 each looked
+    fine and together undercut the savings case.
+36. Every retrieval constant so far was wrong on the next data set.
+    Before hardcoding one, run `eval/calibrate_confidence_blind.py`
+    (real `mf search`, blind queries, size sweep). Score the
+    top-1 the tool presents. Keep its `os._exit(0)` (gotcha 4).
+38. Default model `snowflake-arctic-embed-xs` (384-d), pinned per
+    field by `mf init --model`. `mf model list` shows the registry.
+    Open: `FLOOR`, `DENSE_FLOOR`, and `DEDUP_THRESHOLD` were calibrated
+    on nomic and never re-swept on it (architecture.md "Known gaps").
+44. Same prefix on both sides, too. `consolidate --plan` once compared
+    query-prefixed vectors against a document-to-document threshold.
+    Use `embedder.embed_document(s)`.
+46. `_TOKEN_RE` once dropped digits and non-Latin scripts, so the
+    `401`/`403` page was unreachable. Any tokenizer change gets the
+    calibrate_confidence_blind A/B first
+    (`eval/results/calibration_2026-09-03_audit.txt`).
 
-2. **Embedding bugs don't show up at the corpus level, only at
-   retrieval.** A one-line bug in the embedder input string silently
-   cost 30 points of dense recall on one domain. Sanity-check a single
-   embedding's text content before trusting aggregate numbers.
+### Page format and parsers
 
-3. **fastembed does not add the BGE query prefix for you.** It adds
-   the nomic prefix implicitly. BGE needs the same kind of asymmetric
-   prefix, but fastembed treats it as symmetric. Re-check the prefix
-   convention whenever you swap embedding models.
+19. Test a new parser against the real corpus (gotcha 29) before
+    trusting fixtures. `mf/page.py` passed its unit tests and rejected
+    most real pages, with `mf index` reporting "0 upserted" and no
+    reason.
+39. mf's parser quotes ambiguous values before YAML sees them, so
+    `title: API: the difference...` parses here and nowhere else
+    (upstream's tool, Obsidian, `yaml.safe_load`). `mf lint` reports
+    it as `spec-yaml`. Quote title, summary, and source.
+43. That quoting shim is a parser of its own, and it once broke block
+    scalars (`summary: |`). Feed it the real corpus and the spec's
+    full value grammar as fixtures.
 
-4. **fastembed's `TextEmbedding` is not thread-safe across two
-   instantiations in one process.** Loading nomic and bge together can
-   deadlock with `recursive_mutex lock failed`. Run them as separate
-   process invocations instead, confirmed working by running
-   `dense_bge` then `hybrid` as two sequential `run_baselines` calls.
+### Environment and tooling
 
-5. **TF-IDF is not dense.** `eval/baselines/dense_baseline.py` is
-   the TF-IDF control, not a real embedder. `dense_real_baseline.py` is
-   the real one. A TF-IDF vs FTS comparison says nothing about dense.
+20. Three Python environments coexist: system `python3`, `.venv`
+    (`uv run`, reflects source immediately), and the global tool
+    (`uv tool install --force .` to refresh). "Module not found" is
+    usually the wrong environment.
+21. `uv sync` resets the venv on each call. Put every `--extra` and
+    `--group` in one invocation.
+22. `pyrightconfig.json`'s `include` needs a manual entry for each
+    new top-level package. A missing entry silently skips the
+    directory.
+24. Several Claude Code sessions can run against this repo.
+    Check `git status` and mtimes before overwriting a changed file,
+    and `git ls-files` before treating one as committed. Confirm
+    commit scope when new work is entangled with pre-existing
+    uncommitted changes.
+33. `reads`, `co_read` links, and `claims` in `mf.sqlite3` come only
+    from tool calls, so rebuilding the index loses them.
+    `schema.migrate()` drops only derived tables and `mf index`
+    rebuilds them. Keep it that way when bumping the schema.
+37. **This repo is not a field. `notes/` is.** A root-level `mf init
+    && mf index` silently indexes `eval/corpus`, because `_SKIP_DIRS`
+    skips `raw` but not `eval`. Add `eval` there first if a root field
+    is ever wanted.
+40. MCP SDK v2: `from mcp.server import MCPServer`. The v1 `FastMCP`
+    import is a stub that raises. Check the installed version
+    (`mcp==2.1.1`) before trusting a sample.
+41. hatchling's sdist bundles every tracked file unless scoped.
+    `only-include = ["mf"]` fixes it. Verify any packaging change with
+    `uv build && tar tzf dist/*.tar.gz`.
+45. "Is the model downloaded?" must never instantiate the model
+    (gotcha 4's deadlock). `mf/models.py` probes the cache directory.
+    `get_embedder`'s cache fill is behind a lock because the MCP SDK
+    runs tools on threads.
+48. Tests are hermetic (no real model) except
+    `tests/test_token_regression.py`. Document any new exception in
+    its own docstring and in `conftest.py`'s.
 
-6. **Top-k always returns k.** An empty-top-k check is not a real
-   no-answer metric, since no baseline here has an abstention
-   mechanism.
+### Patterns worth reusing
 
-7. **The query set shares an authoring process with the corpus.**
-   Pages were written, then queries to match them, then paraphrases
-   from the queries. One vocabulary throughout, close to the best case
-   any retriever will see. High scores are conditional on that and on
-   the corpus's writing discipline, not portable to a sloppier corpus.
-   The soapstones fixture is the one corpus outside that process, and
-   the shipped gate's usable-answer rate drops from 0.85-0.90 to 0.75
-   on it, mostly because its summaries repeat the title.
+29. Real-corpus smoke test, cheaper than new fixtures. Clean up the
+    tmpdir when done:
 
-8. **De-biased stub labels use a more permissive bar than the original
-   author labels.** Original: "agent wouldn't need the body" (67 to
-   82%). De-biased: "stub has the answer" (99.1% of raw labels,
-   corrected given-hit range 0.69-0.87, the number the report uses).
-   Both are valid. Lead with the operational one, since PLAN.md
-   section 6's token-savings model depends on it. A 20-sample blind
-   spot-check agreed 18/20 (see the "Stub-sufficiency spot-check"
-   section of docs/M0.5_REPORT.md).
+    ```bash
+    tmpdir=$(mktemp -d) && cp eval/corpus/codebase/*.md "$tmpdir"/ && uv run python3 -m mf.cli init "$tmpdir" && uv run python3 -m mf.cli index "$tmpdir"
+    ```
 
-### Process gotchas
+    Foreign field: swap the `cp` for `uv run python3 -m mf.cli unpack
+    eval/fixtures/soapstones.memoryfield.zip "$tmpdir"` after
+    `fetch_soapstones.py`.
 
-9. **Subagent-generated labels can't be regenerated identically.**
-   Paraphrases, topical/entity tags, and stub-end de-bias judgments came
-   from background subagents at non-zero temperature. Paraphrase median
-   Jaccard similarity to the original is 0.29 (max 0.50), so they're
-   genuinely different wordings, not near-duplicates. Back up before
-   regenerating. `eval/build_corpus.py` overwrites
-   `eval/queries/*/queries.jsonl` on every run (it reproduces the corpus
-   byte-identically, the queries not): `git checkout` both files after
-   regenerating the corpus.
-
-10. **`summary.json` gets overwritten on every single-baseline run.**
-    `--baseline X --domain Y` writes only that one entry. To
-    reconstruct the full summary, pull
-    `json.loads(p.read_text())["metrics"]` from each
-    `eval/results/{baseline}_{domain}.json` (each is a full trace dump
-    with the summary entry nested under `metrics`) and write that list
-    back as `summary.json`. Verified byte-identical against the
-    committed original during the 1.1 restructure.
-
-11. **Don't run the full baseline suite in the foreground.** It runs
-    about 15 minutes for the fast baselines, 45 for BGE plus papers.
-    Background it with the Bash tool's `run_in_background: true`, not
-    manual `nohup ... &`: a manually-backgrounded process isn't
-    tracked, so there's no completion notification.
-
-### Plan-design gotchas (for M1 implementation)
-
-13. **Record of the 1.5 ranking decision, superseded by 2.6 (gotcha
-    36).** Symmetric RRF at equal weights had nothing to add once both
-    signals were near ceiling, so 1.5 shipped FTS-first. Since 2.6,
-    `mf/search.py` presents dense's top-k. FTS still runs on every
-    query as a gate signal and is the result set only when `vec` is
-    empty. Full decision trail in ROADMAP.md 1.5 and 2.6.
-
-14. **The vec table backs three features, not one.** It backs kNN
-    neighbor stubs, write-time dedup of paraphrased near-duplicates,
-    and fallback ranking when FTS returns nothing. Only the ranking
-    use was ever contested.
-
-15. **Record of the 1.4 gate decision, superseded by 2.7 (gotcha
-    36).** A floor on raw FTS bm25 score cannot separate no-answer
-    from real-answer queries on this corpus: their score ranges
-    overlap almost completely (gotcha 7's ceiling effect on a new
-    axis). 1.4 used normalized bm25 plus FTS/dense top-1 agreement.
-    The current gate is three-signal (ROADMAP.md 2.7). See
-    `eval/calibrate_confidence.py` for the trade-off table and gotcha
-    18 for a bug caught mid-calibration.
-
-16. **`lint` is required infrastructure, not a nice-to-have.** Every
-    quality number in this eval holds because page summaries are
-    information-dense, and that density comes from writing discipline.
-    If `lint` (PLAN.md section 5) isn't enforced, retrieval quality
-    drifts, and the design verdicts change with it.
-
-17. **A metric that's computed but never read hides its own bugs.**
-    `stub_end_given_hit_rate` in `run_baselines.py` incremented its
-    hit counter and denominator together on every retrieval hit, so it
-    silently evaluated to exactly 1.0 across all 12 result files.
-    Unnoticed, because `report.py` never consumed the field. If a
-    computed field isn't wired into the report, verify it directly:
-    "it's in the JSON" means neither "correct" nor "used".
-
-18. **A "0% false-positive" calibration result is worth re-deriving
-    before trusting it.** A scale mismatch in an early gap check made
-    the check fire almost unconditionally and produced a clean-looking
-    0% false-high at floor=1.5. The real number was 13.3%. Caught by
-    re-deriving the same result a second way, not by code review. A
-    surprising "it just works" calibration result gets checked twice
-    before it becomes a hardcoded constant.
-
-19. **A parser that only ever sees synthetic test fixtures will pass
-    while rejecting most of the real corpus.** `mf/page.py`'s
-    frontmatter parser passed all its unit tests, then rejected
-    10-75+ pages per domain on the real 157-page corpus: this
-    project's own `"Topic: specific question"` title convention (an
-    unescaped `": "` in an unquoted value reads as a nested mapping)
-    and any value starting with a backtick both fail plain-scalar
-    YAML. `mf index` reported "0 upserted" with no indication why.
-    Test new parsers against the real corpus (gotcha 29's recipe)
-    before trusting hand-written fixtures.
-
-### Environment / tooling gotchas
-
-20. **Three different Python environments coexist for this repo:**
-    system `python3`, the project `.venv` (`uv sync`), and the global
-    tool install (`uv tool install .`). `uv run python3 -m mf.cli ...`
-    uses `.venv` and reflects source changes immediately. The
-    installed `mf` command does not, until you `uv tool install
-    --force .` again. A "module not found" error is often just the
-    wrong environment, not a missing dependency.
-
-21. **`uv sync --extra X` and `uv sync --group Y` don't compose across
-    separate calls**: each `uv sync` invocation resets the venv to
-    exactly what that invocation specifies. Running eval baselines and
-    the test suite together needs every extra and group in one `uv
-    sync` call, not two sequential ones.
-
-22. **`pyrightconfig.json`'s `include` list needs a manual update
-    whenever a new top-level package appears** (`mf`, `eval`, `tests`
-    so far). A missing entry doesn't error and silently skips
-    type-checking that directory, so a clean `pyright` run can hide
-    real problems in unlisted code.
-
-24. **This repo can have more than one Claude Code session running
-    against it at once.** Before assuming sole-writer state (especially
-    on shared files like `pyproject.toml`, `README.md`, or
-    `eval/run_baselines.py`), check `git status` and file mtimes. A
-    file that changed on disk since you last read it may be another
-    session's legitimate concurrent work, not corruption. Investigate
-    before overwriting it.
-
-### M1 calibration gotchas (surfaced by ROADMAP.md 1.8)
-
-25. **Record of the 1.8 blind-set finding, re-measured and largely
-    closed by 2.7 (gotcha 36).** The gate's "0% false-high-confidence"
-    claim was calibrated against a no-answer set sharing the corpus's
-    vocabulary and did not hold under blind phrasing: "GDPR deletion
-    request process for customer data" (a genuine no-answer query)
-    returned `confidence: high` pointing at `code-dm-soft-delete`, a
-    topically-adjacent but wrong page, n=1/8. On the same set, the
-    dense fallback essentially never fired, because `fts_query()`'s
-    OR-joined tokenization almost always finds *some* lexical overlap,
-    and the bm25-floor gate absorbed the degradation instead, demoting
-    correct hits to `none` at roughly double the M0.5 rate. A larger
-    blind no-answer sample is unclaimed follow-up. See ROADMAP.md 1.8
-    and 2.7 for numbers and methodology.
-
-26. **Search defaults are a measured cost decision, not a
-    convenience.** Defaults are `--limit 2 --neighbor-limit 0`
-    (ROADMAP.md 2.11 addendum, measured matrix in
-    `eval/results/token_costs_2_11.txt`; 2.7's 3/1 pick was
-    re-measured at 1.75x raw and dropped). The 1.9 real-agent trial
-    (ROADMAP.md 1.9, `eval/agent_trial_1_9.md`) found the old
-    defaults (`--limit 5 --neighbor-limit 3`) cost 1014 tokens/task,
-    5.85x more than raw file exploration, while a lean call
-    (`--limit 1 --neighbor-limit 0`) cost 55 tokens/task, 3.2x less:
-    only the lean shape delivers PLAN.md section 6's modeled savings.
-    The same trial: the Agent tool's `subagent_tokens` figure is
-    useless for measuring this (~50k of per-agent-session overhead
-    swamps the mechanism's few hundred tokens), so isolate content
-    tokens directly (`eval/agent_trial_token_costs.py`). The skill
-    teaches the lean call.
-
-### M2 write-path gotchas
-
-27. **The dedup gate catches copies and light rewordings, not thorough
-    rewrites.** Calibrated by 2.10 on a 32-paraphrase labeled set
-    (`DEDUP_THRESHOLD` = 0.10 cosine, `eval/calibrate_dedup.py`):
-    paraphrase and genuinely-different distributions overlap, so about
-    one in eight paraphrases passes at any threshold that spares real
-    sibling pages, and a "sibling" written without seeing the corpus
-    is as likely to duplicate some *other* existing page as to be a
-    clean negative. Labeled negatives need checking against the whole
-    corpus, not just their anchor. A second signal to catch thorough
-    rewrites is not scheduled (docs/architecture.md records the
-    limit).
-
-### Phase 2 review gotchas
-
-32. **Any constant calibrated in the eval harness and consumed in
-    `mf/` must be computed the same way on both sides.** The nomic
-    agreement numbers behind the gate were calibrated on cosine while
-    the `vec0` table ran Euclidean L2 (fixed by 2.5, schema v2,
-    cosine). Second-order rule from the fix: a zero vector has no
-    cosine distance (sqlite-vec returns NULL), so the dedup gate needs
-    a NULL guard and test fixtures must not use zero vectors as base
-    vectors.
-
-33. **Not everything in `mf.sqlite3` is derived from the pages.** The
-    `reads` log, `co_read` rows in `links`, and `claims` accumulate
-    from tool calls and have no other source, so "delete the index and
-    rebuild" loses them. Upserts delete only the three typed link
-    kinds, never `co_read`. A removed page drops its `co_read` rows in
-    both directions. Since schema v3, a schema bump does not force that
-    loss: `schema.migrate()` drops only the derived tables and `mf
-    index` rebuilds them (`db.migrate_field`). Keep it that way when
-    bumping again.
-
-34. **A per-domain gap can hide inside a two-domain average.** 1.8's
-    blind-set headline reported FTS "flat" at 0.925, averaged across
-    domains. The codebase domain alone was 0.85 against nomic's 1.0
-    (MRR 0.79 vs 0.975, n=24). Report per-domain numbers whenever the
-    two domains stress different retrievers (codebase pages are
-    anchor-heavy, papers pages are prose-heavy).
-
-35. **Two measurements that each look fine can be bad together.** 1.8
-    found 45% of answerable blind queries returned `confidence: none`.
-    1.9 found 100% stub-end at 55 tokens/lookup, on deliberately
-    in-vocabulary tasks. Jointly: under realistic phrasing, about half
-    of lookups paid for the search, were told not to cite the result,
-    and fell back to raw exploration, undercutting PLAN.md section 6's
-    savings case (2.7's gate recut moved usable blind answers to
-    0.90/0.85). When two eval tasks measure the same pipeline under
-    different conditions, write the joint reading down.
-
-36. **Every retrieval decision so far was right on the data it had and
-    wrong on the next set.** Ranking: the plan said RRF, M0.5 said
-    FTS-first (both at ceiling, FTS cheaper), 2.6 measured through the
-    real pipeline on blind phrasing and dense-first beat both on every
-    cell, in-vocabulary included (RRF averages in FTS's noise). Gate:
-    1.4 calibrated a bm25 floor on the in-vocabulary no-answer set,
-    2.7 found it demoted 45% of blind answers and 80% of answers on a
-    10-page field (bm25's IDF term shrinks with N). The fix each time
-    was the same: run the *real* `mf search` code on a query set
-    authored without seeing the corpus, and sweep corpus size, before
-    hardcoding a constant. `eval/calibrate_confidence_blind.py` is the
-    template: it now embeds through `mf.embedder` with the field's
-    default model (`MF_CAL_MODEL` overrides) and takes domain names as
-    arguments. Two pitfalls from writing it: score "usable answer" with
-    the top-1 the tool actually *presents* (the FTS-scored and
-    dense-scored numbers differ on every low-confidence query), and
-    fastembed/onnxruntime aborts with `recursive_mutex lock failed` at
-    interpreter exit when a module-level model is torn down (gotcha
-    4's family), so the script flushes and `os._exit(0)`s.
-
-### Phase 4 dogfooding gotchas
-
-37. **This repo is not itself a field. `notes/` is.** A root-level
-    `mf init && mf index` here would silently sweep
-    `eval/corpus/{codebase,papers}` (157 real frontmattered pages of
-    calibration fixtures) into the field, because `_SKIP_DIRS`
-    excludes `raw` but not `eval`. Same silent-failure family as
-    gotchas 17 and 19: nothing errors, the wrong data quietly becomes
-    the corpus. If a root-level field is ever wanted, `eval` needs a
-    `_SKIP_DIRS` entry first.
-
-38. **Embedding model selection and dimension pinning
-    (`snowflake-arctic-embed-xs`).** `MODEL_REGISTRY`
-    (`mf/embedder.py`) defaults to `snowflake-arctic-embed-xs`
-    (384-d, ~170 MB), which benchmarked at 0.950 average blind Top-1
-    with a 33 ms cached load time (5.6x faster than Nomic v1.5) and
-    0.9 ms query latency, cutting vector DB storage in half.
-    `MODEL_REGISTRY` also supports `snowflake-arctic-embed-s` (384-d),
-    `bge-small-en-v1.5` (384-d), `bge-base-en-v1.5` (768-d),
-    `bge-large-en-v1.5` (1024-d), `nomic-embed-text-v1.5` (768-d),
-    `all-MiniLM-L6-v2` (384-d), and `jina-embeddings-v2-small-en`
-    (512-d). `mf model list` prints the table of models, speeds,
-    sizes, and cache status; `mf model install <name>` downloads and
-    warms a model ahead of time. When initializing a field,
-    `mf init --model <name>` pins the model and dimension into
-    `config`. Full benchmarks live in
-    [docs/BENCHMARKS.md](docs/BENCHMARKS.md). Open: `FLOOR`,
-    `DENSE_FLOOR`, and `DEDUP_THRESHOLD` were calibrated on nomic
-    distances (2.7, 2.10) and have not been re-swept on the arctic-xs
-    default; the soapstones run is the only measurement of the shipped
-    gate on it (docs/architecture.md "Known gaps").
-
-39. **mf's frontmatter parser is more lenient than every other reader,
-    and that leniency hid a 100% interop failure.** `mf/page.py` quotes
-    ambiguous values before YAML sees them, so `title: API: the
-    difference between 401 and 403` (this project's own convention) and
-    a backtick-leading summary parse here and nowhere else: upstream's
-    tool, Obsidian, and any plain `yaml.safe_load` reject them
-    (`ScannerError`). 157/157 eval corpus pages failed that way until
-    `eval/build_corpus.py` quoted title/summary/source (2026-09-02),
-    and the skill's reference.md used to say the unquoted form "is
-    fine". `mf lint` reports it as `spec-yaml`. Same family as gotcha
-    19, from the other side: a parser that accepts more than the format
-    lets pages drift out of the format without anyone noticing. The
-    spec itself is vendored at docs/upstream/SPEC.md, and Cal's real
-    95-page export (`eval/fetch_soapstones.py`) is the fixture that
-    caught this.
-
-### Phase 5 packaging gotchas
-
-40. **MCP Python SDK v2 renamed `FastMCP` to `MCPServer` and moved the
-    import path.** `from mcp.server.fastmcp import FastMCP` (the
-    widely-documented v1 API) is a stub in `mcp>=2` that raises
-    `ModuleNotFoundError` pointing at a migration guide, not a working
-    import. Use `from mcp.server import MCPServer` (`mf/mcp_server.py`,
-    ROADMAP.md 5.1). Confirm the installed SDK version (`mcp==2.1.1`
-    here) before trusting any mcp code sample, training-data or
-    otherwise.
-
-41. **hatchling's default sdist bundles every git-tracked file:**
-    `uv build` shipped the full eval corpus, every doc, and this
-    repo's own private `notes/raw/` session extracts into the source
-    distribution, since no `[tool.hatch.build.targets.sdist]` config
-    existed to scope it (the wheel was already scoped via `packages =
-    ["mf"]`). Same silent-failure family as gotcha 37. Fixed with
-    `only-include = ["mf"]` (ROADMAP.md 5.2); verify any future
-    packaging change with `uv build && tar tzf dist/*.tar.gz`.
-
-### 2026-09-03 audit gotchas
-
-43. **The quoting shim in `mf/page.py` is a parser of its own, and it
-    had the same blind spot as gotcha 19.** `_quote_ambiguous_values`
-    quoted every `key: value` line, including a block-scalar indicator
-    (`summary: |` became `summary: "|"`) and the lines indented under
-    it, so any page using a block scalar parsed as YAML nowhere and was
-    silently not a page. Same family as 19 and 39: anything that
-    rewrites text before a real parser sees it needs the real corpus
-    and the spec's full value grammar as fixtures, not the shapes the
-    author happened to write.
-
-44. **Any distance compared against a calibrated threshold must be
-    embedded on the same side of the model as the calibration was.**
-    `consolidate --plan` embedded raw entries with the *query* prefix
-    and compared them against `DEDUP_THRESHOLD`, calibrated
-    document-to-document. On an asymmetric model those vectors sit in
-    a different region. `embedder.embed_document(s)` exists for this.
-    Gotcha 32's rule (same metric both sides) has a second clause: same
-    prefix both sides.
-
-45. **"Is the model downloaded?" must never instantiate the model.**
-    `mf model list` constructed a fastembed `TextEmbedding` for all
-    eight registry entries in one process to ask whether each was
-    cached, which is gotcha 4's deadlock recipe and loaded up to 2.5 GB
-    of weights to print a table. `mf/models.py` probes the cache
-    directory instead. The same rule guards `get_embedder`: its cache
-    fill is behind a lock because the MCP SDK runs tools on threads.
-
-46. **The FTS tokenizer decides what the lexical arm can see, and it
-    was blind to digits.** `_TOKEN_RE` required a leading ASCII letter,
-    so `401`, `403`, version numbers, and every non-Latin script were
-    dropped before FTS ran. This repo's own "difference between 401
-    and 403" page was unreachable by its anchors. Re-swept
-    `eval/calibrate_confidence_blind.py` after widening it: the shipped
-    gate's numbers were identical before and after (both sweeps in
-    `eval/results/calibration_2026-09-03_audit.txt` and ROADMAP.md
-    6.1), and FTS-only top-1 rose on codebase. Any tokenizer change
-    gets that A/B before it lands.
-
-### Tooling patterns worth reusing
-
-29. **Quick real-corpus smoke test, cheaper than writing new
-    fixtures:** `tmpdir=$(mktemp -d) && cp eval/corpus/codebase/*.md
-    "$tmpdir"/ && uv run python3 -m mf.cli init "$tmpdir" && uv run
-    python3 -m mf.cli index "$tmpdir"`: catches gotcha-19-style
-    parser/behavior bugs synthetic fixtures miss. It caught real bugs
-    in 1.6, 1.8, 2.1, and 2.2. Clean up the tmpdir when done. For a
-    field this project did not write, swap the `cp` for `uv run
-    python3 -m mf.cli unpack eval/fixtures/soapstones.memoryfield.zip
-    "$tmpdir"` after `eval/fetch_soapstones.py`; it caught gotcha 39.
-
-30. **New `mf` subcommand pattern**, established by `read`, `write`,
-    `raw add`, `claim`, and `consolidate`: one module `mf/<verb>.py`
-    with a dataclass result type exposing `.as_dict()`, wired into
-    `mf/cli.py` via `_cmd_<verb>()` + `_render_<verb>_text()` + an
-    argparse subparser. Follow `mf/read.py` or `mf/write.py` as the
-    template for the next one.
-
-31. **sqlite-vec's `vec0` KNN queries expose a `distance` column**
-    (`SELECT page_uuid, distance FROM vec WHERE embedding MATCH ? AND
-    k = ?`), L2 by library default, cosine in this schema since v2.
-    `mf/search.py` never selects it, since ranking only needs the uuid
-    order. `mf/write.py`'s dedup gate does: it needs the actual
-    distance to compare against `DEDUP_THRESHOLD`. Worth knowing
-    before assuming it's unavailable.
-
-42. **Measure a dependency's real install cost before deciding core
-    vs optional:** build twice into a scratch tool dir
-    (`UV_TOOL_DIR=$(mktemp -d) uv tool install --force .`), once with
-    and once without the dependency, and diff the installed package
-    lists. Caught that `mcp` pulled in 14 packages (`cryptography`,
-    `starlette`, `uvicorn`, and their own trees) nothing in the core
-    CLI touches, moved to the `mcp` extra instead of shipping as a
-    hard dependency (ROADMAP.md 5.2).
+30. New subcommand pattern: `mf/<verb>.py` with a dataclass result
+    exposing `.as_dict()`, wired into `mf/cli.py` via `_cmd_<verb>()`,
+    `_render_<verb>_text()`, and a subparser. Template: `mf/read.py`.
+31. `vec0` KNN exposes a `distance` column (cosine since v2).
+    `mf/search.py` never selects it, `mf/write.py`'s dedup gate does.
+42. Measure a dependency's install cost before deciding core versus
+    optional: `UV_TOOL_DIR=$(mktemp -d) uv tool install --force .`
+    with and without it, then diff the package lists.
 
 ## Roadmap
 
-M0 through M4 are closed (eval matrix, read path, write path,
-hooks/imports, reranker cut). M5, consolidation and multi-writer, is
-in progress: `consolidate --plan`, `claim`, `contested` status, and
-the `notes/` dogfooding field are built, and 4.4 (co_read weighting
-in neighbor ranking, `MIN_CO_READ_WEIGHT` uncalibrated) landed
-2026-09-02. Remaining: consolidate idempotency across runs,
-pointer-entry expansion, and `write` auto-calling `claim`. M6, the
-MCP server (5.1) and packaging polish (5.2), landed 2026-09-02. Phase
-6 (2026-09-03) was a full audit pass: schema v3 with in-place
-migration, WAL, parser and tokenizer fixes, and 46 findings in all,
-recorded as ROADMAP.md 6.1 and gotchas 43-46. Full
-task detail, per-task decision records, and open debt
-(including 0.5's upstream frontmatter proposal, which now has a
-destination and still needs a human to send it) in
-[ROADMAP.md](ROADMAP.md).
-The milestone list is PLAN.md section 9.
+M0 to M4 and M6 are closed. M5 (consolidation, multi-writer) is in
+progress: `consolidate --plan`, `claim`, `contested`, and co_read
+neighbor weighting (`MIN_CO_READ_WEIGHT` uncalibrated) are built.
+Remaining: consolidate idempotency across runs, pointer-entry
+expansion, and `write` auto-calling `claim`.
 
-M4 reopen trigger: rerank only if a later blind set drops the real
-pipeline's top-1 under 0.8. Not triggered by the first foreign
-field (soapstones, 2026-09-02: dense-first blind top-1 0.90,
-docs/BENCHMARKS.md section 5).
+Phase 6 was a full audit
+(schema v3, WAL, parser and tokenizer fixes, ROADMAP.md 6.1). M4
+reopen trigger: rerank only if a later blind set drops the real
+pipeline's top-1 under 0.8.

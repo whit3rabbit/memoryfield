@@ -1,4 +1,4 @@
-# notes/ — mf's own operational memoryfield
+# notes/: mf's own operational memoryfield
 
 This directory is a real `mf` field (`mf.sqlite3` at its root), separate
 from the parent repo's source and from `../eval/corpus` (calibration

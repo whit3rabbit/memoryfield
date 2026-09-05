@@ -21,6 +21,8 @@ exchanging fields with other memoryfield tools.
 - `raw/` is the staging area for session extracts and pointers.
   Nothing indexes it. `mf consolidate --plan` reads it and proposes
   pages.
+- Commit the pages, not the index. `mf setup` writes the field's
+  `.gitignore` (`mf.sqlite3`, `mf.sqlite3-*`) on install.
 
 ## Writing pages
 
@@ -71,7 +73,7 @@ lint-field:
   steps:
     - uses: actions/checkout@v4
     - uses: astral-sh/setup-uv@v5
-    - run: uv tool install git+https://github.com/<you>/mf
+    - run: uv tool install memoryfield
     - run: mf lint --check .
 ```
 

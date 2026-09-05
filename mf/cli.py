@@ -2,7 +2,8 @@
 
 Every command is real: `init`/`index`/`search`/`read`/`write`/`claim`/
 `consolidate --plan`/`lint`/`pack`/`unpack`/`import`/`hook`/`raw add`/
-`model`/`mcp` (ROADMAP.md 1.3-1.6, 2.1-2.4, 3.1-3.2, 4.2-4.3, 5.1).
+`model`/`mcp`/`setup` (ROADMAP.md 1.3-1.6, 2.1-2.4, 3.1-3.2, 4.2-4.3,
+5.1, 5.3).
 
 One place turns failures into exit codes: `main()` maps every error a
 user can cause or fix (no field here, an old schema, a bad flag value,
@@ -10,7 +11,10 @@ a locked index, an unparsable page, a missing model) to a one-line
 `mf <cmd>: ...` on stderr and exit 1. Commands keep their own codes for
 outcomes that aren't errors: `write` 2 on a dedup block, `claim` 2 on a
 lost race, `search` 3 on a stale index, `unpack` 2 on a digest
-mismatch, `lint --check` 1 on findings. Hooks return 0 no matter what.
+mismatch, `lint --check` 1 on findings, `setup install`/`uninstall` 1
+when any file had to be skipped (unparsable JSON, a foreign skill dir,
+a conflicting Codex table), bare `setup` 1 outside a terminal. Hooks
+return 0 no matter what.
 """
 from __future__ import annotations
 
@@ -25,6 +29,7 @@ from pathlib import Path
 from mf import __version__, db, embedder, importers, indexer, schema
 from mf import claim as claim_mod
 from mf import consolidate as consolidate_mod
+from mf import harnesses as harnesses_mod
 from mf import hooks as hooks_mod
 from mf import lint as lint_mod
 from mf import models as models_mod
@@ -32,6 +37,7 @@ from mf import pack as pack_mod
 from mf import raw as raw_mod
 from mf import read as read_mod
 from mf import search as search_mod
+from mf import setup as setup_mod
 from mf import write as write_mod
 from mf.page import PageParseError
 from mf.schema import DEFAULT_MODEL_CODE
@@ -61,20 +67,58 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command")
 
     init_parser = subparsers.add_parser("init", help="create mf.sqlite3 in a field")
-    init_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+    init_parser.add_argument(
+        "dir", nargs="?", default=db.DEFAULT_FIELD_DIRNAME,
+        help="field directory (default: %(default)s)",
+    )
     init_parser.add_argument(
         "--model", choices=sorted(embedder.MODEL_REGISTRY), default=DEFAULT_MODEL_CODE,
         help="embedding model for this field; fixed at init (default: %(default)s)",
     )
+    init_parser.add_argument(
+        "--no-setup", action="store_true",
+        help="create the index only; skip the harness wizard that runs on a terminal",
+    )
+
+    setup_parser = subparsers.add_parser(
+        "setup", help="wire mf into a coding-agent harness (interactive with no subcommand)"
+    )
+    setup_sub = setup_parser.add_subparsers(dest="setup_command")
+    for verb, help_text in (
+        ("install", "write instructions, skill, MCP, and hooks for the chosen harnesses"),
+        ("uninstall", "remove what `setup install` wrote, leaving everything else"),
+    ):
+        sp = setup_sub.add_parser(verb, help=help_text)
+        sp.add_argument(
+            "--harness", nargs="+", required=True, choices=harnesses_mod.MENU_ORDER,
+            metavar="ID", help="one or more of: " + ", ".join(harnesses_mod.MENU_ORDER),
+        )
+        sp.add_argument("--instructions", action="store_true", help="the two-line block in CLAUDE.md/AGENTS.md")
+        sp.add_argument("--skill", action="store_true", help="the mf skill directory")
+        sp.add_argument("--mcp", action="store_true", help="an `mf mcp` server entry")
+        sp.add_argument("--hooks", action="store_true", help="Stop and SessionEnd hooks (Claude Code)")
+        sp.add_argument("--all-surfaces", action="store_true", help="every surface the harness supports")
+        sp.add_argument("--field", default="notes", help="field directory relative to --root (default: %(default)s)")
+        sp.add_argument("--root", default=".", help="project root (default: cwd)")
+        sp.add_argument("--dry-run", action="store_true", help="list what would change, write nothing")
+        sp.add_argument("--json", action="store_true", help="output JSON instead of text")
+    sp = setup_sub.add_parser("status", help="show what is installed for each harness")
+    sp.add_argument("--harness", nargs="+", choices=harnesses_mod.MENU_ORDER, metavar="ID", default=None)
+    sp.add_argument("--field", default="notes", help="field directory relative to --root (default: %(default)s)")
+    sp.add_argument("--root", default=".", help="project root (default: cwd)")
+    sp.add_argument("--json", action="store_true", help="output JSON instead of text")
+    sp = setup_sub.add_parser("prompt", help="print the prompt that has an agent seed the field")
+    sp.add_argument("--field", default="notes", help="field directory (default: %(default)s)")
+    sp.add_argument("--reference", default=None, help="path to the installed skill's reference.md")
 
     index_parser = subparsers.add_parser(
         "index", help="scan a field's pages into mf.sqlite3 (migrates a v2 index in place)"
     )
-    index_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+    index_parser.add_argument("dir", nargs="?", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
 
     search_parser = subparsers.add_parser("search", help="search a field")
     search_parser.add_argument("query", help="the search query text")
-    search_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    search_parser.add_argument("--field", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     search_parser.add_argument("--limit", type=int, default=search_mod.DEFAULT_LIMIT)
     search_parser.add_argument(
         "--neighbor-limit", type=int, default=search_mod.DEFAULT_NEIGHBOR_LIMIT
@@ -88,7 +132,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     read_parser = subparsers.add_parser("read", help="read a page's L1/L2 slice or a #section")
     read_parser.add_argument("refs", nargs="+", help="uuid or uuid#section, one or more")
-    read_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    read_parser.add_argument("--field", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     read_parser.add_argument("--tier", choices=read_mod.TIERS, default=None)
     read_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
@@ -98,7 +142,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="draft page: a path outside the field (copied in on a pass), a path "
              "inside it (indexed in place), or '-' for stdin (needs --dest)",
     )
-    write_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    write_parser.add_argument("--field", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     write_parser.add_argument(
         "--dest", metavar="NAME", default=None,
         help="filename inside the field to write the draft to (default: the draft's own name)",
@@ -116,7 +160,7 @@ def build_parser() -> argparse.ArgumentParser:
     claim_parser.add_argument("slug", help="the slug to claim (a page's filename stem)")
     claim_parser.add_argument("--by", required=True, metavar="WRITER", help="claimant identity")
     claim_parser.add_argument("--release", action="store_true", help="drop your own claim on the slug")
-    claim_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    claim_parser.add_argument("--field", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     claim_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     consolidate_parser = subparsers.add_parser(
@@ -126,7 +170,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--plan", action="store_true", required=True,
         help="required: consolidate only plans so far, it doesn't execute",
     )
-    consolidate_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    consolidate_parser.add_argument("--field", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     consolidate_parser.add_argument(
         "--threshold", type=float, default=consolidate_mod.REVIEW_THRESHOLD,
         help="cosine distance below which a candidate triggers review (default: %(default)s, untuned)",
@@ -134,13 +178,13 @@ def build_parser() -> argparse.ArgumentParser:
     consolidate_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     lint_parser = subparsers.add_parser("lint", help="check pages against the writing conventions")
-    lint_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+    lint_parser.add_argument("dir", nargs="?", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     lint_parser.add_argument("--check", action="store_true", help="exit 1 on any error or warning (CI)")
     lint_parser.add_argument("--all", action="store_true", help="also print info-level findings")
     lint_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     pack_parser = subparsers.add_parser("pack", help="archive a field as <name>.memoryfield.zip + .sha256")
-    pack_parser.add_argument("dir", nargs="?", default=".", help="field directory (default: cwd)")
+    pack_parser.add_argument("dir", nargs="?", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     pack_parser.add_argument("--out", default=None, help="archive path (default: ../<field name>.memoryfield.zip)")
     pack_parser.add_argument("--no-index", action="store_true", help="leave mf.sqlite3 out")
     pack_parser.add_argument("--no-raw", action="store_true", help="leave raw/ out")
@@ -164,14 +208,21 @@ def build_parser() -> argparse.ArgumentParser:
     ):
         sp = import_sub.add_parser(kind, help=help_text)
         sp.add_argument("src", help="source directory")
-        sp.add_argument("--field", default=".", help="field directory (default: cwd)")
+        sp.add_argument("--field", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
         sp.add_argument("--dry-run", action="store_true", help="list what would be written, write nothing")
         sp.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     hook_parser = subparsers.add_parser("hook", help="Claude Code hook handlers (read the hook JSON on stdin)")
     hook_sub = hook_parser.add_subparsers(dest="hook_command")
-    hook_sub.add_parser("stop", help="Stop hook: ask the agent to capture before finishing, once per session")
-    hook_sub.add_parser("session-end", help="SessionEnd hook: write a transcript pointer to raw/")
+    for name, help_text in (
+        ("stop", "Stop hook: ask the agent to capture before finishing, once per session"),
+        ("session-end", "SessionEnd hook: write a transcript pointer to raw/"),
+    ):
+        sp = hook_sub.add_parser(name, help=help_text)
+        sp.add_argument(
+            "--field", default=None,
+            help="field directory relative to the hook payload's cwd (default: the cwd itself)",
+        )
 
     raw_parser = subparsers.add_parser("raw", help="raw/ staging-area operations")
     raw_subparsers = raw_parser.add_subparsers(dest="raw_command")
@@ -179,7 +230,7 @@ def build_parser() -> argparse.ArgumentParser:
     raw_add_parser.add_argument(
         "text", nargs="?", default=None, help="text to append; reads stdin if omitted"
     )
-    raw_add_parser.add_argument("--field", default=".", help="field directory (default: cwd)")
+    raw_add_parser.add_argument("--field", default=None, help="field directory (default: the cwd if it is a field, else ./notes)")
     raw_add_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
     model_parser = subparsers.add_parser("model", help="list or download embedding models")
@@ -194,8 +245,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     model_install_parser.add_argument("--json", action="store_true", help="output JSON instead of text")
 
-    subparsers.add_parser(
+    mcp_parser = subparsers.add_parser(
         "mcp", help="run an MCP server wrapping search/read/write/raw_add (stdio transport)"
+    )
+    mcp_parser.add_argument(
+        "--field", default=None,
+        help="default field directory for every tool call (default: the cwd if it is a field, else ./notes)",
     )
     return parser
 
@@ -209,11 +264,59 @@ def _cmd_init(args: argparse.Namespace) -> int:
         sys.stderr.write(f"mf init: {e} already exists; nothing to do.\n")
         return 1
     print(f"Initialized empty field at {db_path} (model {args.model}, {entry['dim']}-d)")
-    return 0
+    if args.no_setup or not _on_a_terminal():
+        return 0
+    root = Path.cwd().resolve()
+    if field_dir != root and root not in field_dir.parents:
+        print("Run `mf setup` from the project root to wire a coding agent to this field.")
+        return 0
+    from mf import wizard  # lazy: pulls questionary and prompt_toolkit
+
+    rel = "." if field_dir == root else field_dir.relative_to(root).as_posix()
+    return wizard.run_wizard(root, wizard.QuestionaryPrompter(), field=rel)
+
+
+def _on_a_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _cmd_setup(args: argparse.Namespace) -> int:
+    sub = args.setup_command
+    if sub is None:
+        if not _on_a_terminal():
+            sys.stderr.write(
+                "mf setup: not a terminal; use `mf setup install --harness ... --field DIR` "
+                "(see `mf setup install --help`)\n"
+            )
+            return 1
+        from mf import wizard
+
+        return wizard.run_wizard(Path.cwd().resolve(), wizard.QuestionaryPrompter())
+    if sub == "prompt":
+        print(setup_mod.seeding_prompt(args.field, args.reference), end="")
+        return 0
+    if sub == "status":
+        result = setup_mod.status(Path(args.root), args.field, args.harness)
+        print(json.dumps(result.as_dict(), indent=2) if args.json else setup_mod.render_status_text(result))
+        return 0
+    surfaces = {
+        "instructions": args.instructions or args.all_surfaces,
+        "skill": args.skill or args.all_surfaces,
+        "mcp": args.mcp or args.all_surfaces,
+        "hooks": args.hooks or args.all_surfaces,
+    }
+    if not any(surfaces.values()):
+        sys.stderr.write(f"mf setup {sub}: pick at least one surface (--instructions, --skill, --mcp, --hooks, --all-surfaces)\n")
+        return 1
+    choices = setup_mod.SetupChoices(root=Path(args.root), field=args.field, harnesses=list(args.harness), **surfaces)
+    run = setup_mod.install if sub == "install" else setup_mod.uninstall
+    result = run(choices, dry_run=args.dry_run)
+    print(json.dumps(result.as_dict(), indent=2) if args.json else setup_mod.render_setup_text(result))
+    return 1 if result.failed else 0
 
 
 def _cmd_index(args: argparse.Namespace) -> int:
-    field_dir = Path(args.dir).resolve()
+    field_dir = db.resolve_field_dir(args.dir)
     migrated_from = db.migrate_field(field_dir)
     if migrated_from is not None:
         print(f"migrated index v{migrated_from} -> v{schema.SCHEMA_VERSION}")
@@ -262,7 +365,7 @@ def _render_text(result: search_mod.SearchResult) -> str:
 
 
 def _cmd_search(args: argparse.Namespace) -> int:
-    field_dir = Path(args.field).resolve()
+    field_dir = db.resolve_field_dir(args.field)
     conn = db.open_field(field_dir)
     try:
         result = search_mod.search(
@@ -295,7 +398,7 @@ def _render_read_text(results: list[read_mod.ReadResult]) -> str:
 
 
 def _cmd_read(args: argparse.Namespace) -> int:
-    field_dir = Path(args.field).resolve()
+    field_dir = db.resolve_field_dir(args.field)
     conn = db.open_field(field_dir)
     try:
         results = read_mod.read(conn, args.refs, tier=args.tier, field_dir=field_dir)
@@ -328,7 +431,7 @@ def _render_write_text(result: write_mod.WriteResult) -> str:
 
 
 def _cmd_write(args: argparse.Namespace) -> int:
-    field_dir = Path(args.field).resolve()
+    field_dir = db.resolve_field_dir(args.field)
     if args.path == "-" and not args.dest:
         sys.stderr.write("mf write: reading from stdin needs --dest NAME\n")
         return 1
@@ -384,7 +487,7 @@ def _render_claim_text(result: claim_mod.ClaimResult) -> str:
 
 
 def _cmd_claim(args: argparse.Namespace) -> int:
-    field_dir = Path(args.field).resolve()
+    field_dir = db.resolve_field_dir(args.field)
     conn = db.open_field(field_dir)
     try:
         if args.release:
@@ -416,7 +519,7 @@ def _render_consolidate_text(result: consolidate_mod.ConsolidatePlan) -> str:
 
 
 def _cmd_consolidate(args: argparse.Namespace) -> int:
-    field_dir = Path(args.field).resolve()
+    field_dir = db.resolve_field_dir(args.field)
     conn = db.open_field(field_dir)
     try:
         result = consolidate_mod.plan(field_dir, conn, threshold=args.threshold)
@@ -446,7 +549,7 @@ def _render_lint_text(result: lint_mod.LintResult, show_all: bool) -> str:
 
 
 def _cmd_lint(args: argparse.Namespace) -> int:
-    field_dir = Path(args.dir).resolve()
+    field_dir = db.resolve_field_dir(args.dir)
     conn = None
     try:
         conn = db.open_field(field_dir)
@@ -465,7 +568,7 @@ def _cmd_lint(args: argparse.Namespace) -> int:
 
 
 def _cmd_pack(args: argparse.Namespace) -> int:
-    field_dir = Path(args.dir).resolve()
+    field_dir = db.resolve_field_dir(args.dir)
     if not field_dir.is_dir():
         sys.stderr.write(f"mf pack: {field_dir} is not a directory\n")
         return 1
@@ -510,7 +613,7 @@ def _cmd_import(args: argparse.Namespace) -> int:
     if args.import_kind not in ("claude-memory", "wiki"):
         sys.stderr.write("mf import: expected a kind (claude-memory, wiki)\n")
         return 1
-    field_dir = Path(args.field).resolve()
+    field_dir = db.resolve_field_dir(args.field)
     src = Path(args.src)
     if not src.is_dir():
         sys.stderr.write(f"mf import: {src} is not a directory\n")
@@ -544,11 +647,11 @@ def _cmd_hook(args: argparse.Namespace) -> int:
     try:
         payload = hooks_mod.read_payload(sys.stdin)
         if args.hook_command == "stop":
-            result = hooks_mod.stop(payload)
+            result = hooks_mod.stop(payload, field=args.field)
             if result.output is not None:
                 print(json.dumps(result.output))
         else:
-            hooks_mod.session_end(payload)  # fire-and-forget; stdout isn't shown
+            hooks_mod.session_end(payload, field=args.field)  # fire-and-forget; stdout isn't shown
     except Exception as e:
         sys.stderr.write(f"mf hook {args.hook_command}: {type(e).__name__}: {e}\n")
     return 0
@@ -558,7 +661,7 @@ def _cmd_raw(args: argparse.Namespace) -> int:
     if args.raw_command != "add":
         sys.stderr.write("mf raw: expected a subcommand (add)\n")
         return 1
-    field_dir = Path(args.field).resolve()
+    field_dir = db.resolve_field_dir(args.field)
     db.open_field(field_dir).close()  # raw/ never touches the index; only used to validate the field exists
 
     text = args.text if args.text is not None else sys.stdin.read()
@@ -620,17 +723,16 @@ def _cmd_model(args: argparse.Namespace) -> int:
 
 
 def _cmd_mcp(args: argparse.Namespace) -> int:
-    del args  # no flags; the dispatch table passes them anyway
     try:
-        from mf import mcp_server  # lazy: mcp is an optional extra
+        from mf import mcp_server  # lazy: the server stack loads only for `mf mcp`
     except ImportError:
         sys.stderr.write(
-            "mf mcp: the mcp package isn't installed; run "
-            "`uv tool install 'memoryfield[mcp]'` (or `pip install 'memoryfield[mcp]'`) and retry\n"
+            "mf mcp: the mcp package isn't importable; reinstall with "
+            "`uv tool install --force memoryfield` (or `pipx reinstall memoryfield`) and retry\n"
         )
         return 1
 
-    mcp_server.main()
+    mcp_server.main(field=str(db.resolve_field_dir(args.field)))
     return 0
 
 
@@ -650,12 +752,13 @@ _COMMANDS: dict[str, Callable[[argparse.Namespace], int]] = {
     "raw": _cmd_raw,
     "model": _cmd_model,
     "mcp": _cmd_mcp,
+    "setup": _cmd_setup,
 }
 
 
 def _label(args: argparse.Namespace) -> str:
     parts = [args.command]
-    for attr in ("raw_command", "model_command", "hook_command"):
+    for attr in ("raw_command", "model_command", "hook_command", "setup_command"):
         value = getattr(args, attr, None)
         if value:
             parts.append(value)

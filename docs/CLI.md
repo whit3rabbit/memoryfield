@@ -10,7 +10,8 @@ Complete reference for all `mf` commands, flags, arguments, and JSON output stru
 
 | Command | Summary |
 |---|---|
-| [`mf init`](#mf-init) | Initialize a new memoryfield SQLite index (`mf.sqlite3`) |
+| [`mf init`](#mf-init) | Initialize a new memoryfield SQLite index (`mf.sqlite3`), then wire a coding agent on a terminal |
+| [`mf setup`](#mf-setup) | Install, uninstall, or inspect the instructions, skill, MCP entry, and hooks for a harness |
 | [`mf index`](#mf-index) | Incrementally index markdown pages into `mf.sqlite3` |
 | [`mf search`](#mf-search) | Perform stub-first semantic search with confidence gating |
 | [`mf read`](#mf-read) | Read tiered page sections (`L1`, `L2`, or `#section`) |
@@ -34,21 +35,74 @@ Complete reference for all `mf` commands, flags, arguments, and JSON output stru
 Create an empty `mf.sqlite3` index in the specified field directory, pinning the embedding model and vector dimension.
 
 ```bash
-mf init [DIR] [--model MODEL]
+mf init [DIR] [--model MODEL] [--no-setup]
 ```
+
+`DIR` defaults to `notes`, a subdirectory, so the project's own docs never become pages by accident. Every other command that takes a field looks at the cwd first and falls back to `./notes`, so `mf init` followed by `mf search "..."` from the project root just works. When stdin and stdout are a terminal and `DIR` is under the current directory, `mf init` continues into the [`mf setup`](#mf-setup) wizard after creating the index: pick the coding agents that use the project, pick what to install, review the plan, apply. Off a terminal (scripts, CI, hooks) or with `--no-setup`, it prints the one line below and stops, exactly as before.
 
 - **Arguments**:
-  - `DIR`: Target field directory (default: `.`)
+  - `DIR`: Target field directory (default: `notes`)
 - **Options**:
   - `--model <name>`: Embedding model to pin for this field (default: `snowflake-arctic-embed-xs`, 384-d). See [`mf model list`](#mf-model-list) for available models.
+  - `--no-setup`: Create the index only; never start the wizard.
 - **Exit codes**:
-  - `0`: Field initialized successfully.
-  - `1`: `mf.sqlite3` already exists.
+  - `0`: Field initialized successfully (and, on a terminal, the wizard finished or was declined).
+  - `1`: `mf.sqlite3` already exists, or the wizard had to skip a file it could not parse.
 
 ```console
-$ mf init ~/field --model snowflake-arctic-embed-xs
-Initialized empty field at ~/field/mf.sqlite3 (model snowflake-arctic-embed-xs, 384-d)
+$ mf init --model snowflake-arctic-embed-xs --no-setup
+Initialized empty field at /path/to/myapp/notes/mf.sqlite3 (model snowflake-arctic-embed-xs, 384-d)
 ```
+
+---
+
+### `mf setup`
+
+Wire mf into a project's coding-agent harness(es): the two-line instruction block, the mf skill, an `mf mcp` server entry, and (Claude Code) the Stop and SessionEnd hooks. Every write is idempotent and every file edit is a patch that leaves the rest of the file alone. Paths and config shapes come from [agent-config](https://github.com/whit3rabbit/agent-config) (vendored schema: `docs/upstream/agent-config-agents.json`), and the markers are that crate's, so it can recognize what mf wrote.
+
+```bash
+mf setup                                        # wizard (terminal only)
+mf setup install   --harness ID [ID ...] (--instructions|--skill|--mcp|--hooks|--all-surfaces) [--field DIR] [--root DIR] [--dry-run] [--json]
+mf setup uninstall --harness ID [ID ...] (--instructions|--skill|--mcp|--hooks|--all-surfaces) [--field DIR] [--root DIR] [--dry-run] [--json]
+mf setup status    [--harness ID ...] [--field DIR] [--root DIR] [--json]
+mf setup prompt    [--field DIR] [--reference PATH]
+```
+
+- **Harness ids**, in menu order: `claude`, `codex`, `cursor`, `copilot`, `opencode`, `gemini`, `antigravity`, `windsurf`, `amp`, `pi`. The other fifteen ids in the schema are shown in the wizard as "not yet".
+- **Surfaces per harness** (project-local scope):
+  - `instructions`: a fenced block in `CLAUDE.md` (claude), `AGENTS.md` (codex, opencode, amp, pi), `GEMINI.md` (gemini), `.github/copilot-instructions.md` (copilot), or a standalone `.agents/rules/mf.md` (antigravity) / `.windsurf/rules/mf.md` (windsurf). Cursor has no project instruction file upstream.
+  - `skill`: `SKILL.md` and `reference.md` under the harness's skills directory (`.claude/skills/mf/`, `.agents/skills/mf/` for codex, antigravity, and amp, `.cursor/skills/mf/`, `.github/skills/mf/`, `.opencode/skills/mf/`, `.gemini/skills/mf/`, `.windsurf/skills/mf/`, `.pi/skills/mf/`).
+  - `mcp`: an `mf` entry running `mf mcp --field DIR`. `mcpServers` JSON in `.mcp.json` (claude and copilot share it), `.cursor/mcp.json`, `.gemini/settings.json`, `.agents/mcp_config.json`, `.windsurf/mcp_config.json`, `.amp/settings.json`, `.pi/mcp.json`; the `mcp` key in `opencode.json`; a `[mcp_servers.mf]` table in `.codex/config.toml`. The server ships with the package, so the entry works as soon as it is written.
+  - `hooks`: Claude Code only, `.claude/settings.json`, `Stop` and `SessionEnd` groups running `mf hook ... --field DIR`.
+  - The field's `.gitignore` (`mf.sqlite3`, `mf.sqlite3-*`) is always written on install and removed on uninstall.
+- **Options**:
+  - `--field <dir>`: Field directory relative to `--root` (default: `notes`). `.` means the project root is the field, and the generated commands then carry no `--field`.
+  - `--root <dir>`: Project root (default: cwd). Harness files are written here.
+  - `--all-surfaces`: Every surface the harness supports.
+  - `--dry-run`: Print the plan, write nothing.
+  - `--reference <path>`: For `prompt`, the installed skill's `reference.md` the prompt should point at (default: `.claude/skills/mf/reference.md`).
+- **Actions** in the plan: `create`, `patch`, `unchanged`, `remove`, `SKIP`. A file that exists but cannot be parsed (a JSONC `opencode.json`, a `[mcp_servers.mf]` table with other content, a `SKILL.md` that is not mf's, an unbalanced fence) is skipped with the reason and left byte-identical. Uninstall removes a file only when nothing but mf's content was in it.
+- **Status states** per harness and surface: `installed`, `absent`, `unmanaged` (present, not what mf writes), `malformed` (cannot parse), `unsupported`.
+- **Exit codes**:
+  - `0`: Applied, or dry run, or declined in the wizard.
+  - `1`: At least one file was skipped; bare `mf setup` outside a terminal; no surface given; field outside the root.
+
+```console
+$ mf setup install --harness claude codex --all-surfaces --dry-run
+Would install for field notes under /path/to/myapp
+  create    CLAUDE.md  (instructions: claude)
+  create    .claude/skills/mf/SKILL.md  (skill: claude)
+  create    .claude/skills/mf/reference.md  (skill: claude)
+  create    .mcp.json  (mcp: claude)
+  create    .claude/settings.json  (hooks: claude)
+  create    AGENTS.md  (instructions: codex)
+  create    .agents/skills/mf/SKILL.md  (skill: codex)
+  create    .agents/skills/mf/reference.md  (skill: codex)
+  create    .codex/config.toml  (mcp: codex)
+  create    notes/.gitignore  (gitignore: field)
+```
+
+JSON shape for `install`/`uninstall`: `{"mode", "dry_run", "root", "field", "actions": [{"path", "surface", "harnesses", "action", "note"}], "warnings": [...], "failed"}`. For `status`: `{"root", "field", "field_initialized", "entries": [{"harness", "surface", "path", "state"}]}`.
 
 ---
 
@@ -68,7 +122,7 @@ mf index [DIR]
 ```
 
 - **Arguments**:
-  - `DIR`: Target field directory (default: `.`)
+  - `DIR`: Field directory (default: the cwd if it is a field, else `./notes`)
 - **Exit codes**:
   - `0`: Indexing complete.
   - `1`: `mf.sqlite3` not found (run `mf init` first).
@@ -91,7 +145,7 @@ mf search "<query>" [--field DIR] [--limit N] [--neighbor-limit N] [--budget N] 
 - **Arguments**:
   - `query`: The search query text.
 - **Options**:
-  - `--field <dir>`: Field directory (default: `.`).
+  - `--field <dir>`: Field directory (default: the cwd if it is a field, else `./notes`).
   - `--limit <n>`: Number of top result stubs to return (default: `2`).
   - `--neighbor-limit <n>`: Number of neighbor stubs per result (default: `0`).
   - `--budget <n>`: Maximum total token cap for the output.
@@ -130,7 +184,7 @@ mf read <uuid>[#section] ... [--field DIR] [--tier L1|L2] [--json]
   - `refs`: One or more page UUIDs, optionally with a `#section-slug` anchor.
 - **Options**:
   - `--tier <L1|L2>`: Escalation tier. `L1` returns the first section (default); `L2` returns all subsequent sections.
-  - `--field <dir>`: Field directory (default: `.`).
+  - `--field <dir>`: Field directory (default: the cwd if it is a field, else `./notes`).
   - `--json`: Output as JSON.
 
 ```console
@@ -156,7 +210,7 @@ mf write <path> [--field DIR] [--dest NAME] [--update UUID] [--force] [--json]
 - **Arguments**:
   - `path`: Path to draft markdown file (outside or inside field) or `-` for stdin.
 - **Options**:
-  - `--field <dir>`: Target field directory (default: `.`).
+  - `--field <dir>`: Field directory (default: the cwd if it is a field, else `./notes`).
   - `--dest <name>`: Destination filename inside the field (default: draft filename).
   - `--update <uuid>`: UUID this write intentionally updates (bypasses dedup check).
   - `--force`: Bypass near-duplicate check.
@@ -234,7 +288,7 @@ mf raw add [text] [--field DIR] [--json]
 - **Arguments**:
   - `text`: Freeform text to append (reads from stdin if omitted).
 - **Options**:
-  - `--field <dir>`: Field directory (default: `.`).
+  - `--field <dir>`: Field directory (default: the cwd if it is a field, else `./notes`).
   - `--json`: Output result as JSON.
 
 ```console
@@ -255,7 +309,7 @@ mf lint [DIR] [--check] [--all] [--json]
 ```
 
 - **Arguments**:
-  - `DIR`: Target field directory (default: `.`).
+  - `DIR`: Field directory (default: the cwd if it is a field, else `./notes`).
 - **Options**:
   - `--check`: Exit with code 1 if any `error` or `warning` is found (ideal for CI/git pre-commit).
   - `--all`: Also print `info`-level suggestions.
@@ -380,9 +434,11 @@ mf import wiki <dir> [--field DIR] [--dry-run] [--json]
 Handlers invoked by Claude Code hooks at session lifecycle events.
 
 ```bash
-mf hook stop          # Prompts agent to capture learnings before finishing session
-mf hook session-end   # Stages session metadata pointer into raw/ (<0.25s runtime)
+mf hook stop        [--field DIR]   # Prompts agent to capture learnings before finishing session
+mf hook session-end [--field DIR]   # Stages session metadata pointer into raw/ (<0.25s runtime)
 ```
+
+Claude Code runs hooks with `cwd` set to the project root. `--field DIR` joins `DIR` onto that cwd, so a field kept in a subdirectory (`notes/`) still fires. Without it, only a project whose root is the field does anything. `mf setup install --hooks` writes the flag for you.
 
 ---
 
@@ -390,24 +446,17 @@ mf hook session-end   # Stages session metadata pointer into raw/ (<0.25s runtim
 
 Run an MCP server (stdio transport) exposing `search`, `read`, `write`, and `raw_add` as tools.
 
-The `mcp` package is an optional extra, not a core dependency: `uv tool install .` (or a plain `pip install memoryfield`) doesn't pull in the MCP server stack (`mcp` plus its own dependency tree, cryptography, starlette, uvicorn, and friends), since most `mf` usage is the CLI or the Claude Code skill and never touches it. Install it with:
+The `mcp` package is a core dependency (ROADMAP.md 5.4), so a plain `uv tool install memoryfield` or `pipx install memoryfield` includes the server and the MCP entry [`mf setup`](#mf-setup) writes works as is. The server stack is imported only when `mf mcp` runs; every other command leaves it unloaded. If the package is missing from a broken install, `mf mcp` exits 1 with a message naming the reinstall command, not a traceback.
 
 ```bash
-uv tool install ".[mcp]"                 # from a checkout
-pip install "memoryfield[mcp]"
+mf mcp [--field DIR]
 ```
 
-Running `mf mcp` without the extra installed exits 1 with a message naming the install command, not a traceback.
+Each tool wraps the same library function the CLI command calls, and every tool takes an optional `field` argument resolved against the server process's cwd. A call that leaves it out uses the server's `--field` (default `"."`), so a project-level MCP entry can pin a subdirectory field with `mf mcp --field notes` and the agent never has to know where the field lives. `mf setup install --mcp` writes that entry.
 
-```bash
-mf mcp
-```
-
-Each tool wraps the same library function the CLI command calls, and every tool takes a `field` argument (default `"."`, resolved against the server process's cwd), matching the CLI's own `--field` default. There's no separate server-side field configuration to keep in sync: launch `mf mcp` from inside the field directory, or pass `field` per call.
-
-- `search(query, field=".", limit=2, neighbor_limit=0, budget=None, stale_ok=False)`: same gate and ranking as `mf search`. Returns `SearchResult.as_dict()`.
-- `read(refs, field=".", tier=None)`: `refs` is a list of `uuid` or `uuid#section`. Returns `{"results": [ReadResult.as_dict(), ...]}` (the CLI's own `--json` output is a bare array here, but MCP structured output must be a JSON object, so it's wrapped under `results`).
-- `write(text, dest, field=".", update=None, force=False)`: `text` is a draft's full frontmatter and body, `dest` is the filename to write it under inside the field. Returns `WriteResult.as_dict()`. A dedup-blocked draft comes back with `written: false` and a `duplicates` list, not an error.
-- `raw_add(text, field=".")`: appends a session extract to `raw/`. Returns `RawAddResult.as_dict()`.
+- `search(query, field=None, limit=2, neighbor_limit=0, budget=None, stale_ok=False)`: same gate and ranking as `mf search`. Returns `SearchResult.as_dict()`.
+- `read(refs, field=None, tier=None)`: `refs` is a list of `uuid` or `uuid#section`. Returns `{"results": [ReadResult.as_dict(), ...]}` (the CLI's own `--json` output is a bare array here, but MCP structured output must be a JSON object, so it's wrapped under `results`).
+- `write(text, dest, field=None, update=None, force=False)`: `text` is a draft's full frontmatter and body, `dest` is the filename to write it under inside the field. Returns `WriteResult.as_dict()`. A dedup-blocked draft comes back with `written: false` and a `duplicates` list, not an error.
+- `raw_add(text, field=None)`: appends a session extract to `raw/`. Returns `RawAddResult.as_dict()`.
 
 A caller-avoidable failure (no field at that path, a stale index, a ref that doesn't exist, a draft that fails validation, empty raw text, a stale result without `stale_ok`) is raised as an MCP `ToolError`. The message reaches the model as a normal tool result, not a crash.

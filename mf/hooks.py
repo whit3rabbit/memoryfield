@@ -74,12 +74,21 @@ class HookResult:
         return {"acted": self.acted, "output": self.output, "note": self.note}
 
 
-def _field_from(payload: dict) -> Path | None:
+def _field_from(payload: dict, field: str | None = None) -> Path | None:
+    """The field a hook payload refers to, or None.
+
+    Claude Code runs hooks with `cwd` set to the project root, not to
+    wherever the field lives. A project that keeps its field in a
+    subdirectory (this repo's `notes/`) passes `--field notes`, which is
+    joined onto the payload's cwd; without it, only a project whose root
+    is the field ever fires.
+    """
     cwd = payload.get("cwd")
     if not cwd:
         return None
-    field = Path(cwd)
-    return field if (field / DB_FILENAME).exists() else None
+    base = Path(cwd)
+    candidate = base / field if field else base
+    return candidate if (candidate / DB_FILENAME).exists() else None
 
 
 def _marker(session_id: str) -> Path:
@@ -133,12 +142,12 @@ def _transcript_shows_capture(payload: dict) -> bool:
     return False
 
 
-def stop(payload: dict) -> HookResult:
+def stop(payload: dict, field: str | None = None) -> HookResult:
     """Decide whether to ask the agent to capture before it stops."""
     if payload.get("stop_hook_active"):
         return HookResult(False, note="already continuing from a stop hook")
-    field = _field_from(payload)
-    if field is None:
+    field_dir = _field_from(payload, field)
+    if field_dir is None:
         return HookResult(False, note="cwd is not a field")
     session_id = str(payload.get("session_id") or "unknown")
     marker = _marker(session_id)
@@ -153,7 +162,7 @@ def stop(payload: dict) -> HookResult:
     return HookResult(True, output={
         "hookSpecificOutput": {
             "hookEventName": "Stop",
-            "additionalContext": STOP_GUIDANCE.format(field=field),
+            "additionalContext": STOP_GUIDANCE.format(field=field_dir),
         }
     })
 
@@ -171,12 +180,12 @@ def pointer_text(payload: dict, now: datetime | None = None) -> str:
     return "\n".join(lines) + "\n"
 
 
-def session_end(payload: dict) -> RawAddResult | None:
+def session_end(payload: dict, field: str | None = None) -> RawAddResult | None:
     """Append a pointer entry to raw/. None if cwd isn't a field."""
-    field = _field_from(payload)
-    if field is None:
+    field_dir = _field_from(payload, field)
+    if field_dir is None:
         return None
-    raw_dir = field / RAW_DIRNAME
+    raw_dir = field_dir / RAW_DIRNAME
     raw_dir.mkdir(exist_ok=True)
     session_id = str(payload.get("session_id") or "")
     needle = f"session_id: {session_id}\n"

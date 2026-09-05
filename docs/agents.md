@@ -20,21 +20,43 @@ it gets used. mf moves that cost to lookup time, measured at about 100
 tokens for a default search and 55 for a point lookup ([Benchmarks,
 section 4](BENCHMARKS.md#4-token-cost-benchmarks)).
 
-## Install the skill
+## Install with `mf setup`
 
-A Claude Code skill that teaches the lean calls, the confidence
-contract, and the write path ships in
-[.claude/skills/mf](../.claude/skills/mf). Copy the directory into
-your project's `.claude/skills/` to use mf there. The skill triggers
-whenever the working directory has an `mf.sqlite3`, or when the user
-asks for a memoryfield page.
+`mf init` from the project root creates the field at `notes/` and, on
+a terminal, walks through the rest: which coding agents use the project,
+and whether to install the instruction lines, the skill, an MCP
+entry, and (Claude Code) the hooks. `mf setup` reruns the wizard.
+`mf setup install`, `uninstall`, and `status` do the same without
+prompts. Every flag: [CLI reference](CLI.md#mf-setup).
 
-Two lines in the project's CLAUDE.md or AGENTS.md are enough on top of
-that:
+```bash
+mf setup install --harness claude --all-surfaces --field notes
+mf setup status
+```
+
+Ten harnesses are wired in this cut, in the wizard's menu order:
+Claude Code, Codex CLI, Cursor, GitHub Copilot, OpenCode, Gemini CLI,
+Google Antigravity, Windsurf, Amp, and Pi. Where each one keeps its
+files comes from [agent-config](https://github.com/whit3rabbit/agent-config),
+and the markers mf writes are that crate's, so the two tools can
+manage the same files. Hooks are Claude Code only for now: `mf hook`
+parses Claude Code's payload, and no other harness's hook payload has
+been verified.
+
+The skill itself teaches the lean calls, the confidence contract, and
+the write path. It ships inside the package (`mf/templates/skill/`),
+and the copy at [.claude/skills/mf](../.claude/skills/mf) is this
+repo's own install of it. Copying that directory into a project's
+`.claude/skills/` by hand still works. The skill triggers whenever
+the working directory has an `mf.sqlite3`, or when the user asks for a
+memoryfield page.
+
+The instruction surface is two lines in the project's CLAUDE.md or
+AGENTS.md, inside a fenced block so `uninstall` can find them again:
 
 ```
-Before exploring this codebase, run `mf search "<question>" --field .`.
-Before finishing, write what you learned as a page with `mf write`, or stage it with `mf raw add`.
+Before exploring this codebase, run `mf search "<question>" --field notes`.
+Before finishing, write what you learned as a page with `mf write <draft> --field notes`, or stage it with `mf raw add --field notes`.
 ```
 
 ## The lean-call contract
@@ -98,19 +120,25 @@ by `mf` itself, reading the hook JSON on stdin.
   staging area (session id, transcript path, end reason), never the
   transcript body. `mf consolidate --plan` reads those entries later.
 
-Add this to `.claude/settings.json` (or `settings.local.json`) in a
-project whose root is a field. It is the same snippet as the skill's
-reference.md, kept in both places so the skill stays self-contained
-when copied into another repo:
+`mf setup install --harness claude --hooks` writes them. By hand, add
+this to `.claude/settings.json` (or `settings.local.json`) at the
+project root. It is the same snippet as the skill's reference.md, kept
+in both places so the skill stays self-contained when copied into
+another repo:
 
 ```json
 {
   "hooks": {
-    "Stop": [{"hooks": [{"type": "command", "command": "mf hook stop"}]}],
-    "SessionEnd": [{"hooks": [{"type": "command", "command": "mf hook session-end"}]}]
+    "Stop": [{"hooks": [{"type": "command", "command": "mf hook stop --field notes"}]}],
+    "SessionEnd": [{"hooks": [{"type": "command", "command": "mf hook session-end --field notes"}]}]
   }
 }
 ```
+
+Claude Code runs hooks with cwd set to the project root, not to the
+field. `--field notes` joins the field onto that cwd. Without it, the
+hooks fire only in a project whose root is the field, and stay silent
+everywhere else.
 
 Use the installed `mf` binary in the hook command, not `uv run`.
 SessionEnd hooks share a 1.5-second budget, and the installed binary
@@ -123,8 +151,9 @@ than by parsing the transcript afterwards: [Architecture, section
 ## A worked example
 
 This repo's own `notes/` directory is a real field: an `mf.sqlite3`
-at its root, the two hooks wired in `notes/.claude/settings.json`, its
-own CLAUDE.md, and real `raw/` entries. The repo root is deliberately
+at its root, the two hooks wired in `notes/.claude/settings.json` (a
+session started inside `notes/`), its own CLAUDE.md, and real `raw/`
+entries. The repo root is deliberately
 not a field, because a root-level index would sweep the eval corpus in
 as memory. [Architecture, section 7](architecture.md#7-session-capture)
 has the detail.
@@ -134,5 +163,5 @@ has the detail.
 Every command takes `--json` and returns the shapes documented in the
 [CLI reference](CLI.md), so any agent that can run a subprocess can use
 mf today. `mf mcp` runs an MCP server (stdio) wrapping search, read,
-write, and raw add with the same JSON contract. It needs the `mcp`
-extra. See the [CLI reference](CLI.md#mf-mcp).
+write, and raw add with the same JSON contract. `mf setup install
+--mcp` writes the entry. See the [CLI reference](CLI.md#mf-mcp).

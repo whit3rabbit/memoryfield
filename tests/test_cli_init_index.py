@@ -80,3 +80,20 @@ def test_init_rejects_unknown_model(tmp_path, capsys):
     with pytest.raises(SystemExit):
         cli.main(["init", str(tmp_path), "--model", "nope"])
     assert "invalid choice" in capsys.readouterr().err
+
+
+def test_init_defaults_to_notes_and_other_commands_find_it(tmp_path, monkeypatch, capsys, fake_embeddings):
+    monkeypatch.chdir(tmp_path)
+    assert cli.main(["init", "--no-setup"]) == 0
+    assert (tmp_path / "notes" / "mf.sqlite3").exists()
+    assert "notes/mf.sqlite3" in capsys.readouterr().out
+    page = '---\nuuid: a\ntitle: "T"\nsummary: "S"\n---\n## Answer\nbody\n'
+    (tmp_path / "notes" / "a.md").write_text(page)
+    assert cli.main(["index"]) == 0
+    assert "1 upserted" in capsys.readouterr().out
+    assert cli.main(["search", "anything", "--json"]) == 0
+    assert '"uuid": "a"' in capsys.readouterr().out
+    assert cli.main(["lint"]) == 0
+    # An explicit path is never second-guessed.
+    assert cli.main(["search", "anything", "--field", "."]) == 1
+    assert "mf init" in capsys.readouterr().err

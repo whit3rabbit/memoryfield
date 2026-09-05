@@ -6,6 +6,7 @@ import io
 import json
 import os
 import zipfile
+from pathlib import Path
 
 import pytest
 
@@ -195,16 +196,25 @@ def test_cli_missing_subcommands_exit_1(capsys):
     assert cli.main(["import"]) == 1
 
 
-def test_cli_mcp_without_extra_exits_1(monkeypatch, capsys):
+def test_cli_mcp_without_package_exits_1(monkeypatch, capsys):
     import sys
 
     import mf
     # None in sys.modules makes the import raise ImportError, the same
-    # signal a missing `mcp` extra produces.
+    # signal a broken install without the `mcp` package produces.
     monkeypatch.setitem(sys.modules, "mf.mcp_server", None)
     monkeypatch.delattr(mf, "mcp_server", raising=False)
     assert cli.main(["mcp"]) == 1
-    assert "memoryfield[mcp]" in capsys.readouterr().err
+    assert "reinstall" in capsys.readouterr().err
+
+
+def test_cli_mcp_passes_field_to_server(monkeypatch):
+    mcp_server = pytest.importorskip("mf.mcp_server")
+    seen = {}
+    monkeypatch.setattr(mcp_server, "main", lambda field=".": seen.setdefault("field", field))
+    assert cli.main(["mcp", "--field", "notes"]) == 0
+    # Resolved against the cwd, so the server keeps working after a chdir.
+    assert seen == {"field": str(Path.cwd().resolve() / "notes")}
 
 
 def test_cli_locked_database_is_exit_1(field_factory, capsys, monkeypatch):

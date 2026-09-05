@@ -45,3 +45,14 @@ def test_open_field_refuses_other_schema_version(tmp_path):
     conn.close()
     with pytest.raises(db.SchemaVersionError, match="schema v1"):
         db.open_field(tmp_path)
+
+
+def test_resolve_field_dir_prefers_cwd_then_notes(tmp_path):
+    root = tmp_path / "project"
+    root.mkdir()
+    assert db.resolve_field_dir(None, root) == root
+    db.init_field(root / "notes")
+    assert db.resolve_field_dir(None, root) == root / "notes"
+    assert db.resolve_field_dir("elsewhere", root) == root / "elsewhere"
+    db.init_field(root)
+    assert db.resolve_field_dir(None, root) == root

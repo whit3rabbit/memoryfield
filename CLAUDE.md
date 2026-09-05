@@ -39,6 +39,7 @@ ruff check mf/ eval/ tests/               # lint, gated in CI
 npx --yes pyright <files>                 # typecheck, bare pyright is not on PATH
 uv sync --group dev                       # tests + eval in one venv, add --extra mlx in the same call (gotcha 21)
 uv run python3 eval/fetch_soapstones.py   # sha256-pinned interop fixture into gitignored eval/fixtures/, soapstones tests skip without it
+uv build && unzip -l dist/*.whl | grep templates   # the skill must ship inside the wheel (gotcha 52)
 ```
 
 Real-corpus smoke test: gotcha 29.
@@ -206,10 +207,12 @@ item it cites.
     from tool calls, so rebuilding the index loses them.
     `schema.migrate()` drops only derived tables and `mf index`
     rebuilds them. Keep it that way when bumping the schema.
-37. **This repo is not a field. `notes/` is.** A root-level `mf init
-    && mf index` silently indexes `eval/corpus`, because `_SKIP_DIRS`
-    skips `raw` but not `eval`. Add `eval` there first if a root field
-    is ever wanted.
+37. **This repo is not a field. `notes/` is.** `mf init .` at the root
+    followed by `mf index` silently indexes `eval/corpus`, because
+    `_SKIP_DIRS` skips `raw` but not `eval`. Add `eval` there first if
+    a root field is ever wanted. (`mf init` with no directory defaults
+    to `notes/` since 5.5, and other commands fall back to `./notes`
+    when the cwd is not a field.)
 40. MCP SDK v2: `from mcp.server import MCPServer`. The v1 `FastMCP`
     import is a stub that raises. Check the installed version
     (`mcp==2.1.1`) before trusting a sample.
@@ -223,6 +226,16 @@ item it cites.
 48. Tests are hermetic (no real model) except
     `tests/test_token_regression.py`. Document any new exception in
     its own docstring and in `conftest.py`'s.
+51. Claude Code runs hooks with cwd = the project root, so a field in
+    a subdirectory needs `mf hook ... --field DIR` or the hooks stay
+    silent. `mf setup install --hooks` writes the flag. The wizard's
+    `questionary` import is lazy and behind a TTY check: built without
+    a terminal it warns on stderr and `.ask()` raises `EOFError`, so
+    tests drive `mf/wizard.py` through a scripted `Prompter`.
+52. The skill's canonical copy is `mf/templates/skill/`. The one at
+    `.claude/skills/mf/` is this repo's install of it, and
+    `tests/test_skill_templates.py` fails when the two differ. Edit
+    the template, then copy.
 
 ### Patterns worth reusing
 
@@ -252,7 +265,11 @@ M0 to M4 and M6 are closed. M5 (consolidation, multi-writer) is in
 progress: `consolidate --plan`, `claim`, `contested`, and co_read
 neighbor weighting (`MIN_CO_READ_WEIGHT` uncalibrated) are built.
 Remaining: consolidate idempotency across runs, pointer-entry
-expansion, and `write` auto-calling `claim`.
+expansion, and `write` auto-calling `claim`. `mf setup` (ROADMAP.md
+5.3) wires ten harnesses from the vendored agent-config schema, and
+`mcp` is a core dependency again since 5.4 so the entry it writes
+works on a plain install. Hooks for harnesses other than Claude Code
+and the other fifteen ids are open.
 
 Phase 6 was a full audit
 (schema v3, WAL, parser and tokenizer fixes, ROADMAP.md 6.1). M4

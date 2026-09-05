@@ -43,10 +43,17 @@ Most lookups end at the stub.
 
 ## Install
 
-Python 3.11 or newer, installed through [uv](https://docs.astral.sh/uv/):
+Python 3.11 or newer. The package on PyPI is `memoryfield`, the
+command it installs is `mf`. Pick one:
 
 ```bash
-uv tool install .                        # from a checkout
+uv tool install memoryfield              # uv (https://docs.astral.sh/uv/)
+pipx install memoryfield                 # pipx
+```
+
+For the unreleased tip of `main`:
+
+```bash
 uv tool install git+https://github.com/whit3rabbit/memoryfield
 ```
 
@@ -55,28 +62,140 @@ The first search downloads the embedding model (default
 per field at `mf init`. Alternatives, and when to pick one:
 [docs/models.md](docs/models.md).
 
-`mf mcp` (an MCP server for `search`/`read`/`write`/`raw_add`) needs an
-extra: `uv tool install ".[mcp]"`. It's optional because most usage is
-the CLI directly or the Claude Code skill, and the MCP stack (roughly
-a dozen extra packages) isn't worth pulling in for those.
+That install includes `mf mcp`, an MCP server for
+`search`/`read`/`write`/`raw_add`, so the MCP entry the setup wizard
+writes works without a second install step.
+
+Working on mf itself? Install from your checkout instead. See
+[Development](#development).
 
 ## Quickstart
 
-Using this repo's eval corpus as sample pages:
+This walks through adding mf to a project you already have, with a
+coding agent writing the first pages from the code. The example
+project is this repo, and the field it builds is the real one at
+[notes/](notes/). The output is real, with paths shortened.
+
+### 1. Create the field and wire your agent
+
+From the project root:
 
 ```console
-$ mf init ~/field
-Initialized empty field at ~/field/mf.sqlite3 (model snowflake-arctic-embed-xs, 384-d)
+$ mf init
+Initialized empty field at /path/to/myapp/notes/mf.sqlite3 (model snowflake-arctic-embed-xs, 384-d)
+```
 
-$ cp eval/corpus/codebase/*.md ~/field/ && mf index ~/field
-75 upserted, 0 unchanged, 0 deleted
+The field defaults to `notes/`, a subdirectory, so the project's own
+Markdown never becomes memory by accident. Pass a directory to put it
+elsewhere. Every other command looks at the cwd first and falls back
+to `./notes`, so `mf search` from the project root finds it without a
+flag.
 
-$ mf search "how do we roll back a deploy" --field ~/field
-confidence: low
-- [code-deploy-rollback-cmd] Deploy: how to roll back a bad release
-    `kubectl rollout undo deployment/<service>`; rollback is a forward operation and takes ~90 seconds end-to-end.
-- [code-deploy-pre-checklist] Deploy: pre-deploy checklist
-    Tests green, migrations applied to staging, dashboards reviewed, on-call notified, rollback plan documented.
+On a terminal, `mf init` keeps going. It asks which coding agents use
+the project (Claude Code, Codex, Cursor, Copilot, OpenCode, Gemini
+CLI, Antigravity, Windsurf, Amp, Pi, with the ones it detects
+pre-checked), then what to install, then shows the plan and asks
+before writing anything:
+
+```console
+Would install for field notes under /path/to/myapp
+  create    CLAUDE.md  (instructions: claude)
+  create    .claude/skills/mf/SKILL.md  (skill: claude)
+  create    .claude/skills/mf/reference.md  (skill: claude)
+  create    .mcp.json  (mcp: claude)
+  create    .claude/settings.json  (hooks: claude)
+  create    AGENTS.md  (instructions: codex)
+  create    .agents/skills/mf/SKILL.md  (skill: codex)
+  create    .agents/skills/mf/reference.md  (skill: codex)
+  create    .codex/config.toml  (mcp: codex)
+  create    notes/.gitignore  (gitignore: field)
+```
+
+The instruction lines land in a fenced block, the skill is the same
+one this repo uses, the MCP entry runs the server that ships with the
+package, the hooks carry `--field notes`, and the field's `.gitignore`
+keeps the index out of git. Rerunning is a no-op.
+`mf setup` reruns the wizard later, and `mf setup install`,
+`uninstall`, and `status` do the same from a script. Pass
+`--no-setup` to get the old one-line `init`.
+
+The model is pinned per field at `init`, so read
+[docs/models.md](docs/models.md) first if the default is not what you
+want. Every harness path and flag: [docs/CLI.md](docs/CLI.md#mf-setup).
+
+### 2. Have the agent seed the field
+
+The wizard ends by printing this prompt, and `mf setup prompt` prints
+it again. Paste it into Claude Code, Codex, OpenCode, or whatever you
+run, from the project root:
+
+```
+Read .claude/skills/mf/reference.md, then explore this repo and seed the
+memoryfield in notes/. Write one page per question a new contributor
+would ask on day one: how to run the tests, how to run it locally, how a
+release or deploy happens, where config lives, and every gotcha you find
+in comments, CI config, or recent commits. Draft each page outside
+notes/ and add it with `mf write <draft> --field notes`. If write exits
+2, update the page it names instead of forcing. Run `mf lint --field
+notes` when you are done and fix what it reports.
+```
+
+Each page the agent produces looks like this. The summary is the
+answer, not the topic, because the summary is what `search` returns:
+
+```markdown
+---
+uuid: cut-release
+title: "Release: how a version reaches PyPI"
+summary: "Push to main, then `git tag vX.Y.Z && git push origin vX.Y.Z`. release.yml publishes via trusted-publisher OIDC; the version lives only in mf/__init__.py."
+status: active
+tags: [release, ci]
+source: CLAUDE.md
+---
+## Answer
+Bump `__version__` in `mf/__init__.py`, push to `main`, then tag ...
+
+## Don't
+Don't expect a test gate before publish. ...
+```
+
+```console
+$ mf write /tmp/cut-release.md --field notes
+Wrote cut-release to cut-release.md
+```
+
+`write` validates, checks for a near-duplicate, copies the draft in,
+and indexes it. When the agent tries to add a page that already
+exists under a different name, the gate stops it:
+
+```console
+$ mf write /tmp/running-tests.md --field notes
+mf write: 1 possible near-duplicate(s) found; not written.
+  - [run-tests] Tests: how to run the suite (distance 0.012)
+      `uv run pytest tests/ -q` from the repo root. Tests are hermetic (no model download) except tests/test_token_regression.py.
+Use --update <uuid> to update an existing page, or --force to write anyway.
+```
+
+Exit 2. The agent updates the existing page with `--update run-tests`
+or moves on. Nothing un-gated lands in the field.
+
+Already have notes? `mf import claude-memory <dir>` turns a Claude
+Code auto-memory directory into pages, and `mf import wiki <dir>`
+does the same for an index.md wiki. Both skip the gate, so run `mf
+lint` after. [docs/fields.md](docs/fields.md#importing-existing-notes).
+
+### 3. Search it
+
+Three pages in, the agent's next session starts with a lookup instead
+of a cold read of the tree:
+
+```console
+$ mf search "why does the mac CI job use brew python" --field notes
+confidence: high
+- [ci-macos-python] CI: why the macOS leg installs Python from Homebrew
+    sqlite-vec needs a Python built with --enable-loadable-sqlite-extensions. uv-managed and actions/setup-python builds on the macOS runner lack it, so test.yml uses Homebrew Python with UV_PYTHON_PREFERENCE=only-system.
+- [cut-release] Release: how a version reaches PyPI
+    Push to main, then `git tag vX.Y.Z && git push origin vX.Y.Z`. release.yml publishes via trusted-publisher OIDC; the version lives only in mf/__init__.py.
 ```
 
 Read the confidence line before the results:
@@ -86,16 +205,34 @@ Read the confidence line before the results:
   before quoting it.
 - `none`: do not cite it.
 
-The gate errs toward demotion, not overclaiming.
+The gate errs toward demotion. On a field this small, expect `low`
+often, even when the top stub is right:
 
-When the stub is not enough, `mf read <uuid>` returns the page's answer
-section, and `--tier L2` or `<uuid>#section` returns more.
+```console
+$ mf search "how do I run the tests" --field notes
+confidence: low
+- [run-tests] Tests: how to run the suite
+    `uv run pytest tests/ -q` from the repo root. Tests are hermetic (no model download) except tests/test_token_regression.py.
+- [ci-macos-python] CI: why the macOS leg installs Python from Homebrew
+    sqlite-vec needs a Python built with --enable-loadable-sqlite-extensions. uv-managed and actions/setup-python builds on the macOS runner lack it, so test.yml uses Homebrew Python with UV_PYTHON_PREFERENCE=only-system.
+```
 
-New pages go
-in through `mf write <draft> --field <dir>`, drafted outside the field.
-Exit 2 means a near-duplicate was flagged. The calling contract an
-agent should follow is in [docs/agents.md](docs/agents.md), and every
-flag is in [docs/CLI.md](docs/CLI.md#mf-write).
+When the stub is not enough, `mf read <uuid>` returns the page's
+answer section, and `--tier L2` or `<uuid>#section` returns more.
+
+### 4. Keep it alive
+
+The field pays off only if pages keep landing. Three things do that:
+
+- The instruction lines from step 1, so every session searches first
+  and writes last.
+- `mf lint --check notes` in a pre-commit hook and `mf index notes`
+  in post-commit. `search` refuses a stale index (exit 3) until
+  `index` runs. Snippets: [docs/fields.md](docs/fields.md#keeping-a-field-healthy).
+- For Claude Code, the `mf hook stop` and `mf hook session-end`
+  hooks the wizard wrote, which remind the agent to capture what it
+  learned and stage a transcript pointer for `mf consolidate --plan`.
+  [docs/agents.md](docs/agents.md#hooks).
 
 ## Design decisions
 
@@ -127,15 +264,16 @@ behind the links, not here, so they cannot drift.
 
 ## Using it with an agent
 
-A Claude Code skill that teaches the lean calls, the confidence
-contract, and the write path ships in
-[.claude/skills/mf](.claude/skills/mf). Copy it into your project's
-`.claude/skills/` to use mf there.
-
-Two hooks, `mf hook stop` and `mf hook session-end`, ask the agent to
-capture what it learned before it finishes and stage a transcript
-pointer for later consolidation. Setup, the hooks snippet, and the
-calling contract: [docs/agents.md](docs/agents.md).
+`mf init` on a terminal, or `mf setup` any time after, installs what
+each harness needs: the instruction lines, the skill that teaches the
+lean calls and the confidence contract
+([.claude/skills/mf](.claude/skills/mf) is this repo's own copy), an
+`mf mcp` entry, and for Claude Code the two hooks, `mf hook stop` and
+`mf hook session-end`, that ask the agent to capture what it learned
+before it finishes and stage a transcript pointer for later
+consolidation. Ten harnesses in this cut. Where each keeps its files
+comes from [agent-config](https://github.com/whit3rabbit/agent-config).
+The calling contract: [docs/agents.md](docs/agents.md).
 
 ## Commands
 
@@ -144,7 +282,8 @@ Full arguments, flags, exit codes, and JSON outputs are documented in
 
 | Command | What it does |
 |---|---|
-| `mf init [DIR]` | create `mf.sqlite3` in a field, pinning model and dimension |
+| `mf init [DIR]` | create `mf.sqlite3` in a field (default `notes/`), pinning model and dimension, then wire a coding agent on a terminal |
+| `mf setup` | install, uninstall, or inspect a harness's instructions, skill, MCP entry, and hooks |
 | `mf index [DIR]` | scan the field's pages into the index |
 | `mf search "<query>"` | stub-first lookup with the confidence gate |
 | `mf read <uuid>[#section] ...` | read the answer section, one section, or L2 |
@@ -196,10 +335,16 @@ uv run python3 -m eval.calibrate_confidence_blind soapstones   # ranking and gat
 
 ## Development
 
+From a checkout of this repo:
+
 ```bash
 uv sync --group dev
 uv run pytest tests/
+uv tool install --force .                # the global `mf` from this checkout
 ```
+
+`uv run mf ...` picks up source changes immediately. The global tool
+does not, so rerun `uv tool install --force .` after editing.
 
 `uv sync` calls do not compose: each one resets the venv to exactly
 what that call specifies. Pass every extra and group you need in

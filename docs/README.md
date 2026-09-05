@@ -11,7 +11,7 @@ evidence behind each retrieval decision.
 
 | I want to... | Read |
 |---|---|
-| Run a first search | [Quickstart](../README.md#quickstart) in the project README |
+| Add mf to a project and have an agent seed the field | [Quickstart](../README.md#quickstart) in the project README |
 | Use mf from Claude Code | [Agents](agents.md) |
 | Look up a flag, exit code, or JSON shape | [CLI reference](CLI.md) |
 | Pick or change the embedding model | [Models](models.md) |
@@ -64,6 +64,10 @@ Three files in this directory are not hand-edited:
   `eval/`. It stays as the record.
 - `upstream/SPEC.md` is Cal Paterson's memoryfield spec, vendored
   verbatim.
+- `upstream/agent-config-agents.json` is the harness path schema from
+  whit3rabbit/agent-config, vendored verbatim. `upstream/agent-config-agents.md`
+  records the version and date, and `tests/test_harnesses.py` checks
+  `mf/harnesses.py` against it.
 
 The CLI is the source of truth for flags in the installed version:
 

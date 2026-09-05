@@ -74,7 +74,7 @@ def test_marker_path_never_leaves_the_temp_dir(tmp_path, monkeypatch):
 
 def test_cli_hook_never_raises(tmp_path, monkeypatch, capsys):
     field = _field(tmp_path)
-    monkeypatch.setattr(hooks, "session_end", lambda payload: (_ for _ in ()).throw(OSError("disk full")))
+    monkeypatch.setattr(hooks, "session_end", lambda payload, **kw: (_ for _ in ()).throw(OSError("disk full")))
     monkeypatch.setattr("sys.stdin", io.StringIO(json.dumps(_payload(field))))
     assert cli.main(["hook", "session-end"]) == 0
     assert "disk full" in capsys.readouterr().err
@@ -105,3 +105,23 @@ def test_cli_hook_stop_and_session_end(tmp_path, monkeypatch, capsys):
     assert list((field / "raw").glob("*-session.md"))
     monkeypatch.setattr("sys.stdin", io.StringIO("not json"))
     assert cli.main(["hook", "stop"]) == 0  # malformed payload: silent no-op
+
+
+def test_field_flag_joins_onto_payload_cwd(tmp_path, monkeypatch, capsys):
+    # Claude Code runs hooks with cwd = project root; the field is notes/.
+    monkeypatch.setattr(hooks.tempfile, "gettempdir", lambda: str(tmp_path))
+    root = tmp_path / "project"
+    root.mkdir()
+    db.init_field(root / "notes")
+    payload = {"session_id": "sess-2", "cwd": str(root), "transcript_path": str(tmp_path / "t.jsonl")}
+    assert hooks.stop(payload).acted is False
+    assert hooks.session_end(payload) is None
+    r = hooks.stop(payload, field="notes")
+    assert r.acted is True and r.output is not None
+    assert str(root / "notes") in r.output["hookSpecificOutput"]["additionalContext"]
+    assert hooks.stop(payload, field="elsewhere").acted is False
+    end = hooks.session_end(payload, field="notes")
+    assert end is not None and end.path.parent == root / "notes" / "raw"
+    monkeypatch.setattr("sys.stdin", io.StringIO(json.dumps({**payload, "session_id": "sess-3"})))
+    assert cli.main(["hook", "stop", "--field", "notes"]) == 0
+    assert "additionalContext" in json.loads(capsys.readouterr().out)["hookSpecificOutput"]

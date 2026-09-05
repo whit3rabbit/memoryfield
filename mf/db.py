@@ -28,6 +28,25 @@ from . import schema
 from .embedder import registry_entry
 
 DB_FILENAME = "mf.sqlite3"
+# Where `mf init` puts a field when no directory is given, and where
+# every other command looks when the cwd itself is not a field.
+DEFAULT_FIELD_DIRNAME = "notes"
+
+
+def resolve_field_dir(value: str | None, cwd: Path | None = None) -> Path:
+    """The field a command should use when `--field`/DIR was left at its
+    default. The cwd wins if it is a field, then `cwd/notes` if that
+    is one, else the cwd (so the error names the directory the user is
+    in). An explicit value is resolved as given, no guessing."""
+    base = (cwd or Path.cwd()).resolve()
+    if value is not None:
+        return (base / value).resolve()
+    if (base / DB_FILENAME).exists():
+        return base
+    candidate = base / DEFAULT_FIELD_DIRNAME
+    if (candidate / DB_FILENAME).exists():
+        return candidate
+    return base
 BUSY_TIMEOUT_S = 30
 
 

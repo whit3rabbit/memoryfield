@@ -17,10 +17,11 @@ dedup gate is not an error in that sense — like the CLI, a blocked
 write returns normally with `written: false` and the candidate list in
 `duplicates`.
 
-Every tool takes `field` (default ".", resolved against the server
-process's cwd), matching the CLI's own `--field` default — same
-semantics, no separate server-side field configuration to keep in
-sync. One server process serves one embedding model: the SDK runs these
+Every tool takes `field`, resolved against the server process's cwd.
+When a call leaves it out, the server's own `--field` (default ".")
+applies, so a project-level MCP entry can pin a subdirectory field
+with `mf mcp --field notes` and the agent never has to know where the
+field lives. One server process serves one embedding model: the SDK runs these
 sync tools on worker threads, and mf's model cache serializes loading,
 so two fields pinned to different models through one server would
 load both models into one process (CLAUDE.md gotcha 4).
@@ -46,9 +47,18 @@ mcp = MCPServer("mf")
 
 T = TypeVar("T")
 
+# Set once by `main(field=...)` from `mf mcp --field`; a per-call `field`
+# still wins. Module state rather than a closure so tests can pin it.
+_DEFAULT_FIELD = "."
 
-def _open(field: str) -> tuple[Path, Connection]:
-    field_dir = Path(field).resolve()
+
+def set_default_field(field: str) -> None:
+    global _DEFAULT_FIELD
+    _DEFAULT_FIELD = str(Path(field).resolve())
+
+
+def _open(field: str | None) -> tuple[Path, Connection]:
+    field_dir = Path(field or _DEFAULT_FIELD).resolve()
     try:
         conn = db.open_field(field_dir)
     except (db.FieldNotFoundError, db.SchemaVersionError) as e:
@@ -69,7 +79,7 @@ def _guarded(fn: Callable[[], T]) -> T:
 @mcp.tool()
 def search(
     query: str,
-    field: str = ".",
+    field: str | None = None,
     limit: int = search_mod.DEFAULT_LIMIT,
     neighbor_limit: int = search_mod.DEFAULT_NEIGHBOR_LIMIT,
     budget: int | None = None,
@@ -96,7 +106,7 @@ def search(
 
 
 @mcp.tool()
-def read(refs: list[str], field: str = ".", tier: str | None = None) -> dict[str, Any]:
+def read(refs: list[str], field: str | None = None, tier: str | None = None) -> dict[str, Any]:
     """Read one or more refs (uuid, or uuid#section) at tier L1|L2.
     A bare uuid with no tier defaults to L1. Batch related refs into one
     call so the co_read signal (used by search's neighbor ranking) fires."""
@@ -121,7 +131,7 @@ def read(refs: list[str], field: str = ".", tier: str | None = None) -> dict[str
 def write(
     text: str,
     dest: str,
-    field: str = ".",
+    field: str | None = None,
     update: str | None = None,
     force: bool = False,
 ) -> dict[str, Any]:
@@ -142,7 +152,7 @@ def write(
 
 
 @mcp.tool()
-def raw_add(text: str, field: str = ".") -> dict[str, Any]:
+def raw_add(text: str, field: str | None = None) -> dict[str, Any]:
     """Append a session extract to raw/ for a later `mf consolidate --plan`
     pass, rather than writing a page directly. Duplicate of the most
     recent entry is a silent no-op (retried/racing hook, not new)."""
@@ -151,5 +161,6 @@ def raw_add(text: str, field: str = ".") -> dict[str, Any]:
     return _guarded(lambda: raw_mod.add_raw(field_dir, text).as_dict())
 
 
-def main() -> None:
+def main(field: str = ".") -> None:
+    set_default_field(field)
     mcp.run(transport="stdio")

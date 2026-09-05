@@ -68,8 +68,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     init_parser = subparsers.add_parser("init", help="create mf.sqlite3 in a field")
     init_parser.add_argument(
-        "dir", nargs="?", default=db.DEFAULT_FIELD_DIRNAME,
-        help="field directory (default: %(default)s)",
+        "dir", nargs="?", default=None,
+        help=f"field directory (default: {db.DEFAULT_FIELD_DIRNAME})",
     )
     init_parser.add_argument(
         "--model", choices=sorted(embedder.MODEL_REGISTRY), default=DEFAULT_MODEL_CODE,
@@ -256,24 +256,35 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _cmd_init(args: argparse.Namespace) -> int:
-    field_dir = Path(args.dir).resolve()
     entry = embedder.registry_entry(args.model)
-    try:
-        db_path = db.init_field(field_dir, model_code=args.model, embedding_dim=entry["dim"])
-    except db.FieldExistsError as e:
-        sys.stderr.write(f"mf init: {e} already exists; nothing to do.\n")
-        return 1
-    print(f"Initialized empty field at {db_path} (model {args.model}, {entry['dim']}-d)")
-    if args.no_setup or not _on_a_terminal():
-        return 0
     root = Path.cwd().resolve()
-    if field_dir != root and root not in field_dir.parents:
-        print("Run `mf setup` from the project root to wire a coding agent to this field.")
+    if args.no_setup or not _on_a_terminal():
+        field_dir = Path(args.dir or db.DEFAULT_FIELD_DIRNAME).resolve()
+        try:
+            db_path = db.init_field(field_dir, model_code=args.model, embedding_dim=entry["dim"])
+        except db.FieldExistsError as e:
+            sys.stderr.write(f"mf init: {e} already exists; nothing to do.\n")
+            return 1
+        print(f"Initialized empty field at {db_path} (model {args.model}, {entry['dim']}-d)")
         return 0
+
     from mf import wizard  # lazy: pulls questionary and prompt_toolkit
 
-    rel = "." if field_dir == root else field_dir.relative_to(root).as_posix()
-    return wizard.run_wizard(root, wizard.QuestionaryPrompter(), field=rel)
+    if args.dir is not None:
+        field_dir = Path(args.dir).resolve()
+        try:
+            db_path = db.init_field(field_dir, model_code=args.model, embedding_dim=entry["dim"])
+        except db.FieldExistsError as e:
+            sys.stderr.write(f"mf init: {e} already exists; nothing to do.\n")
+            return 1
+        print(f"Initialized empty field at {db_path} (model {args.model}, {entry['dim']}-d)")
+        if field_dir != root and root not in field_dir.parents:
+            print("Run `mf setup` from the project root to wire a coding agent to this field.")
+            return 0
+        rel = "." if field_dir == root else field_dir.relative_to(root).as_posix()
+        return wizard.run_wizard(root, wizard.QuestionaryPrompter(), field=rel, model_code=args.model)
+
+    return wizard.run_wizard(root, wizard.QuestionaryPrompter(), field=None, model_code=args.model, is_init=True)
 
 
 def _on_a_terminal() -> bool:

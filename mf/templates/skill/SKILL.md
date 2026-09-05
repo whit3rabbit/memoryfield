@@ -14,11 +14,11 @@ before writing a page.
 
 ## Do
 
-- **Search before you explore.** `mf search "<question>" --field <dir>`
-  (defaults: 2 stubs, no neighbors, about 100 tokens). `--limit 1` for
-  a point lookup you're sure of (55 tokens). Widen (`--limit 3`,
-  `--neighbor-limit 1` to see linked pages) only when `confidence` is
-  `low`/`none` or the question is genuinely broad.
+- **Search before you explore.** `mf search "<question>"` (defaults to
+  `notes/`, or pass `--field <dir>`; 2 stubs, no neighbors, about 100
+  tokens). `--limit 1` for a point lookup you're sure of (55 tokens).
+  Widen (`--limit 3`, `--neighbor-limit 1` to see linked pages) only
+  when `confidence` is `low`/`none` or the question is genuinely broad.
 - **Read `confidence` before the results.** `high`: cite the stub.
   `low`: a lead, not an answer; read L1 before citing, and be ready to
   explore instead. `none`: don't cite it.
@@ -27,14 +27,14 @@ before writing a page.
   `--tier L2` or `<uuid>#section` only if L1 isn't.
 - **Batch reads for one task** in a single `mf read a b` call; that is
   what records `co_read`.
-- **Write a page with `mf write <draft> --field <dir>`, drafting
+- **Write a page with `mf write <draft>` (or `--field <dir>`), drafting
   outside the field.** It validates, dedup-checks, copies in, and
   indexes in one step. Exit 2 means a near-duplicate was listed: check
   the candidates, then either edit that page in place and `--update
   <uuid>`, or `--force` if it's genuinely different. Retire a page by
   writing its replacement with `supersedes: [old-uuid]`, not by
   deleting it.
-- **Run `mf lint <dir>` after writing.** It checks the conventions in
+- **Run `mf lint` after writing.** It checks the conventions in
   reference.md (summary shaped as an answer, no tables, no copied SHAs
   or relative dates, links resolve) and index drift. `--check` for CI.
 

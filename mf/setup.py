@@ -138,8 +138,8 @@ class StatusResult:
 
 
 def instruction_body(field: str) -> str:
-    # A field at the project root needs no flag: `--field` defaults to cwd.
-    flag = "" if field == "." else f" --field {field}"
+    # A field at the project root or default notes/ needs no flag: `--field` defaults to cwd or ./notes.
+    flag = "" if field in (".", "notes") else f" --field {field}"
     return "\n".join(line.format(flag=flag) for line in INSTRUCTION_LINES)
 
 
@@ -151,6 +151,10 @@ def seeding_prompt(field: str, reference_path: str | None = None) -> str:
         text = SEEDING_PROMPT.format(
             reference=ref, where="the repo root (pages sit beside the code)",
             outside="in a temp directory", flag="",
+        )
+    elif field == "notes":
+        text = SEEDING_PROMPT.format(
+            reference=ref, where="notes/", outside="outside notes/", flag="",
         )
     else:
         text = SEEDING_PROMPT.format(

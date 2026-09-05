@@ -39,8 +39,8 @@ def test_dry_run_writes_nothing_and_install_is_idempotent(tmp_path):
         "CLAUDE.md", ".claude/skills/mf/SKILL.md", ".claude/skills/mf/reference.md",
         ".mcp.json", ".claude/settings.json", "notes/.gitignore",
     }
-    assert (root / "CLAUDE.md").read_text().startswith(ce.FENCE_BEGIN)
-    assert "--field notes" in (root / "CLAUDE.md").read_text()
+    assert '`mf search "<question>"`' in (root / "CLAUDE.md").read_text()
+    assert "--field" not in (root / "CLAUDE.md").read_text()
     settings = json.loads((root / ".claude/settings.json").read_text())
     assert settings["hooks"]["Stop"][0]["hooks"][0]["command"] == "mf hook stop --field notes"
     mcp = json.loads((root / ".mcp.json").read_text())
@@ -203,12 +203,17 @@ def test_render_and_as_dict_shapes(tmp_path):
 
 
 def test_seeding_prompt_and_instruction_body_substitute_the_field():
-    assert "--field notes" in setup.instruction_body("notes")
+    assert "--field" not in setup.instruction_body("notes")
     p = " ".join(setup.seeding_prompt("notes").split())
     assert "seed the memoryfield in notes/" in p and ".claude/skills/mf/reference.md" in p
-    assert "outside notes/" in p and "`mf lint --field notes`" in p
+    assert "outside notes/" in p and "`mf lint`" in p and "`mf write <draft>`" in p
     assert max(len(line) for line in setup.seeding_prompt("notes").splitlines()) <= 72
     assert ".agents/skills/mf/reference.md" in setup.seeding_prompt("notes", ".agents/skills/mf/reference.md")
+
+    assert "--field memory" in setup.instruction_body("memory")
+    p_mem = " ".join(setup.seeding_prompt("memory").split())
+    assert "seed the memoryfield in memory/" in p_mem and "`mf lint --field memory`" in p_mem
+
     root = " ".join(setup.seeding_prompt(".").split())
     assert "--field" not in root and "./" not in root and ".." not in root
     assert "the repo root" in root and "in a temp directory" in root and "`mf lint`" in root

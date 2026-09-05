@@ -130,6 +130,36 @@ def test_mf_init_runs_the_wizard_on_a_terminal(tmp_path, monkeypatch, capsys):
     assert (root / "CLAUDE.md").exists()
 
 
+def test_mf_init_bare_prompts_for_field_on_a_terminal(tmp_path, monkeypatch, capsys):
+    root = _root(tmp_path, init=False)
+    monkeypatch.chdir(root)
+    monkeypatch.setattr(sys.stdin, "isatty", lambda: True)
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
+    monkeypatch.setattr(
+        wizard, "QuestionaryPrompter", lambda: ScriptedPrompter(["notes", ["claude"], ["instructions"], True])
+    )
+    assert cli.main(["init"]) == 0
+    out = capsys.readouterr().out
+    assert "Initialized empty field at " in out
+    assert (root / "notes" / "mf.sqlite3").exists()
+    assert (root / "CLAUDE.md").exists()
+
+
+def test_mf_init_bare_custom_field_on_a_terminal(tmp_path, monkeypatch, capsys):
+    root = _root(tmp_path, init=False)
+    monkeypatch.chdir(root)
+    monkeypatch.setattr(sys.stdin, "isatty", lambda: True)
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
+    monkeypatch.setattr(
+        wizard, "QuestionaryPrompter", lambda: ScriptedPrompter(["myfield", ["claude"], ["instructions"], True])
+    )
+    assert cli.main(["init"]) == 0
+    out = capsys.readouterr().out
+    assert "Initialized empty field at " in out
+    assert (root / "myfield" / "mf.sqlite3").exists()
+    assert "--field myfield" in (root / "CLAUDE.md").read_text()
+
+
 def test_mf_init_no_setup_or_off_terminal_prints_only_the_init_line(tmp_path, monkeypatch, capsys):
     root = _root(tmp_path, init=False)
     monkeypatch.chdir(root)

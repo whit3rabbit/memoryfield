@@ -8,12 +8,15 @@ search, and no LLM in the loop.
 
 [Install](#install) · [Quickstart](#quickstart) · [Design decisions](#design-decisions) · [Agents](#using-it-with-an-agent) · [Documentation](#documentation)
 
+Built and based on Cal Paterson's
+[memoryfield](https://calpaterson.com/memoryfields.html). This is mostly just for testing to see if it works as intended for my personal use cases. Feel free to experiment and play with it as well.
+
 A field is a directory of Markdown pages with frontmatter. mf indexes
 it into SQLite and answers a question with stubs, not pages: the agent
 reads a one-line summary first and opens the body only when it needs
 to.
 
-The page format is Cal Paterson's
+The page format and design is built on Cal Paterson's
 [memoryfield](https://calpaterson.com/memoryfields.html) spec
 ([vendored copy](docs/upstream/SPEC.md)). Any spec field loads
 unchanged, `mf pack --spec` writes one back out, and everything mf adds
@@ -71,77 +74,61 @@ Working on mf itself? Install from your checkout instead. See
 
 ## Quickstart
 
-This walks through adding mf to a project you already have, with a
-coding agent writing the first pages from the code. The example
-project is this repo, and the field it builds is the real one at
-[notes/](notes/). The output is real, with paths shortened.
+Get started from your project root in 5 commands:
 
-### 1. Create the field and wire your agent
+```bash
+# 1. Initialize field (creates notes/ and notes/mf.sqlite3) and wire your agent
+mf init
 
-From the project root:
+# 2. Print the seeding prompt for your agent (or manually create notes in notes/)
+mf setup prompt
+
+# Use /mf skill to use the memoryfield tools within your agent
+# to generate notes using the setup prompt
+# You can manually write and import notes using `mf write <path/to/note.md>`
+
+# 3. Index notes into SQLite to make them searchable (or add via `mf write <draft>`)
+mf index
+
+# 4. Search memory with semantic ranking and confidence gate
+mf search "how do I run the tests"
+
+# 5. Read the full answer section or deeper tiers
+mf read <uuid>
+```
+
+---
+
+### 1. Initialize the field and wire your agent (`mf init`)
+
+From your project root:
 
 ```console
 $ mf init
 Initialized empty field at /path/to/myapp/notes/mf.sqlite3 (model snowflake-arctic-embed-xs, 384-d)
 ```
 
-The field defaults to `notes/`, a subdirectory, so the project's own
-Markdown never becomes memory by accident. Pass a directory to put it
-elsewhere. Every other command looks at the cwd first and falls back
-to `./notes`, so `mf search` from the project root finds it without a
-flag.
+- **Where all notes and data live:** The field defaults to `notes/`. **All Markdown files live directly in `notes/`**, and the SQLite database (`notes/mf.sqlite3`) sits alongside them, keeping your repository's own code and docs separate from agent memory. Pass a directory (e.g. `mf init docs/memory`) to put it elsewhere.
+- **No flags needed:** All subsequent commands (`mf search`, `mf index`, `mf write`, `mf lint`) automatically find `./notes`, so you never need to pass `--field notes` from the project root.
+- **Interactive wizard:** On a terminal, `mf init` confirms the field directory, detects installed coding agents (Claude Code, Codex, Cursor, Copilot, OpenCode, Gemini CLI, Antigravity, Windsurf, Amp, Pi), and configures instructions, skills, MCP server entries, and hooks. Rerunning via `mf setup` is always a no-op. Pass `--no-setup` for a scriptable, one-line init.
 
-On a terminal, `mf init` keeps going. It asks which coding agents use
-the project (Claude Code, Codex, Cursor, Copilot, OpenCode, Gemini
-CLI, Antigravity, Windsurf, Amp, Pi, with the ones it detects
-pre-checked), then what to install, then shows the plan and asks
-before writing anything:
+### 2. Seed the field with your agent (`mf setup prompt`)
+
+The wizard prints a seeding prompt, and `mf setup prompt` prints it anytime:
 
 ```console
-Would install for field notes under /path/to/myapp
-  create    CLAUDE.md  (instructions: claude)
-  create    .claude/skills/mf/SKILL.md  (skill: claude)
-  create    .claude/skills/mf/reference.md  (skill: claude)
-  create    .mcp.json  (mcp: claude)
-  create    .claude/settings.json  (hooks: claude)
-  create    AGENTS.md  (instructions: codex)
-  create    .agents/skills/mf/SKILL.md  (skill: codex)
-  create    .agents/skills/mf/reference.md  (skill: codex)
-  create    .codex/config.toml  (mcp: codex)
-  create    notes/.gitignore  (gitignore: field)
-```
-
-The instruction lines land in a fenced block, the skill is the same
-one this repo uses, the MCP entry runs the server that ships with the
-package, the hooks carry `--field notes`, and the field's `.gitignore`
-keeps the index out of git. Rerunning is a no-op.
-`mf setup` reruns the wizard later, and `mf setup install`,
-`uninstall`, and `status` do the same from a script. Pass
-`--no-setup` to get the old one-line `init`.
-
-The model is pinned per field at `init`, so read
-[docs/models.md](docs/models.md) first if the default is not what you
-want. Every harness path and flag: [docs/CLI.md](docs/CLI.md#mf-setup).
-
-### 2. Have the agent seed the field
-
-The wizard ends by printing this prompt, and `mf setup prompt` prints
-it again. Paste it into Claude Code, Codex, OpenCode, or whatever you
-run, from the project root:
-
-```
+$ mf setup prompt
 Read .claude/skills/mf/reference.md, then explore this repo and seed the
 memoryfield in notes/. Write one page per question a new contributor
 would ask on day one: how to run the tests, how to run it locally, how a
 release or deploy happens, where config lives, and every gotcha you find
 in comments, CI config, or recent commits. Draft each page outside
-notes/ and add it with `mf write <draft> --field notes`. If write exits
-2, update the page it names instead of forcing. Run `mf lint --field
-notes` when you are done and fix what it reports.
+notes/ and add it with `mf write <draft>`. If write exits 2, update the
+page it names instead of forcing. Run `mf lint` when you are done and
+fix what it reports.
 ```
 
-Each page the agent produces looks like this. The summary is the
-answer, not the topic, because the summary is what `search` returns:
+Paste this prompt into your agent. The agent explores your codebase and drafts pages shaped like this:
 
 ```markdown
 ---
@@ -159,38 +146,48 @@ Bump `__version__` in `mf/__init__.py`, push to `main`, then tag ...
 Don't expect a test gate before publish. ...
 ```
 
+The summary is written as the answer itself, not merely a topic description, because the summary is what `mf search` returns.
+
+### 3. Add notes and index into SQLite (`mf index` or `mf write`)
+
+All memory pages are plain Markdown files in `notes/`. You have two ways to add notes:
+
+#### Option A: Manually creating notes in `notes/`, then `mf index`
+If you write or edit notes by hand (or generate them in bulk), save them directly inside `notes/` (e.g. `notes/cut-release.md`). Then run:
+
 ```console
-$ mf write /tmp/cut-release.md --field notes
+$ mf index
+```
+
+`mf index` scans `notes/`, detects new or modified `.md` files, computes their embeddings, and indexes them directly into `notes/mf.sqlite3` so they become immediately searchable.
+
+#### Option B: Staging drafts with `mf write` (near-duplicate protection)
+Why do examples use `/tmp/` with `mf write`? Staging a draft outside `notes/` (like `/tmp/cut-release.md`) lets `mf write` validate and dedup-check the note *before* it touches your field:
+
+```console
+$ mf write /tmp/cut-release.md
 Wrote cut-release to cut-release.md
 ```
 
-`write` validates, checks for a near-duplicate, copies the draft in,
-and indexes it. When the agent tries to add a page that already
-exists under a different name, the gate stops it:
+`mf write` performs four atomic checks:
+1. **Validates** YAML frontmatter against the memoryfield specification.
+2. **Dedup-checks** against existing notes using vector cosine distance. If a near-duplicate exists, it rejects the write (exit 2) and names the candidate so you or the agent update that page instead of creating clutter:
+   ```console
+   $ mf write /tmp/running-tests.md
+   mf write: 1 possible near-duplicate(s) found; not written.
+     - [run-tests] Tests: how to run the suite (distance 0.012)
+         `uv run pytest tests/ -q` from the repo root. Tests are hermetic (no model download) except tests/test_token_regression.py.
+   Use --update <uuid> to update an existing page, or --force to write anyway.
+   ```
+3. **Copies** the validated file into `notes/`.
+4. **Embeds and indexes** the page into `notes/mf.sqlite3` in one step.
+
+### 4. Search and read (`mf search`, `mf read`)
+
+Once notes are indexed, your agent's next session begins with a point lookup instead of a costly cold read of the entire tree:
 
 ```console
-$ mf write /tmp/running-tests.md --field notes
-mf write: 1 possible near-duplicate(s) found; not written.
-  - [run-tests] Tests: how to run the suite (distance 0.012)
-      `uv run pytest tests/ -q` from the repo root. Tests are hermetic (no model download) except tests/test_token_regression.py.
-Use --update <uuid> to update an existing page, or --force to write anyway.
-```
-
-Exit 2. The agent updates the existing page with `--update run-tests`
-or moves on. Nothing un-gated lands in the field.
-
-Already have notes? `mf import claude-memory <dir>` turns a Claude
-Code auto-memory directory into pages, and `mf import wiki <dir>`
-does the same for an index.md wiki. Both skip the gate, so run `mf
-lint` after. [docs/fields.md](docs/fields.md#importing-existing-notes).
-
-### 3. Search it
-
-Three pages in, the agent's next session starts with a lookup instead
-of a cold read of the tree:
-
-```console
-$ mf search "why does the mac CI job use brew python" --field notes
+$ mf search "why does the mac CI job use brew python"
 confidence: high
 - [ci-macos-python] CI: why the macOS leg installs Python from Homebrew
     sqlite-vec needs a Python built with --enable-loadable-sqlite-extensions. uv-managed and actions/setup-python builds on the macOS runner lack it, so test.yml uses Homebrew Python with UV_PYTHON_PREFERENCE=only-system.
@@ -198,41 +195,19 @@ confidence: high
     Push to main, then `git tag vX.Y.Z && git push origin vX.Y.Z`. release.yml publishes via trusted-publisher OIDC; the version lives only in mf/__init__.py.
 ```
 
-Read the confidence line before the results:
+- **Stubs first:** Most queries end at the stub (~100 tokens).
+- **Confidence gate:**
+  - `high`: The stub is verified and safe to cite.
+  - `low`: A strong candidate; inspect the full answer with `mf read <uuid>` before citing.
+  - `none`: Insufficient similarity; do not cite.
+- **Tiered reading:** When a stub isn't enough, `mf read <uuid>` returns the page's L1 answer section. Pass `--tier L2` or `<uuid>#section` to view deeper background details.
 
-- `high`: the stub is safe to cite.
-- `low`: a strong lead. `mf read <uuid>` for the page's answer section
-  before quoting it.
-- `none`: do not cite it.
+### 5. Keep it alive (`mf lint`, `mf index`)
 
-The gate errs toward demotion. On a field this small, expect `low`
-often, even when the top stub is right:
-
-```console
-$ mf search "how do I run the tests" --field notes
-confidence: low
-- [run-tests] Tests: how to run the suite
-    `uv run pytest tests/ -q` from the repo root. Tests are hermetic (no model download) except tests/test_token_regression.py.
-- [ci-macos-python] CI: why the macOS leg installs Python from Homebrew
-    sqlite-vec needs a Python built with --enable-loadable-sqlite-extensions. uv-managed and actions/setup-python builds on the macOS runner lack it, so test.yml uses Homebrew Python with UV_PYTHON_PREFERENCE=only-system.
-```
-
-When the stub is not enough, `mf read <uuid>` returns the page's
-answer section, and `--tier L2` or `<uuid>#section` returns more.
-
-### 4. Keep it alive
-
-The field pays off only if pages keep landing. Three things do that:
-
-- The instruction lines from step 1, so every session searches first
-  and writes last.
-- `mf lint --check notes` in a pre-commit hook and `mf index notes`
-  in post-commit. `search` refuses a stale index (exit 3) until
-  `index` runs. Snippets: [docs/fields.md](docs/fields.md#keeping-a-field-healthy).
-- For Claude Code, the `mf hook stop` and `mf hook session-end`
-  hooks the wizard wrote, which remind the agent to capture what it
-  learned and stage a transcript pointer for `mf consolidate --plan`.
-  [docs/agents.md](docs/agents.md#hooks).
+To keep memory fresh and reliable across team and agent contributions:
+- **Lint conventions:** Run `mf lint` to verify that summaries are formatted as answers, links resolve, and no stale index drift exists (`mf lint --check` in pre-commit CI).
+- **Update index:** If Markdown files are edited by hand or pulled from git, run `mf index`. `mf search` warns with exit code 3 if the index becomes stale until `index` is rerun.
+- **Session hooks:** For Claude Code, `mf hook stop` and `mf hook session-end` prompt the agent to preserve lessons learned and stage pointers before finishing.
 
 ## Design decisions
 

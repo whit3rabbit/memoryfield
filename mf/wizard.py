@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol, TextIO
 
-from . import db
+from . import db, embedder, schema
 from . import harnesses as hz
 from . import setup as setup_mod
 from .db import DB_FILENAME
@@ -86,7 +86,9 @@ def surface_choices(selected: list[str]) -> list[Choice]:
 
 
 def run_wizard(
-    root: Path, prompter: Prompter, *, field: str | None = None, out: TextIO | None = None,
+    root: Path, prompter: Prompter, *, field: str | None = None,
+    model_code: str | None = None, is_init: bool = False,
+    out: TextIO | None = None,
 ) -> int:
     out = out or sys.stdout
     root = root.resolve()
@@ -99,12 +101,19 @@ def run_wizard(
         return 1
     field = probe.field
     field_dir = root / field
-    if not (field_dir / DB_FILENAME).exists():
-        if not prompter.confirm(f"No field at {field}/. Run `mf init {field}`?", True):
-            print("Nothing written.", file=out)
+    if (field_dir / DB_FILENAME).exists():
+        if is_init:
+            sys.stderr.write(f"mf init: {field_dir / DB_FILENAME} already exists; nothing to do.\n")
             return 1
-        db.init_field(field_dir)
-        print(f"Initialized empty field at {field_dir / DB_FILENAME}", file=out)
+    else:
+        if not is_init:
+            if not prompter.confirm(f"No field at {field}/. Run `mf init {field}`?", True):
+                print("Nothing written.", file=out)
+                return 1
+        model = model_code or schema.DEFAULT_MODEL_CODE
+        entry = embedder.registry_entry(model)
+        db_path = db.init_field(field_dir, model_code=model, embedding_dim=entry["dim"])
+        print(f"Initialized empty field at {db_path} (model {model}, {entry['dim']}-d)", file=out)
 
     selected = prompter.checkbox("Which coding agents use this project?", harness_choices(root))
     selected = [h for h in hz.MENU_ORDER if h in selected]
